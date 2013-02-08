@@ -5,10 +5,16 @@
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <%= stylesheet_link_tag :application, :media => "all" %>
-  <%= javascript_include_tag :jquery, 'jquery-ui', :eco_tree, :gsp  %>
+  <%= javascript_include_tag :jquery, 'jquery-ui', :rails, :eco_tree, :gsp  %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+
+<% if Rails.env %>
+<div style="font-family:Courier New; margin:10px; padding:5px; background-color:silver">
+  <%= debug params %>
+</div
+<% end %>>
 
 <%= yield %>
 
