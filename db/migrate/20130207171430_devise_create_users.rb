@@ -5,6 +5,9 @@ class DeviseCreateUsers < ActiveRecord::Migration
       t.string     :language
       t.string     :phone
       t.references :organization
+      t.string     :first_name
+      t.string     :last_name
+      t.string     :display_name
       t.integer    :profile_image_id
 
       #== Devise fields ==

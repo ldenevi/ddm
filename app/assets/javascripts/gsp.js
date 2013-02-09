@@ -3,12 +3,12 @@ var OrganizationTree = null;
 
 function logout() {
   if(confirm("Are you sure you want to log out of the application?"))
-    document.location = "/";
+    document.location = "/users/sign_out";
 };
 
 
 function load_organization(id) {
-  tree_array = $.getJSON('/orghier/' + parseInt(id), function(data) { build_ecotree(data); });
+  tree_array = $.getJSON('/organization/hierarchy', function(data) { build_ecotree(data); });
 }
 
 function build_ecotree(data) {

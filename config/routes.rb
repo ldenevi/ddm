@@ -1,7 +1,9 @@
 GSP::Application.routes.draw do
-  constraints :host => /localhost/ do
-    devise_for :users, :controllers => { :sessions => :sessions }
+  root :to => 'home#index'
+  
+  devise_for :users, :controllers => { :sessions => :sessions }
 
-    root :to => 'home#index'
-  end
+  get "organization/index", :to => 'organization#index'
+  get "organization/hierarchy", :to => 'organization#hierarchy', :as => 'organization_hierarchy'
+  get "organization/overview",  :to => 'organization#overview',  :as => 'organization_overview'
 end

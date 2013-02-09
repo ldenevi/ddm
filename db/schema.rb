@@ -139,6 +139,9 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.string   "language"
     t.string   "phone"
     t.integer  "organization_id"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "display_name"
     t.integer  "profile_image_id"
     t.string   "email",                  :default => "", :null => false
     t.string   "encrypted_password",     :default => "", :null => false

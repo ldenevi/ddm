@@ -6,6 +6,7 @@ module GSP::UI::Javascript
     
 protected
     def to_ecotree_node(is_parent = false)
+      is_parent = true if self.id == self.root_parent_id
       {:name => self.name, :id => self.id, :parent_id => (is_parent ? -1 : self.parent.id)}
     end
     

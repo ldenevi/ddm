@@ -1,2 +1,5 @@
+Dashboard
 
-<%= render :partial => 'home/login' %>
+<%= link_to 'Sign out, ' + @user.eponym, destroy_user_session_path, :method => :delete %>
+
+<%= link_to 'Your organization', organization_overview_path %>
