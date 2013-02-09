@@ -1,0 +1,36 @@
+
+  <div id="regulations_list">
+    <div id="rl_search">
+      <div>
+        <form>
+          <input type="text" size="20" value="search...">
+          <img src="search_icon.png" width="20" height="20">
+        </form>
+      </div>
+    </div>
+    
+    <% @templates.each do |template| %>
+    <div id="rl_item">
+      <div id="ri_fields">
+        <div id="ri_agency">
+          <span class="ri_fieldname"><%= template.agency_display_name %></span> -
+          <span class="ri_fieldvalue"><%= template.full_name %></span>
+        </div>
+        
+        <div id="ri_iconic_summary">
+         <ul>
+           <li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-gear"></span></li>
+           <li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-clock"></span></li>
+         </ul>
+        </div>
+        
+      </div>
+      
+      <span style="clear:left; display:block"></span>
+    </div>
+    <% end %>
+    
+    
+    <div id="rl_end_line"></div>
+    
+  </div>

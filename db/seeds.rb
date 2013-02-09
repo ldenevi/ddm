@@ -29,6 +29,10 @@ compA_SL_NA_MEX = Organization.create({:name => 'Company A - Sales - Mexico', :p
 companyB = Organization.create({:name => 'Company B', :owner => user1})
 compB_HR = Organization.create({:name => 'CompB - Human Resources', :parent => companyB})
 
+# Associate user to organization
+User.find(1).update_attribute(:organization_id, 1)
+User.find(2).update_attribute(:organization_id, 4)
+
 agency_sec = Agency.create({:name => 'Securities and Exchange Commission', :acronym => 'SEC', :website => 'sec.gov'})
 
 iso_9000 = Template.create({:agency => agency_sec,

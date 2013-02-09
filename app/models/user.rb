@@ -28,4 +28,22 @@ class User < ActiveRecord::Base
       display_name
     end
   end
+  
+  def can_purchase_templates?
+    organization.owner == self
+  end
+  
+  def purchase_template(template_id)
+    return false unless can_purchase_templates?
+    
+    # Copy data from Template
+    template = Template.find(template_id)
+    pt = PurchasedTemplate.new :agency => template.agency, :description => template.description,
+                               :display_name => template.display_name, :frequency => template.frequency,
+                               :full_name => template.full_name, :objectives => template.objectives,
+                               :regulatory_review_name => template.regulatory_review_name,
+                               :purchased_by => self, :organization => self.organization,
+                               :tasks => template.tasks
+    return pt.save!
+  end
 end

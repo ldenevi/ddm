@@ -7,6 +7,7 @@ class CreateTasks < ActiveRecord::Migration
       t.integer :sequence
       t.string :status
       t.timestamp :assigned_at
+      t.timestamp :start_at
       t.timestamp :expected_completion_at
       t.timestamp :actual_completion_at
       t.float :completion_percentage

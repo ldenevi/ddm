@@ -62,11 +62,14 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   create_table "purchased_templates", :force => true do |t|
     t.integer  "agency_id"
     t.string   "agency_display_name"
+    t.integer  "approved_by_id"
+    t.datetime "approved_at"
     t.string   "full_name"
     t.string   "display_name"
     t.string   "frequency"
     t.text     "description"
     t.text     "objectives"
+    t.text     "tasks"
     t.string   "regulatory_review_name"
     t.integer  "organization_id"
     t.integer  "revision"
@@ -76,6 +79,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.datetime "updated_at",             :null => false
   end
 
+  add_index "purchased_templates", ["approved_by_id"], :name => "index_purchased_templates_on_approved_by_id"
   add_index "purchased_templates", ["display_name"], :name => "index_purchased_templates_on_display_name"
   add_index "purchased_templates", ["full_name"], :name => "index_purchased_templates_on_full_name"
   add_index "purchased_templates", ["organization_id"], :name => "index_purchased_templates_on_organization_id"
@@ -83,10 +87,12 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
 
   create_table "reviews", :force => true do |t|
     t.string   "name"
-    t.datetime "assigned_at"
     t.integer  "owner_id"
     t.string   "frequency"
     t.string   "status"
+    t.datetime "assigned_at"
+    t.datetime "deployed_at"
+    t.datetime "start_at"
     t.datetime "due_at"
     t.datetime "actual_completion_at"
     t.datetime "created_at",           :null => false
@@ -104,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.integer  "sequence"
     t.string   "status"
     t.datetime "assigned_at"
+    t.datetime "start_at"
     t.datetime "expected_completion_at"
     t.datetime "actual_completion_at"
     t.float    "completion_percentage"

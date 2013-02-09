@@ -65,6 +65,15 @@ table {
 /* === END RESET === */
 
 
+/* == REDO STYLES == */
+ol, ul {
+  list-style: circle;
+}
+
+li {
+  display:block;
+}
+/* == END REDO STYLES == */
 
 
  

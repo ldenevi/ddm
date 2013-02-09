@@ -12,4 +12,14 @@ class OrganizationController < ApplicationController
   def overview
     @org = current_user.organization
   end
+  
+  def templates
+    @org = Organization.find(current_user.organization_id, :include => :purchased_templates)
+    @templates = @org.purchased_templates
+  end
+  
+  def deploy_reviews
+    @org = Organization.find(current_user.organization_id, :include => :purchased_templates)
+    @templates = @org.purchased_templates
+  end
 end
