@@ -5,6 +5,8 @@ class CreateReviews < ActiveRecord::Migration
       t.integer :owner_id
       t.string :frequency
       t.string :status
+      t.integer :purchased_template_id
+      t.integer :organization_id
       t.timestamp :assigned_at
       t.timestamp :deployed_at
       t.timestamp :start_at
@@ -17,5 +19,6 @@ class CreateReviews < ActiveRecord::Migration
     add_index :reviews, :name
     add_index :reviews, :assigned_at
     add_index :reviews, :owner_id
+    add_index :reviews, :purchased_template_id
   end
 end

@@ -90,18 +90,21 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.integer  "owner_id"
     t.string   "frequency"
     t.string   "status"
+    t.integer  "purchased_template_id"
+    t.integer  "organization_id"
     t.datetime "assigned_at"
     t.datetime "deployed_at"
     t.datetime "start_at"
     t.datetime "due_at"
     t.datetime "actual_completion_at"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
   end
 
   add_index "reviews", ["assigned_at"], :name => "index_reviews_on_assigned_at"
   add_index "reviews", ["name"], :name => "index_reviews_on_name"
   add_index "reviews", ["owner_id"], :name => "index_reviews_on_owner_id"
+  add_index "reviews", ["purchased_template_id"], :name => "index_reviews_on_purchased_template_id"
 
   create_table "tasks", :force => true do |t|
     t.string   "name"
