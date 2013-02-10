@@ -1,5 +1,12 @@
 class Task < ActiveRecord::Base
-  attr_accessible :actual_completion_at, :assigned_at, :completion_percentage, :expected_completion_at, :instructions, :name, :review, :sequence, :status, :start_at
-  
+  # Display information
+  attr_accessible :comments, :executor, :completion_percentage, :instructions,
+                  :name, :review, :sequence, :status
+  belongs_to :executor, :class_name => 'User'
   belongs_to :review
+  has_many   :comments, :as => :commentable
+  
+  # Tracking
+  attr_accessible :actual_completion_at, :assigned_at, :expected_completion_at,
+                  :start_at
 end

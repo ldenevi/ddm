@@ -1,8 +1,15 @@
 class Template < ActiveRecord::Base
-  attr_accessible :agency_display_name, :agency, :author, :description, :display_name, :frequency, :full_name, :objectives, :regulatory_review_name, :tasks
-  
-  # Relationships
+  # Display information
+  attr_accessible :price, :agency, :agency_display_name, :description,
+                  :display_name, :frequency, :full_name, :objectives,
+                  :regulatory_review_name, :tasks
   belongs_to :agency
+  
+  # Tracking
+  attr_accessible :author
   belongs_to :author
   
+  # STI
+  attr_accessible :parent
+  belongs_to :parent, :class_name => 'Template'
 end

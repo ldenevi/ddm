@@ -2,13 +2,16 @@ class DeviseCreateUsers < ActiveRecord::Migration
   def change
     create_table(:users) do |t|
       #== GSP ==
-      t.string     :language
-      t.string     :phone
+      # Display information
       t.references :organization
+      t.string     :display_name
       t.string     :first_name
       t.string     :last_name
-      t.string     :display_name
-      t.integer    :profile_image_id
+      t.string     :phone
+      t.references :profile_image
+      
+      # Customization
+      t.string     :language
 
       #== Devise fields ==
       ## Database authenticatable

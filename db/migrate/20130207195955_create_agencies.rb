@@ -1,6 +1,7 @@
 class CreateAgencies < ActiveRecord::Migration
   def change
     create_table :agencies do |t|
+      # Display information
       t.string :name
       t.string :acronym
       t.string :website
