@@ -1,7 +1,7 @@
 
-<div id="task2" class="task">
-  <div id="task2_info" class="pending-task">
-    <p><span><input type="checkbox" onclick="toggle_task_status('#task2_info')"/>Task <%= task.sequence %></span></p>
+<div id="task<%= task.sequence %>" class="task">
+  <div id="task<%= task.sequence %>_info" class="pending-task">
+    <h2><span><!--input type="checkbox" onclick="toggle_task_status('#task2_info')"-->Task <%= task.sequence %></span></h2>
     <span>
       
     </span>
@@ -24,31 +24,31 @@
   </div>
   
   <div>
-    <%= nested.label :actual_completion_at %>
-    <%= nested.text_field :actual_completion_at %>
-    <%= nested.label :assigned_at %>
-    <%= nested.text_field :assigned_at %>
-    <%= nested.label :completion_percentage %>
-    <%= nested.text_field :completion_percentage %>
-    <%= nested.label :executor_id %>
-    
-    <%= nested.label :expected_completion_at %>
-    
-    <%= nested.label :instructions %>
+    <%= nested.label :name %></br>
+    <%= nested.text_field :name %></br></br>
+    </br>
+        
+    <%= nested.label :instructions %></br>
     <%= nested.text_area :instructions %>
-    <%= nested.label :name %>
-    <%= nested.text_field :name %>
-    <%= nested.label :sequence %>
-    <%= nested.text_field :sequence %>
-    <%= nested.label :start_at %>
-    
-    <%= nested.label :status %>
+    </br>
+    <%= nested.label :sequence %></br>
+    <%= nested.text_field :sequence %></br>
+    </br>
+    <%= nested.label :actual_completion_at %></br>
+    <%= nested.text_field :actual_completion_at %></br>
+    </br>
+    <%= nested.label :assigned_at %></br>
+    <%= nested.text_field :assigned_at %></br>
+    </br>
+    <%= nested.label :completion_percentage %></br>
+    <%= nested.text_field :completion_percentage %></br>
+    </br>
   </div>
   
-  <div id="task2_comments" class="task_comments">
-    <div onclick="toggle_comment_entry('#task2_comments')">
-      <div id="task2_comments_entry_collapsed" class="display-block">Add comment...</div>
-      <div id="task2_comments_entry_expanded" class="display-none">
+  <div id="task<%= task.sequence %>_comments" class="task_comments">
+    <div onclick="toggle_comment_entry('#task<%= task.sequence %>_comments')">
+      <div id="task<%= task.sequence %>_comments_entry_collapsed" class="display-block">Add comment...</div>
+      <div id="task<%= task.sequence %>_comments_entry_expanded" class="display-none">
         <div id="task_comment_editor">
           <textfield></textfield>
         </div>
@@ -56,14 +56,15 @@
       </div>
     </div>
     
-    
-    <div id="task2_comments_list" class="task_comments_list">
+    <% if task.sequence == 2 %>
+    <div id="task<%= task.sequence %>_comments_list" class="task_comments_list">
       <div class="task_comment_profile_image"><img src="john_profile.png"></div>
       <div class="task_comment"><span>Supplier contact info located on UA shared server</span></div>
       
       <div class="task_comment_profile_image"><img src="leo_profile.png"></div>
       <div class="task_comment"><span>Cannot find supplier contact info for step #1</span></div>
     </div>
+    <% end %>
   </div>
   
 </div>
