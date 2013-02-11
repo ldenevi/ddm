@@ -43,6 +43,10 @@ class PurchasedTemplate < ActiveRecord::Base
     # Create Code
   end
   
+  def name
+    regulatory_review_name
+  end
+  
 private
   def generate_tasks
     _tasks = []
