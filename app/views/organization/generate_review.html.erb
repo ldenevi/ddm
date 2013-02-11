@@ -1,0 +1,141 @@
+
+  <style type="text/css">
+  
+  #wrapper, body, html { background-color:#DDD; margin:0px; padding:0px; }
+  #regulation_review {
+  
+    background-color:white;
+    width:750px;
+    border: 1px solid black;
+    padding: 10px;
+    margin-left:50px;
+  }
+  
+  #review_attributes table, td {
+   border: 1px solid black;
+   border-collapse: collapse;
+   padding:5px;
+  }
+  
+  #review_attributes table tr td:first-child {
+    width:300px !important;
+  }
+  
+  
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	
+	#objective { font-size: .8em }
+	
+	#task_navigation {
+	  float:right;
+	  position:relative;
+	  width: 100%;
+	  margin: 10px 0px 20px 0px;
+	  text-align:right;
+	}
+	
+	#task_navigation li {
+		margin: 2px;
+		position: relative;
+		padding: 4px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	
+	
+	#task_navigation ul {
+	  border: 0; padding:0; margin: 0; float:right;
+	}
+	
+	#review_tasks { position:relative; 
+	}
+	
+	
+	/* TASK COMMENTS */
+	.task { border-bottom:1px solid gray; padding:30px; }
+	.task_comments { border-top:1px solid lightgreen; padding:30px;  }
+  
+  .pending-task { }
+  .done-task { text-decoration:line-through; color:silver; }
+  
+  
+  .task_comments_list { position:relative; border-left:5px solid silver; padding-left:10px; }
+  .task_comment_profile_image { position:relative; height:32px; width:32px; }
+  .task_comment { position:relative; left:45px; top:-32px; height:32px; border-bottom:1px solid silver; color:gray;  }
+  
+  /* Task Comment Input */
+  .display-none { display:none }
+  .display-block { display:block }
+  
+  #task2_comments_entry_collapsed {
+    color:silver;
+    font-size: 18pt;
+    
+    cursor: pointer;
+    border:1px solid silver;
+    margin: 30px;
+    padding: 20px;
+  }
+  
+  #task2_comments_entry_expanded {
+    height: 200px;
+  }
+  
+  #task_comment_editor {
+    position:relative;
+    background-color:gray;
+    width:500px;
+  }
+  
+  </style>
+  
+  <script>
+    function toggle_task_status(e) {
+      if ($(e).hasClass('pending-task')) {
+        $(e).removeClass('pending-task');
+        $(e).addClass('done-task');
+      }
+      else {
+        $(e).removeClass('done-task');
+        $(e).addClass('pending-task');
+      }
+    }
+    
+    function toggle_comment_entry(e) {
+      collapsed = $(e + ' .display-none');
+      expanded  = $(e + ' .display-block');
+      
+      collapsed.removeClass('display-none');
+      collapsed.addClass('display-block');
+      expanded.removeClass('display-block');
+      expanded.addClass('display-none');
+      
+            
+    }
+  </script>
+  
+ <script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+  </script>
+
+<!-- Deploy single review -->
+  <div id="wrapper">
+  
+    <h2>Securities and Exchange Commission (SEC)</h2> <h3>Conflict Minerals</h3>
+
+    <%= form_for @review, :url => {:action => 'deploy_review'} do |f| %>
+      <%= render 'review_form', :f => f %>
+      <%= f.submit 'Save' %>
+    <% end %>
+    
+  </div>
+
+
+
+</pre>

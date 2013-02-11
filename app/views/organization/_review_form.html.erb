@@ -1,0 +1,104 @@
+
+  
+  
+
+    <div id="regulation_review">
+    
+    
+      <div id="review_overview">
+        <h3>Quaterly Review</h3>
+      
+        <div id="review_attributes">
+        
+          <table>
+            <tr>
+              <td rowspan="2">
+              <strong>2013-14-02 (1<sup>st</sup> Quarter)</strong>
+              </br><%= @review.purchased_template.regulatory_review_name %></td>
+              <td>Owner</td>
+              <td>Start</td>
+              <td>End</td>
+              <td>Status</td>
+            </tr>
+            
+            <tr>
+              <td nowrap><%= f.text_field :owner_id %></td>
+              <td nowrap><%= f.text_field :start_at %></td>
+              <td nowrap><%= f.text_field :due_at %></td>
+              <td><span style="color:red"><%= f.text_field :status %></span></td>
+            </tr>
+          </table>
+        
+        </div>
+      </div>
+      
+      <div id="objective">
+	      <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+		      <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+		      <%= @review.purchased_template.objectives %></p>
+	      </div>
+      </div>
+      
+      <div id="review_fields">
+        <%= f.label :actual_completion_at %>
+        <%= f.text_field :actual_completion_at %>
+        <%= f.label :assigned_at %>
+        <%= f.text_field :assigned_at %>
+        <%= f.label :deployed_at %>
+        <%= f.text_field :deployed_at %>
+        
+        <%= f.text_field :due_at %>
+        <%= f.label :frequency %>
+        <%= f.text_field :frequency %>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+        <%= f.label :organization_id %>
+        <%= f.text_field :organization_id %>
+        <%= f.label :owner_id %>
+        <%= f.label :purchased_template_id %>
+        <%= f.text_field :purchased_template_id %>
+        
+        <%= f.text_field :start_at %>
+        <%= f.label :status %>
+      </div>
+      
+      
+      <div id="review_tasks">
+        <div id="task_navigation">
+         <ul>
+           <li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-triangle-1-w"></span></li>
+           <li class="ui-state-default ui-corner-all">&nbsp;2 / 5&nbsp;</li>
+           <li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-triangle-1-e"></span></li>
+         </ul>
+        </div>
+        
+        <div id="task_page">
+          
+          
+          <!-- TASKS -->
+          <div id="tabs">
+            <ul>
+            <% @review.tasks.each_with_index do |t,i| %>
+              <li><a href="#tabs-<%= (i + 1) %>"><%= (i + 1) %></a></li>
+            <% end %>
+            </ul>
+            
+            <% @review.tasks.each_with_index do |task, i| %>
+            <%= f.fields_for :tasks, task do |nested| %>
+              <div style="border:1px solid black; margin:20px" id="tabs-<%= (i + 1) %>">
+                <%= render 'review_task_form', :nested => nested, :task => task %>
+              </div>
+            <% end %>
+            <% end %>
+            
+          </div>
+          
+        </div>
+        
+      </div>
+    
+      
+      
+      
+      
+    </div>
