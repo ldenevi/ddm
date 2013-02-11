@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Agency do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'should validate date' do
+    pending ""
+  end
 end

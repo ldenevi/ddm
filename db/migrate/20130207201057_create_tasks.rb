@@ -4,7 +4,7 @@ class CreateTasks < ActiveRecord::Migration
       # Display information
       t.references :executor
       t.float      :completion_percentage
-      t.string     :instructions
+      t.text       :instructions
       t.string     :name
       t.references :review
       t.integer    :sequence

@@ -29,9 +29,28 @@ class PurchasedTemplate < ActiveRecord::Base
   extend  GSP::UI::Javascript::EcoTree::ClassMethods
   include GSP::UI::Javascript::EcoTree::InstanceMethods
   make_ecotree :class_name => 'PurchasedTemplate', :children => 'purchased_templates'
-    
   
-  def deploy_reviews
-    
+  def generate_review
+    review = Review.new :owner => organization.owner, :frequency => frequency,
+                        :name => regulatory_review_name, :organization => organization,
+                        :purchased_template => self, :status => GSP::STATUS::PENDING,
+                        :assigned_at => Time.now, :deployed_at => Time.now
+    review.tasks = generate_tasks
+    review
+  end
+  
+  def deploy_review
+    # Create Code
+  end
+  
+private
+  def generate_tasks
+    _tasks = []
+    JSON.parse(tasks).each_with_index do |t, i|
+      _tasks << Task.new(:name => t["name"], :instructions => t["instructions"], :sequence => (i + 1), 
+                         :status => GSP::STATUS::PENDING, :executor => organization.owner,
+                         :assigned_at => Time.now)
+    end
+    _tasks
   end
 end

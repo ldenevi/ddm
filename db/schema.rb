@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   create_table "tasks", :force => true do |t|
     t.integer  "executor_id"
     t.float    "completion_percentage"
-    t.string   "instructions"
+    t.text     "instructions"
     t.string   "name"
     t.integer  "review_id"
     t.integer  "sequence"

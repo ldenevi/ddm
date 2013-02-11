@@ -154,3 +154,6 @@ iso_9000.tasks = [{:name => 'Conflict Minerals Supplier Log', :instructions => t
                    {:name => 'Determine If Conflict Minerals Are Sourced From Scrap or Recycled Materials', :instructions => tasktext4},
                    {:name => 'Determine If The Firm Has Reason To Believe That Its Conflict Minerals May Have Originated In the DRC or an Adjoining Country.', :instructions => tasktext5}].to_json
 iso_9000.save!
+
+puts "= Purchasing template"
+User.find(1).purchase_template(1)

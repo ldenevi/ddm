@@ -4,7 +4,7 @@
   <tr>
     <td><%= temp.full_name %></td>
     <td>Edit</td>
-    <td>Deploy</td>
+    <td><%= link_to 'Deploy', generate_review_path(temp.id) %></td>
   </tr>
   <% end %>
 </table>

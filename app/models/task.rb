@@ -1,6 +1,8 @@
 class Task < ActiveRecord::Base
   # Display information
-  attr_accessible :comments, :executor, :completion_percentage, :instructions,
+  attr_accessible :comments, 
+                  :executor, :executor_id,
+                  :completion_percentage, :instructions,
                   :name, :review, :sequence, :status
   belongs_to :executor, :class_name => 'User'
   belongs_to :review

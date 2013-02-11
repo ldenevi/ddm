@@ -1,5 +1,9 @@
 require 'spec_helper'
 
 describe Template do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe 'data validations' do
+    it 'should prevent hazardous field values' do
+      pending 'must have purchased data, owner, and organization'
+    end
+  end
 end

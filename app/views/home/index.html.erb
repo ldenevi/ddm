@@ -8,7 +8,7 @@ Dashboard
   <% end %>
   <% unless @user.organization.purchased_templates.empty? %>
   <li><%= link_to 'Purchased templates', organization_templates_path %></li>
-  <li><%= link_to 'Deploy reviews', deploy_reviews_path %></li>
+  <li><%= link_to 'Deploy reviews', deployable_list_path %></li>
   <% end %>
 </ul>
 
