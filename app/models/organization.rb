@@ -1,8 +1,7 @@
 class Organization < ActiveRecord::Base
   
   # ECOTree hierarchy
-  extend  GSP::UI::Javascript::EcoTree::ClassMethods
-  include GSP::UI::Javascript::EcoTree::InstanceMethods
+  include GSP::UI::Javascript::EcoTree
   make_ecotree :class_name => 'Organization', :children => 'organizations'
   
   # Display information

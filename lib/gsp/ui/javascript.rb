@@ -1,9 +1,13 @@
 module GSP::UI::Javascript
   module EcoTree
+    def EcoTree.included(obj)
+      obj.send(:extend,  ClassMethods)
+      obj.send(:include, InstanceMethods)
+    end
+  
     module ClassMethods
-    
       def make_ecotree(config = {:class_name => 'NilClass', :children => :organizations})
-        @@ecotree_config = config
+        self.class_variable_set(:@@ecotree_children, config[:children])
         
         attr_accessible :name, :is_branch, :is_leaf, :root_parent, :parent
         
@@ -14,16 +18,12 @@ module GSP::UI::Javascript
         
         after_create :set_root_parent
         after_create :set_tree_position
-        
-        def ecotree_config(attribute)
-          @@ecotree_config[attribute]
-        end
       end
     end
     
     module InstanceMethods
       def children
-        self.send(self.class.send(:ecotree_config, :children))
+        self.send(self.class.class_variable_get(:@@ecotree_children))
       end
       
       def set_root_parent

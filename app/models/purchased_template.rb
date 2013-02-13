@@ -26,8 +26,7 @@ class PurchasedTemplate < ActiveRecord::Base
   belongs_to :shared_by,    :class_name => 'User'
   
   # ECOTree hierarchy
-  extend  GSP::UI::Javascript::EcoTree::ClassMethods
-  include GSP::UI::Javascript::EcoTree::InstanceMethods
+  include GSP::UI::Javascript::EcoTree
   make_ecotree :class_name => 'PurchasedTemplate', :children => 'purchased_templates'
   
   def generate_review
