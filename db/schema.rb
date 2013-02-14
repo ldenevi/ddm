@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   add_index "comments", ["title"], :name => "index_comments_on_title"
 
   create_table "organizations", :force => true do |t|
-    t.string   "name"
+    t.string   "full_name"
     t.string   "display_name"
     t.integer  "governing_law_id"
     t.integer  "owner_id"
@@ -53,10 +53,10 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   end
 
   add_index "organizations", ["display_name"], :name => "index_organizations_on_display_name"
+  add_index "organizations", ["full_name"], :name => "index_organizations_on_full_name"
   add_index "organizations", ["governing_law_id"], :name => "index_organizations_on_governing_law_id"
   add_index "organizations", ["is_branch"], :name => "index_organizations_on_is_branch"
   add_index "organizations", ["is_leaf"], :name => "index_organizations_on_is_leaf"
-  add_index "organizations", ["name"], :name => "index_organizations_on_name"
   add_index "organizations", ["parent_id"], :name => "index_organizations_on_parent_id"
   add_index "organizations", ["root_parent_id"], :name => "index_organizations_on_root_parent_id"
 
