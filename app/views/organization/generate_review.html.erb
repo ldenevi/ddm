@@ -125,13 +125,16 @@
   </script>
 
 <!-- Deploy single review -->
+
+  <h1>Review template before deploying periodical review</h1>
+
   <div id="wrapper">
   
     <h2>Securities and Exchange Commission (SEC)</h2> <h3>Conflict Minerals</h3>
 
     <%= form_for @review, :url => {:action => 'deploy_review'} do |f| %>
       <%= render 'review_form', :f => f %>
-      <%= f.submit 'Save' %>
+      <%= f.submit "Deploy to Your Organization and #{current_user.organization.to_ecotree_array.size - 1} Sub-Organizations" %>
     <% end %>
     
   </div>

@@ -1,17 +1,1 @@
 Dashboard
-
-<ul>
-  <li><%= link_to 'Sign out, ' + @user.eponym, destroy_user_session_path, :method => :delete %></li>
-  <li><%= link_to 'Your organization', organization_overview_path %></li>
-  <% if @user.can_purchase_templates? %>
-  <li>Buy templates</li>
-  <% end %>
-  <% unless @user.organization.purchased_templates.empty? %>
-  <li><%= link_to 'Purchased templates', organization_templates_path %></li>
-  <li><%= link_to 'Deploy reviews', deployable_list_path %></li>
-  <% end %>
-</ul>
-
-
-
-

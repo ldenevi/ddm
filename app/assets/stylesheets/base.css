@@ -106,7 +106,7 @@ p { margin: 5px; }
 
 #section_app_menu #logo {
   margin-left: 40px;
-  margin-top: 30px;
+  margin-top: 0px;
   vertical-align: middle;
   color: white;
   font-family: Arial;
@@ -215,3 +215,17 @@ p { margin: 5px; }
 
  
 span, li { float: left }
+
+.list_table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.list_table td {
+  border: 1px solid black;
+  padding: 3px;
+
+}
+
+.odd {  background-color:silver; }
+.even { background-color:#EEE;   }

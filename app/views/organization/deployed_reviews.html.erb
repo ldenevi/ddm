@@ -1,0 +1,11 @@
+<p>Deployed templates for <b><%= @purchased_template.full_name %></b> </p>
+
+<table class="list_table">
+  <% @organizations.each do |org| %>
+  <tr class="<%= cycle('even', 'odd') %>">
+    <td><%= org.full_name %></td>
+    <td>View Deployed</td>
+    <td></td>
+  </tr>
+  <% end %>
+</table>

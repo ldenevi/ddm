@@ -1,4 +1,6 @@
 
+<%= flash[:notice] %>
+
   <div id="regulations_list">
     <div id="rl_search">
       <div>
@@ -13,8 +15,10 @@
     <div id="rl_item">
       <div id="ri_fields">
         <div id="ri_agency">
+          <p><%= link_to "Share template", share_template_path(template.id), :method => 'post' %></p<
           <span class="ri_fieldname"><%= template.agency_display_name %></span> -
           <span class="ri_fieldvalue"><%= template.full_name %></span>
+          
         </div>
         
         <div id="ri_iconic_summary">

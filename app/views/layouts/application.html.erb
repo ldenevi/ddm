@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GSP</title>
+  <title>Green Status Pro</title>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <%= stylesheet_link_tag :application, :media => "all" %>
@@ -11,13 +11,84 @@
 </head>
 <body>
 
-<% if Rails.env %>
+<% if Rails.env == 'disabled' %>
 <div style="font-family:Courier New; margin:10px; padding:5px; background-color:silver">
   <%= debug params %>
 </div
-<% end %>>
+<% end %>
 
-<%= yield %>
+
+
+<div id="wrapper">
+
+  <div id="section_app_menu">
+    <span id="logo"><img src="/images/logo.jpg"></span>
+    <% if current_user %>
+    <span id="app_menu">
+      <ul>
+        <li><img src="/images/app_menu/msg.png"></li>
+        <li><img src="/images/app_menu/config.png"></li>
+        <li><img src="/images/app_menu/search.png"></li>
+        <li><img src="/images/app_menu/help.png"></li>
+        <li><img src="/images/app_menu/settings.png"></li>
+        <li>&nbsp;&nbsp;<a href="javascript:logout();"><img src="/images/app_menu/logout.png"></a></li>
+      </ul>
+    </span>
+    <% end %>
+  </div>
+
+  <% if current_user %>
+  <div id="section_nav_menu">
+    <span id="nav_menu">
+      <ul>
+        <li class="inactive-menu" id="nav_menu_home"><%= link_to "Home", '/' %></li>
+        <li class="inactive-menu" id="nav_menu_divisions"><%= link_to "Organization", organization_overview_path %></li>
+        <li class="inactive-menu" id="nav_menu_templates"><%= link_to "Purchased Templates", organization_templates_path %></li>
+        <li class="disabled-menu" id="nav_menu_reviews">
+          <!--<%= link_to "Reviews", 'organization_launched_reviews_path' %> | -->
+          <%= link_to 'Deploy reviews', deployable_list_path %></li>
+        <li class="disabled-menu" id="nav_menu_reports"><%= link_to "Reports", "reports" %></li>
+        <li class="disabled-menu" id="nav_menu_store"><%= link_to "Store", "store" %></li>
+        <li class="disabled-menu" id="nav_menu_loginstatus">
+          <% if user_signed_in? %>
+            <%= link_to 'Sign out, ' + current_user.eponym, destroy_user_session_path, :method => :delete %>
+          <% else %>
+            <%= link_to 'Sign in', new_user_session_path, :method => :post %>
+          <% end %>
+        </li>
+      </ul>
+    </span>
+  </div>
+  <% end %>
+
+
+  <div id="section_app">
+  <%= yield %>
+  </div>
+  
+  <div id="section_bottom_links">
+    <span id="bottom_links">
+      <% if current_user %>
+      <ul>
+        <li>Link 1</li>
+        <li>Link 2</li>
+      </ul>
+      <% else %>
+      <ul>
+        <li>owner@gsp.com</li>
+        <li>sales@gsp.com</li>
+        <li>manufac@gsp.com</li>
+        <li>hr@gsp.com</li>
+      </ul>
+      <% end %>
+    </span>
+  </div>
+<div id="section_footer">
+  <span>&copy; Copyright 2013. Green Status Pro. All Rights Reserved.</span>
+</div>
+
+
+</div>
 
 </body>
 </html>
