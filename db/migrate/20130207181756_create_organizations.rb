@@ -2,7 +2,7 @@ class CreateOrganizations < ActiveRecord::Migration
   def change
     create_table :organizations do |t|
       # Display information
-      t.string     :name
+      t.string     :full_name
       t.string     :display_name
       t.references :governing_law
       t.references :owner
@@ -15,7 +15,7 @@ class CreateOrganizations < ActiveRecord::Migration
 
       t.timestamps
     end
-    add_index :organizations, :name
+    add_index :organizations, :full_name
     add_index :organizations, :display_name
     add_index :organizations, :governing_law_id
     
