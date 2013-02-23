@@ -1,0 +1,154 @@
+<style>
+ #regulation_review {
+  
+    background-color:white;
+    width:750px;
+    border: 1px solid black;
+    padding: 10px;
+    margin-left:50px;
+  }
+  
+  #review_attributes table, td {
+   border: 1px solid black;
+   border-collapse: collapse;
+   padding:5px;
+  }
+  
+  #review_attributes table tr td:first-child {
+    width:300px !important;
+  }
+  
+  
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	
+	#objective { font-size: 1em; text-align:justify }
+	
+	#task_navigation {
+	  float:right;
+	  position:relative;
+	  width: 100%;
+	  margin: 10px 0px 20px 0px;
+	  text-align:right;
+	}
+	
+	#task_navigation li {
+		margin: 2px;
+		position: relative;
+		padding: 4px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	
+	
+	#task_navigation ul {
+	  border: 0; padding:0; margin: 0; float:right;
+	}
+	
+	#review_tasks { position:relative; 
+	}
+	
+	
+	/* TASK COMMENTS */
+	.task { border-bottom:1px solid gray; padding:30px; }
+	.task_comments { border-top:1px solid lightgreen; padding:30px;  }
+  
+  .pending-task { }
+  .done-task { text-decoration:line-through; color:silver; }
+  
+  
+  .task_comments_list { position:relative; border-left:5px solid silver; padding-left:10px; }
+  .task_comment_profile_image { position:relative; height:32px; width:32px; }
+  .task_comment { position:relative; left:45px; top:-32px; height:32px; border-bottom:1px solid silver; color:gray;  }
+  
+  /* Task Comment Input */
+  .display-none { display:none }
+  .display-block { display:block }
+  
+  #task2_comments_entry_collapsed {
+    color:silver;
+    font-size: 18pt;
+    
+    cursor: pointer;
+    border:1px solid silver;
+    margin: 30px;
+    padding: 20px;
+  }
+  
+  #task2_comments_entry_expanded {
+    height: 200px;
+  }
+  
+  #task_comment_editor {
+    position:relative;
+    background-color:gray;
+    width:500px;
+  }
+  
+  </style>
+
+<div>
+  <div style="float:left; margin-right:5px;">
+    <img src="/images/agencies/<%= @template.agency.acronym.downcase %>.png">
+  </div>
+  <div>
+    <h2><%= @template.agency.name %> (<%= @template.agency.acronym %>)</h2> <h3><%= @template.regulatory_review_name %></h3>
+  </div>
+</div>
+
+<div id="regulation_review">
+
+  <div id="review_overview">
+    <h3>Frequency: <%= @template.frequency %></h3>
+  
+    <div id="review_attributes">
+    
+      <div id="review_info" class="display-none">
+        <span id="review_full_name">
+          <%= @template.full_name %>
+        </span>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div id="objective">
+    <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+      <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+      <%= @template.objectives %>
+    </div>
+  </div>
+  
+  
+  <div id="review_tasks">
+    <div id="task_navigation">
+     <ul>
+       <!--li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-triangle-1-w"></span></li-->
+       <!--li class="ui-state-default ui-corner-all">&nbsp;2 / 5&nbsp;</li-->
+       <!--li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-triangle-1-e"></span></li-->
+     </ul>
+    </div>
+    
+    <div id="task_page">
+      <% JSON.parse(@template.tasks).each_with_index do |task, i| %>
+      <div class="task">
+        <p><span>Task <%= i + 1 %></span></p>
+        <span>
+          <h4><%= task["name"] %></h4>
+          <pre><%= task["instructions"] %></pre>
+        </span>
+      </div>
+      <% end %>
+    </div>
+    
+  </div>
+
+  
+  
+  
+  
+</div>
+

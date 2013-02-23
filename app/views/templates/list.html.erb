@@ -1,0 +1,14 @@
+<div class="templates-list">
+  <ul>
+    <li> + <br> Purchase new template</li>
+    <% @templates.each do |template| %>
+    <li>
+      <span class="templates-list-logo"><img src="/images/agencies/<%= template.agency.acronym.downcase %>.png"></span>
+      <span>
+      <br> <%= link_to template.regulatory_review_name, template_show_path(template.id) %> <br> <br> 
+      Frequency: <%= template.frequency %><br><br>
+      <%= link_to 'Deploy Review', deploy_review_path(template.id), :method => 'post' %></span>
+    </li>
+    <% end %>
+  </ul>
+</div>

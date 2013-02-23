@@ -1,0 +1,48 @@
+<link href="/assets/gsp/green/gsp.green.review.css" media="all" rel="stylesheet" type="text/css" />
+
+<div class="panel" id="completed-task-panel">
+  <h2>Your Completed Tasks</h2>
+  <div>
+    <table id="completed-tasks-table">
+      <% if @recently_completed_tasks.empty? %>
+      <tr>
+        <td colspan="3" align="center">No completed tasks</td>
+      </tr>
+      <% else %>
+      <tr>
+        <th>&nbsp;</th>
+        <th>Task</th>
+        <th>Name</th>
+        <th>Completed</th>
+      </tr>
+      <% @recently_completed_tasks.each do |task| %>
+      <%= render 'review/recently_completed_tasks_row', :task => task %>
+      <% end %>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<div id="completed-task-dialog">
+</div>
+
+<script>
+  $('#completed-task-panel a').click(function() {
+    var url = $(this).attr('href');
+    showDialog(url);
+    return false;
+  });
+  
+  $('#completed-task-dialog').dialog({
+    autoOpen:false,
+    height: 600,
+    width: 900,
+    modal: true
+  });
+  
+  function showDialog(url) {
+    $('#completed-task-dialog').load(url);
+    $('#completed-task-dialog').dialog('open');
+  }
+</script>
+

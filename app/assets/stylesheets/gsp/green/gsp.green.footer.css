@@ -1,0 +1,67 @@
+/*  GSP - Green - Footer
+ * Application and service menu
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+ 
+#footer {
+	min-width:1100px;
+	margin:-70px auto 0;
+	height:70px;
+	background:#007C43;
+	position:relative;
+}
+
+#footer-menu {
+  background-color:#333;
+  height:40px;
+  clear:left;
+  text-align:center;
+}
+
+#footer-menu-links {
+  display:block;
+}
+
+#footer-menu-links ul {
+  position:relative;
+  padding:15px 0 0 0;
+  color:#898;
+}
+
+#footer-menu-links ul li {
+  float:left;
+  margin-left:50px;
+  padding-left:25px;
+  font-family:Arial;
+  font-size:8pt;
+}
+
+.footer-menu-first-link {
+  list-style:none;
+}
+
+#footer-menu-links a,
+#footer-menu-links a:visited {
+  color:#898;
+  text-decoration:none;
+}
+
+#footer-menu-links a:hover {
+  color:#DDFFDD;
+}
+
+#footer-copyright {
+  position:relative;
+  background-color:#007C43;
+  height:30px;
+}
+  
+#footer-copyright p {
+  margin:0px;
+  padding-top:10px;
+  padding-right:10px;
+  color:#DFD;
+  text-align:right;
+  font-family:Arial;
+  font-size:8pt;
+}

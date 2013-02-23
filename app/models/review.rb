@@ -2,16 +2,17 @@ class Review < ActiveRecord::Base
   # Display information
   attr_accessible :frequency, :name,
                   :organization, :organization_id,
-                  :owner, :owner_id,
+                  :responsible_party, :responsible_party_id,
                   :purchased_template, :status
 
   belongs_to :organization
-  belongs_to :owner, :class_name => 'User'
+  belongs_to :responsible_party, :class_name => 'User'
   belongs_to :purchased_template
   
   # Tracking
-  attr_accessible :actual_completion_at, :assigned_at, :deployed_at,
-                  :due_at, :start_at
+  attr_accessible :actual_completion_at, :actual_start_at,
+                  :targeted_completion_at, :targeted_start_at,
+                  :assigned_at, :deployed_at
   
   # Relationship
   attr_accessible :purchased_template_id, :tasks_attributes

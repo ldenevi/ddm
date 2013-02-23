@@ -33,10 +33,12 @@ class PurchasedTemplate < ActiveRecord::Base
   make_ecotree :class_name => 'PurchasedTemplate', :children => 'purchased_templates'
   
   def generate_review
-    review = Review.new :owner => organization.owner, :frequency => frequency,
+    review = Review.new :responsible_party => organization.owner, :frequency => frequency,
                         :name => regulatory_review_name, :organization => organization,
                         :purchased_template => self, :status => GSP::STATUS::PENDING,
-                        :assigned_at => Time.now, :deployed_at => Time.now
+                        :assigned_at => Time.now, :deployed_at => Time.now,
+                        :targeted_completion_at => (Time.now + 3.months),
+                        :targeted_start_at => (Time.now + 1.day)
     review.tasks = generate_tasks
     review
   end

@@ -1,0 +1,31 @@
+/*  GSP - Green - Top Menu
+ * Controller-based sub-menu navigation
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+
+#sub-menu {
+  background-color: #3BA173;
+  height:25px;
+  font-family: Calibri, Arial;
+  font-size: 10pt;
+}
+
+#sub-menu-links ul {
+  margin: 0px 0px 0px 200px;
+  list-style: none;
+}
+
+#sub-menu-links ul li {
+  float: left;
+  margin: 5px 20px 0px 20px;
+}
+
+#sub-menu-links ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+#sub-menu-links ul li a:hover {
+  color: #FFCFA6;
+}
+

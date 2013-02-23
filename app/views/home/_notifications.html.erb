@@ -1,0 +1,27 @@
+<div class="panel">
+  <h2>Notifications</h2>
+  <div>
+    <table>
+      <tr>
+        <th>From</th>
+        <th>Subject</th>
+        <th>Date</th>
+      </tr>
+      <tr class="panel-table-row even">
+        <td>John</td>
+        <td>Upcoming regulations changes</td>
+        <td><%= Time.now.to_formatted_s(:short) %></td>
+      </tr>
+      <tr class="panel-table-row odd">
+        <td>John</td>
+        <td>Summary</td>
+        <td><%= Time.now.to_formatted_s(:short) %></td>
+      </tr>
+      <tr class="panel-table-row even">
+        <td>Ted</td>
+        <td>System changes</td>
+        <td><%= Time.now.to_formatted_s(:short) %></td>
+      </tr>
+    </table>
+  </div>
+</div>

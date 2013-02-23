@@ -1,0 +1,12 @@
+/*  GSP - Green - System Notification
+ * System-wide notification
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+
+#sys-notification {
+  background-color: #333;
+  width: 100%;
+  min-height: 5px;
+  color:#DDD;
+  text-align:center;
+}

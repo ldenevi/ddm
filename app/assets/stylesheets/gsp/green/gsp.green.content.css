@@ -1,0 +1,17 @@
+/*  GSP - Green - Content
+ * Work 
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+
+#content {
+  position: relative;
+  top: 0px;
+  margin: 0px;
+  background-color: #DDD;
+  padding: 10px;
+}
+
+#content p {
+  margin:0;
+  
+}

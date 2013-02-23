@@ -12,9 +12,17 @@ class Organization < ActiveRecord::Base
   has_many   :purchased_templates
   after_create :set_owner, :if => lambda { |o| o.owner_id.nil? }
   
+  # Reviews
+  has_many :active_reviews,   :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at > ?", Time.now, Time.now]
+  has_many :upcoming_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at > ? AND targeted_completion_at > ?", Time.now, Time.now]
+  has_many :past_due_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at < ?", Time.now, Time.now]
+  
+  # For ECOTree... should be something other than the general 'name'... JavaScript may have to be changed
   def name
     "#{full_name} (#{self.purchased_templates.size.to_s})"
   end
+  
+  
   
 private
   

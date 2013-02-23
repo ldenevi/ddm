@@ -1,0 +1,41 @@
+<div id="task#{@task.id}" class="task">
+  <div>
+    <span class="task-sequence">
+      <p><%= @task.sequence %></p>
+    </span>
+    <span class="task-due-date">
+      <p>Due</p>
+      <p><%= @task.expected_completion_at.to_formatted_s(:long) %></p>
+    </span>
+  </div>
+  
+  <div class="task-functions">
+    <ul>
+      <li><a href="">Print All Pending</a></li>
+      <li><a href="">Print</a></li>
+    </ul>
+  </div>
+  
+  <div class="task-fields">
+    <span>Person responsible for this task:</span>
+    <span><%= @task.executor.eponym %></span>
+  </div>
+  
+  <div class="task-objective">
+    <h3>Review objective</h3>
+    <span><%= @task.review.purchased_template.objectives %></span>
+  </div>
+  
+  <div class="task-content">
+    
+    <h2>Task <%= @task.sequence %> - <%= @task.name %></h2>
+    <div class="task-instructions">
+      <h3>Instructions</h3>
+      <pre><%= @task.instructions %></pre>
+    </div>
+  
+    <div class="task-comments">
+    </div>
+    
+  </div>
+</div>

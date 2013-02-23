@@ -1,0 +1,56 @@
+<link href="/assets/gsp/green/gsp.green.review.css" media="all" rel="stylesheet" type="text/css" />
+
+<div class="panel" id="task-panel">
+  <h2>Your Active Tasks</h2>
+  <div>
+    <table>
+      
+      <% if @active_tasks.empty? %>
+      <tr>
+        <td colspan="3" align="center">No active tasks</td>
+      </tr>
+      <% else %>
+      <tr>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+        <th>Task</th>
+        <th>Name</th>
+        <th>Due</th>
+      </tr>
+      <% @active_tasks.each do |task| %>
+      <tr class="panel-table-row" id="active-task-row-<%= task.id %>">
+        <td><input type="checkbox" onclick="Task.toggle_completed(<%= task.id %>, this)"></td>
+        <td><%= task.review.purchased_template.agency.acronym %></td>
+        <td align="center"><%= task.sequence %></td>
+        <td><%= link_to task.name, task_show_path(task.id) %></td>
+        <td nowrap><%= task.expected_completion_at.to_formatted_s(:short) %></td>
+      </tr>
+      <% end %>
+      <% end %>
+    </table>
+  </div>
+</div>
+
+<div id="task-dialog">
+</div>
+
+<script>
+  $('#task-panel a').click(function() {
+    var url = $(this).attr('href');
+    showDialog(url);
+    return false;
+  });
+  
+  $('#task-dialog').dialog({
+    autoOpen:false,
+    height: 600,
+    width: 900,
+    modal: true
+  });
+  
+  function showDialog(url) {
+    $('#task-dialog').load(url);
+    $('#task-dialog').dialog('open');
+  }
+</script>
+

@@ -1,0 +1,140 @@
+/*  GSP - Green - Base
+ * Theme loader
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+
+@import url("gsp.green.system-notification.css");
+@import url("gsp.green.topmenu.css");
+@import url("gsp.green.submenu.css");
+@import url("gsp.green.content.css");
+@import url("gsp.green.footer.css");
+
+html, body {
+  background-color:#DDD;
+  margin:0;
+  padding:0;
+  height:100%;
+  font-family:Calibri, Arial;
+  font-size:10pt;
+}
+
+#app {
+  position:relative;
+  top:0px;
+  left:0px;
+	width:100%;
+	min-width:1100px;
+	min-height:100%;
+	height:auto !important;
+	margin:0 auto;
+}
+
+/* Panels */
+
+.panel {
+  width:500px;
+  -webkit-border-radius:10px 10px 10px 10px;
+  border-radius:10px 10px 10px 10px;
+  border:1px solid #999;
+  padding:0px;
+  margin:0px;
+  display:block;
+  float:left;
+  margin: 0 20px 20px 20px;
+}
+
+.panel:hover {
+  border-color:#3BA173;
+}
+
+.panel:hover h2 {
+  border-color:#3BA173;
+  background-color:#3BA173;
+  color:white;
+}
+
+.panel:hover h3 {
+  border-color:#3BA173;
+  background-color:#3BA173;
+  color:white;
+}
+
+.panel:hover .panel-reviews-past-due h3 {
+  background-color:#A13B40;
+  color:#FFCFA6;
+  color:white;
+}
+
+.panel:hover div {
+  border-color:#3BA173;
+}
+
+.panel div {
+  padding:0;
+  margin:0 0 10px 0;
+}
+
+.panel table {
+  border-collapse:collapse;
+  width:100%;
+}
+
+.panel h2 {
+  -webkit-border-radius:10px 10px 0px 0px;
+  border-radius:10px 10px 0px 0px;
+  display:block;
+  margin:0;
+  padding:5px 5px 5px 10px; 
+  background-color:#AAA;
+  border:1px solid #999;
+  font-size:10pt;
+  text-transform:uppercase;
+}
+
+.panel h3 {
+  display:block;
+  margin:0 0 0 0;
+  padding:5px 5px 5px 10px; 
+  background-color:#AAA;
+  border:1px solid #999;
+  font-size:9pt;
+  text-transform:uppercase;
+}
+
+.panel-table-row {
+  border-top:1px solid gray;
+}
+
+.panel-table-row td { padding:5px; }
+.panel-table-row tr { padding:2px; }
+.panel-table-row-unread td { font-weight:bold; }
+.panel-table-row td a { text-decoration:none; color:black; }
+.panel-table-row:hover td a { text-decoration:underline; color:#A13B40; }
+.panel-table-row:hover { background-color:#FFCFA6; cursor:pointer; }
+
+.odd   { background-color:#BBB; }
+.even  { background-color:#CCC; }
+
+.panel-reviews-past-due {
+  background-color:#7C0006;
+  color:white;
+}
+
+.panel-reviews-past-due table { color:black; }
+.panel-reviews-past-due th { color:white; }
+.panel-reviews-past-due .odd { background-color:#FFA6AB; }
+.panel-reviews-past-due .even { background-color:#FF5C65; }
+
+.panel-reviews-past-due h3 {
+  background-color:#FF000D;
+  color:#FFCFA6;
+}
+
+.panel-task-completed,
+.panel-task-completed a,
+.panel-task-completed a:visited,
+.panel-task-completed a:link {
+  color:gray;
+  text-decoration:line-through;
+}
+

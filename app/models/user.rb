@@ -5,7 +5,12 @@ class User < ActiveRecord::Base
   belongs_to :organization
   belongs_to :profile_image, :class_name => 'BinaryFile'
    
-  has_many :active_tasks, :class_name => 'Task', :foreign_key => 'owner_id', :conditions => { :actual_completion_at => nil, :status => GSP::STATUS::ACTIVE }
+  has_many :active_tasks, :class_name => 'Task', :foreign_key => 'executor_id', 
+                          :order => 'review_id DESC, sequence ASC',
+                          :conditions => { :actual_completion_at => nil, :status => GSP::STATUS::PENDING }
+  has_many :recently_completed_tasks, :class_name => 'Task', :foreign_key => 'executor_id', 
+                          :order => 'actual_completion_at DESC',
+                          :conditions => ["actual_completion_at > ? AND status = ?", 1.week.ago, GSP::STATUS::COMPLETED]
   
     
   # == Devise ==

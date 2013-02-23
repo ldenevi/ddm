@@ -1,0 +1,98 @@
+/*  GSP - Green - Reviews
+ * Periodical reviews
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+
+.task {
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  border:1px solid #7C0006;
+  background-color:#FFD;
+  width:800px;
+}
+
+.task-sequence {
+  float:left;
+  display:table-cell;
+  background-color:#7C0006;
+  padding:5px;
+  min-width:40px;
+  margin:0;
+  height:30px;
+  color:#FFCFA6;
+  font-family:Arial;
+  font-weight:bold;
+  font-size:18pt;
+  text-align:center;
+  vertical-align:middle;
+  -webkit-border-radius: 20px 0px 20px 0px;
+  border-radius: 20px 0px 20px 0px;
+}
+
+.task-sequence p { margin:0; padding:0;}
+
+.task-due-date {
+  display:block;
+  padding-right:80px;
+  font-size:22pt;
+  text-align:right;
+}
+
+.task-due-date p {
+  display:inline;
+  color:gray;
+}
+
+.task-due-date p:first-child {
+  color:silver;
+}
+
+.task-functions {
+  margin:0;
+  padding:0;
+  width:100%;
+  overflow:auto;
+  text-align:center;
+}
+
+.task-functions ul {
+  overflow:auto;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.task-functions ul li {
+  padding:0;
+  float:right;
+  margin:0 20px 0 10px;
+}
+
+.task-fields {
+  padding: 0 0 0 10px;
+}
+
+.task-fields span:first-child {
+  font-weight:bold;
+}
+
+.task-objective {
+  margin:0;
+  padding:10px;
+  font-size:9pt;
+}
+
+.task-content {
+  padding:0 10px 0 10px;
+}
+
+.task-instructions pre {
+  border:1px solid #FFA6AB;
+  overflow:scroll;
+}
+
+.task-comments {
+  border-top: 1px solid cadetblue;
+}
+
+

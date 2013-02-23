@@ -1,0 +1,69 @@
+/*  GSP - Green - Top Menu
+ * Universal navigation menu
+ * © Copyright 2013. Green Status Pro. All Rights Reserved.
+ */
+
+#top-menu {
+  position: relative;
+  background-color: #007C43;
+  width: 100%;
+  min-height: 100px;
+  background-image: url("/images/green/top-menu-bg.png");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+}
+
+#top-menu-logo {
+  padding-top: 5px;
+  margin-left: 20px;
+  display:block;
+  float:left;
+  vertical-align: bottom;
+}
+
+#top-menu-links {
+  display:block;
+  position: relative;
+  margin: 0px 0px 0px 250px;
+  padding-top: 65px;
+}
+
+#top-menu-links ul {
+  margin:0px;
+  list-style: none;
+}
+
+#top-menu-links ul li {
+  float:left;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#top-menu-links ul li a {
+  color: white;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-family: Calibri, Arial;
+  font-size: 12pt;
+}
+
+#top-menu-links ul li a:hover {
+  color:#FFCFA6;
+}
+
+
+#top-menu-links .top-menu-link-active {
+}
+
+#top-menu-links .top-menu-link-active a,
+#top-menu-links .top-menu-link-active a:visited,
+#top-menu-links .top-menu-link-active a:active {
+  color:#A6FFD7;
+  text-decoration:underline;
+  font-weight: bold;
+}
+
+#top-menu-links .top-menu-link-disabled a {
+  color:gray;
+  text-decoration:none;
+}

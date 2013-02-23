@@ -1,4 +1,10 @@
 class Task < ActiveRecord::Base
+  validate :executor, :presence => true
+  validate :instructions, :presence => true
+  validate :sequence, :presence => true
+  validate :status, :presence => true
+  validate :review, :presence => true
+  
   # Display information
   attr_accessible :comments, 
                   :executor, :executor_id,
@@ -11,4 +17,16 @@ class Task < ActiveRecord::Base
   # Tracking
   attr_accessible :actual_completion_at, :assigned_at, :expected_completion_at,
                   :start_at
+  
+  def assign_to(user_id)
+    self.executor_id = (user_id.is_a?(User)) ? user_id.id : user_id
+    self.assigned_at = Time.now
+    self.save
+  end
+  
+  def complete
+    self.status = GSP::STATUS::COMPLETED
+    self.actual_completion_at = Time.now
+    self.save
+  end
 end

@@ -96,40 +96,41 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   add_index "purchased_templates", ["purchased_by_id"], :name => "index_purchased_templates_on_purchased_by_id"
 
   create_table "reviews", :force => true do |t|
-    t.integer  "owner_id"
+    t.integer  "responsible_party_id"
     t.string   "frequency"
     t.string   "name"
     t.integer  "organization_id"
     t.integer  "purchased_template_id"
     t.string   "status"
     t.datetime "actual_completion_at"
+    t.datetime "actual_start_at"
+    t.datetime "targeted_completion_at"
+    t.datetime "targeted_start_at"
     t.datetime "assigned_at"
     t.datetime "deployed_at"
-    t.datetime "due_at"
-    t.datetime "start_at"
-    t.datetime "created_at",            :null => false
-    t.datetime "updated_at",            :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
   end
 
   add_index "reviews", ["assigned_at"], :name => "index_reviews_on_assigned_at"
   add_index "reviews", ["name"], :name => "index_reviews_on_name"
-  add_index "reviews", ["owner_id"], :name => "index_reviews_on_owner_id"
   add_index "reviews", ["purchased_template_id"], :name => "index_reviews_on_purchased_template_id"
+  add_index "reviews", ["responsible_party_id"], :name => "index_reviews_on_responsible_party_id"
 
   create_table "tasks", :force => true do |t|
-    t.integer  "executor_id"
+    t.integer  "executor_id",                                               :null => false
     t.float    "completion_percentage"
-    t.text     "instructions"
+    t.text     "instructions",                                              :null => false
     t.string   "name"
-    t.integer  "review_id"
-    t.integer  "sequence"
-    t.string   "status"
+    t.integer  "review_id",                                                 :null => false
+    t.integer  "sequence",               :default => 1,                     :null => false
+    t.string   "status",                 :default => "Pending",             :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at"
+    t.datetime "expected_completion_at", :default => '2013-03-06 15:10:20', :null => false
     t.datetime "start_at"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",                                                :null => false
+    t.datetime "updated_at",                                                :null => false
   end
 
   add_index "tasks", ["executor_id"], :name => "index_tasks_on_executor_id"

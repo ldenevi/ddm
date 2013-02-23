@@ -1,4 +1,5 @@
 /*
+/*
  * This is a manifest file that'll be compiled into application.css, which will include all the files
  * listed below.
  *
@@ -10,14 +11,14 @@
  *
  *= require_self
  *= require_tree .
- */
+ *-/
  
  
-/* === RESET === */
+/* === RESET === *-/
 /**
  * Eric Meyer's Reset CSS v2.0 (http://meyerweb.com/eric/tools/css/reset/)
  * http://cssreset.com
- */
+ *-/
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -38,7 +39,7 @@ time, mark, audio, video {
 	font: inherit;
 	vertical-align: baseline;
 }
-/* HTML5 display-role reset for older browsers */
+/* HTML5 display-role reset for older browsers *-/
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {
 	display: block;
@@ -62,10 +63,10 @@ table {
 	border-spacing: 0;
 }
 
-/* === END RESET === */
+/* === END RESET === *-/
 
 
-/* == REDO STYLES == */
+/* == REDO STYLES == *-/
 ol, ul {
   list-style: circle;
 }
@@ -73,7 +74,7 @@ ol, ul {
 li {
   display:block;
 }
-/* == END REDO STYLES == */
+/* == END REDO STYLES == *-/
 
 
  
@@ -120,7 +121,7 @@ p { margin: 5px; }
   margin-right: 20px;
 }
 
-/* === Navigation Menu === */
+/* === Navigation Menu === *-/
 #section_nav_menu {
   width: 100%;
   height: 40px;
@@ -163,7 +164,7 @@ p { margin: 5px; }
 
 
 
-/* === Application Section === */
+/* === Application Section === *-/
 #section_app {
   background-color: #EEE;
   min-height: 600px;
@@ -229,3 +230,5 @@ span, li { float: left }
 
 .odd {  background-color:silver; }
 .even { background-color:#EEE;   }
+
+*/
