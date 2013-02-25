@@ -1,8 +1,13 @@
-<div id="task#{@task.id}" class="task">
+<div id="task<%= @task.id %>" class="task">
   <div>
     <span class="task-sequence">
       <p><%= @task.sequence %></p>
     </span>
+    <% if @task.is_completed? %>
+    <span class="task-reopen">
+      <p><%= link_to "Re-open", "asdf" %></p>
+    </span>
+    <% end %>
     <span class="task-due-date">
       <p>Due</p>
       <p><%= @task.expected_completion_at.to_formatted_s(:long) %></p>
@@ -19,6 +24,10 @@
   <div class="task-fields">
     <span>Person responsible for this task:</span>
     <span><%= @task.executor.eponym %></span>
+    <% if @task.is_completed? %>
+    <br>
+    <span>Completed at: <%= @task.actual_completion_at.to_formatted_s(:long) %></span>
+    <% end %>
   </div>
   
   <div class="task-objective">
@@ -39,3 +48,10 @@
     
   </div>
 </div>
+
+<% if @task.is_completed? %>
+<script>
+  $(".task").attr("class", "task-completed");
+</script>
+<% end %>
+

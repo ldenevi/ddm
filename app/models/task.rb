@@ -29,4 +29,8 @@ class Task < ActiveRecord::Base
     self.actual_completion_at = Time.now
     self.save
   end
+  
+  def is_completed?
+    !self.actual_completion_at.nil?
+  end
 end

@@ -12,6 +12,7 @@
 }
 
 .task-sequence {
+  position:relative;
   float:left;
   display:table-cell;
   background-color:#7C0006;
@@ -27,6 +28,7 @@
   vertical-align:middle;
   -webkit-border-radius: 20px 0px 20px 0px;
   border-radius: 20px 0px 20px 0px;
+  z-index:2;
 }
 
 .task-sequence p { margin:0; padding:0;}
@@ -93,6 +95,41 @@
 
 .task-comments {
   border-top: 1px solid cadetblue;
+}
+
+.task-reopen {
+  float:left;
+  display:table-cell;
+  background-color:#A13B40;
+  padding:5px 5px 5px 20px;
+  min-width:40px;
+  margin:0 0 0 -15px;
+  height:30px;
+  font-family:Arial;
+  font-weight:bold;
+  font-size:18pt;
+  text-align:center;
+  vertical-align:middle;
+  -webkit-border-radius: 20px 0px 20px 0px;
+  border-radius: 20px 0px 20px 0px;
+  z-index:-3;
+}
+
+.task-reopen p { margin:0; padding:0;}
+.task-reopen a,
+.task-reopen a:link,
+.task-reopen a:visited { color:#FFA65C; text-decoration:none }
+
+.task-reopen a:hover { color:#FFA65C; text-decoration:underline }
+
+.task-completed {
+  text-decoration:line-through;
+  background-color:#5CFFB5;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  border:1px solid #7C0006;
+  width:800px;
+  color:gray;
 }
 
 
