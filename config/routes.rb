@@ -8,9 +8,11 @@ GSP::Application.routes.draw do
   devise_for :users, :controllers => { :sessions => :sessions }
   
   # Templates
+  resource :template
   get "template/list", :to => 'templates#list'
   get "template/show/:id", :to => 'templates#show', :as => 'template_show'
   post "template/:id/deploy_review", :to => 'templates#deploy_review', :as => 'deploy_review'
+  
 
   # Review
   get "review/task/:id/show/", :to => "review#show_task", :as => "task_show"
