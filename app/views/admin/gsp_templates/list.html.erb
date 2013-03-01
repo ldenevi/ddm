@@ -1,0 +1,5 @@
+<ul>
+<% @templates.each do |template| %>
+  <li><%= link_to template.full_name, admin_template_show_path(template.id) %></li>
+<% end %>
+</ul>

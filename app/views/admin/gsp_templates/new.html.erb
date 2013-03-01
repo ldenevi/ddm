@@ -1,0 +1,91 @@
+<script>
+var last_task_added = 0;
+
+function add_task() {
+  ntt = $('#nt_tasks');
+  last_task_added += 1;
+  task_box = build_task_elements(last_task_added);
+  ntt.append(task_box);
+  
+  task_box.slideDown(500);
+  $('html, body').animate({scrollTop: task_box.offset().top}, 500);
+}
+
+function build_task_elements(no) {
+  return $("<div id='task_"+no+"' style='display:none'>\
+              <span><p>Task "+no+"</p></span>\
+              <span>Name: <input type='text' size='50' name='[tasks]["+no+"]name'></span>\
+              <span>Instructions: <textarea id='task_"+no+"' rows='10' name='[tasks]["+no+"]instructions' cols='65'></textarea></span>\
+            </div>");
+}
+
+</script>
+
+<style>
+#new_template { ; float:left;width:500px; margin-right:80px; }
+#new_template div { margin-bottom:20px }
+#new_template div span { border:0px solid black; display:block; width:500px; }
+#app { min-height:2000px }
+#footer { display:none; }
+</style>
+
+<div id="new_template">
+  <form action="/admin/gsp_templates/create" method="get">
+  <div id="nt_agency">
+    <span>Agency</span>
+    <span>
+      <select name="[template]agency_id">
+        <% @agencies.each do |a| %>
+        <option value="<%= a.id %>"><%= [a.id.to_s, a.acronym, a.name].join(" - ") %></option>
+        <% end %>
+      </select>
+    </span>
+  </div>
+  
+  <div id="nt_regulation_full_name">
+    <span>Regulation Full Name</span>
+    <span><%= text_field_tag '[template]full_name', nil, :size => 50 %></span>
+  </div>
+  
+  <div id="nt_regulation_display_name">
+    <span>Regulation Display Name</span>
+    <span><%= text_field_tag '[template]display_name', nil, :size => 50 %></span>
+  </div>
+  
+  <div id="nt_description">
+    <span>Description</span>
+    <span><%= text_field_tag '[template]description', nil, :size => 50 %></span>
+  </div>
+  
+  <div id="nt_review_name">
+    <span>Review Name</span>
+    <span><%= text_field_tag '[template]regulatory_review_name', nil, :size => 50 %></span>
+  </div>
+  
+  <div id="nt_frequency">
+    <span>Frequency</span>
+    <span><%= text_field_tag '[template]frequency', nil, :size => 50 %></span>
+  </div>
+  
+  <div id="nt_review_objective">
+    <span>Review Objective</span>
+    <span><%= text_area_tag '[template]objectives', nil, :cols => 65, :rows => 10 %></span>
+  </div>
+  
+  <div>
+    <div id="nt_tasks">
+    </div>
+  
+    <a href="javascript:add_task()">Add Task</a>
+  </div>
+  
+  <div>
+    <span><%= submit_tag "Save and Create Another" %></span>
+  </div>
+  </form>
+</div>
+
+<div>
+  <h1>Example Review</h1>
+  <img src="/images/review_editor.png" style="opacity:0.6">
+</div>

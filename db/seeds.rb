@@ -9,9 +9,12 @@
 load './db/seeds/agencies.rb'
 Dir['./db/seeds/templates/*'].each { |t| load t }
 
+load "./db/seeds/clients/gsp.rb"
+load "./db/seeds/clients/fake.rb"
+
 if ENV["GSP_CLIENT"]
   load "./db/seeds/clients/#{ENV["GSP_CLIENT"]}.rb"
 else
-  load "./db/seeds/clients/gsp.rb"
+  puts "If you want to add a custome client, user GSP_CLIENT=client_name rake db:seed"
 end
 

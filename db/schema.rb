@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.string   "status",                 :default => "Pending",             :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-03-06 15:10:20', :null => false
+    t.datetime "expected_completion_at", :default => '2013-03-15 06:12:09', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false

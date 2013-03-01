@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   end
   
   def can_purchase_templates?
-    organization.owner == self
+    true #organization.owner == self
   end
   
   def purchase_template(template_id)

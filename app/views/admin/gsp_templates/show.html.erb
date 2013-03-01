@@ -1,0 +1,57 @@
+
+<style>
+#new_template { ; float:left;width:500px; margin-right:80px; }
+#new_template div { margin-bottom:20px }
+#new_template div span:firs-child { font-weight:bold; }
+#new_template div span { border:0px solid black; display:block; width:500px; }
+#app { min-height:2000px }
+#footer { display:none; }
+</style>
+
+<div id="new_template">
+  <div id="nt_agency">
+    <span>Agency</span>
+    <span>
+      <%= @template.agency.name %>
+    </span>
+  </div>
+  
+  <div id="nt_regulation_full_name">
+    <span>Regulation Full Name</span>
+    <span><%= @template.full_name %></span>
+  </div>
+  
+  <div id="nt_regulation_display_name">
+    <span>Regulation Display Name</span>
+    <span><%= @template.display_name %></span>
+  </div>
+  
+  <div id="nt_description">
+    <span>Description</span>
+    <span><%= @template.description %></span>
+  </div>
+  
+  <div id="nt_review_name">
+    <span>Review Name</span>
+    <span><%= @template.regulatory_review_name %></span>
+  </div>
+  
+  <div id="nt_frequency">
+    <span>Frequency</span>
+    <span><%= @template.frequency %></span>
+  </div>
+  
+  <div id="nt_review_objective">
+    <span>Review Objective</span>
+    <span><%= @template.objectives %></span>
+  </div>
+  
+  <div>
+    <% @tasks.each_with_index do |task, index| %>
+    <div>Task <%= index + 1 %></div>
+    <div><%= task["name"] %></div>
+    <div><pre><%= task["instructions"] %></pre></div>
+    <% end %>
+  </div>
+</div>
+

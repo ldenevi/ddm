@@ -2,7 +2,10 @@
   <div id="sub-menu">
     <span id="sub-menu-links">
       <ul>
-        <li></li>
+        <% if params[:controller] == 'admin/gsp_templates' %>
+        <li><%= link_to "GSP Templates List", admin_list_templates_path %></li>
+        <li><%= link_to "Create GSP Templates", admin_new_template_path %></li>
+        <% end %>
       </ul>
     </span>
   </div>

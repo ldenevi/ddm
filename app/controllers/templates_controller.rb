@@ -12,14 +12,4 @@ class TemplatesController < ApplicationController
   def show
     @template = PurchasedTemplate.find(params[:id])
   end
-  
-  def new
-    @template = Template.new
-    @agencies = Agency.find(:all, :order => 'acronym')
-  end
-  
-  def create
-    render :text => params.inspect
-  end
-  
 end
