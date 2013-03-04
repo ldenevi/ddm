@@ -7,7 +7,7 @@ GSP::Application.routes.draw do
   
   devise_for :users, :controllers => { :sessions => :sessions }
   
-  # Purchased Templates
+  # Organization Templates
   get "template/list", :to => 'templates#list'
   get "template/show/:id", :to => 'templates#show', :as => 'template_show'
   post "template/:id/deploy_review", :to => 'templates#deploy_review', :as => 'deploy_review'
@@ -16,7 +16,7 @@ GSP::Application.routes.draw do
   get "admin/gsp_templates/index", :to => "admin/gsp_templates#index", :as => 'admin_templates'
   get "admin/gsp_templates/list", :to => "admin/gsp_templates#list", :as => 'admin_list_templates'
   get "admin/gsp_templates/new", :to => "admin/gsp_templates#new", :as => 'admin_new_template'
-  get "admin/gsp_templates/create", :to => "admin/gsp_templates#create"
+  post "admin/gsp_templates/create", :to => "admin/gsp_templates#create"
   get "admin/gsp_templates/show/(:id)", :to => "admin/gsp_templates#show", :as => "admin_template_show"
   
   # Review

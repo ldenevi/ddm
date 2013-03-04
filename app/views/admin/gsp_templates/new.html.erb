@@ -30,7 +30,8 @@ function build_task_elements(no) {
 </style>
 
 <div id="new_template">
-  <form action="/admin/gsp_templates/create" method="get">
+  <form action="/admin/gsp_templates/create" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
   <div id="nt_agency">
     <span>Agency</span>
     <span>

@@ -1,5 +1,5 @@
 <ul>
 <% @templates.each do |template| %>
-  <li><%= link_to template.full_name, admin_template_show_path(template.id) %></li>
+  <li><%= link_to "#{template.full_name} - #{template.regulatory_review_name}", admin_template_show_path(template.id) %></li>
 <% end %>
 </ul>
