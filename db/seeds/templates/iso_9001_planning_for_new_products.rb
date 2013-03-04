@@ -1,12 +1,12 @@
 puts "Creating ISO 9001:2008 - Planning for New Products and Processes Checklist ..."
-template = Template.create({:agency => Agency.find_by_acronym('ISO'),
-                            :full_name => 'ISO 9001:2008 Quality Management System Requirements',
-                            :display_name => 'ISO 9001',
-                            :description => 'ISO 9001:2008 sets out the criteria for a quality management system.',
-                            :regulatory_review_name => 'ISO 9001:2008 - Planning for New Products and Processes Checklist',
-                            :frequency => 'Annual',                            
-                            :objectives => "The organization must have in place processes needed for product realization.  Read through all the task instructions to understand how to document this review.  Then identify and interview the executive(s) responsible for defining new products and processes that meet customers' requirements.  Note any exceptions to the organization's QMS policy and report to the appropriate person for corrective action.  When you identify methods to improve a process, document your findings and forward to the appropriate person."
-                            })
+template = GspTemplate.create({:agency => Agency.find_by_acronym('ISO'),
+                               :full_name => 'ISO 9001:2008 Quality Management System Requirements',
+                               :display_name => 'ISO 9001',
+                               :description => 'ISO 9001:2008 sets out the criteria for a quality management system.',
+                               :regulatory_review_name => 'ISO 9001:2008 - Planning for New Products and Processes Checklist',
+                               :frequency => 'Annual',                            
+                               :objectives => "The organization must have in place processes needed for product realization.  Read through all the task instructions to understand how to document this review.  Then identify and interview the executive(s) responsible for defining new products and processes that meet customers' requirements.  Note any exceptions to the organization's QMS policy and report to the appropriate person for corrective action.  When you identify methods to improve a process, document your findings and forward to the appropriate person."
+                               })
                       
 tasks = []
 

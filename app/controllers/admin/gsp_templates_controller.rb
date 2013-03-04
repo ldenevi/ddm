@@ -4,11 +4,11 @@ class Admin::GspTemplatesController < ApplicationController
   end
   
   def list
-    @templates = Template.all
+    @templates = GspTemplate.all
   end
   
   def new
-    @template = Template.new
+    @template = GspTemplate.new
     @agencies = Agency.find(:all, :order => 'id')
   end
    
@@ -21,12 +21,12 @@ class Admin::GspTemplatesController < ApplicationController
     end
     
     attrs = params[:template].merge({:tasks => tasks.to_json})
-    template = Template.create attrs
+    template = GspTemplate.create attrs
     redirect_to :action => 'new'
   end
   
   def show
-    @template = Template.find(params[:id])
+    @template = GspTemplate.find(params[:id])
     @tasks = JSON.parse(@template.tasks)
   end
   

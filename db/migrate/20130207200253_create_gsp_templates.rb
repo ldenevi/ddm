@@ -1,6 +1,6 @@
-class CreateTemplates < ActiveRecord::Migration
+class CreateGspTemplates < ActiveRecord::Migration
   def change
-    create_table :templates do |t|
+    create_table :gsp_templates do |t|
       # Display information
       t.float      :price
       t.references :agency
@@ -21,10 +21,10 @@ class CreateTemplates < ActiveRecord::Migration
       t.references :parent
       t.timestamps
     end
-    add_index :templates, :agency_id
-    add_index :templates, :agency_display_name
-    add_index :templates, :author_id
-    add_index :templates, :display_name
-    add_index :templates, :full_name
+    add_index :gsp_templates, :agency_id
+    add_index :gsp_templates, :agency_display_name
+    add_index :gsp_templates, :author_id
+    add_index :gsp_templates, :display_name
+    add_index :gsp_templates, :full_name
   end
 end

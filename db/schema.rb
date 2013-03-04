@@ -39,6 +39,65 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   add_index "comments", ["body"], :name => "index_comments_on_body"
   add_index "comments", ["title"], :name => "index_comments_on_title"
 
+  create_table "gsp_templates", :force => true do |t|
+    t.float    "price"
+    t.integer  "agency_id"
+    t.string   "agency_display_name"
+    t.text     "description"
+    t.string   "display_name"
+    t.string   "frequency"
+    t.string   "full_name"
+    t.text     "objectives"
+    t.string   "regulatory_review_name"
+    t.text     "tasks"
+    t.integer  "author_id"
+    t.text     "reasons_for_update"
+    t.integer  "parent_id"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+  end
+
+  add_index "gsp_templates", ["agency_display_name"], :name => "index_gsp_templates_on_agency_display_name"
+  add_index "gsp_templates", ["agency_id"], :name => "index_gsp_templates_on_agency_id"
+  add_index "gsp_templates", ["author_id"], :name => "index_gsp_templates_on_author_id"
+  add_index "gsp_templates", ["display_name"], :name => "index_gsp_templates_on_display_name"
+  add_index "gsp_templates", ["full_name"], :name => "index_gsp_templates_on_full_name"
+
+  create_table "organization_templates", :force => true do |t|
+    t.integer  "agency_id"
+    t.string   "agency_display_name"
+    t.text     "description"
+    t.string   "display_name"
+    t.string   "frequency"
+    t.string   "full_name"
+    t.text     "objectives"
+    t.integer  "organization_id",                           :null => false
+    t.string   "regulatory_review_name"
+    t.integer  "gsp_template_id"
+    t.integer  "revision"
+    t.boolean  "is_latest_revision"
+    t.text     "tasks"
+    t.boolean  "is_archived"
+    t.integer  "approved_by_id"
+    t.datetime "approved_at"
+    t.integer  "modified_by_id"
+    t.integer  "purchased_by_id"
+    t.integer  "shared_by_id"
+    t.datetime "shared_at"
+    t.integer  "parent_id"
+    t.integer  "root_parent_id"
+    t.boolean  "is_branch",              :default => false
+    t.boolean  "is_leaf",                :default => false
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "organization_templates", ["approved_by_id"], :name => "index_organization_templates_on_approved_by_id"
+  add_index "organization_templates", ["display_name"], :name => "index_organization_templates_on_display_name"
+  add_index "organization_templates", ["full_name"], :name => "index_organization_templates_on_full_name"
+  add_index "organization_templates", ["organization_id"], :name => "index_organization_templates_on_organization_id"
+  add_index "organization_templates", ["purchased_by_id"], :name => "index_organization_templates_on_purchased_by_id"
+
   create_table "organizations", :force => true do |t|
     t.string   "full_name"
     t.string   "display_name"
@@ -60,47 +119,12 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   add_index "organizations", ["parent_id"], :name => "index_organizations_on_parent_id"
   add_index "organizations", ["root_parent_id"], :name => "index_organizations_on_root_parent_id"
 
-  create_table "purchased_templates", :force => true do |t|
-    t.integer  "agency_id"
-    t.string   "agency_display_name"
-    t.text     "description"
-    t.string   "display_name"
-    t.string   "frequency"
-    t.string   "full_name"
-    t.text     "objectives"
-    t.integer  "organization_id"
-    t.string   "regulatory_review_name"
-    t.integer  "template_id"
-    t.integer  "revision"
-    t.boolean  "is_latest_revision"
-    t.text     "tasks"
-    t.boolean  "is_archived"
-    t.integer  "approved_by_id"
-    t.datetime "approved_at"
-    t.integer  "modified_by_id"
-    t.integer  "purchased_by_id"
-    t.integer  "shared_by_id"
-    t.datetime "shared_at"
-    t.integer  "parent_id"
-    t.integer  "root_parent_id"
-    t.boolean  "is_branch",              :default => false
-    t.boolean  "is_leaf",                :default => false
-    t.datetime "created_at",                                :null => false
-    t.datetime "updated_at",                                :null => false
-  end
-
-  add_index "purchased_templates", ["approved_by_id"], :name => "index_purchased_templates_on_approved_by_id"
-  add_index "purchased_templates", ["display_name"], :name => "index_purchased_templates_on_display_name"
-  add_index "purchased_templates", ["full_name"], :name => "index_purchased_templates_on_full_name"
-  add_index "purchased_templates", ["organization_id"], :name => "index_purchased_templates_on_organization_id"
-  add_index "purchased_templates", ["purchased_by_id"], :name => "index_purchased_templates_on_purchased_by_id"
-
   create_table "reviews", :force => true do |t|
     t.integer  "responsible_party_id"
     t.string   "frequency"
     t.string   "name"
     t.integer  "organization_id"
-    t.integer  "purchased_template_id"
+    t.integer  "organization_template_id"
     t.string   "status"
     t.datetime "actual_completion_at"
     t.datetime "actual_start_at"
@@ -108,13 +132,13 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.datetime "targeted_start_at"
     t.datetime "assigned_at"
     t.datetime "deployed_at"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
   end
 
   add_index "reviews", ["assigned_at"], :name => "index_reviews_on_assigned_at"
   add_index "reviews", ["name"], :name => "index_reviews_on_name"
-  add_index "reviews", ["purchased_template_id"], :name => "index_reviews_on_purchased_template_id"
+  add_index "reviews", ["organization_template_id"], :name => "index_reviews_on_organization_template_id"
   add_index "reviews", ["responsible_party_id"], :name => "index_reviews_on_responsible_party_id"
 
   create_table "tasks", :force => true do |t|
@@ -127,7 +151,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.string   "status",                 :default => "Pending",             :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-03-15 06:12:09', :null => false
+    t.datetime "expected_completion_at", :default => '2013-03-18 05:56:47', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
@@ -137,32 +161,8 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
   add_index "tasks", ["review_id"], :name => "index_tasks_on_review_id"
   add_index "tasks", ["status"], :name => "index_tasks_on_status"
 
-  create_table "templates", :force => true do |t|
-    t.float    "price"
-    t.integer  "agency_id"
-    t.string   "agency_display_name"
-    t.text     "description"
-    t.string   "display_name"
-    t.string   "frequency"
-    t.string   "full_name"
-    t.text     "objectives"
-    t.string   "regulatory_review_name"
-    t.text     "tasks"
-    t.integer  "author_id"
-    t.text     "reasons_for_update"
-    t.integer  "parent_id"
-    t.datetime "created_at",             :null => false
-    t.datetime "updated_at",             :null => false
-  end
-
-  add_index "templates", ["agency_display_name"], :name => "index_templates_on_agency_display_name"
-  add_index "templates", ["agency_id"], :name => "index_templates_on_agency_id"
-  add_index "templates", ["author_id"], :name => "index_templates_on_author_id"
-  add_index "templates", ["display_name"], :name => "index_templates_on_display_name"
-  add_index "templates", ["full_name"], :name => "index_templates_on_full_name"
-
   create_table "users", :force => true do |t|
-    t.integer  "organization_id"
+    t.integer  "organization_id",                        :null => false
     t.string   "display_name"
     t.string   "first_name"
     t.string   "last_name"

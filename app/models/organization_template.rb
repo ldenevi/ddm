@@ -1,12 +1,12 @@
-class PurchasedTemplate < ActiveRecord::Base
+class OrganizationTemplate < ActiveRecord::Base
   # Mass-assign ids
-  attr_accessible :agency_id, :template_id, :approved_by_id, :modified_by_id, :purchased_by_id, :shared_by_id, :parent_id, :root_parent_id, :organization_id
+  attr_accessible :agency_id, :gsp_template_id, :approved_by_id, :modified_by_id, :purchased_by_id, :shared_by_id, :parent_id, :root_parent_id, :organization_id
   
   # Display information
   attr_accessible :agency, :agency_display_name,
                   :description, :display_name, :frequency, :full_name,
                   :objectives, :organization, :regulatory_review_name,
-                  :template
+                  :gsp_template
   belongs_to :agency
   belongs_to :organization
 
@@ -30,12 +30,12 @@ class PurchasedTemplate < ActiveRecord::Base
   
   # ECOTree hierarchy
   include GSP::UI::Javascript::EcoTree
-  make_ecotree :class_name => 'PurchasedTemplate', :children => 'purchased_templates'
+  make_ecotree :class_name => 'OrganizationTemplate', :children => 'organization_templates'
   
   def generate_review
     review = Review.new :responsible_party => organization.owner, :frequency => frequency,
                         :name => regulatory_review_name, :organization => organization,
-                        :purchased_template => self, :status => GSP::STATUS::PENDING,
+                        :organization_template => self, :status => GSP::STATUS::PENDING,
                         :assigned_at => Time.now, :deployed_at => Time.now,
                         :targeted_completion_at => (Time.now + 3.months),
                         :targeted_start_at => (Time.now + 1.day)
@@ -62,7 +62,6 @@ class PurchasedTemplate < ActiveRecord::Base
   end
   
   def share_among(organizations)
-  
     if organizations == :all
       organizations = (self.organization.to_ecotree_array.map { |e| e[:id] })[1..-1]
     end
@@ -78,7 +77,7 @@ class PurchasedTemplate < ActiveRecord::Base
     
     organizations.each do |org|
       attrs[:organization_id] = org
-      shared << PurchasedTemplate.create(attrs)
+      shared << OrganizationTemplate.create(attrs)
     end
     
     shared

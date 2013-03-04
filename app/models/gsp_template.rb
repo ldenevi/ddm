@@ -1,4 +1,4 @@
-class Template < ActiveRecord::Base
+class GspTemplate < ActiveRecord::Base
   # Display information
   attr_accessible :price, :agency, :agency_id, :agency_display_name, :description,
                   :display_name, :frequency, :full_name, :objectives,
@@ -11,5 +11,5 @@ class Template < ActiveRecord::Base
   
   # STI
   attr_accessible :parent
-  belongs_to :parent, :class_name => 'Template'
+  belongs_to :parent, :class_name => 'GspTemplate'
 end

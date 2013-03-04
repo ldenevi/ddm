@@ -1,6 +1,6 @@
-class CreatePurchasedTemplates < ActiveRecord::Migration
+class CreateOrganizationTemplates < ActiveRecord::Migration
   def change
-    create_table :purchased_templates do |t|
+    create_table :organization_templates do |t|
       # Display information
       t.integer    :agency_id
       t.string     :agency_display_name
@@ -9,9 +9,9 @@ class CreatePurchasedTemplates < ActiveRecord::Migration
       t.string     :frequency
       t.string     :full_name
       t.text       :objectives
-      t.references :organization
+      t.references :organization, :null => false
       t.string     :regulatory_review_name
-      t.references :template
+      t.references :gsp_template
       
       # Revisions
       t.integer    :revision
@@ -39,10 +39,10 @@ class CreatePurchasedTemplates < ActiveRecord::Migration
       t.timestamps
     end
     
-    add_index :purchased_templates, :approved_by_id
-    add_index :purchased_templates, :full_name
-    add_index :purchased_templates, :display_name
-    add_index :purchased_templates, :organization_id
-    add_index :purchased_templates, :purchased_by_id
+    add_index :organization_templates, :approved_by_id
+    add_index :organization_templates, :full_name
+    add_index :organization_templates, :display_name
+    add_index :organization_templates, :organization_id
+    add_index :organization_templates, :purchased_by_id
   end
 end

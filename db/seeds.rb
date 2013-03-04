@@ -7,14 +7,15 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
 load './db/seeds/agencies.rb'
-Dir['./db/seeds/templates/*'].each { |t| load t }
+Dir['./db/seeds/templates/*.rb'].each { |t| load t }
 
 load "./db/seeds/clients/gsp.rb"
 load "./db/seeds/clients/fake.rb"
 
 if ENV["GSP_CLIENT"]
+  Dir["./db/seeds/templates/#{ENV['GSP_CLIENT']}/*.rb"].each { |t| load t }
   load "./db/seeds/clients/#{ENV["GSP_CLIENT"]}.rb"
 else
-  puts "If you want to add a custome client, user GSP_CLIENT=client_name rake db:seed"
+  puts "If you want to add a custom client, use GSP_CLIENT=client_name rake db:seed"
 end
 

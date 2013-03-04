@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   belongs_to :governing_law, :class_name => 'User'  # Using User just as a placeholder; eventually there'd be a mangeble Law object
   has_many   :users
-  has_many   :purchased_templates
+  has_many   :organization_templates
   after_create :set_owner, :if => lambda { |o| o.owner_id.nil? }
   
   # Reviews
@@ -19,7 +19,7 @@ class Organization < ActiveRecord::Base
   
   # For ECOTree... should be something other than the general 'name'... JavaScript may have to be changed
   def name
-    "#{full_name} (#{self.purchased_templates.size.to_s})"
+    "#{full_name} (#{self.organization_templates.size.to_s})"
   end
   
   

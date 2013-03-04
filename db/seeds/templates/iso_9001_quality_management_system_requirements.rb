@@ -1,12 +1,12 @@
 puts "Creating ISO 9001 Quality Management System Requirements..."
-template = Template.create({:agency => Agency.find_by_acronym('ISO'),
-                            :full_name => 'ISO 9001:2008 Quality Management System Requirements',
-                            :display_name => 'ISO 9001',
-                            :description => '9001:2008 sets out the criteria for a quality management system',
-                            :regulatory_review_name => 'ISO 9001:2008 - Continual Improvement Checklist',
-                            :frequency => 'Annual',                            
-                            :objectives => "The organization must have in place suitable methods for supporting continual improvement of its QMS.  Describe the organization's QMS improvement methods. Note any exceptions to the organization's QMS policy and report to the appropriate person for corrective action.  When you identify a means to improve a method, document your findings and forward to the appropriate person."
-                            })
+template = GspTemplate.create({:agency => Agency.find_by_acronym('ISO'),
+                               :full_name => 'ISO 9001:2008 Quality Management System Requirements',
+                               :display_name => 'ISO 9001',
+                               :description => '9001:2008 sets out the criteria for a quality management system',
+                               :regulatory_review_name => 'ISO 9001:2008 - Continual Improvement Checklist',
+                               :frequency => 'Annual',                            
+                               :objectives => "The organization must have in place suitable methods for supporting continual improvement of its QMS.  Describe the organization's QMS improvement methods. Note any exceptions to the organization's QMS policy and report to the appropriate person for corrective action.  When you identify a means to improve a method, document your findings and forward to the appropriate person."
+                               })
                       
 tasks = []
 

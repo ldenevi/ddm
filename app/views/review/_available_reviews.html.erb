@@ -57,7 +57,7 @@
         </tr>
         <% @upcoming_reviews.each do |review| %>
         <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
-          <td><%= review.purchased_template.agency.acronym %></td>
+          <td><%= review.organization_template.agency.acronym %></td>
           <td><%= review.name %></td>
           <td><%= review.targeted_completion_at.to_formatted_s(:short) %></td>
         </tr>

@@ -6,7 +6,7 @@ class CreateReviews < ActiveRecord::Migration
       t.string     :frequency
       t.string     :name
       t.references :organization
-      t.references :purchased_template
+      t.references :organization_template
       t.string     :status
       
       # Tracking
@@ -23,6 +23,6 @@ class CreateReviews < ActiveRecord::Migration
     add_index :reviews, :name
     add_index :reviews, :assigned_at
     add_index :reviews, :responsible_party_id
-    add_index :reviews, :purchased_template_id
+    add_index :reviews, :organization_template_id
   end
 end

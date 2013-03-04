@@ -1,5 +1,5 @@
 puts "Creating SEC templates..."
-sec_conflict_minerals = Template.create({:agency => Agency.find_by_acronym('SEC'),
+sec_conflict_minerals = GspTemplate.create({:agency => Agency.find_by_acronym('SEC'),
                             :description => 'Section 1502 of the Dodd-Frank Act requires public companies to provide disclosures relating to Conflict Minerals (gold, tin, tantalum, and tungsten) used in the products they manufacture. The intent of the Dodd-Frank mandate is to curb violence and human rights abuses in the Democratic Republic of the Congo (the "DRC") and its adjoining countries (collectively, the "Covered Countries") that may be fueled by proceeds from trade in these minerals through required disclosure, consumer transparency and public pressure on companies that source Conflict Minerals from the region.',
                             :display_name => 'Conflict Minerals',
                             :frequency => 'Quarterly',

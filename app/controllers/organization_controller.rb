@@ -19,7 +19,7 @@ class OrganizationController < ApplicationController
   end
   
   def share_template
-    pt = PurchasedTemplate.find(params[:purchased_template_id])
+    pt = OrganizationTemplate.find(params[:purchased_template_id])
     shared = pt.share_among(:all)
     flash[:notice] = "Template shared to %s" % [shared.map { |p| p.organization.full_name }]
     redirect_to :action => 'templates'
@@ -32,7 +32,7 @@ class OrganizationController < ApplicationController
   end
   
   def generate_review
-    @review = PurchasedTemplate.find(params[:purchased_template_id]).generate_review
+    @review = OrganizationTemplate.find(params[:purchased_template_id]).generate_review
   end
   
   def deploy_review
@@ -40,14 +40,14 @@ class OrganizationController < ApplicationController
   
     # render :text => "<h1>Submitted params</h1><div style='font-family:Courier New; width:1000px'>#{params.inspect}</div><br><br><h1>#{@review.inspect}</h1>"
     # Poof! send off
-    purchased_template = PurchasedTemplate.find(params[:review][:purchased_template_id])
+    purchased_template = OrganizationTemplate.find(params[:review][:purchased_template_id])
     puts "purchased_template.deploy_all_reviews"
     purchased_template.deploy_all_reviews
     redirect_to :action => 'deployed_reviews', :purchased_template_id => params[:review][:purchased_template_id]
   end
   
   def deployed_reviews
-    @purchased_template = PurchasedTemplate.find(params[:purchased_template_id])
+    @purchased_template = OrganizationTemplate.find(params[:purchased_template_id])
     @organizations = [@purchased_template.organization] + @purchased_template.children.map(&:organization)
   end
   

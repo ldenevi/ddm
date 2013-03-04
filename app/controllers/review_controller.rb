@@ -2,7 +2,7 @@ class ReviewController < ApplicationController
   layout :false
   
   def show_task
-    @task = Task.find(params[:id], :include => {:review => :purchased_template})
+    @task = Task.find(params[:id], :include => {:review => :organization_template})
   end
   
   def active_tasks
