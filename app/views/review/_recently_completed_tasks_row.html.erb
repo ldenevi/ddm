@@ -1,7 +1,7 @@
 <% task = @task if task.nil? %>
 
       <tr class="panel-table-row panel-task-completed"  id="completed-task-row-<%= task.id %>">
-        <td><%= task.review.purchased_template.agency.acronym %></td>
+        <td><%= task.review.agency.acronym %></td>
         <td align="center"><%= task.sequence %></td>
         <td><%= link_to task.name, task_show_path(task.id) %></td>
         <td nowrap><%= task.actual_completion_at.to_formatted_s(:short) %></td>
