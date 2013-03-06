@@ -1,2 +1,2 @@
-Time::DATE_FORMATS[:task_due_date] = "%B %Y"
+Time::DATE_FORMATS[:review_date] = "%B, %d %Y"
 
