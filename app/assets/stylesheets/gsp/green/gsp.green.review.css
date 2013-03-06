@@ -9,6 +9,7 @@
   border:1px solid #7C0006;
   background-color:#FFD;
   width:800px;
+  min-height: 500px;
 }
 
 .task-sequence {
@@ -91,6 +92,7 @@
 .task-instructions pre {
   border:1px solid #FFA6AB;
   overflow:scroll;
+  min-height:200px;
 }
 
 .task-comments {
