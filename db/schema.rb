@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.integer  "responsible_party_id"
     t.string   "frequency"
     t.string   "name"
+    t.integer  "owner_id"
     t.integer  "organization_id"
     t.integer  "organization_template_id"
     t.string   "status"
@@ -151,7 +152,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.string   "status",                 :default => "Pending",             :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-03-18 05:56:47', :null => false
+    t.datetime "expected_completion_at", :default => '2013-03-20 15:48:49', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false

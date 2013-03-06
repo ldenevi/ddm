@@ -1,0 +1,81 @@
+<!-- TODO Create Rails helper to append stylesheets in <head> -->
+<link href="/assets/gsp/green/gsp.green.review.css" media="all" rel="stylesheet" type="text/css">
+
+<div id="review_prepare">
+  
+  <div style="font-family:Arial">
+    <div style="float:left; margin-right:5px;">
+      <img src="/images/agencies/<%= @review.agency.acronym.downcase %>.png">
+    </div>
+    <div>
+      <h2><%= "%s (%s)" % [@review.agency.name, @review.agency.acronym] %></h2>
+      <h3><%= @review.name %></h3>
+    </div>
+  </div>
+  
+  <div id="review_page">
+  <%= form_for @review, :url => deploy_review_path(@review), :method => :post, :html => {:id => "review_form"} do |review_form| %>
+    <h3><%= @review.frequency %> Review</h3>
+    <%= submit_tag "Deploy Review", :confirm => "Are you sure you want to deploy?" %>
+    
+    <%= render "prepare_review_attributes", :review => @review, :review_form => review_form %>
+    <%= render "prepare_review_tasks", :review_form => review_form %>
+  <% end %>
+  </div>
+</div>
+
+
+<script>
+
+var tasks  = $('.review-task-inactive');
+first_task = $(tasks[0]);
+first_task.removeClass('review-task-inactive');
+first_task.addClass('review-task-active');
+
+prev_arrow = $('.review-task-page-previous')[0];
+next_arrow = $('.review-task-page-next')[0];
+
+var active_task = 0;
+update_task_page_number()
+
+prev_arrow.onclick = function() {
+  if (active_task == 0)
+    return;
+  else {
+    $(tasks[active_task]).slideUp(500);
+    //$(tasks[active_task]).removeClass('review-task-active').addClass('review-task-inactive');
+    active_task--;
+    //$(tasks[active_task]).removeClass('review-task-inactive').addClass('review-task-active');
+    $(tasks[active_task]).slideDown(500);
+    update_task_page_number();
+  }
+}
+
+next_arrow.onclick = function() {
+  if (active_task == (tasks.length - 1))
+    return;
+  else {
+    $(tasks[active_task]).slideUp(500);
+   // $(tasks[active_task]).removeClass('review-task-active').addClass('review-task-inactive');
+    active_task++;
+   // $(tasks[active_task]).removeClass('review-task-inactive').addClass('review-task-active');
+    $(tasks[active_task]).slideDown(500);
+    update_task_page_number();
+  }
+}
+
+function update_task_page_number() {
+  $('#task_page_numbers').empty();
+  $('#task_page_numbers').append("&nbsp;" + (active_task + 1) + " / " + tasks.length + "&nbsp;");
+}
+
+
+$(function() {
+    $("#review_start_date").datepicker({dateFormat:"MM d, yy"});
+    $("#review_due_date").datepicker({dateFormat:"MM d, yy"});
+    $(".task-start-at").datepicker({dateFormat:"MM d, yy"});
+    $(".task-due-at").datepicker({dateFormat:"MM d, yy"});
+  });
+ 
+</script>
+

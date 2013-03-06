@@ -1,0 +1,40 @@
+<div id="review_attributes">
+  <%= review_form.hidden_field :organization_id %>
+  <%= review_form.hidden_field :organization_template_id %>
+  <%= review_form.hidden_field :frequency %>
+  <%= review_form.hidden_field :name %>
+  <%= review_form.hidden_field :status %>
+  <%= review_form.hidden_field :deployed_at %>
+  <%= review_form.hidden_field :assigned_at %>
+  <table>
+    <tr>
+      <td rowspan="2">
+      <strong>Due: <%= @review.targeted_completion_at.to_formatted_s(:review_date) %></strong>
+      </br><%= @review.name %></td>
+      <td>Owner</td>
+      <td>Start</td>
+      <td>Due Date</td>
+      <td>Status</td>
+    </tr>
+    
+    <tr>
+      <td nowrap>
+        <%= review_form.select :owner_id, @possible_review_owner_options %>
+      </td>
+      
+      <td nowrap><span><%= review_form.text_field :targeted_start_at, :value => @review.targeted_start_at.to_formatted_s(:review_date),  :size => 15, :id => 'review_start_date' %></span></td>
+      <td nowrap><span><%= review_form.text_field :targeted_completion_at, :value => @review.targeted_completion_at.to_formatted_s(:review_date), :size => 15, :id => 'review_due_date' %></span></td>
+      <td><span style="color:red"><%= @review.status %></span></td>
+    </tr>
+  </table>
+
+  <div id="review_objective">
+    <div class="ui-state-highlight ui-corner-all">
+         <span class="ui-icon ui-icon-info" style="float:left;"></span>
+         <p><strong>Overview</strong></p>
+         <p><%= @review.organization_template.description %></p>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,20 @@
+<div id="review_tasks">
+  <div id="task_page_navigation">
+   <ul>
+     <li class="ui-state-default ui-corner-all review-task-page-previous"><span class="ui-icon ui-icon-triangle-1-w"></span></li>
+     <li class="ui-state-default ui-corner-all" id="task_page_numbers"></li>
+     <li class="ui-state-default ui-corner-all review-task-page-next"><span class="ui-icon ui-icon-triangle-1-e"></span></li>
+   </ul>
+  </div>
+  
+  <div id="task_pages">
+    <% @review.tasks.each do |task| -%>
+    <%= review_form.fields_for :tasks, task do |task_form| %>
+    <%= render "prepare_review_task", :task => task, :task_form => task_form %>
+    <% end -%> 
+    <% end -%> 
+  </div>
+  
+</div>
+
+

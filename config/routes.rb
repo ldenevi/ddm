@@ -10,7 +10,8 @@ GSP::Application.routes.draw do
   # Organization Templates
   get "template/list", :to => 'templates#list'
   get "template/show/:id", :to => 'templates#show', :as => 'template_show'
-  post "template/:id/deploy_review", :to => 'templates#deploy_review', :as => 'deploy_review'
+  post "template/deploy_review", :to => 'templates#deploy_review', :as => 'deploy_review'
+  get "template/:id/prepare_review", :to => "templates#prepare_review", :as => 'prepare_review'
   
   # GSP Templates
   get "admin/gsp_templates/index", :to => "admin/gsp_templates#index", :as => 'admin_templates'

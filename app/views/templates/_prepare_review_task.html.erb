@@ -1,0 +1,41 @@
+<div id="task_<%= task.sequence.to_s %>" class="review-task review-task-inactive">
+  <%= task_form.hidden_field :sequence %>
+  <%= task_form.hidden_field :name %>
+  <%= task_form.hidden_field :instructions %>
+  <%= task_form.hidden_field :status %>
+  
+  <div>
+    <p>
+      <span><B>Task <%= task.sequence %></B></span>
+      <h3><%= task.name %></h3>
+      <span>
+        
+        <pre><%= task.instructions %></pre>
+      </span>
+    </p>
+    
+    
+    <table>
+      <tr>
+        <td width="200">Executor</td>
+        <td>Start</td>
+        <td>Due Date</td>
+        <td>Status</td>
+      </tr>
+      
+      <tr>
+        <td nowrap>
+          <%= task_form.select :executor_id, @possible_task_executor_options %>
+        </td>
+        <td nowrap><%= task_form.text_field :start_at, :value => task.start_at.to_formatted_s(:review_date), :size => 15, :class => 'task-start-at' %></td>
+        <td nowrap><%= task_form.text_field :expected_completion_at, :value => task.expected_completion_at.to_formatted_s(:review_date), :size => 15, :class => 'task-due-at' %></td>
+        <td><span style="color:red"><%= task.status %></span></td>
+      </tr>
+    </table>
+  </div>
+  
+  <div>
+  <%= render "prepare_review_task_comments", :comments => task.comments %>
+  </div>
+</div>
+

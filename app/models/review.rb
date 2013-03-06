@@ -12,7 +12,7 @@ class Review < ActiveRecord::Base
   # Tracking
   attr_accessible :actual_completion_at, :actual_start_at,
                   :targeted_completion_at, :targeted_start_at,
-                  :assigned_at, :deployed_at
+                  :assigned_at, :deployed_at, :owner, :owner_id
   
   # Relationship
   attr_accessible :organization_template_id, :tasks_attributes

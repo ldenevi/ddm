@@ -132,4 +132,184 @@
   color:gray;
 }
 
+/* Full review viewer & editor */
+#review_prepare { 
+  position:relative;
+  top:0;
+  left:0;
+  margin-bottom:100px;
+}
+
+#review_page {
+  position:relative;
+  background-color:#FFD;
+  width:800px;
+  border: 1px solid black;
+  padding: 10px;
+  margin-left:50px;
+}
+
+/* Review attributes */
+#review_attributes { }
+
+#review_attributes table {
+  border-collapse:collapse;
+  width:100%;
+}
+
+#review_attributes table tr:first-child td:first-child {
+  width:50%;
+}
+
+#review_attributes td {
+  border:1px solid gray;
+  padding:4px;
+}
+
+#review_objective { margin-top:20px;  }
+
+/* Review tasks */
+#review_tasks { }
+
+#task_page_navigation {
+  margin-top:20px;
+}
+#task_page_navigation:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+#task_page_navigation ul {
+  padding:0;
+  margin:0;
+  list-style:none;
+  float:right;
+}
+
+#task_page_navigation ul li {
+  float:left;
+  min-height:20px;
+  min-width:32px;
+  margin:0 5px 0 5px;
+}
+
+.review-task-page-previous,
+
+.review-task-page-next {
+  cursor:pointer;
+}
+
+#task_pages {
+  position:relative;
+  top:0; left:0;
+  
+}
+
+.review-task { 
+}
+
+.review-task-active {
+  display:block;
+}
+
+.review-task-inactive {
+  display:none;
+}
+
+.review-task table {
+  border-collapse:collapse;
+  width:100%;
+}
+
+.review-task table tr:first-child td:first-child {
+  width:50%;
+}
+
+.review-task td {
+  border:1px solid gray;
+  padding:4px;
+}
+
+
+/*
+ #regulation_review {
+  }
+  
+  #review_attributes table, td {
+   border: 1px solid black;
+   border-collapse: collapse;
+   padding:5px;
+  }
+  
+  #review_attributes table tr td:first-child {
+    width:300px !important;
+  }
+  
+  
+	#icons {
+		margin: 0;
+		padding: 0;
+	}
+	
+	#objective { font-size: .8em }
+	
+	/* Tasks 
+	#task_page { position:relative; border:1px solid red; top:0 }
+	.task { position:absolute; top:0; left:0 }
+	
+	#task_navigation {
+	  float:right;
+	  position:relative;
+	  width: 100%;
+	  margin: 10px 0px 0px 0px;
+	  text-align:right;
+	}
+	
+	#task_navigation li {
+		margin: 2px;
+		position: relative;
+		padding: 4px 0;
+		cursor: pointer;
+		float: left;
+		list-style: none;
+	}
+	
+	
+	#task_navigation ul {
+	  border: 0; padding:0; margin: 0; float:right;
+	}
+	
+	#review_tasks { position:relative; 
+	}
+	
+	
+	/* TASK COMMENTS 
+	.task { border-bottom:1px solid gray; padding:30px;  }
+	.task-instructions { font-size:10pt; font-family:Courier New}
+	.task_comments { border-top:1px solid lightgreen; padding:30px;  }
+  
+  .pending-task { }
+  .done-task { text-decoration:line-through; color:silver; }
+  
+  
+  .task_comments_list { position:relative; border-left:5px solid silver; padding-left:10px; }
+  .task_comment_profile_image { position:relative; height:32px; width:32px; }
+  .task_comment { position:relative; left:45px; top:-32px; height:32px; border-bottom:1px solid #333; color:#333;  }
+  
+  /* Task Comment Input 
+  .display-none { display:none }
+  .display-block { display:block }
+  
+  
+  #task_comment_editor {
+    position:relative;
+    background-color:gray;
+    width:500px;
+  }
+*/
+
 

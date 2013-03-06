@@ -15,31 +15,13 @@
           <th>Name</th>
           <th>Due</th>
         </tr>
-        <tr class="panel-table-row even panel-table-row-unread">
-          <td>SEC</td>
-          <td><a href="">Conflict Minerals</a></td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
+        <% @active_reviews.each do |review| %>
+        <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
+          <td><%= review.agency.acronym %></td>
+          <td><%= review.name %></td>
+          <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
         </tr>
-        <tr class="panel-table-row odd panel-table-row-unread">
-          <td>SEC</td>
-          <td><a href="">Summary</a></td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
-        </tr>
-        <tr class="panel-table-row even panel-table-row-unread">
-          <td>ISO</td>
-          <td><a href="">System changes</a></td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
-        </tr>
-        <tr class="panel-table-row odd">
-          <td>SEC</td>
-          <td>Summary</td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
-        </tr>
-        <tr class="panel-table-row even">
-          <td>ISO</td>
-          <td>System changes</td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
-        </tr>
+        <% end %>
       </table>
     </div>
   </div>
@@ -59,7 +41,7 @@
         <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
           <td><%= review.organization_template.agency.acronym %></td>
           <td><%= review.name %></td>
-          <td><%= review.targeted_completion_at.to_formatted_s(:short) %></td>
+          <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
         </tr>
         <% end %>
       </table>
@@ -77,16 +59,13 @@
           <th>Name</th>
           <th>Due</th>
         </tr>
-        <tr class="panel-table-row even panel-table-row-unread">
-          <td>SEC</td>
-          <td><a href="">Conflict Minerals</a></td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
+        <% @past_due_reviews.each do |review| %>
+        <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
+          <td><%= review.organization_template.agency.acronym %></td>
+          <td><%= review.name %></td>
+          <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
         </tr>
-        <tr class="panel-table-row odd panel-table-row-unread">
-          <td>SEC</td>
-          <td><a href="">Summary</a></td>
-          <td><%= Time.now.next_month.to_formatted_s(:short) %></td>
-        </tr>
+        <% end %>
       </table>
     </div>
   </div>

@@ -7,7 +7,7 @@
       <span>
       <br> <%= link_to template.regulatory_review_name, template_show_path(template.id) %> <br> <br> 
       Frequency: <%= template.frequency %><br><br>
-      <%= link_to 'Deploy Review', deploy_review_path(template.id), :method => 'post' %></span>
+      <%= link_to 'Deploy Review', prepare_review_path(template.id) %></span>
     </li>
     <% end %>
   </ul>

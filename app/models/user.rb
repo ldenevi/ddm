@@ -5,12 +5,18 @@ class User < ActiveRecord::Base
   belongs_to :organization
   belongs_to :profile_image, :class_name => 'BinaryFile'
    
+  # Tasks
   has_many :active_tasks, :class_name => 'Task', :foreign_key => 'executor_id', 
                           :order => 'review_id DESC, sequence ASC',
                           :conditions => { :actual_completion_at => nil, :status => GSP::STATUS::PENDING }
   has_many :recently_completed_tasks, :class_name => 'Task', :foreign_key => 'executor_id', 
                           :order => 'actual_completion_at DESC',
                           :conditions => ["actual_completion_at > ? AND status = ?", 1.week.ago, GSP::STATUS::COMPLETED]
+
+  # Reviews
+  has_many :active_reviews,   :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at > ?", Time.now, Time.now], :foreign_key => 'organization_id', :primary_key => 'organization_id'
+  has_many :upcoming_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at > ? AND targeted_completion_at > ?", Time.now, Time.now], :foreign_key => 'organization_id', :primary_key => 'organization_id'
+  has_many :past_due_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at < ?", Time.now, Time.now], :foreign_key => 'organization_id', :primary_key => 'organization_id'
   
     
   # == Devise ==

@@ -7,7 +7,7 @@
   <%= stylesheet_link_tag '/assets/jquery/pepper-grinder/jquery-ui.css', :media => "all" %>
   <%= stylesheet_link_tag "/assets/gsp/green/gsp.green.#{params[:controller]}.css", :media => "all" %>
   
-  <%= javascript_include_tag :jquery, 'jquery-ui', :rails, :eco_tree, :gsp  %>
+  <%= javascript_include_tag :jquery, 'jquery-ui', 'jquery.jeditable', :rails, :eco_tree, :gsp  %>
   <%= csrf_meta_tags %>
   
   <title><%= params[:controller].titlecase %> - Green Status Pro</title>
