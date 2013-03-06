@@ -16,7 +16,9 @@ class Review < ActiveRecord::Base
   
   # Relationship
   attr_accessible :organization_template_id, :tasks_attributes
+  has_one    :owner, :class => 'User'
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
   has_many   :tasks,    :order => 'sequence'
+  has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
 end
