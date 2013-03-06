@@ -5,6 +5,28 @@
   <div style="text-align:center">No on-going, upcoming nor past due reviews to report</div>
   <% end %>
   
+  <% unless @past_due_reviews.empty? %>
+  <div class="panel-reviews-past-due">
+    <h3>Past Due</h3>
+    <div>
+      <table>
+        <tr>
+          <th>Agency</th>
+          <th>Name</th>
+          <th>Due</th>
+        </tr>
+        <% @past_due_reviews.each do |review| %>
+        <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
+          <td><%= review.organization_template.agency.acronym %></td>
+          <td><%= review.name %></td>
+          <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
+        </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+  <% end %>
+  
   <% unless @active_reviews.empty? %>
   <div>
     <h3>On-going</h3>
@@ -38,28 +60,6 @@
           <th>Due</th>
         </tr>
         <% @upcoming_reviews.each do |review| %>
-        <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
-          <td><%= review.organization_template.agency.acronym %></td>
-          <td><%= review.name %></td>
-          <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
-        </tr>
-        <% end %>
-      </table>
-    </div>
-  </div>
-  <% end %>
-  
-  <% unless @past_due_reviews.empty? %>
-  <div class="panel-reviews-past-due">
-    <h3>Past Due</h3>
-    <div>
-      <table>
-        <tr>
-          <th>Agency</th>
-          <th>Name</th>
-          <th>Due</th>
-        </tr>
-        <% @past_due_reviews.each do |review| %>
         <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
           <td><%= review.organization_template.agency.acronym %></td>
           <td><%= review.name %></td>
