@@ -10,7 +10,7 @@
     <% end %>
     <span class="task-due-date">
       <p>Due</p>
-      <p><%= @task.expected_completion_at.to_formatted_s(:long) %></p>
+      <p><%= @task.expected_completion_at.to_formatted_s(:review_date) %></p>
     </span>
   </div>
   
@@ -26,7 +26,7 @@
     <span><%= @task.executor.eponym %></span>
     <% if @task.is_completed? %>
     <br>
-    <span>Completed at: <%= @task.actual_completion_at.to_formatted_s(:long) %></span>
+    <span>Completed at: <%= @task.actual_completion_at.to_formatted_s(:review_date) %></span>
     <% end %>
   </div>
   
