@@ -6,4 +6,7 @@ class Comment < ActiveRecord::Base
   # Tracking
   attr_accessible :author
   belongs_to      :author, :class_name => 'User'
+  
+  # Relationships
+  has_many :attachments, :as => :attachable, :class_name => 'BinaryFile'
 end
