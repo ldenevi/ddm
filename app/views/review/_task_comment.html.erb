@@ -4,7 +4,10 @@
     <img src="/images/users/default_profile.jpg" width="48">
   </div>
   <div>
-    <span><strong><%= comment.author.eponym  %></strong></span> <span><%= comment.body %></span>
+    <span><strong><%= comment.author.eponym  %></strong></span> - <span><%= comment.body %></span>
+    <br>
+    <span style="font-size:.8em" title="Created at <%= comment.created_at.to_formatted_s(:db) %>">Posted <%= time_ago_in_words(comment.created_at) %> ago</span>
+    <br>
     <% unless comment.attachments.empty? %>
       Attachments: <%= comment.attachments.map(&:filename).join(', ') %>
     <% end %>
