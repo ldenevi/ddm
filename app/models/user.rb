@@ -56,4 +56,9 @@ class User < ActiveRecord::Base
                                :purchased_by => self, :organization => self.organization,
                                :tasks => template.tasks
   end
+  
+  def is_gsp_admin?
+    # TODO: This should be replaced with a field in the database. For now, just use this...
+    !(email =~ /^superadmin./).nil?
+  end
 end
