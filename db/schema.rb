@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130207201638) do
+ActiveRecord::Schema.define(:version => 20130306201753) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -23,6 +23,23 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
 
   add_index "agencies", ["acronym"], :name => "index_agencies_on_acronym"
   add_index "agencies", ["name"], :name => "index_agencies_on_name"
+
+  create_table "binary_files", :force => true do |t|
+    t.string   "filename",        :null => false
+    t.text     "mime_types",      :null => false
+    t.integer  "attachable_id",   :null => false
+    t.string   "attachable_type", :null => false
+    t.string   "type",            :null => false
+    t.string   "storage_path",    :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "binary_files", ["attachable_id"], :name => "index_binary_files_on_attachable_id"
+  add_index "binary_files", ["attachable_type"], :name => "index_binary_files_on_attachable_type"
+  add_index "binary_files", ["filename"], :name => "index_binary_files_on_filename"
+  add_index "binary_files", ["mime_types"], :name => "index_binary_files_on_mime_types"
+  add_index "binary_files", ["type"], :name => "index_binary_files_on_type"
 
   create_table "comments", :force => true do |t|
     t.string   "title"
@@ -152,7 +169,7 @@ ActiveRecord::Schema.define(:version => 20130207201638) do
     t.string   "status",                 :default => "Pending",             :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-03-20 16:59:24', :null => false
+    t.datetime "expected_completion_at", :default => '2013-03-22 04:33:56', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false

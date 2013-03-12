@@ -1,0 +1,12 @@
+<% comment = comment || @comment %>
+<div id="comment_<%= comment.id %>" class="task-comment">
+  <div class="comment-profile-image">
+    <img src="/images/users/default_profile.jpg" width="48">
+  </div>
+  <div>
+    <span><strong><%= comment.author.eponym  %></strong></span> <span><%= comment.body %></span>
+    <% unless comment.attachments.empty? %>
+      Attachments: <%= comment.attachments.map(&:filename).join(', ') %>
+    <% end %>
+  </div>
+</div>

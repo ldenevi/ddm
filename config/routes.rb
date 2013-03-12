@@ -21,10 +21,14 @@ GSP::Application.routes.draw do
   get "admin/gsp_templates/show/(:id)", :to => "admin/gsp_templates#show", :as => "admin_template_show"
   
   # Review
-  get "review/task/:id/show/", :to => "review#show_task", :as => "task_show"
+  get "review/task/:id/show", :to => "review#show_task", :as => "task_show"
   get "tasks/active", :to => "review#active_tasks", :as => "active_tasks"
   post "tasks/mark_completed/:id", :to => "review#mark_task_as_completed", :as => 'task_mark_completed'
   get "tasks/recently_completed_tasks", :to => "review#recently_completed_tasks", :as => 'recently_completed_tasks'
+  
+  post "review/task/:id/comment/post", :to => "review#post_comment", :as => "post_comment"
+  get  "review/task/comment/:id/show", :to => "review#show_comment", :as => "show_comment"
+  get  "review/task/:task_id/comment/form", :to => "review#post_comment_form", :as => "post_comment_form"
   
   # Organization
   

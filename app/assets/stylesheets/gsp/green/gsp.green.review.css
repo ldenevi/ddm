@@ -2,6 +2,9 @@
  * Periodical reviews
  * © Copyright 2013. Green Status Pro. All Rights Reserved.
  */
+ 
+ 
+ /* == Task popup == */
 
 .task {
   -webkit-border-radius: 20px;
@@ -95,9 +98,81 @@
   min-height:200px;
 }
 
+/* == Task Comment == */
 .task-comments {
-  border-top: 1px solid cadetblue;
+  margin-bottom: 20px;
 }
+
+.task-comment {
+  padding:10px;
+}
+
+.comment-profile-image {
+  width:48px;
+  height:48px;
+  float:left;
+  margin-right: 10px;
+}
+
+#comment_entry {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  border:1px solid silver;
+  padding:10px;
+  background-color:#EEE;
+}
+
+#comment_input { float:left }
+#comment_input {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color:white;
+  width:90%;
+  border:1px solid silver;
+  margin:0;
+}
+
+#comment_input iframe {
+  width:100%;
+  border:0;
+  margin:0;
+}
+
+#comment_fake_input {
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  float:left;
+  border:1px solid silver;
+  cursor:text;
+  min-height:30px;
+  vertical-align:middle;
+  text-align:center;
+  font-size:16pt;
+  color:silver;
+  width:80%;
+}
+
+.task-comment:after,
+#comment_entry:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.hide-comment-entry-box {
+  display:none;
+}
+
+.show-comment-entry-box {
+  display:table-cell;
+}
+
+
+
+
 
 .task-reopen {
   float:left;

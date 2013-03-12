@@ -4,7 +4,7 @@ class Comment < ActiveRecord::Base
   belongs_to :commentable, :polymorphic => true
   
   # Tracking
-  attr_accessible :author
+  attr_accessible :author, :author_id
   belongs_to      :author, :class_name => 'User'
   
   # Relationships

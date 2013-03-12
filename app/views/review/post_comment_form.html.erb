@@ -1,0 +1,16 @@
+
+<%= form_tag('post', :multipart => true) do |form| %>
+  <%= hidden_field_tag :"comment[title]", "In-process Task Comment" %>
+  <%= hidden_field_tag :"task[id]", @task.id %>
+  <%= hidden_field_tag :"comment[author_id]", current_user.id %>
+  <%= text_area_tag :"comment[body]", nil, :size => '80x4' %>
+  <%= label_tag :attachment, :'Attach file' %>: <%= file_field_tag :attachment %>
+  <br>
+  <%= submit_tag "submit",  :disable_with => 'Please wait...', :class => 'submit' %>
+<% end %>
+
+<% if defined? @posted_comment %>
+<script>
+window.parent.append_posted_comment(<%= @posted_comment.id %>);
+</script>
+<% end %>

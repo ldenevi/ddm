@@ -44,14 +44,45 @@
     </div>
   
     <div class="task-comments">
+      <div id="comment_entry">
+        <div class="comment-profile-image">
+          <img src="/images/users/default_profile.jpg" width="48">
+        </div>
+        <div id="comment_fake_input" class="show-comment-entry-box">
+          <p>Add a comment...</p>
+        </div>
+        <div id="comment_input" class="hide-comment-entry-box">
+          <iframe src="<%= post_comment_form_path(@task) %>" ></iframe>
+        </div>
+      </div>
+      
+      <div id="comments-container">
+        <div id="comment-insertion-marker"></div>
+        <% @comments.each do |comment| %>
+        <%= render 'task_comment', :comment => comment %>
+        <% end %>
+      </div>
     </div>
     
   </div>
 </div>
 
+<script>
+$(document).ready(function() {
+  $('#comment_fake_input').on('click', function () { 
+    $('#comment_fake_input').removeClass('show-comment-entry-box');
+    $('#comment_fake_input').addClass('hide-comment-entry-box');
+    $('#comment_input').removeClass('hide-comment-entry-box');
+    $('#comment_input').addClass('show-comment-entry-box');
+    
+  });
+});
+</script>
+
 <% if @task.is_completed? %>
 <script>
   $(".task").attr("class", "task-completed");
+  
 </script>
 <% end %>
 

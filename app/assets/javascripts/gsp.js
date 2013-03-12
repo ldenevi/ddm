@@ -1,3 +1,11 @@
+/* Task comments */
+function append_posted_comment(comment_id) {
+  $.get("/review/task/comment/"+comment_id+"/show", function(data) {
+      $('#comment-insertion-marker').after(data);
+  });
+};
+
+
 var OrganizationTree = null;
 
 function logout() {
