@@ -5,14 +5,15 @@ namespace :gsp do
   task :dump_templates => :environment do
    
 import_script_template_attributes =<<EOT
-puts "Creating %s ..."
+# encoding: UTF-8
+puts "Creating %s ...".force_encoding('UTF-8')
 template = GspTemplate.create({:agency => Agency.find_by_acronym('%s'),
                                :full_name => '%s',
                                :display_name => '%s',
                                :description => '%s',
                                :regulatory_review_name => '%s',
-                               :frequency => '%s',                            
-                               :objectives => "%s"
+                               :frequency => '%s'.force_encoding('UTF-8'),                            
+                               :objectives => "%s".force_encoding('UTF-8')
                                })
 
 tasks = []
@@ -43,7 +44,7 @@ EOT
     
     output = import_script_template_attributes % [template.regulatory_review_name, template.agency.acronym, template.full_name,
                                                   template.display_name, template.description, template.regulatory_review_name,
-                                                  template.frequency, template.objectives]
+                                                  template.frequency, template.objectives.gsub('"', '\"')]
     
     JSON.parse(template.tasks).each do |task|
       output << import_script_template_task % [task["name"], task["instructions"]]
