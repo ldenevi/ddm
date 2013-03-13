@@ -29,6 +29,10 @@ html, body {
 	margin:0 auto;
 }
 
+#content {
+	padding-bottom: 70px;
+}
+
 /* Panels */
 
 .panel {
