@@ -1,0 +1,155 @@
+<style>
+/* Agency image, name, regulation name */
+#standard {
+ /* margin: 0 20% 0 20%; */
+}
+
+#standard_purchased_by {
+  text-align:center;
+  color:#007C43;
+  font-weight:bold;
+}
+
+#standard_agency_section {
+}
+
+#standard_agency_image_section {
+  float:left;
+  margin-right:5px;
+  min-height:92px;
+}
+
+#standard_agency_section h2 {
+}
+
+#standard_agency_section h3 {
+}
+
+/* Standard's data and tasks */
+#standard_data_section {
+  background-color:white;
+  width:850px;
+  border:1px solid black;
+  padding:10px;
+  margin:0 0 20px 50px;
+}
+ 
+#standard_objective { 
+  font-size:1em;
+  text-align:justify;
+}
+
+/* Tasks */
+#standard_add_task {
+  text-align:center;
+  padding:10px;
+}
+
+.standard-add-task-button,
+.standard-delete-task-button {
+  -webkit-border-radius:5px;
+  border-radius:5px;
+  padding:3px 10px 3px 10px;
+  border:1px solid gray;
+  background-color:silver;
+  text-shadow: -1px -1px -1px white;
+  cursor:pointer;
+  font-weight:bold;
+  color:#333;
+}
+
+.standard-add-task-button:hover,
+.standard-delete-task-button:hover {
+  color:black;
+}
+
+.standard-add-task-button:active,
+.standard-delete-task-button:active {
+  color:#007C43;
+}
+
+/* TASK COMMENTS */
+.task { border-bottom:1px solid gray; padding:30px; }
+</style>
+
+
+<script>
+  $(document).ready(function () {
+    $('.standard-add-task-button').on('click', add_task);
+    $('*[contenteditable]').css('border','1px dashed cadetblue');
+  });
+  
+  function add_task() {
+    var div = $(document.createElement('div'));
+    var url = $(this).attr('data-add-task-url');
+    $.get(url, function (data) {
+      $('#task_add_marker').before(div.css('display', 'none').html(data));
+      div.slideDown(750);
+    });
+  }
+  function delete_task() {
+    var target = $(this);
+    var url = target.attr('data-delete-task-url');
+    $.ajax({
+      type:"DELETE",
+      url: url,
+      success: function() {
+        target.parent().parent().slideUp(500);
+      }
+    });
+  }
+</script>
+
+
+
+
+
+<div id="standard">
+
+  <%= render 'shared/standard/purchased_by' if @template.respond_to?(:purchased_by) %>
+
+  <div id="standard_agency_section">
+    <div id="standard_agency_image_section">
+      <img src="/images/agencies/<%= @template.agency.acronym.downcase %>.png">
+    </div>
+    <div>
+       <%= render 'shared/standard/agency_name' %><%= render 'shared/standard/regulatory_review_name' %>
+    </div>
+  </div>
+
+
+  <div id="standard_data_section">
+    <div id="review_overview">
+      <h3>Frequency: <%= render 'shared/standard/frequency' %></h3>
+    
+      <div id="review_attributes">
+        <div id="review_info" class="display-none">
+          <span id="review_full_name">
+            <%= render 'shared/standard/full_name' %>
+          </span>        
+        </div>
+      </div>
+    </div>
+    
+    <div id="standard_objective">
+      <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
+        <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+        <strong>Objectives</strong><br>
+        <%= render 'shared/standard/objectives' %>
+      </div>
+    </div>
+    
+    <div id="standard_tasks">
+      <div id="task_page">
+        <% JSON.parse(@template.tasks).each_with_index do |task, sequence| %>
+        <% sequence = sequence + 1 %>
+        <%= render 'shared/standard/template_task', :sequence => sequence, :task => task %>
+        <% end %>
+        <div id="task_add_marker" style="display:none">
+        </div>
+      </div>
+      
+      <%= render 'shared/standard/add_template_task' if defined? @is_editable %>
+    </div>
+  </div>
+</div>

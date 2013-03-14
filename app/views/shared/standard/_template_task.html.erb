@@ -1,0 +1,9 @@
+
+<div class="task">
+  <p><span>Task <%= sequence %></span></p>
+  <span>
+    <h4 contenteditable='true'><%=  task["name"] %></h4>
+    <div contentEditable="true"><%= task["instructions"] %></div>
+  </span>
+  <%= render 'shared/standard/destroy_task', :sequence => sequence if defined? @is_editable %>
+</div>

@@ -7,11 +7,19 @@ GSP::Application.routes.draw do
   
   devise_for :users, :controllers => { :sessions => :sessions }
   
+  # Template editing
+  get "templates/temp_show(/:t_id(/:ot_id))", :to => 'templates#temporary_template_display'
+  get "organization_template/:ot_id/new_task", :to => 'templates#new_task'
+  get "gsp_template/:t_id/new_task", :to => 'templates#new_task'
+  delete "organization_template/:ot_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
+  delete "gsp_template/:t_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
+  
   # Organization Templates
   get "template/list", :to => 'templates#list'
   get "template/show/:id", :to => 'templates#show', :as => 'template_show'
   post "template/deploy_review", :to => 'templates#deploy_review', :as => 'deploy_review'
   get "template/:id/prepare_review", :to => "templates#prepare_review", :as => 'prepare_review'
+  get "template/new", :to => "templates#new_organization_template", :as => 'new_organization_template'
   
   # GSP Templates
   get "admin/gsp_templates/index", :to => "admin/gsp_templates#index", :as => 'admin_templates'
@@ -30,13 +38,13 @@ GSP::Application.routes.draw do
   get  "review/task/comment/:id/show", :to => "review#show_comment", :as => "show_comment"
   get  "review/task/:task_id/comment/form", :to => "review#post_comment_form", :as => "post_comment_form"
   
-  # Organization
   
   # Reports
   
   # Store
   
   
+  # Organization
   get "organization/index", :to => 'organization#index'
   get "organization/hierarchy", :to => 'organization#hierarchy', :as => 'organization_hierarchy'
   get "organization/overview",  :to => 'organization#overview',  :as => 'organization_overview'

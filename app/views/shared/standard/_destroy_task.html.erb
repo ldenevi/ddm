@@ -1,0 +1,13 @@
+<% 
+  delete_task_url = ((@template.respond_to?(:purchased_by) ? "/organization_template/%d/%d/destroy_task" : "/gsp_template/%d/%d/destroy_task" ) % [@template.id, sequence])
+%>
+<br>
+<div id="standard_delete_task">
+  <span class="standard-delete-task-button" data-delete-task-url="<%= delete_task_url %>">
+    <span>- Remove Task <%= sequence %></span>
+  </span>
+</div>
+
+<script>
+$('.standard-delete-task-button').on('click', delete_task);
+</script>

@@ -27,7 +27,8 @@ class Admin::GspTemplatesController < ApplicationController
   
   def show
     @template = GspTemplate.find(params[:id])
-    @tasks = JSON.parse(@template.tasks)
+    # @tasks = JSON.parse(@template.tasks)
+    render 'shared/standard/show'
   end
   
 end

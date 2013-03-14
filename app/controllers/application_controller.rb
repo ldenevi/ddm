@@ -6,6 +6,11 @@ class ApplicationController < ActionController::Base
   def check_login
     redirect_to new_user_session_path if current_user.nil?
   end
+  
+protected
+  def use_ckeditor
+    @use_ckeditor = true
+  end
 
 private  
   def store_path
