@@ -6,6 +6,18 @@
         <li><%= link_to "GSP Templates List", admin_list_templates_path %></li>
         <li><%= link_to "Create GSP Templates", admin_new_template_path %></li>
         <% end %>
+        
+        <% if params[:controller] == 'templates' %>
+        <li><%= link_to "List Templates", templates_list_path %></li>
+        <li><%= link_to "Add Template", new_organization_template_path %></li>
+        <li><%= link_to "Manage Acknowldgement Forms", '#' %></li>
+        <li><%= link_to "Go to GSP Store", '#' %></li>
+        <% end %>
+        
+        <% if params[:controller] == 'organization' %>
+        <li><%= link_to "View Hierarchical Map", organization_overview_path %></li>
+        <li><%= link_to "Manage Organizations", '#' %></li>
+        <% end %>
       </ul>
     </span>
   </div>
