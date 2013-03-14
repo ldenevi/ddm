@@ -6,10 +6,10 @@
   <div>
     <span><strong><%= comment.author.eponym  %></strong></span> - <span><%= comment.body %></span>
     <br>
-    <span style="font-size:.8em" title="Created at <%= comment.created_at.to_formatted_s(:db) %>">Posted <%= time_ago_in_words(comment.created_at) %> ago</span>
-    <br>
+    <span style="font-size:.8em; color: #666" title="Created at <%= comment.created_at.to_formatted_s(:db) %>">Posted <%= time_ago_in_words(comment.created_at) %> ago</span>
     <% unless comment.attachments.empty? %>
-      Attachments: <%= comment.attachments.map(&:filename).join(', ') %>
+      <span style="font-size:.8em; font-weight:bold">
+          <br>Attachments: <%= comment.attachments.map(&:filename).join(', ') %></span>
     <% end %>
   </div>
 </div>
