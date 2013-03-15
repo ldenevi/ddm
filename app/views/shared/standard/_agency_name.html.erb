@@ -1,1 +1,6 @@
-<h2 data-inline-edit="select"><%= @template.agency.name %> (<%= @template.agency.acronym %>)</h2>
+<h2 data-inline-edit="select"
+  data-template-id="<%= @template.id %>"
+  data-template-type="<%= @template.class %>"
+  data-field-name="agency_name">
+  <%= @template.agency.name %> (<%= @template.agency.acronym %>)
+</h2>

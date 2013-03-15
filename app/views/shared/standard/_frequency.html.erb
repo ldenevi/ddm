@@ -1,1 +1,6 @@
-<span data-inline-edit="select"><%= @template.frequency %></span>
+<span data-inline-edit="select"
+  data-template-id="<%= @template.id %>"
+  data-template-type="<%= @template.class %>"
+  data-field-name="frequency">
+  <%= @template.frequency %>
+</span>

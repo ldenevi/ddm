@@ -70,13 +70,18 @@
 
 /* TASK COMMENTS */
 .task { border-bottom:1px solid gray; padding:30px; }
+
+
+/* gsp.js */
+.hide-inline-element { display:none }
+.inline-editable-highlight { border:1px dashed cadetblue; }
+
 </style>
 
 
 <script>
   $(document).ready(function () {
     $('.standard-add-task-button').on('click', add_task);
-    $('*[contenteditable]').css('border','1px dashed cadetblue');
   });
   
   function add_task() {
@@ -120,7 +125,7 @@
 
   <div id="standard_data_section">
     <div id="review_overview">
-      <h3>Frequency: <%= render 'shared/standard/frequency' %></h3>
+      <h3>Frequency: <div><%= render 'shared/standard/frequency' %></div></h3>
     
       <div id="review_attributes">
         <div id="review_info" class="display-none">

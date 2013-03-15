@@ -13,6 +13,7 @@ GSP::Application.routes.draw do
   get "gsp_template/:t_id/new_task", :to => 'templates#new_task'
   delete "organization_template/:ot_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
   delete "gsp_template/:t_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
+  get "templates/field_options/:field_name", :to => 'templates#field_options'
   
   # Organization Templates
   get "template/list", :to => 'templates#list'

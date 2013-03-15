@@ -43,6 +43,52 @@ class TemplatesController < ApplicationController
     render :template => 'shared/standard/show'
   end
   
+  # WYSIWYG attributes editor
+  def field_options
+    @options = begin
+      case params[:field_name]
+      
+      # Template#frequency string 
+      #  
+      # This string is used to determine the due dates for Review and its tasks 
+      #
+      when 'frequency'
+        [['Annual', 'Annual'],['Quarterly', 'Quaterly'],['Monthly', 'Monthly'],['Weekly', 'Weekly']]
+        
+      # Template#agency
+      # 
+      # A list of agencies which are relevant to the organization.
+      # TODO: Make it relevant just to the user's organization and not pull all of them.
+      # 
+      when 'agency_name'
+        Agency.all.map do |agency|
+          ["%s (%s)" % [agency.name, agency.acronym], agency.id]
+        end
+        
+      # Review#owner
+      # 
+      # List of users within an organization who can own/manage reviews
+      # TODO: Make it list only users with the power to own/manage reviews
+      #
+      when 'responsible_party'
+        current_user.organization.users.map { |u| [u.eponym, u.id] }
+        
+      # Task#executor
+      #
+      # List of users who can execute a task
+      # TODO: Make it list only users with the power to execute tasks
+      #
+      when 'executor'
+        current_user.organization.users.map { |u| [u.eponym, u.id] }
+        
+      else
+        [[]]
+      end
+    end
+    
+    render :json => @options
+  end
+  
   def new_task
     @template = get_gsp_or_organization_template(params)
     tasks = JSON.parse(@template.tasks)

@@ -9,7 +9,7 @@
   <table>
     <tr>
       <td rowspan="2">
-      <strong>Due: <%= @review.targeted_completion_at.to_formatted_s(:review_date) %></strong>
+      <strong>Due: <span contenteditable="true"><%= @review.targeted_completion_at.to_formatted_s(:review_date) %></span></strong>
       </br><%= @review.name %></td>
       <td>Owner</td>
       <td>Start</td>
@@ -19,7 +19,11 @@
     
     <tr>
       <td nowrap>
-        <%= review_form.select :owner_id, @possible_review_owner_options %>
+        <span data-inline-edit="select"
+              data-template-id="<%= @review.id || 0 %>"
+              data-template-type="<%= @review.class %>"
+              data-field-name="responsible_party"><%= current_user.eponym %></span>
+        <% review_form.select :owner_id, @possible_review_owner_options %>
       </td>
       
       <td nowrap><span><%= review_form.text_field :targeted_start_at, :value => @review.targeted_start_at.to_formatted_s(:review_date),  :size => 15, :id => 'review_start_date' %></span></td>

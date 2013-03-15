@@ -25,7 +25,11 @@
       
       <tr>
         <td nowrap>
-          <%= task_form.select :executor_id, @possible_task_executor_options %>
+          <span data-inline-edit="select"
+                data-template-id="<%= @review.id || 0 %>"
+                data-template-type="<%= @review.class %>"
+                data-field-name="executor"><%= current_user.eponym %></span>
+          <% task_form.select :executor_id, @possible_task_executor_options %>
         </td>
         <td nowrap><%= task_form.text_field :start_at, :value => task.start_at.to_formatted_s(:review_date), :size => 15, :class => 'task-start-at' %></td>
         <td nowrap><%= task_form.text_field :expected_completion_at, :value => task.expected_completion_at.to_formatted_s(:review_date), :size => 15, :class => 'task-due-at' %></td>

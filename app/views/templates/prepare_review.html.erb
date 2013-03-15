@@ -1,5 +1,12 @@
 <!-- TODO Create Rails helper to append stylesheets in <head> -->
 <link href="/assets/gsp/green/gsp.green.review.css" media="all" rel="stylesheet" type="text/css">
+<style>
+
+/* gsp.js */
+.hide-inline-element { display:none }
+.inline-editable-highlight { border:1px dashed cadetblue; }
+
+</style>
 
 <div id="review_prepare">
   
@@ -15,7 +22,11 @@
   
   <div id="review_page">
   <%= form_for @review, :url => deploy_review_path(@review), :method => :post, :html => {:id => "review_form"} do |review_form| %>
-    <h3><%= @review.frequency %> Review</h3>
+    <h3>
+      <span data-inline-edit="select"
+        data-template-id="<%= @review.id%>"
+        data-template-type="<%= @review.class %>"
+        data-field-name="frequency"><%= @review.frequency %></span> Review</h3>
     <%= submit_tag "Deploy Review", :confirm => "Are you sure you want to deploy?" %>
     
     <%= render "prepare_review_attributes", :review => @review, :review_form => review_form %>
