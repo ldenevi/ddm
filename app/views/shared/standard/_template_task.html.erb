@@ -2,8 +2,18 @@
 <div class="task">
   <p><span>Task <%= sequence %></span></p>
   <span>
-    <h4 contenteditable='true'><%=  task["name"] %></h4>
-    <div contentEditable="true"><%= task["instructions"] %></div>
+    <h4 data-inline-edit="textfield"
+        data-template-id="<%= @template.id %>"
+        data-template-type="<%= @template.class %>"
+        data-task-sequence="<%= sequence %>"
+        data-field-name="task[name]"
+        <%= "contenteditable=true" if @use_ckeditor %>><%=  task["name"].html_safe %></h4>
+    <div data-inline-edit="textfield"
+        data-template-id="<%= @template.id %>"
+        data-template-type="<%= @template.class %>"
+        data-task-sequence="<%= sequence %>"
+        data-field-name="task[instructions]"
+        <%= "contenteditable=true" if @use_ckeditor %>><%= task["instructions"].html_safe %></div>
   </span>
   <%= render 'shared/standard/destroy_task', :sequence => sequence if defined? @is_editable %>
 </div>

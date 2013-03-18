@@ -40,7 +40,7 @@
     <h2>Task <%= @task.sequence %> - <%= @task.name %></h2>
     <div class="task-instructions">
       <h3>Instructions</h3>
-      <pre><%= @task.instructions %></pre>
+      <div style="font-family:Georgia, Times New Roman; font-size:1.2em"><%= @task.instructions.html_safe %></div>
     </div>
   
     <div class="task-comments">

@@ -30,6 +30,6 @@ c_sales.update_attribute(:owner, sales)
 c_manufac.update_attribute(:owner, manufac)
 
 
-puts "Purchasing all templates..."
-GspTemplate.all(:select => 'id').each { |id| owner.purchase_template(id) }
+puts "Associating all LeDuc templates..."
+GspTemplate.where(:full_name => "LeDuc Corporation").select(:id).each { |id| owner.purchase_template(id) }
 

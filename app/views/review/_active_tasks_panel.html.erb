@@ -22,8 +22,11 @@
         <td><input type="checkbox" onclick="Task.toggle_completed(<%= task.id %>, this)"></td>
         <td><%= task.review.organization_template.agency.acronym %></td>
         <td align="center"><%= task.sequence %></td>
-        <td><%= link_to task.name, task_show_path(task.id) %></td>
-        <td nowrap><%= task.expected_completion_at.to_formatted_s(:short) %></td>
+        <td>
+          <span style="font-size:.8em"><%= task.review.name %></span> <br>
+          <%= link_to task.name, task_show_path(task.id) %>
+        </td>
+        <td nowrap><%= task.expected_completion_at.to_formatted_s(:review_date) %></td>
       </tr>
       <% end %>
       <% end %>

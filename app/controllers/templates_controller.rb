@@ -20,6 +20,7 @@ class TemplatesController < ApplicationController
   
   def show
     @template = OrganizationTemplate.find(params[:id])
+    render "shared/standard/show"
   end
   
   # Add custom organization template
@@ -43,7 +44,10 @@ class TemplatesController < ApplicationController
     render :template => 'shared/standard/show'
   end
   
-  # WYSIWYG attributes editor
+  #
+  #
+  #  WYSIWYG gsp.TemplateManager.js attributes editor
+  # 
   def field_options
     @options = begin
       case params[:field_name]
@@ -89,6 +93,44 @@ class TemplatesController < ApplicationController
     render :json => @options
   end
   
+  # organization template ajax urls
+  def ot_update_attributes; update_attributes(OrganizationTemplate, params); end
+  def ot_update_task;       update_task(OrganizationTemplate, params);       end
+  
+  # gsp template ajax urls
+  def gspt_update_attributes; update_attributes(GspTemplate, params); end
+  def gspt_update_task;       update_task(GspTemplate, params);       end
+  
+  # review ajax urls
+  def review_update_attributes; update_attributes(Review, params); end
+  
+private
+  def update_attributes(object, params)
+    template = object.find(params[:id])
+    params.delete(:controller); params.delete(:action); params.delete(:id)
+    template.update_attributes(params)
+    render :nothing => true
+  end
+  
+  def update_task(object, params)
+    if (object.is_a?(Review))
+      review = Review.find(params[:id])
+      task   = review.tasks[params[:task_sequence].to_i - 1]
+      task.name = params[:task][:name] unless params[:task][:name].nil?
+      task.instructions = params[:task][:instructions] unless params[:task][:instructions].nil?
+      task.save!
+    else
+      template = object.find(params[:id])
+      tasks = JSON.parse(template.tasks)
+      task_index = params[:task_sequence].to_i - 1
+      tasks[task_index] = tasks[task_index].merge(params[:task])
+      template.tasks = tasks.to_json
+      template.save!
+    end
+    render :nothing => true
+  end
+  
+public
   def new_task
     @template = get_gsp_or_organization_template(params)
     tasks = JSON.parse(@template.tasks)

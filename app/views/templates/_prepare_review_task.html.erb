@@ -3,6 +3,7 @@
   <%= task_form.hidden_field :name %>
   <%= task_form.hidden_field :instructions %>
   <%= task_form.hidden_field :status %>
+  <%= task_form.hidden_field :executor_id %>
   
   <div>
     <p>
@@ -10,7 +11,7 @@
       <h3><%= task.name %></h3>
       <span>
         
-        <pre><%= task.instructions %></pre>
+        <div><%= task.instructions.html_safe %></div>
       </span>
     </p>
     

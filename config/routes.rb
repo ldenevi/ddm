@@ -7,6 +7,13 @@ GSP::Application.routes.draw do
   
   devise_for :users, :controllers => { :sessions => :sessions }
   
+  # GSP Template Manager javascript
+  put "organization_templates/:id/update_attributes", :to => "templates#ot_update_attributes"
+  put "organization_templates/:id/update_task/:task_sequence", :to => "templates#ot_update_task"
+  put "gsp_templates/:id/update_attributes", :to => "templates#gspt_update_attributes"
+  put "gsp_templates/:id/update_task/:task_sequence", :to => "templates#gspt_update_task"
+  put "review_templates/:id/update_attributes", :to => "templates#review_update_attributes"
+  
   # Template editing
   get "templates/temp_show(/:t_id(/:ot_id))", :to => 'templates#temporary_template_display'
   get "organization_template/:ot_id/new_task", :to => 'templates#new_task'
@@ -14,6 +21,7 @@ GSP::Application.routes.draw do
   delete "organization_template/:ot_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
   delete "gsp_template/:t_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
   get "templates/field_options/:field_name", :to => 'templates#field_options'
+  
   
   # Organization Templates
   get "template/list", :to => 'templates#list'

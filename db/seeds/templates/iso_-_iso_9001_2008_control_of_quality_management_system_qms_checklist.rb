@@ -14,12 +14,7 @@ tasks = []
 tasks << {
 :name => "General Requirements",
 :instructions => <<EOT
-1.	Attach documentation evidencing the following:
-a.	The processes required for the QMS have been identified and documented.
-b.	The sequence and interaction of processes have been determined.
-c.	The criteria and methods the organization uses to ensure that the operation and control of QMS processes are effective.
-d.	The organization has provided resources and information needed to support the operation and monitoring of QMS processes.
-e.	The organization controls any outsourced process that affects product conformity with requirements.
+<ol><li>Attach documentation evidencing the following: <br><ol start="1" style="list-style-type: lower-alpha;"><li>The processes required for the QMS have been identified and documented.<br></li><li>The sequence and interaction of processes have been determined.<br></li><li>The criteria and methods the organization uses to ensure that the operation and control of QMS processes are effective.<br></li><li>The organization has provided resources and information needed to support the operation and monitoring of QMS processes.<br></li><li>The organization controls any outsourced process that affects product conformity with requirements.</li></ol></li></ol>
 
 EOT
 }
@@ -27,18 +22,7 @@ EOT
 tasks << {
 :name => "QMS Documentation Requirements",
 :instructions => <<EOT
-1.	Does the organization have documented statements of its quality policy and quality objectives?
-a.	Attach documentation evidencing the quality policy and objectives.
-2.	Does the organization have a quality manual?
-a.	Attach the Quality Manual
-3.	Does the Quality Manual contain procedures for the control of:
-a.	Documents
-b.	Records
-c.	Internal Audit
-d.	Nonconforming Product
-e.	Corrective Action
-f.	Preventive Action
-4.	Does the Quality Manual contain procedures that have been identified as being required to maintain the QMS?
+<ol><li>Does the organization have documented statements of its quality policy and quality objectives?<br><ol start="1" style="list-style-type: lower-alpha;"><li>Attach documentation evidencing the quality policy and objectives. <br></li></ol></li><li>Does the organization have a quality manual?<br><ol start="1" style="list-style-type: lower-alpha;"><li>Attach the Quality Manual<br></li></ol></li><li>Does the Quality Manual contain procedures for the control of:<br><ol start="1" style="list-style-type: lower-alpha;"><li>Documents<br></li><li>Records<br></li><li>Internal Audit<br></li><li>Nonconforming Product<br></li><li>Corrective Action<br></li><li>Preventive Action<br></li></ol></li><li>Does the Quality Manual contain procedures that have been identified as being required to maintain the QMS?</li></ol>
 
 EOT
 }
@@ -46,17 +30,7 @@ EOT
 tasks << {
 :name => "Control of Documents",
 :instructions => <<EOT
-1.	Does the document control procedure contained within the QMS define the means of:
-a.	Document approval
-b.	Document review and re-approval
-c.	Identification of revision status
-d.	Identification of changes made to documentation
-e.	Ensuring that only current and relevant versions of documentation are available at the point of use
-f.	Ensuring that documents remain legible
-g.	Ensuring that appropriate external documentation is identified
-h.	Ensuring that the distribution of external documents is controlled
-i.	Removing obsolete documents from use
-j.	Ensuring that obsolete documents remain out of use
+<ol><li>Does the document control procedure contained within the QMS define the means of:<br><ol start="1" style="list-style-type: lower-alpha;"><li>Document approval<br></li><li>Document review and re-approval<br></li><li>Identification of revision status<br></li><li>Identification of changes made to documentation<br></li><li>Ensuring that only current and relevant versions of documentation are available at the point of use<br></li><li>Ensuring that documents remain legible<br></li><li>Ensuring that appropriate external documentation is identified<br></li><li>Ensuring that the distribution of external documents is controlled<br></li><li>Removing obsolete documents from use<br></li><li>Ensuring that obsolete documents remain out of use</li></ol></li></ol>
 
 EOT
 }
@@ -64,12 +38,7 @@ EOT
 tasks << {
 :name => "Control of Records",
 :instructions => <<EOT
-1.	Does the record control procedure contained within the QMS define the means of:
-a.	Identification of Records
-b.	Storage of Records
-c.	Protection of Records
-d.	Retrieval of Records
-e.	Disposition of Records
+<ol><li>Does the record control procedure contained within the QMS define the means of:<br><ol start="1" style="list-style-type: lower-alpha;"><li>Identification of Records<br></li><li>Storage of Records<br></li><li>Protection of Records<br></li><li>Retrieval of Records<br></li><li>Disposition of Records</li></ol></li></ol>
 
 EOT
 }
@@ -77,15 +46,7 @@ EOT
 tasks << {
 :name => "Internal Audit",
 :instructions => <<EOT
-1.	Does the internal audit procedure contained with the QMS describe:
-a.	How internal audits are planned and conducted;
-b.	How the audit program takes into account the status and importance of the areas to be audited;
-c.	How the audit program takes into account the results of previous audits;
-d.	How the audit is defined by criteria, scope, frequency and methods;
-e.	How the audits have maintained objectivity and impartiality;
-f.	How the organization has been assured that the audit has not been conducted by personnel involved in the audited activity;
-g.	How they are documented in conformance with the document management procedure;
-h.	How any required corrections and corrective actions are documented and monitored.
+<ol><li>Does the internal audit procedure contained with the QMS describe:<br><ol start="1" style="list-style-type: lower-alpha;"><li>How internal audits are planned and conducted;<br></li><li>How the audit program takes into account the status and importance of the areas to be audited;<br></li><li>How the audit program takes into account the results of previous audits;<br></li><li>How the audit is defined by criteria, scope, frequency and methods;<br></li><li>How the audits have maintained objectivity and impartiality;<br></li><li>How the organization has been assured that the audit has not been conducted by personnel involved in the audited activity;<br></li><li>How they are documented in conformance with the document management procedure;<br></li><li>How any required corrections and corrective actions are documented and monitored.</li></ol></li></ol>
 
 EOT
 }
@@ -93,13 +54,7 @@ EOT
 tasks << {
 :name => "Control of Nonconforming Product Procedure",
 :instructions => <<EOT
-1.	Does the control of nonconforming product procedure contained with the QMS describe:
-a.	How does the organization ensure that nonconforming products are identified and controlled to prevent unintended use or delivery;
-b.	Who has responsibility and authority to deal with nonconforming products;
-c.	What methods does the organization employ to deal with nonconforming products;
-d.	How records of nonconforming products, including subsequent actions, are maintained
-e.	How nonconforming products that have been corrected are re-verified to ensure conformity;
-f.	What actions the organization shall take when it is discovered that nonconforming actions are shipped.
+<ol><li>Does the control of nonconforming product procedure contained with the QMS describe:<br><ol start="1" style="list-style-type: lower-alpha;"><li>How does the organization ensure that nonconforming products are identified and controlled to prevent unintended use or delivery;<br></li><li>Who has responsibility and authority to deal with nonconforming products;<br></li><li>What methods does the organization employ to deal with nonconforming products;<br></li><li>How records of nonconforming products, including subsequent actions, are maintained<br></li><li>How nonconforming products that have been corrected are re-verified to ensure conformity;<br></li><li>What actions the organization shall take when it is discovered that nonconforming actions are shipped.</li></ol></li></ol>
 
 EOT
 }
@@ -107,12 +62,7 @@ EOT
 tasks << {
 :name => "Corrective Action Procedure",
 :instructions => <<EOT
-1.	Does the Corrective Action procedure contained within the QMS describe:
-a.	When a Corrective Action should be initiated to eliminate the cause of a nonconformity to prevent recurrence;
-b.	How to evaluate the need for action to ensure that nonconformities do not recur;
-c.	The process for identifying nonconformities;
-d.	The record keeping process for Corrective Actions taken;
-e.	The process for reviewing the effectiveness of the Corrective Action taken.
+<ol><li>Does the Corrective Action procedure contained within the QMS describe:<br><ol start="1" style="list-style-type: lower-alpha;"><li>When a Corrective Action should be initiated to eliminate the cause of a nonconformity to prevent recurrence;<br></li><li>How to evaluate the need for action to ensure that nonconformities do not recur;<br></li><li>The process for identifying nonconformities;<br></li><li>The record keeping process for Corrective Actions taken;<br></li><li>The process for reviewing the effectiveness of the Corrective Action taken.</li></ol></li></ol>
 
 EOT
 }
@@ -120,12 +70,7 @@ EOT
 tasks << {
 :name => "Preventive Action Procedure",
 :instructions => <<EOT
-1.	Does the Preventive Action procedure contained within the QMS describe:
-a.	How does the organization determine a potential nonconformity that would require a Preventive Action to be initiated to prevent an occurrence;
-b.	How to evaluate the need for a Preventive Action to ensure that the nonconformity does not occur;
-c.	The process for determining and implementing a Preventive Action that is needed;
-d.	The record keeping process for Preventive Actions taken;
-e.	The process for reviewing the effectiveness of the Preventive Action taken.
+<ol><li>Does the Preventive Action procedure contained within the QMS describe:<br><ol start="1" style="list-style-type: lower-alpha;"><li>How does the organization determine a potential nonconformity that would require a Preventive Action to be initiated to prevent an occurrence;<br></li><li>How to evaluate the need for a Preventive Action to ensure that the nonconformity does not occur;<br></li><li>The process for determining and implementing a Preventive Action that is needed;<br></li><li>The record keeping process for Preventive Actions taken;<br></li><li>The process for reviewing the effectiveness of the Preventive Action taken.</li></ol></li></ol>
 
 EOT
 }

@@ -1,1 +1,6 @@
-<h3 contenteditable="true"><%= @template.regulatory_review_name %></h3>
+<h3 data-inline-edit="textfield"
+  data-template-id="<%= @template.id %>"
+  data-template-type="<%= @template.class %>"
+  data-field-name="full_name"
+  <%= "contenteditable=true" if @use_ckeditor %>><%= @template.regulatory_review_name.html_safe %>
+</h3>

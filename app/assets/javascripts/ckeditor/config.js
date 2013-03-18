@@ -8,6 +8,7 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.language = 'it';
 	config.uiColor = '#007C43';
 	config.font_names = 'Task Font/Lucida Console, Courier New; Normal/Arial, Calibri, Helvetica';
+
 	
 	// Toolbar configuration generated automatically by the editor based on config.toolbarGroups.
   config.toolbar = [
