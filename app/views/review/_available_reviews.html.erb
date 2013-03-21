@@ -18,7 +18,7 @@
         <% @past_due_reviews.each do |review| %>
         <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
           <td><%= review.organization_template.agency.acronym %></td>
-          <td><%= review.name %></td>
+          <td><span title="<%= review.agency.name %>"><%= link_to review.name, show_review_path(review) %></span></td>
           <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
         </tr>
         <% end %>
@@ -39,8 +39,8 @@
         </tr>
         <% @active_reviews.each do |review| %>
         <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
-          <td><%= review.agency.acronym %></td>
-          <td><%= review.name %></td>
+          <td><span title="<%= review.agency.name %>"><%= review.agency.acronym %></span></td>
+          <td><%= link_to review.name, show_review_path(review) %></td>
           <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
         </tr>
         <% end %>
@@ -62,7 +62,7 @@
         <% @upcoming_reviews.each do |review| %>
         <tr class="panel-table-row <%= cycle('even', 'odd') %> panel-table-row-unread">
           <td><%= review.organization_template.agency.acronym %></td>
-          <td><%= review.name %></td>
+          <td><span title="<%= review.agency.name %>"><%= link_to review.name, show_review_path(review) %></span></td>
           <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
         </tr>
         <% end %>

@@ -1,5 +1,9 @@
 class ReviewController < ApplicationController
-  layout :false
+  layout :false, :except => :show
+  
+  def show
+    @review = Review.find(params[:id])
+  end
   
   def show_task
     @task = Task.find(params[:id], :include => {:review => :organization_template})

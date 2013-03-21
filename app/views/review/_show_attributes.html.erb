@@ -1,0 +1,33 @@
+<div id="review_attributes">
+  <table>
+    <tr>
+      <td rowspan="2">
+      <strong>Due: <span contenteditable="true"><%= @review.targeted_completion_at.to_formatted_s(:review_date) %></span></strong>
+      </br><%= @review.name %></td>
+      <td>Owner</td>
+      <td>Start</td>
+      <td>Due Date</td>
+      <td>Status</td>
+    </tr>
+    
+    <tr>
+      <td nowrap>
+        <span><%= current_user.eponym %></span>
+      </td>
+      
+      <td nowrap><span><%= @review.targeted_start_at.to_formatted_s(:review_date) %></span></td>
+      <td nowrap><span><%= @review.targeted_completion_at.to_formatted_s(:review_date) %></span></td>
+      <td><span style="color:red"><%= @review.status %></span></td>
+    </tr>
+  </table>
+
+  <div id="review_objective">
+    <div class="ui-state-highlight ui-corner-all">
+         <span class="ui-icon ui-icon-info" style="float:left;"></span>
+         <p><strong>Overview</strong></p>
+         <p><%= @review.organization_template.description %></p>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,41 @@
+<div id="task_<%= task.sequence.to_s %>" class="review-task review-task-inactive">
+  <div>
+    <p>
+      <span><B>Task <%= task.sequence %></B></span>
+      <h3><%= task.name %></h3>
+      <span>
+        
+        <div><%= task.instructions.html_safe %></div>
+      </span>
+    </p>
+    
+    
+    <table>
+      <tr>
+        <td width="200">Executor</td>
+        <td>Start</td>
+        <td>Due Date</td>
+        <td>Status</td>
+      </tr>
+      
+      <tr>
+        <td nowrap>
+          <span data-inline-edit="select"
+                data-template-id="<%= @review.id || 0 %>"
+                data-template-type="<%= @review.class %>"
+                data-field-name="executor"><%= task.executor.eponym %></span>
+        </td>
+        <td nowrap><%= task.start_at.to_formatted_s(:review_date) %></td>
+        <td nowrap><%= task.expected_completion_at.to_formatted_s(:review_date) %></td>
+        <td><span style="color:red"><%= task.status %></span></td>
+      </tr>
+    </table>
+  </div>
+  
+  <div>
+  <% task.comments.each do |comment| %>
+  <%= render "task_comment", :comment => comment %>
+  <% end %>
+  </div>
+</div>
+

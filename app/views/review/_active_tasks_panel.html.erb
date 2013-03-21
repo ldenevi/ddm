@@ -19,8 +19,8 @@
       </tr>
       <% @active_tasks.each do |task| %>
       <tr class="panel-table-row" id="active-task-row-<%= task.id %>">
-        <td><input type="checkbox" onclick="Task.toggle_completed(<%= task.id %>, this)"></td>
-        <td><%= task.review.organization_template.agency.acronym %></td>
+        <td><input type="checkbox" onclick="Task.toggle_completed(<%= task.id %>, this)" title="Mark as completed"></td>
+        <td><span title="<%= task.review.agency.name %>"><%= task.review.organization_template.agency.acronym %></span></td>
         <td align="center"><%= task.sequence %></td>
         <td>
           <span style="font-size:.8em"><%= task.review.name %></span> <br>

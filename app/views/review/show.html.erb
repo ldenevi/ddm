@@ -1,0 +1,23 @@
+<script src="/assets/gsp/gsp.review.js" type="text/javascript"></script>
+
+<div id="review_prepare">
+  <div style="font-family:Arial">
+    <div style="float:left; margin-right:5px;">
+      <img src="/images/agencies/<%= @review.agency.acronym.downcase %>.png">
+    </div>
+    <div>
+      <h2><%= "%s (%s)" % [@review.agency.name, @review.agency.acronym] %></h2>
+      <h3><%= @review.name %></h3>
+    </div>
+  </div>
+  
+  <div id="review_page">
+    <form name="review_form"></form>
+    <h3>
+      <span><%= @review.frequency %></span> Review</h3>
+      
+    <%= render "show_attributes", :review => @review %>
+    <%= render "show_tasks", :tasks => @review.tasks %>
+  </div>
+</div>
+

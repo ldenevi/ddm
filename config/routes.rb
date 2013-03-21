@@ -38,6 +38,7 @@ GSP::Application.routes.draw do
   get "admin/gsp_templates/show/(:id)", :to => "admin/gsp_templates#show", :as => "admin_template_show"
   
   # Review
+  get "review/show/:id", :to => "review#show", :as => "show_review"
   get "review/task/:id/show", :to => "review#show_task", :as => "task_show"
   get "tasks/active", :to => "review#active_tasks", :as => "active_tasks"
   post "tasks/mark_completed/:id", :to => "review#mark_task_as_completed", :as => 'task_mark_completed'
