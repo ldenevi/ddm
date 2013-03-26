@@ -62,4 +62,9 @@ class ReviewController < ApplicationController
     render :partial => 'task_comment', :content_type => 'text/html'
   end
   
+  def get_attachment
+    @attachment = BinaryFile.find(params[:id])
+    send_data @attachment.file_data, :filename => @attachment.filename, :type => @attachment.mime_types.first["Content-Type"]
+  end
+  
 end

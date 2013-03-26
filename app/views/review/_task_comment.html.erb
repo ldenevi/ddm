@@ -9,7 +9,7 @@
     <span style="font-size:.8em; color: #666" title="Created at <%= comment.created_at.to_formatted_s(:db) %>">Posted <%= time_ago_in_words(comment.created_at) %> ago</span>
     <% unless comment.attachments.empty? %>
       <span style="font-size:.8em; font-weight:bold">
-        <br>Attachments: <%= comment.attachments.map(&:filename).join(', ') %>
+        <br>Attachments: <%= comment.attachments.map { |a| link_to a.filename, get_file_path(a.id) }.join(', ').html_safe %>
       </span>
     <% end %>
   </div>

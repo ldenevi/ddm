@@ -52,6 +52,8 @@ GSP::Application.routes.draw do
   get  "review/task/comment/:id/show", :to => "review#show_comment", :as => "show_comment"
   get  "review/task/:task_id/comment/form", :to => "review#post_comment_form", :as => "post_comment_form"
   
+  get "review/get_file/:id", :to => "review#get_attachment", :as => "get_file"
+  
   
   # Reports
   get "reports/list", :to => "reports#list", :as => "reports_list"

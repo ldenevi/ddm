@@ -19,6 +19,10 @@ module GSP::FileManager::Storage
       puts storage_path
       File.open(storage_path, 'wb') { |f| f.write(data) }
     end
+    
+    def file_data
+      File.read(storage_path)
+    end
   end
   
   class MissingDataFields < StandardError
