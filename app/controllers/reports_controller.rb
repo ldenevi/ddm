@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+  layout 'print', :only => 'generate_comprehensive'
 
   def list
   end

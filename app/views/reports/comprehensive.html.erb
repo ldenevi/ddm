@@ -18,7 +18,7 @@
       <% @reviews.each do |review| %>
       <tr class="panel-table-row">
         <td align="center"><span title="<%= review.agency.name %>" style="font-size:.8em"><%= review.organization_template.agency.acronym %></span></td>
-        <td align="center"><%= link_to review.name, comprehensive_report_path(review.id) %></td>
+        <td align="center"><%= link_to review.name, comprehensive_report_path(review.id), :target => '_new' %></td>
         <td align="center">
           <span style="font-size:.8em"><%= review.targeted_completion_at.to_formatted_s(:review_date) %></span>
         </td>
