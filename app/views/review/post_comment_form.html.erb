@@ -1,3 +1,8 @@
+<% if flash[:notice] %>
+<div style="background-color:#FF5C65; color:white; font-family:Arial; font-size:.8em; padding:1px auto 1px 5px;">
+  <p><%= flash[:notice] %></p>
+</div>
+<% end %>
 
 <%= form_tag('post', :multipart => true) do |form| %>
   <%= hidden_field_tag :"comment[title]", "In-process Task Comment" %>

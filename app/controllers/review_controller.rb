@@ -39,17 +39,22 @@ class ReviewController < ApplicationController
     @task = Task.find(params[:task][:id])
     @comment = Comment.create params[:comment]
     
-    if params[:attachment]
-      @attachment = BinaryFile.generate :filename => params[:attachment].original_filename, :data => params[:attachment].read
-      @attachment.attachable = @comment
-      @attachment.save!
+    begin
+      if params[:attachment]
+        @attachment = BinaryFile.generate :filename => params[:attachment].original_filename, :data => params[:attachment].read
+        @attachment.attachable = @comment
+        @attachment.save!
+      end
+      
+      @task.comments << @comment
+      @posted_comment = @comment
+      
+      render :layout => nil, :template => 'review/post_comment_form'
+
+    rescue GSP::FileManager::BinaryFileHandler::InvalidFileFormatException
+      flash[:notice] = "'%s' is an invalid file format." % params[:attachment].original_filename 
+      redirect_to :back
     end
-    
-    @task.comments << @comment
-    @posted_comment = @comment
-    
-    render :layout => nil, :template => 'review/post_comment_form'
-    #render :partial => 'task_comment', :task_id => @task.id, :id => @comment.id
   end
   
   def show_comment
