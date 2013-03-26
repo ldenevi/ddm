@@ -16,6 +16,7 @@ class Organization < ActiveRecord::Base
   has_many :active_reviews,   :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at > ?", Time.now, Time.now]
   has_many :upcoming_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at > ? AND targeted_completion_at > ?", Time.now, Time.now]
   has_many :past_due_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at < ?", Time.now, Time.now]
+  has_many :reviews, :order => "created_at DESC"
   
   # For ECOTree... should be something other than the general 'name'... JavaScript may have to be changed
   def name

@@ -1,0 +1,93 @@
+
+#report_page {
+  width:800px;
+  background-color:white;
+  margin: 0 auto 0 auto;
+}
+
+#report_header {
+  background-color:#A1693B;
+  color:#FFCFA6;
+  font-weight:bolder;
+  text-style:uppercase;
+  padding:3px;
+  padding-right:10px;
+  text-align:right;
+  font-size:.8em;
+  
+  
+}
+
+#report_attributes,
+#report_tasks {
+  padding:10px;
+}
+
+#report_company { text-align:center; }
+
+#report_logos {
+}
+
+
+#report_logos:after { 
+  content: ".";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+#report_logos div {
+  float:left;
+}
+
+#report_agency_logo {
+  width:25%;
+  opacity:0.5;
+}
+
+#report_name {
+  text-align:center;
+  width:50%;
+}
+
+#report_gsp_logo {
+  text-align:right;
+  width:25%;
+  opacity:0.5;
+}
+
+#report_objective {
+  font-size:1.3em;
+  margin:0 20px 40px 20px;
+}
+
+#report_tasks table th, 
+#report_tasks table td { 
+  border:1px solid #999;
+  padding:2px;
+  text-align:center;
+}
+#report_tasks table { 
+  border-collapse:collapse;
+  width:100%;
+}
+
+#report_task_attributes {
+  border:1px solid #666;
+  border-top-color:#EEE;
+  margin-bottom:15px;
+}
+
+#report_task {
+  padding-right:20px;
+}
+#report_task_comment { 
+  border-left:3px solid #A13B40;
+  padding:10px;
+  margin-bottom:2px;
+}
+#report_task_comment p { 
+  font-size:0.8em;
+  color:#666;
+}

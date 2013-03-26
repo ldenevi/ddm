@@ -1,4 +1,8 @@
 GSP::Application.routes.draw do
+  get "reports/list"
+
+  get "reports/view"
+
   get "help/initial_usage"
 
   get "templates/list"
@@ -50,6 +54,9 @@ GSP::Application.routes.draw do
   
   
   # Reports
+  get "reports/list", :to => "reports#list", :as => "reports_list"
+  get "reports/get/c/:id", :to => "reports#generate_comprehensive", :as => "comprehensive_report"
+  get "reports/comprehensive", :to => "reports#comprehensive", :as => "comprehensive_list"
   
   # Store
   

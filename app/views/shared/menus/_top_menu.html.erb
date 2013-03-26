@@ -3,10 +3,10 @@
     <li class="<%= active_feature('home') %>"><%= link_to 'Home', root_path %></li>
     <li class="<%= active_feature('templates') %>"><%= link_to 'Templates', template_list_path %></li>
     <!--li class="<%= active_feature('review') %> top-menu-link-disabled"><a href="">Reviews</a></li-->
-    <li class="<%= active_feature('calendar') %> Ztop-menu-link-disabled"><a href="">Calendar</a></li>
+    <li class="<%= active_feature('calendar') %> top-menu-link-disabled"><a href="">Calendar</a></li>
     <li class="<%= active_feature('organization') %>"><%= link_to 'Organization', organization_overview_path %></a></li>
-    <li class="<%= active_feature('report') %> Ztop-menu-link-disabled"><a href="">Reports</a></li>
-    <li class="<%= active_feature('store') %> Ztop-menu-link-disabled"><a href="">Store</a></li>
+    <li class="<%= active_feature('reports') %> "><%= link_to "Reports", reports_list_path %></li>
+    <li class="<%= active_feature('store') %> top-menu-link-disabled"><a href="">Store</a></li>
     <% if current_user.is_gsp_admin? %><li class="<%= active_feature('admin') %>"><%= link_to "Admin", admin_templates_path %></li><% end %>
     <li class="<%= active_feature('users') %>"><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
   </ul>

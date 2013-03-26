@@ -1,0 +1,57 @@
+
+<!--  -->
+
+<div id="report_page">
+  <div id="report_header">
+    <p><%= Time.now.to_formatted_s(:review_date) %></p>
+  </div>
+  
+  <div id="report_attributes">
+    <div id="report_company"><h2><%= @review.organization.full_name %></h2></div>
+    <div id="report_logos">
+      <div id="report_agency_logo"><%= @review.agency.logo_image_tag %></div>
+      <div id="report_name">
+        <h2><%= @review.name %></h2>
+        <h3><%= @review.targeted_completion_at.to_formatted_s(:review_date) %></h3>
+      </div>
+      <div id="report_gsp_logo"><img src="/images/logo.jpg" height="64"></div>
+    </div>
+    
+    
+    <div id="report_objective"><p><%= @review.organization_template.objectives %></p></div>
+  </div>
+  
+  <div id="report_tasks">
+    <% @review.tasks.each do |task| %>
+    <div>
+      <div>
+        <table>
+          <tr>
+            <th rowspan="2"><%= task.sequence %></th>
+            <th>Executor</th>
+            <th>Start Date</th>
+            <th>Completion Date</th>
+          </tr>
+          <tr>
+            <td><%= task.executor.eponym %></td>
+            <td><%= (task.start_at) ? task.start_at.to_formatted_s(:review_date) : 'Not started' %></td>
+            <td><%= (task.actual_completion_at) ? task.actual_completion_at.to_formatted_s(:review_date) : '&nbsp;'.html_safe %></td>
+          </tr>
+        </table>
+      </div>
+      <div id="report_task_attributes">
+        <div id="report_task">
+          <%= task.instructions.html_safe %>
+        </div>
+        <% task.comments.each do |comment| %>
+        <div id="report_task_comment">
+          <span><strong><%= comment.author.eponym %>: </strong> <%= comment.body %> </span>
+          <p><%= comment.created_at.to_formatted_s(:long) %></p>
+          
+        </div>
+        <% end %>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>

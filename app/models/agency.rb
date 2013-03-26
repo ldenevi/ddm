@@ -5,4 +5,12 @@ class Agency < ActiveRecord::Base
   
   has_many :gsp_templates
   has_many :organization_templates
+  
+  def logo_url
+    "/images/agencies/%s.png" % ((acronym) ? acronym.downcase : 'in_house')
+  end
+  
+  def logo_image_tag
+    ("<img src=\"%s\" />" % logo_url).html_safe
+  end
 end

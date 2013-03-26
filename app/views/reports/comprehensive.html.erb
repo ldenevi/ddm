@@ -1,0 +1,31 @@
+
+<div class="panel" id="task-panel" style="width:90%">
+  <h2>Your Organization's Reviews</h2>
+  <div>
+    <table>
+      
+      <% if @reviews.empty? %>
+      <tr>
+        <td colspan="3" align="center">No reviews</td>
+      </tr>
+      <% else %>
+      <tr>
+        <th>Agency</th>
+        <th>Name</th>
+        <th>Due Date</th>
+        <th>Completion Date</th>
+      </tr>
+      <% @reviews.each do |review| %>
+      <tr class="panel-table-row">
+        <td align="center"><span title="<%= review.agency.name %>" style="font-size:.8em"><%= review.organization_template.agency.acronym %></span></td>
+        <td align="center"><%= link_to review.name, comprehensive_report_path(review.id) %></td>
+        <td align="center">
+          <span style="font-size:.8em"><%= review.targeted_completion_at.to_formatted_s(:review_date) %></span>
+        </td>
+        <td align="center" nowrap><%= (review.actual_completion_at) ? review.actual_completion_at.to_formatted_s(:review_date) : '' %></td>
+      </tr>
+      <% end %>
+      <% end %>
+    </table>
+  </div>
+</div>
