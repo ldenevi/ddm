@@ -1,4 +1,6 @@
 GSP::Application.routes.draw do
+  get "calendar/show"
+
   get "reports/list"
 
   get "reports/view"
