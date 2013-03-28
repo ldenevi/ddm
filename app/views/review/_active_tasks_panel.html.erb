@@ -23,7 +23,7 @@
         <td><span title="<%= task.review.agency.name %>"><%= task.review.organization_template.agency.acronym %></span></td>
         <td align="center"><%= task.sequence %></td>
         <td>
-          <span style="font-size:.8em"><%= task.review.name %></span> <br>
+          <span style="font-size:.8em"><%= task.review.name %> - <%= task.review.targeted_start_at.strftime("%D") %></span> <br>
           <%= link_to task.name, task_show_path(task.id) %>
         </td>
         <td nowrap><%= task.expected_completion_at.to_formatted_s(:review_date) %></td>
