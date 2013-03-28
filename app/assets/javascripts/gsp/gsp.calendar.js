@@ -5,7 +5,6 @@
  
  
 (function(gsp, window, undefined) {
-  alert("SADAD");
   var view = "week";
   
   var DATA_FEED_URL = "/calendar/datafeed";
@@ -95,7 +94,7 @@
     var eurl = "/calendar/edit?id={0}&start={2}&end={3}&isallday={4}&title={1}";
     if (data) {
       var url = StrFormat(eurl, data);
-      OpenModalWindow(url, {
+      OpenModelWindow(url, {
         width:   600,
         height:  400,
         caption: "Manage the Calendar",
@@ -171,7 +170,7 @@
   // Add new event
   $("#faddbtn").click(function(e) {
     var url = "/edit";
-    OpenModalWindow(url, {
+    OpenModelWindow(url, {
       width:   500,
       height:  400,
       caption: "Create New Calendar"});

@@ -169,7 +169,7 @@
              * {Array} event items for initialization.
              */   
             eventItems: [], 
-            method: "POST", 
+            method: "GET", 
             /**
              * @description {Config} showday  
              * {Date} Current date. today by default.

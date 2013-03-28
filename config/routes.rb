@@ -56,11 +56,14 @@ GSP::Application.routes.draw do
   
   get "review/get_file/:id", :to => "review#get_attachment", :as => "get_file"
   
-  
   # Reports
   get "reports/list", :to => "reports#list", :as => "reports_list"
   get "reports/get/c/:id", :to => "reports#generate_comprehensive", :as => "comprehensive_report"
   get "reports/comprehensive", :to => "reports#comprehensive", :as => "comprehensive_list"
+  
+  # Calendar
+  get "calendar/datafeed/:method", :to => "calendar#datafeed"
+  post "calendar/datafeed/:method", :to => "calendar#datafeed"
   
   # Store
   
