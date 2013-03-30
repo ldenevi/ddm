@@ -26,49 +26,33 @@ private
   end
   
   def tasks_to_events
-    current_user.active_tasks.map do |task|
-      [
-        task.id,
-        ("[%s] %s (%s)" % [task.sequence, task.name, task.review.name]),
-        jsDate(task.start_at),
-        jsDate(task.expected_completion_at),
-        1,
-        1,
-        0,
-        1,
-        0,
-        "",
-        ""
-      ]
+    tasks_by_review = current_user.active_tasks.group_by(&:review)
+    events = []
+    color  = 0
+    tasks_by_review.each do |review, tasks|
+      tasks.each do |task|
+        events << [
+          task.id,
+          ("[%s] %s (%s)" % [task.sequence, task.name, task.review.name]),
+          jsDate(task.start_at),
+          jsDate(task.expected_completion_at),
+          1,
+          1,
+          0,
+          color,
+          0,
+          "",
+          ""
+        ]
+      end
+      color += 1
     end
+    
+    events
   end
   
   
   def list_calendar_by_range(start_date, end_date)
-    events = [[1,
-             "Leo rules",
-              jsDate(Time.now),
-              jsDate(Time.now + 1.hour),
-              1,
-              0,
-              0,
-              1,
-              0,
-              "Castle Snow",
-              'What'],
-              [2,
-             "Another",
-              jsDate(Time.now),
-              jsDate(Time.now + 1.hour),
-              1,
-              0,
-              0,
-              2,
-              0,
-              "Castle Snow",
-              '']
-              ]
-  
     data = {"events" => tasks_to_events,
             "issort" => true,
             "start" => jsDate(Time.now),
