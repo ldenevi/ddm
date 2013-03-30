@@ -5,7 +5,7 @@
  
  
 (function(gsp, window, undefined) {
-  var view = "week";
+  var view = "month";
   
   var DATA_FEED_URL = "/calendar/datafeed";
   var op = {
@@ -31,7 +31,7 @@
   var $dv = $("#calhead");
   var _MH = document.documentElement.clientHeight;
   var dvH = $dv.height() + 2;
-  op.height = _MH - dvH;
+  op.height = _MH - dvH - 200;
   op.eventItems = [];
   
   var p = $("#gridcontainer").bcalendar(op).BcalGetOp();
@@ -133,7 +133,7 @@
    */
   // Switch to day view
   $("#showdaybtn").click(function(e) {
-    $("#caltoobar div.fcurrent").each(function() {
+    $("#caltoolbar div.fcurrent").each(function() {
       $(this).removeClass("fcurrent");
     });
     $(this).addClass("fcurrent");
@@ -145,7 +145,7 @@
   
   // Switch to week view
   $("#showweekbtn").click(function(e) {
-    $("#caltoobar div.fcurrent").each(function() {
+    $("#caltoolbar div.fcurrent").each(function() {
       $(this).removeClass("fcurrent");
     });
     $(this).addClass("fcurrent");
@@ -157,7 +157,7 @@
   
   // Switch to month view
   $("#showmonthbtn").click(function(e) {
-    $("#caltoobar div.fcurrent").each(function() {
+    $("#caltoolbar div.fcurrent").each(function() {
       $(this).removeClass("fcurrent");
     });
     $(this).addClass("fcurrent");
