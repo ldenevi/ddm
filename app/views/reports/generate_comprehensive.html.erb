@@ -46,6 +46,7 @@
         <% task.comments.each do |comment| %>
         <div id="report_task_comment">
           <span><strong><%= comment.author.eponym %>: </strong> <%= comment.body %> </span>
+          <p>Attachments: <%= comment.attachments.map { |a| link_to a.filename, get_file_path(a.id) }.join(', ').html_safe %></p>
           <p><%= comment.created_at.to_formatted_s(:long) %></p>
           
         </div>
