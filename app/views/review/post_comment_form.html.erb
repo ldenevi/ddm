@@ -1,3 +1,4 @@
+<%= javascript_include_tag 'ckeditor/ckeditor.js' %>
 <% if flash[:notice] %>
 <div style="background-color:#FF5C65; color:white; font-family:Arial; font-size:.8em; padding:1px auto 1px 5px;">
   <p><%= flash[:notice] %></p>
@@ -8,7 +9,7 @@
   <%= hidden_field_tag :"comment[title]", "In-process Task Comment" %>
   <%= hidden_field_tag :"task[id]", @task.id %>
   <%= hidden_field_tag :"comment[author_id]", current_user.id %>
-  <%= text_area_tag :"comment[body]", nil, :size => '80x4' %>
+  <%= text_area_tag :"comment[body]", nil, :size => '80x4', :class => "ckeditor" %>
   <%= label_tag :attachment, :'Attach file' %>: <%= file_field_tag :attachment %>
   <br>
   <%= submit_tag "submit",  :disable_with => 'Please wait...', :class => 'submit' %>

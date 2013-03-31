@@ -6,7 +6,7 @@ class CreateBinaryFiles < ActiveRecord::Migration
       t.text    :mime_types,      :null => false
       t.integer :attachable_id,   :null => false
       t.string  :attachable_type, :null => false
-      t.string  :type,            :null => false
+      t.string  :type
       
       # GSP::FileManager::Storage
       t.string :storage_path,     :null => false
