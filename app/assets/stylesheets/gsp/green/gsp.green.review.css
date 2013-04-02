@@ -11,8 +11,9 @@
   border-radius: 20px;
   border:1px solid #7C0006;
   background-color:#FFD;
-  width:800px;
+  width:90%;
   min-height: 500px;
+  margin: 0 auto 0 auto;
 }
 
 .task-sequence {
@@ -174,7 +175,8 @@
 
 
 
-.task-reopen {
+.task-reopen,
+.task-close {
   float:left;
   display:table-cell;
   background-color:#A13B40;
@@ -192,21 +194,26 @@
   z-index:-3;
 }
 
-.task-reopen p { margin:0; padding:0;}
+.task-reopen p,
+.task-close p { margin:0; padding:0;}
 .task-reopen a,
 .task-reopen a:link,
-.task-reopen a:visited { color:#FFA65C; text-decoration:none }
+.task-reopen a:visited,
+.task-close a,
+.task-close a:link,
+.task-close a:visited { color:#FFA65C; text-decoration:none }
 
-.task-reopen a:hover { color:#FFA65C; text-decoration:underline }
+.task-reopen a:hover,
+.task-close a:hover { color:#FFA65C; text-decoration:underline }
 
 .task-completed {
-  text-decoration:line-through;
+  /*text-decoration:line-through;*/
   background-color:#5CFFB5;
   -webkit-border-radius: 20px;
   border-radius: 20px;
   border:1px solid #7C0006;
   width:800px;
-  color:gray;
+  margin: 0 auto 0 auto;
 }
 
 /* Full review viewer & editor */

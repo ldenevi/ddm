@@ -1,8 +1,10 @@
 <% task = @task if task.nil? %>
 
-      <tr class="panel-table-row panel-task-completed"  id="completed-task-row-<%= task.id %>">
+      <tr class="panel-table-row panel-task-completed"  id="completed-task-row-<%= task.id %>" data-task-id="<%= task.id %>">
+        <td><input type="checkbox" title="Re-open task" checked></td>
         <td><%= task.review.agency.acronym %></td>
         <td align="center"><%= task.sequence %></td>
         <td><%= link_to task.name, task_show_path(task.id) %></td>
-        <td nowrap><%= task.actual_completion_at.to_formatted_s(:short) %></td>
+        <td nowrap><%= task.start_at.to_formatted_s(:review_date) %></td>
+        <td nowrap><%= task.expected_completion_at.to_formatted_s(:review_date) %></td>
       </tr>

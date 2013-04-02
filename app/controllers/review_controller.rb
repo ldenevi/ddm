@@ -16,7 +16,13 @@ class ReviewController < ApplicationController
   
   def mark_task_as_completed
     @task = Task.find(params[:id])
-    @task.complete
+    @task.complete!
+    render :text => 'Done'
+  end
+  
+  def reopen_task
+    @task = Task.find(params[:id])
+    @task.reopen!
     render :text => 'Done'
   end
   

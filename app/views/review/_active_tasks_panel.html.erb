@@ -1,9 +1,10 @@
 <link href="/assets/gsp/green/gsp.green.review.css" media="all" rel="stylesheet" type="text/css" />
+<script src="/assets/gsp/gsp.task.manager.js" type="text/javascript"></script>
 
-<div class="panel" id="task-panel">
+<div class="panel" id="task_panel">
   <h2>Your Active Tasks</h2>
   <div>
-    <table>
+    <table id="active_tasks_list">
       
       <% if @active_tasks.empty? %>
       <tr>
@@ -15,17 +16,19 @@
         <th>&nbsp;</th>
         <th>Task</th>
         <th>Name</th>
+        <th>Task Start Date</th>
         <th>Task Due</th>
       </tr>
       <% @active_tasks.each do |task| %>
-      <tr class="panel-table-row" id="active-task-row-<%= task.id %>">
-        <td><input type="checkbox" onclick="Task.toggle_completed(<%= task.id %>, this)" title="Mark as completed"></td>
+      <tr class="panel-table-row active-task-row" id="active-task-row-<%= task.id %>" data-task-id="<%= task.id %>">
+        <td><input type="checkbox" title="Mark as completed"></td>
         <td><span title="<%= task.review.agency.name %>"><%= task.review.organization_template.agency.acronym %></span></td>
         <td align="center"><%= task.sequence %></td>
         <td>
           <span style="font-size:.8em"><%= task.review.name %> - <%= task.review.targeted_start_at.strftime("%D") %></span> <br>
           <%= link_to task.name, task_show_path(task.id) %>
         </td>
+        <td nowrap><%= task.start_at.to_formatted_s(:review_date) %></td>
         <td nowrap><%= task.expected_completion_at.to_formatted_s(:review_date) %></td>
       </tr>
       <% end %>
@@ -33,27 +36,4 @@
     </table>
   </div>
 </div>
-
-<div id="task-dialog">
-</div>
-
-<script>
-  $('#task-panel a').click(function() {
-    var url = $(this).attr('href');
-    showDialog(url);
-    return false;
-  });
-  
-  $('#task-dialog').dialog({
-    autoOpen:false,
-    height: 600,
-    width: 900,
-    modal: true
-  });
-  
-  function showDialog(url) {
-    $('#task-dialog').load(url);
-    $('#task-dialog').dialog('open');
-  }
-</script>
 

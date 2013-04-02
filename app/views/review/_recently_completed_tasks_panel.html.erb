@@ -3,7 +3,7 @@
 <div class="panel" id="completed-task-panel">
   <h2>Your Completed Tasks</h2>
   <div>
-    <table id="completed-tasks-table">
+    <table id="completed_tasks_list">
       <% if @recently_completed_tasks.empty? %>
       <tr>
         <td colspan="3" align="center">No completed tasks</td>
@@ -11,9 +11,11 @@
       <% else %>
       <tr>
         <th>&nbsp;</th>
+        <th>&nbsp;</th>
         <th>Task</th>
         <th>Name</th>
-        <th>Completed</th>
+        <th>Task Start Date</th>
+        <th>Task Due</th>
       </tr>
       <% @recently_completed_tasks.each do |task| %>
       <%= render 'review/recently_completed_tasks_row', :task => task %>
@@ -22,27 +24,4 @@
     </table>
   </div>
 </div>
-
-<div id="completed-task-dialog">
-</div>
-
-<script>
-  $('#completed-task-panel a').click(function() {
-    var url = $(this).attr('href');
-    showDialog(url);
-    return false;
-  });
-  
-  $('#completed-task-dialog').dialog({
-    autoOpen:false,
-    height: 600,
-    width: 900,
-    modal: true
-  });
-  
-  function showDialog(url) {
-    $('#completed-task-dialog').load(url);
-    $('#completed-task-dialog').dialog('open');
-  }
-</script>
 

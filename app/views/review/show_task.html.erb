@@ -5,7 +5,11 @@
     </span>
     <% if @task.is_completed? %>
     <span class="task-reopen">
-      <p><%= link_to "Re-open", "asdf" %></p>
+      <p><%= link_to "Re-open", reopen_task_path(@task.id), :remote => true, :method => 'post' %></p>
+    </span>
+    <% else %>
+    <span class="task-close">
+      <p><%= link_to "Mark as Completed", mark_task_completed_path(@task.id), :remote => true, :method => 'post' %></p>
     </span>
     <% end %>
     <span class="task-due-date">
@@ -48,6 +52,8 @@
     </div>
   
     <div class="task-comments">
+      
+      <% unless @task.is_completed? %>
       <div id="comment_entry">
         <div class="comment-profile-image">
           <img src="/images/users/default_profile.jpg" width="48">
@@ -59,6 +65,7 @@
           <iframe src="<%= post_comment_form_path(@task) %>" height="400" ></iframe>
         </div>
       </div>
+      <% end %>
       
       <div id="comments-container">
         <div id="comment-insertion-marker"></div>
@@ -80,6 +87,8 @@ $(document).ready(function() {
     $('#comment_input').addClass('show-comment-entry-box');
     
   });
+  
+  
 });
 </script>
 

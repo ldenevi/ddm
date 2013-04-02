@@ -24,9 +24,15 @@ class Task < ActiveRecord::Base
     self.save
   end
   
-  def complete
+  def complete!
     self.status = GSP::STATUS::COMPLETED
     self.actual_completion_at = Time.now
+    self.save
+  end
+  
+  def reopen!
+    self.status = GSP::STATUS::PENDING
+    self.actual_completion_at = nil
     self.save
   end
   
