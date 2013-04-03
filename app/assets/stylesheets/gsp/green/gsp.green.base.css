@@ -33,6 +33,10 @@ html, body {
 	padding-bottom: 70px;
 }
 
+.no-scrollbar {
+  overflow:hidden;
+}
+
 /* Panels */
 
 .panel {

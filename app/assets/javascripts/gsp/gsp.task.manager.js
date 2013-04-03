@@ -25,15 +25,13 @@
   var $active_tasks_list    = null;
   var $completed_tasks_list = null;
   var $dialog = $("<div id='task_dialog'></div>");
-  
-  var active_row = null;
-  
+    
   // events
   var evt_marked_completed  = "task.completed";
   var evt_marked_reopened   = "task.reopened";
-  /*
   var evt_show_comment_form = "task.show-comment-form";
   var evt_hide_comment_form = "task.hide-comment-form";
+  /*
   var evt_comment_added     = "task.comment-added";
   var evt_comment_removed   = "task.comment-removed";
   var evt_next_task         = "task.next";
@@ -43,29 +41,27 @@
   
   var config = {
     fx : {
-      fade_rate : 500,
-      scroll_rate: 200,
+      fade_rate   : 500,
+      scroll_rate : 200,
     },
     styles : {
       task_completed : "panel-task-completed"
     }
   };
-  
+    
   // Task actions
   function show_task(event, url) {
     $dialog.load(url, function(responseText, textStatus, XMLHttpRequest) {
-                        var source_row = $(event.target).data("row");
-                        var status_button = $(".task-close p a, .task-reopen p a", this);
-                        status_button.click(function() {
-                                                source_row.checkbox.trigger("click");
-                                                source_row.checkbox.trigger("focus");
-                                                $dialog.dialog("close");
-                                                $dialog.text("");
-                                                return false;
-                                            });
-                        
+                        TaskWorksheet($(event.target).data("row"));
                       });
     
+    // Visuals clean up
+    $dialog.dialog(
+      {
+        open:  function() { $("html body").addClass("no-scrollbar"); },
+        close: function() { $("html body").removeClass("no-scrollbar"); }
+      }
+    );
     $dialog.dialog('open');
     $dialog.trigger('focus');
   }
@@ -75,6 +71,7 @@
     $.post('/tasks/mark_completed/' + row.id, function(data) {
       move_to_completed_list(row);
     }).fail(function () {  alert("Mark complete failed"); });
+    return event;
   }
   
   function reopen(event) {
@@ -82,6 +79,7 @@
     $.post('/tasks/reopen/' + row.id, function(data) {
       move_to_active_list(row);
     }).fail(function () {  alert("Reopen failed"); });
+    return event;
   }
   
   // UI effects
@@ -104,15 +102,23 @@
     $row.show(config.fx.fade_rate, function () { /*$('html, body').animate({scrollTop: $row.offset().top}, config.fx.scroll_rate); */ });
   }
   
-  // Table list objects
-  function Row(i, $table_row) {
+  /*********************************************
+   * Task Manager objects
+   *
+   * Custom data classes for handling events,
+   * visual behaviors and storing temporary data
+   *
+   */
+   
+  /*
+   * Row(jQueryTableRow)
+   */
+  function Row($table_row) {
     var row_object = {
       id       : $table_row.data("task-id"),
       row      : $table_row,
       checkbox : $("input[type=checkbox]", $table_row),
       anchor   : $("a", $table_row),
-      previous_position : null,
-      position : i,
       
       changeStatus : function () {
         if (this.checked) {
@@ -152,6 +158,47 @@
     return row_object;
   }
   
+  /*
+   * TaskWorksheet(Row)
+   */
+  function TaskWorksheet(source_row) {
+    var task_worksheet_object = {
+      revealCommentForm  : function() {
+                              $('#comment_fake_input').removeClass('show-comment-entry-box');
+                              $('#comment_fake_input').addClass('hide-comment-entry-box');
+                              $('#comment_input').removeClass('hide-comment-entry-box');
+                              $('#comment_input').addClass('show-comment-entry-box');
+                              $dialog.animate({scrollTop: $('#comment_entry').offset().top - $("#task_dialog").offset().top}, config.fx.scroll_rate);
+                              $dialog.addClass("no-scrollbar");
+                           },
+      concealCommentForm : function() {
+                              $('#comment_fake_input').addClass('show-comment-entry-box');
+                              $('#comment_fake_input').removeClass('hide-comment-entry-box');
+                              $('#comment_input').addClass('hide-comment-entry-box');
+                              $('#comment_input').removeClass('show-comment-entry-box');
+                              $dialog.removeClass("no-scrollbar");
+                           },
+      changeStatus       : function() {
+                              source_row.checkbox.trigger("click");
+                              source_row.checkbox.trigger("focus");
+                              $dialog.dialog("close");
+                              $dialog.text("Loading...");
+                              return false;
+                           }
+    };
+  
+    var status_button = $(".task-close p a, .task-reopen p a", $dialog);
+    status_button.on("click", task_worksheet_object.changeStatus);
+                        
+    $('#comment_fake_input').bind(evt_show_comment_form, task_worksheet_object.revealCommentForm);
+    $('#comment_entry iframe').bind(evt_hide_comment_form, task_worksheet_object.concealCommentForm);
+                        
+    $('#comment_fake_input').on('click', function () { $(this).trigger(evt_show_comment_form);  });
+    $("#comment_entry iframe").on("blur", function () { $(this).trigger(evt_hide_comment_form); });
+    
+  }
+  
+  
   var TaskManager = function() {
     // Get DOM elements  
     $active_tasks_list    = $("#active_tasks_list");
@@ -166,20 +213,11 @@
       modal: true
     });
     
-    $("tr", $active_tasks_list).each(function(i, e) {
-                                  Row(i, $(e));
-                               });
-                               
-    $("tr", $completed_tasks_list).each(function(i, e) { 
-                                  Row(i, $(e));
-                               });
+    $("tr", $active_tasks_list).each(function(i, e) { Row($(e)); });
+    $("tr", $completed_tasks_list).each(function(i, e) { Row($(e)); });
                                
     $dialog.on("mouseenter", function(event) {
     });
-    
-    this.current_row = function() {
-      return active_row;
-    };
   };
   
   gsp.TaskManager = TaskManager;

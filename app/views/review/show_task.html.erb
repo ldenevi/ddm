@@ -79,17 +79,6 @@
 </div>
 
 <script>
-$(document).ready(function() {
-  $('#comment_fake_input').on('click', function () { 
-    $('#comment_fake_input').removeClass('show-comment-entry-box');
-    $('#comment_fake_input').addClass('hide-comment-entry-box');
-    $('#comment_input').removeClass('hide-comment-entry-box');
-    $('#comment_input').addClass('show-comment-entry-box');
-    
-  });
-  
-  
-});
 </script>
 
 <% if @task.is_completed? %>
