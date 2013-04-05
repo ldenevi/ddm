@@ -74,9 +74,36 @@
 .templates-list-item { 
   border:1px solid cadetblue;
   position:relative;
-  -moz-box-shadow:  3px 3px 5px #CCC;
-  -webkit-box-shadow: 3px 3px 5px #CCC;
-  box-shadow: 3px 3px 5px #CCC;
+  -moz-box-shadow: 2px 2px 5px #CCC;
+  -webkit-box-shadow: 2px 2px 5px #CCC;
+  box-shadow: 2px 2px 5px #CCC;
 }
-.templates-list-item div {  }
+
+
+.templates-list-item a,
+.templates-list-item a:hover,
+.templates-list-item a:link,
+.templates-list-item a:active,
+.templates-list-item a:visited {
+  color: #3BA173;
+  font-weight:bold;
+}
+
+.templates-list-item div { float:left; }
+.templates-list-item div:nth-child(1) { width:64px; padding:2px;}
+.templates-list-item div:nth-child(2) { width:60%; padding: 10px; text-align:justify; }
+.templates-list-item div:nth-child(2) span { display:block; }
+.templates-list-item div:nth-child(3) { width:200px; }
 .templates-list-item img { opacity: 0.5; }
+
+.templates-list-item:hover { 
+  top : -1px;
+  left: -1px;
+  -moz-box-shadow:  3px 3px 5px #666;
+  -webkit-box-shadow: 3px 3px 5px #666;
+  box-shadow: 3px 3px 5px #666;
+}
+.templates-list-item:hover img {
+  opacity: 1;
+}
+
