@@ -1,14 +1,29 @@
-<div class="templates-list">
-  <ul>
-    <li> + <br> Purchase new template</li>
-    <% @templates.each do |template| %>
-    <li>
-      <span class="templates-list-logo"><img src="/images/agencies/<%= template.agency.acronym.downcase %>.png"></span>
-      <span>
-      <br> <%= link_to template.regulatory_review_name, template_show_path(template.id) %> <br> <br> 
-      Frequency: <%= template.frequency %><br><br>
-      <%= link_to 'Deploy Review', prepare_review_path(template.id) %></span>
-    </li>
-    <% end %>
-  </ul>
+<div class="templates">
+  <div class="templates-header">
+    <h3>Protocol Management Templates for <%= current_user.organization.full_name %></h3>
+    <p><%= @templates.size %> templates</p>
+  </div>
+
+  <div class="templates-list">
+    <div class="templates-purchase-search">
+      <div title="Click here to add a template to your organization" class="template-add"><p>+ Purchase new template</p></div>
+      <div title="Click here to create a template to your organization"  class="template-add"><p>+ Create custom template</p></div>
+      <div><input type="text" value="Filter..." name="filter"></div>
+    </div>
+
+    <div class="organization-templates">
+      <% @templates.each do |template| %>
+      <div class="templates-list-item">
+        <div class="templates-list-logo"><img src="/images/agencies/<%= template.agency.acronym.downcase %>.png"></div>
+        <div>
+          <span><%= link_to template.regulatory_review_name, template_show_path(template.id) %></span>
+          <span><%= template.description %></span>
+          <span><%= link_to 'Deploy Review', prepare_review_path(template.id) %></span>
+          <span><%= link_to "Settings", template_settings_path(template), "data-gsp-ui-balloon" => "click" %></span>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+
 </div>

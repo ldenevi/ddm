@@ -1,0 +1,15 @@
+<div style="background:url(/assets/jquery/pepper-grinder/images/ui-bg_fine-grain_10_eceadf_60x60.png); padding:5px">
+  <title><%= @template.regulatory_review_name %></title>
+
+  <div>
+    <p>Person responsible for this review:
+    <select>
+      <%= @possible_owners.each do |user| %>
+      <option><%= user.eponym %></option>
+      <% end %>
+    </select>
+    </p>
+  </div>
+
+  <%= render "/calendar/event_recurrence_settings", :template => @template %>
+</div>

@@ -228,5 +228,4 @@
    
 }(GSP, window));
 
-console.log("Loaded "+GSP.TemplateManager);
 

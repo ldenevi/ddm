@@ -3,29 +3,80 @@
  * © Copyright 2013. Green Status Pro. All Rights Reserved.
  */
 
-.templates-list ul {
-  list-style:none;
+.templates {
+  margin: 0 auto 0 auto;
+  width: 80%;
+  padding: 20px;
+  background-color: white;
+  border: 1px solid black;
 }
 
-.templates-list ul li:first-child {
+.templates-header {
+  margin-bottom: 30px;
+  text-align:center;
+}
+
+.templates-header p { color: gray }
+.templates-list div {
+  margin-bottom:10px;
+}
+
+.templates-purchase-search div {
+  float:left;
   color:cadetblue;
+  width:33%;
 }
 
-.templates-list ul li {
-  border: 1px dashed blue;
-  width: 300px;
-  height: 150px;
-  padding:5px;
-  margin:10px;
-  float:left;
+.templates-purchase-search:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
 }
 
-.templates-list ul li:hover {
+.templates-purchase-search div {
+  font-size:20pt;
+  height:50px;
+  vertical-align:middle;
+  text-align:center;
+  margin: 1px;
+}
+
+.template-add:hover {
+  background-color:#FFCFA6;
   cursor:pointer;
-  background-color:#DFD;
-  border:1px solid green;
+  border:1px solid cadetblue;
+  margin:0px;
 }
 
-.templates-list-logo span {
-  float:left;
+.templates-purchase-search div:nth-child(3) {
+  text-align:right;
 }
+.templates-purchase-search div:nth-child(3) input {
+  font-size:20pt;
+  color:silver;
+}
+
+.organization-templates div {
+}
+
+.templates-list-item:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+
+.templates-list-item { 
+  border:1px solid cadetblue;
+  position:relative;
+  -moz-box-shadow:  3px 3px 5px #CCC;
+  -webkit-box-shadow: 3px 3px 5px #CCC;
+  box-shadow: 3px 3px 5px #CCC;
+}
+.templates-list-item div {  }
+.templates-list-item img { opacity: 0.5; }

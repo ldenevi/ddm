@@ -215,9 +215,7 @@
     
     $("tr", $active_tasks_list).each(function(i, e) { Row($(e)); });
     $("tr", $completed_tasks_list).each(function(i, e) { Row($(e)); });
-                               
-    $dialog.on("mouseenter", function(event) {
-    });
+
   };
   
   gsp.TaskManager = TaskManager;

@@ -1,6 +1,7 @@
 class TemplatesController < ApplicationController
   before_filter :use_ckeditor, :only => [:temporary_template_display]
   before_filter :editable, :only => [:temporary_template_display, :new_task, :destroy_task]
+  layout false, :only => [:settings]
 
   def list
     @templates = current_user.organization.organization_templates
@@ -42,6 +43,11 @@ class TemplatesController < ApplicationController
   def temporary_template_display
     @template = get_gsp_or_organization_template(params)  
     render :template => 'shared/standard/show'
+  end
+  
+  def settings
+    @template = OrganizationTemplate.find(params[:id])
+    @possible_owners = current_user.organization.users
   end
   
   #

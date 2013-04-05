@@ -1,0 +1,91 @@
+
+  <script>
+  $(function() {
+    $( "#tabs<%= template.id %>" ).tabs().addClass( "ui-tabs-vertical ui-helper-clearfix" );
+    $( "#tabs<%= template.id %> li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+  });
+  </script>
+  <style>
+  .ui-tabs-vertical { width: 38em; font-size:10pt; }
+  .ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 6em; }
+  .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+  .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+  .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 0px; border-right-width: 0px; }
+  .ui-tabs-vertical .ui-tabs-panel { padding: 1em; float: left }
+  .ui-state-focus { border: 0 }
+  
+  .events-recurrence-save { background-color:#3BA173; padding:5px; text-align:center;}
+  .events-recurrence-save a,
+  .events-recurrence-save a:hover,
+  .events-recurrence-save a:link,
+  .events-recurrence-save a:visited,
+  .events-recurrence-save a:active
+  { color:#FFCFA6; }
+
+  </style>
+  
+<div class="event-reccurence">
+  <div class="events-time">
+    <table>
+      <tr><td>Start:</td><td><input type="text" size="12" value="09:00 AM"></td></tr>
+      <tr><td>End:</td><td><input type="text" size="12" value="05:00 PM"></td></tr>
+    </table>
+    <br>
+  </div>
+  
+  <div id="tabs<%= template.id %>" class="events-recurrence-tabs">
+    <ul>
+      <li><a href="#tabs<%= template.id %>-1">Daily</a></li>
+      <li><a href="#tabs<%= template.id %>-2">Weekly</a></li>
+      <li><a href="#tabs<%= template.id %>-3">Monthly</a></li>
+      <li><a href="#tabs<%= template.id %>-4">Annually</a></li>
+    </ul>
+    <div id="tabs<%= template.id %>-1">
+      <input type="radio" group="daily"> Every <input type="text" size="2" value="1"> day(s)<br>
+      <input type="radio" group="daily"> Every weekday
+    </div>
+    <div id="tabs<%= template.id %>-2">
+      Recur every <input type="text" value="1" size="2"> week(s) on:<br>
+      <table>
+        <tr>
+          <td><input type="checkbox"> Sunday</td>
+          <td><input type="checkbox"> Monday</td>
+          <td><input type="checkbox"> Tuesday</td>
+          <td><input type="checkbox"> Wednesday</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"> Thursday</td>
+          <td><input type="checkbox"> Friday</td>
+          <td><input type="checkbox"> Saturday</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+    <div id="tabs<%= template.id %>-3">
+      <input type="radio" group="monthly"> <input type="text" size="2" value="1"> of every <input type="text" size="2" value="1"> month(s)<br>
+      <input type="radio" group="monthly"> The <select><option>first</option><option>second</option><option>third</option><option>fourth</option><option>fifth</option></select> 
+        <select><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select> of every <input type="text" size="2" value="1"> month(s)
+    </div>
+    <div id="tabs<%= template.id %>-4">
+    </div>
+  </div>
+  
+  <div class="events-recurrence-range">
+    <p>Range of recurrence</p>
+    
+    <table>
+      <tr>
+        <td>Start: <input type="text"></td>
+        <td>
+          <p><input type="radio" group="annually"> No end date<br/>
+             <input type="radio" group="annually"> End after: <input type="text" size="2" value="10"> occurrences<br/>
+             <input type="radio" group="annually"> End by: <input type="text" ></p>
+        </td>
+      </tr>
+    </table>
+  </div>
+  
+  <div class="events-recurrence-save">
+    <a href="#">Save</a>
+  </div>
+</div>
