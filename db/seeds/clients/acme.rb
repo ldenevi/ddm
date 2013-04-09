@@ -1,6 +1,6 @@
 # springfield company
 
-puts "Creating Springfield, Co. company..."
+puts "Creating Springfield Co. company..."
 springfield_company = Organization.create({:full_name => 'Springfield, Co.'})
 
 puts "Creating users..."

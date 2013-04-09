@@ -4,7 +4,7 @@
 
 
 puts "Creating company organizations..."
-c_main    = Organization.create(:full_name => 'R. R. LeDuc, Co.')
+c_main    = Organization.create(:full_name => 'R. R. LeDuc Co.')
 c_sales   = Organization.create(:full_name => 'Sales', :parent => c_main)
 c_manufac = Organization.create(:full_name => 'Manufacturing', :parent => c_main)
 # c_sales_west = Organization.create(:full_name => 'West Coast Sales', :parent => c_sales, :owner => sales)

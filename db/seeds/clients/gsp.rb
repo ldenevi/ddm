@@ -1,7 +1,7 @@
 # GSP accounts
 
 puts "Creating companies..."
-gsp = Organization.create({:full_name => 'Green Status Pro, Inc.'})
+gsp = Organization.create({:full_name => 'Green Status Pro Inc.'})
 
 puts "Creating users..."
 superadmin  = User.create :email => 'superadmin@greenstatuspro.com', :password => 'abcd1234', :organization => gsp
