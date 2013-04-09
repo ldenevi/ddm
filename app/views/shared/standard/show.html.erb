@@ -112,7 +112,7 @@
 
 <div id="standard">
 
-  <%= render 'shared/standard/purchased_by' if @template.respond_to?(:purchased_by) %>
+  <%= render 'shared/standard/purchased_by' if @template.respond_to?(:purchased_by) && !@template.purchased_by.nil? %>
 
   <div id="standard_agency_section">
     <div id="standard_agency_image_section">
@@ -150,7 +150,7 @@
         <% JSON.parse(@template.tasks).each_with_index do |task, sequence| %>
         <% sequence = sequence + 1 %>
         <%= render 'shared/standard/template_task', :sequence => sequence, :task => task %>
-        <% end %>
+        <% end unless @template.tasks.nil? %>
         <div id="task_add_marker" style="display:none">
         </div>
       </div>

@@ -2,4 +2,4 @@
   data-template-id="<%= @template.id %>"
   data-template-type="<%= @template.class %>"
   data-field-name="objectives"
-  <%= "contenteditable=true" if @use_ckeditor %>><%= @template.objectives.html_safe %></div>
+  <%= "contenteditable=true" if @use_ckeditor %>><%= edit_field @template.objectives %></div>

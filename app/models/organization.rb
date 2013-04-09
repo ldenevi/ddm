@@ -9,7 +9,7 @@ class Organization < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User'
   belongs_to :governing_law, :class_name => 'User'  # Using User just as a placeholder; eventually there'd be a mangeble Law object
   has_many   :users
-  has_many   :organization_templates
+  has_many   :organization_templates, :order => 'created_at DESC'
   after_create :set_owner, :if => lambda { |o| o.owner_id.nil? }
   
   # Reviews

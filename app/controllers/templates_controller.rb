@@ -1,6 +1,6 @@
 class TemplatesController < ApplicationController
-  before_filter :use_ckeditor, :only => [:temporary_template_display]
-  before_filter :editable, :only => [:temporary_template_display, :new_task, :destroy_task]
+  before_filter :use_ckeditor, :only => [:temporary_template_display, :new_organization_template]
+  before_filter :editable, :only => [:temporary_template_display, :new_task, :destroy_task, :new_organization_template]
   layout false, :only => [:settings]
 
   def list
@@ -25,9 +25,16 @@ class TemplatesController < ApplicationController
   end
   
   # Add custom organization template
+  #def new_organization_template
+  #  @all_organization_templates_options = current_user.organization.organization_templates.map { |t| [t.full_name, t.id] }
+  #  @copy_source = GspTemplate.find params[:source_template_id] unless params[:source_template_id].nil?
+  #end
+  
+  # Organization admin/owner can create custom templates
   def new_organization_template
-    @all_organization_templates_options = current_user.organization.organization_templates.map { |t| [t.full_name, t.id] }
-    @copy_source = GspTemplate.find params[:source_template_id] unless params[:source_template_id].nil?
+    @agency = Agency.in_house
+    @template = OrganizationTemplate.create :agency => @agency, :agency_display_name => @agency.name, :organization => current_user.organization
+    render "shared/standard/show"
   end
   
   def post_organization_template
@@ -139,7 +146,7 @@ private
 public
   def new_task
     @template = get_gsp_or_organization_template(params)
-    tasks = JSON.parse(@template.tasks)
+    tasks = (@template.tasks) ? JSON.parse(@template.tasks) : []
     @sequence = tasks.size + 1
     @task = {"name" => 'Insert task name...', "instructions" => 'Insert instructions...'}
     tasks << @task

@@ -59,6 +59,15 @@
   color:silver;
 }
 
+.templates-purchase-search a,
+.templates-purchase-search a:hover,
+.templates-purchase-search a:link,
+.templates-purchase-search a:active
+.templates-purchase-search a:visited {
+  color: cadetblue;
+  text-decoration:none;
+}
+
 .organization-templates div {
 }
 

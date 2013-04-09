@@ -13,4 +13,8 @@ class Agency < ActiveRecord::Base
   def logo_image_tag
     ("<img src=\"%s\" />" % logo_url).html_safe
   end
+  
+  def self.in_house
+    where(:name => 'In-House').limit(1).first
+  end
 end

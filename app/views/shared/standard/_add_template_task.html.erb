@@ -1,5 +1,5 @@
 <% 
-  add_task_url = ((@template.respond_to?(:purchased_by) ? "/organization_template/%d/new_task" : "/gsp_template/%d/new_task" ) % @template.id)
+  add_task_url = ((@template.respond_to?(:purchased_by) ? "/organization_template/%d/new_task" : "/gsp_template/%d/new_task" ) % @template.id) unless @template.id.nil?
 %>
 <div id="standard_add_task">
   <span class="standard-add-task-button" data-add-task-url="<%= add_task_url %>">
