@@ -17,7 +17,7 @@
         <div class="templates-list-logo"><img src="/images/agencies/<%= template.agency.acronym.downcase %>.png"></div>
         <div>
           <span><%= link_to template.regulatory_review_name, template_show_path(template.id) %></span>
-          <span><%= JSON.parse(template.tasks).size.to_s %> task(s)</span>
+          <span><%= (template.tasks.to_s.empty?) ? "No" : JSON.parse(template.tasks).size %> task(s)</span>
           <span><%= template.description %></span>
         </div>
         <div>
