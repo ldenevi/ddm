@@ -1,6 +1,6 @@
 class Admin::GspTemplatesController < ApplicationController
-  before_filter :use_ckeditor, :only => [:show]
-  before_filter :editable, :only => [:show]
+  before_filter :use_ckeditor, :only => [:show, :new]
+  before_filter :editable, :only => [:show, :new]
 
   def editable
     @is_editable = true
