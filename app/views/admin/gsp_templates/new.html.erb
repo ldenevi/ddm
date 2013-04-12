@@ -8,7 +8,6 @@ function add_task() {
   ntt.append(task_box);
   
   task_box.slideDown(500);
-  console.log($('textarea', task_box)[0]);
   CKEDITOR.replace($('textarea', task_box)[0]);
   $('html, body').animate({scrollTop: task_box.offset().top}, 500);
 }
