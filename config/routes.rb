@@ -36,6 +36,7 @@ GSP::Application.routes.draw do
   get "template/:id/prepare_review", :to => "templates#prepare_review", :as => 'prepare_review'
   get "template/new", :to => "templates#new_organization_template", :as => 'new_organization_template'
   get "template/settings/:id", :to => "templates#settings", :as => 'template_settings'
+  get "template/test_editor/:id", :to => "templates#test_editor"
   
   # GSP Templates
   get "admin/gsp_templates/index", :to => "admin/gsp_templates#index", :as => 'admin_templates'

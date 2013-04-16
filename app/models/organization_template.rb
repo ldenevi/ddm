@@ -32,6 +32,14 @@ class OrganizationTemplate < ActiveRecord::Base
   include GSP::UI::Javascript::EcoTree
   make_ecotree :class_name => 'OrganizationTemplate', :children => 'organization_templates'
   
+  def tasks_array
+    JSON.parse(tasks)
+  end
+  
+  def tasks_array=(array)
+    tasks = array.to_json
+  end
+  
   def generate_review
     review = Review.new :responsible_party => organization.owner, :frequency => frequency,
                         :name => regulatory_review_name, :organization => organization,
