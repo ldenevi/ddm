@@ -1,0 +1,12 @@
+
+<div id="tasks">
+  <% JSON.parse(@template.tasks).each_with_index do |task, i| %>
+  <div class="task">
+    <p><span>Task <%= i + 1 %></span></p>
+    <span>
+      <h4><%= task["name"] %></h4>
+      <p><%= task["instructions"].html_safe %></p>
+    </span>
+  </div>
+  <% end %>
+</div>

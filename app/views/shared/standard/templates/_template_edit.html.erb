@@ -1,0 +1,61 @@
+<div>
+  <%= form_for @template, :url => 'yahoo.com', :method => :put do |t| %>
+    <!-- Frequency -->
+    <div class="template-editor-attribute">
+      <p class="template-editor-attribute-label"><%= t.label :frequency, 'Frequency' %>:</p>
+      <p class="template-editor-attribute-field"><%= t.text_field :frequency %></p>
+    </div>
+    
+    <!-- Objective -->
+    <div class="template-editor-attribute">
+      <p class="template-editor-attribute-label"><%= t.label :objectives, 'Objective' %>:</p>
+      <p class="template-editor-attribute-field"><%= t.text_area :objectives %></p>
+    </div>
+    
+    <!-- Tasks -->
+    <div class="template-editor-tasks">
+      <% @template.tasks_array.each_with_index do |task, index| %>
+      <div class="template-editor-accordian-group">
+        <h3 title="Drag to reorder task">Task <%= index + 1 %>: <%= task["name"] %></h3>
+        
+        <div>
+          <!-- Task name -->
+          <div class="template-editor-attribute">
+            <p class="template-editor-attribute-label"><%= t.label :objectives, 'Name' %>:</p>
+            <p class="template-editor-attribute-field"><%= t.text_field :objectives %></p>
+          </div>
+          
+          <!-- Task instructions -->
+          <div class="template-editor-attribute">
+            <p class="template-editor-attribute-label"><%= t.label :objectives, 'Instruction' %>:</p>
+            <p class="template-editor-attribute-field"><%= t.text_area :objectives, :onclick => 'CKEDITOR.replace(this)' %></p>
+          </div>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    
+  <% end %>
+</div>
+
+<script>
+
+  $(function() {
+    $( ".template-editor-tasks" )
+      .accordion({
+        header: "> div > h3"
+      })
+      .sortable({
+        axis: "y",
+        handle: "h3",
+        stop: function( event, ui ) {
+          // IE doesn't register the blur when sorting
+          // so trigger focusout handlers to remove .ui-state-focus
+          ui.item.children( "h3" ).triggerHandler( "focusout" );
+        }
+      });
+      
+    CKEDITOR.replaceAll();
+  });
+  
+</script>
