@@ -1,6 +1,6 @@
 class TemplatesController < ApplicationController
-  before_filter :use_ckeditor, :only => [:temporary_template_display, :new_organization_template, :test_editor]
-  before_filter :editable, :only => [:temporary_template_display, :new_task, :destroy_task, :new_organization_template, :test_editor]
+  before_filter :use_ckeditor, :only => [:temporary_template_display, :new_organization_template, :show]
+  before_filter :editable, :only => [:temporary_template_display, :new_task, :destroy_task, :new_organization_template, :show]
   layout false, :only => [:settings]
   prepend_view_path 'app/views/shared/standard'
 
@@ -36,11 +36,6 @@ class TemplatesController < ApplicationController
     @agency = Agency.in_house
     @template = OrganizationTemplate.new :agency => @agency, :agency_display_name => @agency.name, :organization => current_user.organization
     render "shared/standard/show"
-  end
-  
-  # TODO:Test a new idea for an editor
-  def test_editor
-    @template = OrganizationTemplate.find(params[:id])
   end
   
   def post_organization_template

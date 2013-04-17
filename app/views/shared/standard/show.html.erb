@@ -110,52 +110,42 @@
 
 
 
-<div id="standard">
 
-  <%= render 'shared/standard/purchased_by' if @template.respond_to?(:purchased_by) && !@template.purchased_by.nil? %>
 
-  <div id="standard_agency_section">
-    <div id="standard_agency_image_section">
-      <img src="/images/agencies/<%= @template.agency.acronym.downcase %>.png" height="64">
-    </div>
-    <div>
-       <%= render 'shared/standard/agency_name' %><%= render 'shared/standard/regulatory_review_name' %>
-    </div>
+<style>
+  #tabs {
+    max-width: 1000px;
+    margin: 0 auto 0 auto;
+    -webkit-box-shadow: 0px 0px 5px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    0px 0px 5px rgba(50, 50, 50, 0.75);
+    box-shadow:         0px 0px 5px rgba(50, 50, 50, 0.75);
+  }
+  
+  .template-editor-tasks h2 {
+    margin: 20px auto 20px auto;
+    width:150px;
+  }
+</style>
+
+
+<div id="tabs">
+  <ul>
+    <li><a href="#template_readonly">View</a></li>
+    <li><a href="#template_editor">Edit</a></li>
+  </ul>
+  <div id="template_readonly">
+    <%= render 'template_readonly', :template => @template %>
   </div>
-
-
-  <div id="standard_data_section">
-    <div id="review_overview">
-      <h3>Frequency: <div><%= render 'shared/standard/frequency' %></div></h3>
-    
-      <div id="review_attributes">
-        <div id="review_info" class="display-none">
-          <span id="review_full_name">
-            <%= render 'shared/standard/full_name' %>
-          </span>        
-        </div>
-      </div>
-    </div>
-    
-    <div id="standard_objective">
-      <div class="ui-state-highlight ui-corner-all" style="margin-top: 20px; padding: 0 .7em;">
-        <p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
-        <strong>Objectives</strong><br>
-        <%= render 'shared/standard/objectives' %>
-      </div>
-    </div>
-    
-    <div id="standard_tasks">
-      <div id="task_page">
-        <% JSON.parse(@template.tasks).each_with_index do |task, sequence| %>
-        <% sequence = sequence + 1 %>
-        <%= render 'shared/standard/template_task', :sequence => sequence, :task => task %>
-        <% end unless @template.tasks.nil? %>
-        <div id="task_add_marker" style="display:none">
-        </div>
-      </div>
-      
-      <%= render 'shared/standard/add_template_task' if defined? @is_editable %>
-    </div>
+  <div id="template_editor">
+    <%= render 'template_edit', :template => @template %>
   </div>
 </div>
+<script>
+  $(function() {
+    $( "#tabs" ).tabs();
+  });
+</script>
+
+
+
+
