@@ -7,6 +7,19 @@ class TemplatesController < ApplicationController
   def list
     @templates = current_user.organization.organization_templates
   end
+   
+  def create
+    tasks = []
+    if params["tasks"]
+      params["tasks"].each do |k, v|
+        tasks << v
+      end
+    end
+    
+    attrs = params[:template].merge({:tasks => tasks.to_json})
+    template = OrganizationTemplate.create attrs
+    redirect_to :action => 'list'
+  end
   
   def prepare_review
     @template = OrganizationTemplate.find(params[:id])
@@ -35,7 +48,7 @@ class TemplatesController < ApplicationController
   def new_organization_template
     @agency = Agency.in_house
     @template = OrganizationTemplate.new :agency => @agency, :agency_display_name => @agency.name, :organization => current_user.organization
-    render "shared/standard/show"
+    # render "shared/standard/show"
   end
   
   def post_organization_template
