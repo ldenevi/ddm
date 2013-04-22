@@ -11,6 +11,7 @@ gem 'pg'        # Database
 gem 'i18n'      # Internationalization
 gem 'devise'    # User authentication
 gem 'rubyzip'   # Zip compression
+gem 'ice_cube'  # Scheduler
 
 # Gems used only for assets and not required
 # in production environments by default.
