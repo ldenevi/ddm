@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(:version => 20130306201753) do
     t.text     "mime_types",      :null => false
     t.integer  "attachable_id",   :null => false
     t.string   "attachable_type", :null => false
-    t.string   "type",            :null => false
+    t.string   "type"
     t.string   "storage_path",    :null => false
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
