@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130306201753) do
+ActiveRecord::Schema.define(:version => 20130422191122) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(:version => 20130306201753) do
     t.datetime "deployed_at"
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
+    t.string   "schedule"
   end
 
   add_index "reviews", ["assigned_at"], :name => "index_reviews_on_assigned_at"
@@ -173,6 +174,7 @@ ActiveRecord::Schema.define(:version => 20130306201753) do
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
+    t.string   "schedule"
   end
 
   add_index "tasks", ["executor_id"], :name => "index_tasks_on_executor_id"
