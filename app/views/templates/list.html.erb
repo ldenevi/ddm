@@ -24,7 +24,7 @@
         <div>
           <ul>
             <li><%= link_to "Settings", template_settings_path(template), "data-gsp-ui-balloon" => "click" %><br><br><br></li>
-            <li><%= link_to 'Deploy Review', prepare_review_path(template.id), :confirm => "Manual review deploys will be deactivated on April 12, 2013. Continue?" %></li>
+            <li><%= link_to 'Deploy Review', prepare_review_path(template.id) %></li>
           </ul>
         </div>
       </div>
