@@ -41,9 +41,10 @@
       </div>
       <div id="report_task_attributes">
         <div id="report_task">
-          <%= task.instructions.html_safe %>
+          <p><strong><%= task.name %></strong></p>
+          <p><%= task.instructions.html_safe %></p>
         </div>
-        <% task.comments.each do |comment| %>
+        <% task.comments.reverse.each do |comment| %>
         <div id="report_task_comment">
           <span><strong><%= comment.author.eponym %>: </strong> <%= comment.body.html_safe %> </span>
           <p>Attachments: <%= comment.attachments.map { |a| link_to a.filename, get_file_path(a.id) }.join(', ').html_safe %></p>
