@@ -12,4 +12,8 @@ class GspTemplate < ActiveRecord::Base
   # STI
   attr_accessible :parent
   belongs_to :parent, :class_name => 'GspTemplate'
+  
+  def tasks_array
+    JSON.parse(tasks)
+  end
 end

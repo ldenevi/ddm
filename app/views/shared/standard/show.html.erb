@@ -131,14 +131,19 @@
 <div id="tabs">
   <ul>
     <li><a href="#template_readonly">View</a></li>
-    <li><a href="#template_editor">Edit</a></li>
+    <% unless @readonly %>
+      <li><a href="#template_editor">Edit</a></li>
+    <% end %>
   </ul>
   <div id="template_readonly">
-    <%= render 'template_readonly', :template => @template %>
+    <%= render '/shared/standard/templates/template_readonly', :template => @template %>
   </div>
+  
+  <% unless @readonly %>
   <div id="template_editor">
-    <%= render 'template_edit', :template => @template %>
+    <%= render '/shared/standard/templates/template_edit', :template => @template %>
   </div>
+  <% end %>
 </div>
 <script>
   $(function() {
