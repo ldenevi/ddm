@@ -12,6 +12,7 @@ gem 'i18n'      # Internationalization
 gem 'devise'    # User authentication
 gem 'rubyzip'   # Zip compression
 gem 'ice_cube'  # Scheduler
+gem 'recurring_select' # iCal recurrence input user interface
 
 # Gems used only for assets and not required
 # in production environments by default.

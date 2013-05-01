@@ -58,6 +58,10 @@ class TemplatesController < ApplicationController
     @possible_owners = current_user.organization.users
   end
   
+  def set_recurrence
+    render :text => params.inspect
+  end
+  
   #
   #
   #  WYSIWYG gsp.TemplateManager.js attributes editor

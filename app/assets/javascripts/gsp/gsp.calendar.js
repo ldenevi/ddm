@@ -1,5 +1,5 @@
 /**
- * GSP - Calendar
+ * GSP - Calendar View
  * using wdCalendar (http://www.web-delicious.com/jquery-plugins-demo/wdCalendar/sample.php)
  */
  
@@ -202,3 +202,17 @@
   
 }(GSP, window));
 
+
+/**
+ * iCalendar (RFC 5545) recurrence editor
+ *
+ */
+
+(function(gsp, window, undefined) {
+
+  var config = {
+  };
+
+
+
+}(GSP, window));
