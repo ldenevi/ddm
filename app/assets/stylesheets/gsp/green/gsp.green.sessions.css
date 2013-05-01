@@ -1,0 +1,32 @@
+#sign_in {
+  width: 400px;
+  margin: auto auto 0 auto;
+  padding: 5px;
+}
+
+  #sign_in h2 {
+    -webkit-border-radius: 10px 10px 0px 0px;
+    border-radius: 10px 10px 0px 0px;
+    background-color: #A1693B;
+    margin: 0;
+    padding: 10px;
+    color: white;
+    border-bottom: 1px solid #FFCFA6;
+  }
+  
+  #sign_in > div {
+    border: 1px solid gray;
+    padding: 10px;
+    -webkit-border-radius: 0px 0px 10px 10px;
+    border-radius: 0px 0px 10px 10px;
+  }
+  
+  #sign_in input[type=email],
+  #sign_in input[type=password] {
+    color: gray;
+    margin-bottom: 20px;
+  }
+  
+  #sign_in input {
+    font-size: 14pt;
+  }

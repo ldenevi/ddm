@@ -12,6 +12,14 @@ function add_task() {
   $('html, body').animate({scrollTop: task_box.offset().top}, 500);
 }
 
+function remove_task() {
+  JQElement = $("#task_" + last_task_added);
+  JQElement.fadeOut(500, function() {
+                          JQElement.remove();
+                          last_task_added -= 1;
+                         });
+}
+
 function build_task_elements(no) {
   $element = $("<div id='task_"+no+"' style='display:none'>\
                 <span><p>Task "+no+"</p></span>\
@@ -79,7 +87,11 @@ function build_task_elements(no) {
     <div id="nt_tasks">
     </div>
   
-    <a href="javascript:add_task()">Add Task</a>
+    <div>
+      <p><a href="javascript:add_task()">+ Add Task</a></p>
+      <br>
+      <p><a href="javascript:remove_task()">- Remove Last Task</a></p>
+    </div>
   </div>
   
   <div>

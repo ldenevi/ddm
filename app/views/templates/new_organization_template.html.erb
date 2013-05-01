@@ -1,7 +1,98 @@
-Copy data from: 
+<script>
+var last_task_added = 0;
 
-<%= @template.inspect %>
+function add_task() {
+  ntt = $('#nt_tasks');
+  last_task_added += 1;
+  task_box = build_task_elements(last_task_added);
+  ntt.append(task_box);
+  
+  task_box.slideDown(500);
+  CKEDITOR.replace($('textarea', task_box)[0]);
+  $('html, body').animate({scrollTop: task_box.offset().top}, 500);
+}
 
-<select>
-  <option></option>
-</select>
+function remove_task() {
+  JQElement = $("#task_" + last_task_added);
+  JQElement.fadeOut(500, function() {
+                          JQElement.remove();
+                          last_task_added -= 1;
+                         });
+}
+
+function build_task_elements(no) {
+  $element = $("<div id='task_"+no+"' style='display:none'>\
+                <span><p>Task "+no+"</p></span>\
+                <span>Name: <input type='text' size='50' name='[tasks]["+no+"]name'></span>\
+                <span>Instructions: <textarea id='task_"+no+"' rows='10' name='[tasks]["+no+"]instructions' cols='65' class='ckeditor'></textarea></span>\
+              </div>");
+              
+  return $element;
+}
+
+</script>
+
+<style>
+#new_template { float:left;width:500px; margin-right:80px; }
+#new_template div { margin-bottom:20px }
+#app { min-height:2000px }
+#footer { display:none; }
+</style>
+
+<div id="new_template">
+  <form action="/template/create" method="post">
+  <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+  <input type="hidden" name="[template]organization_id" value="<%= @template.organization_id %>">
+  <input type="hidden" name="[template]agency_id" value="<%= Agency.in_house.id %>">
+  <div id="nt_agency">
+    <span>Agency</span>
+    <h3><%= current_user.organization.full_name %></h3>
+  </div>
+  
+  <div id="nt_regulation_full_name">
+    <span>Regulation Full Name</span>
+    <span><%= text_field_tag '[template]full_name', nil, :size => 60 %></span>
+  </div>
+  
+  <div id="nt_regulation_display_name">
+    <span>Regulation Display Name</span>
+    <span><%= text_field_tag '[template]display_name', nil, :size => 60 %></span>
+  </div>
+  
+  <div id="nt_description">
+    <span>Description</span>
+    <span><%= text_field_tag '[template]description', nil, :size => 60 %></span>
+  </div>
+  
+  <div id="nt_review_name">
+    <span>Review Name</span>
+    <span><%= text_field_tag '[template]regulatory_review_name', nil, :size => 60 %></span>
+  </div>
+  
+  <div id="nt_frequency">
+    <span>Frequency</span>
+    <span><%= text_field_tag '[template]frequency', nil, :size => 60 %></span>
+  </div>
+  
+  <div id="nt_review_objective">
+    <span>Review Objective</span>
+    <div><%= text_area_tag '[template]objectives', nil, :cols => 65, :rows => 10, :id => 'editor1', :class => 'ckeditor' %></div>
+  </div>
+  
+  <div>
+    <div id="nt_tasks">
+    </div>
+  
+    <div>
+      <p><a href="javascript:add_task()">+ Add Task</a></p>
+      <br>
+      <p><a href="javascript:remove_task()">- Remove Last Task</a></p>
+    </div>
+  </div>
+  
+  <div>
+    <span><%= submit_tag "Create Template" %></span>
+  </div>
+  </form>
+</div>
+
