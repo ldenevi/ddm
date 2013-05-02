@@ -21,4 +21,13 @@ class Review < ActiveRecord::Base
   has_many   :tasks,    :order => 'sequence'
   has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
+  
+  # Recurrence schedule
+  attr_accessible :schedule
+  serialize :schedule, Hash
+  
+  def initialize(args)
+    
+    super(args)
+  end
 end

@@ -68,11 +68,61 @@ class TemplatesController < ApplicationController
   
   def settings
     @template = OrganizationTemplate.find(params[:id])
+    # @possible_owners = current_user.organization.users
     @possible_owners = current_user.organization.users
   end
   
+  include IceCube
+  
   def set_recurrence
-    render :text => params.inspect
+    schedule = Schedule.new(DateTime.strptime(params[:range_start], "%m/%d/%Y"))
+    puts params.inspect
+  
+    case params[:frequency]
+      when "Daily"
+        recurrence_daily(schedule, params)
+      when "Weekly"
+        recurrence_weekly(schedule, params)
+      when "Monthly"
+        recurrence_monthly(schedule, params)
+    end
+    
+    template = OrganizationTemplate.find(params[:id])
+    template.schedule = schedule.to_hash
+    template.save!
+    
+    template.deploy_review if schedule.occurs_on?(Time.now)
+    
+    #render :nothing => true
+    redirect_to :back
+  end
+  
+  # Daily
+  def recurrence_daily(schedule, params)
+    case params[:daily_every]
+      when "day"
+        schedule.add_recurrence_rule(Rule.daily(params[:daily_every_interval].to_i))
+      when "weekday"
+        schedule.add_recurrence_rule(Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday))
+    end
+  end
+  
+  # Weekly
+  def recurrence_weekly(schedule, params)
+    params[:weekly_day].each do |day|
+      schedule.add_recurrence_rule(Rule.weekly(params[:weekly].to_i).day(day.downcase.to_sym))
+    end
+  end
+  
+  def recurrence_monthly(schedule, params)
+    case params[:monthly]
+      when "day"
+        schedule.add_recurrence_rule(Rule.monthly(params[:monthly_interval].to_i).day_of_month(params[:monthly_day].to_i))
+      when "week"
+        week = {}
+        week[params[:monthly_weekday_day].downcase.to_sym] = [params[:monthly_weekday_ordinal].to_i]
+        schedule.add_recurrence_rule(Rule.monthly(params[:monthly_weekday_interval].to_i).day_of_week(week))
+    end
   end
   
   #
