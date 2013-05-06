@@ -18,6 +18,9 @@ class Task < ActiveRecord::Base
   attr_accessible :actual_completion_at, :assigned_at, :expected_completion_at,
                   :start_at
   
+  # Recurrence schedule
+  serialize :schedule, Hash
+  
   def assign_to(user_id)
     self.executor_id = (user_id.is_a?(User)) ? user_id.id : user_id
     self.assigned_at = Time.now

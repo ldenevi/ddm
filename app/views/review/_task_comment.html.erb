@@ -6,7 +6,7 @@
   <div>
     <span><strong><%= comment.author.eponym  %></strong></span> - <span><%= comment.body.html_safe %></span>
     <br>
-    <span style="font-size:.8em; color: #666" title="Created at <%= comment.created_at.to_formatted_s(:db) %>">Posted <%= time_ago_in_words(comment.created_at) %> ago</span>
+    <span style="font-size:.8em; color: #666" title="Created at <%= comment.created_at.to_formatted_s(:db) %>"><%= formatted_posted_at(comment.created_at) %></span>
     <% unless comment.attachments.empty? %>
       <span style="font-size:.8em; font-weight:bold">
         <br>Attachments: <%= comment.attachments.map { |a| link_to a.filename, get_file_path(a.id) }.join(', ').html_safe %>

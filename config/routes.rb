@@ -35,6 +35,7 @@ GSP::Application.routes.draw do
   post "template/deploy_review", :to => 'templates#deploy_review', :as => 'deploy_review'
   get "template/:id/prepare_review", :to => "templates#prepare_review", :as => 'prepare_review'
   get "template/settings/:id", :to => "templates#settings", :as => 'template_settings'
+  put "template/set_recurrence/:id", :to => "templates#set_recurrence", :as => "template_set_recurrence"
   get "template/new", :to => "templates#new_organization_template", :as => 'new_organization_template'
   post "template/create", :to => "templates#create"
   

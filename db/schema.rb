@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(:version => 20130422191122) do
     t.boolean  "is_leaf",                :default => false
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
+    t.text     "schedule"
   end
 
   add_index "organization_templates", ["approved_by_id"], :name => "index_organization_templates_on_approved_by_id"
@@ -152,7 +153,7 @@ ActiveRecord::Schema.define(:version => 20130422191122) do
     t.datetime "deployed_at"
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
-    t.string   "schedule"
+    t.text     "schedule"
   end
 
   add_index "reviews", ["assigned_at"], :name => "index_reviews_on_assigned_at"
@@ -174,7 +175,7 @@ ActiveRecord::Schema.define(:version => 20130422191122) do
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
-    t.string   "schedule"
+    t.text     "schedule"
   end
 
   add_index "tasks", ["executor_id"], :name => "index_tasks_on_executor_id"

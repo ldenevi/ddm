@@ -32,6 +32,9 @@ class OrganizationTemplate < ActiveRecord::Base
   include GSP::UI::Javascript::EcoTree
   make_ecotree :class_name => 'OrganizationTemplate', :children => 'organization_templates'
   
+  # Recurrence schedule
+  serialize :schedule, Hash
+  
   def tasks_array
     JSON.parse(tasks)
   end
@@ -46,7 +49,8 @@ class OrganizationTemplate < ActiveRecord::Base
                         :organization_template => self, :status => GSP::STATUS::PENDING,
                         :assigned_at => Time.now, :deployed_at => Time.now,
                         :targeted_completion_at => calculate_due_date,
-                        :targeted_start_at => Time.now
+                        :targeted_start_at => Time.now,
+                        :schedule => schedule
     review.tasks = generate_tasks
     review
   end
@@ -97,7 +101,7 @@ class OrganizationTemplate < ActiveRecord::Base
   end
   
   def self.length_of_time_to_complete_task
-    20.days
+    1.days
   end
   
   def calculate_due_date
@@ -116,12 +120,15 @@ class OrganizationTemplate < ActiveRecord::Base
 private
   def generate_tasks
     _tasks = []
+    start_at = Time.now
+    
     JSON.parse(tasks).each_with_index do |t, i|
       _tasks << Task.new(:name => t["name"], :instructions => t["instructions"], :sequence => (i + 1), 
                          :status => GSP::STATUS::PENDING, :executor => organization.owner,
                          :assigned_at => Time.now,
-                         :start_at => Time.now,
-                         :expected_completion_at => Time.now.end_of_week + OrganizationTemplate.length_of_time_to_complete_task)
+                         :start_at => start_at,
+                         :expected_completion_at => start_at)
+      start_at = start_at + OrganizationTemplate.length_of_time_to_complete_task
     end
     _tasks
   end

@@ -23,15 +23,17 @@
   { color:#FFCFA6; }
 
   </style>
-  
-<div class="event-reccurence">
-  <div class="events-time">
+
+<%= form_for @template, :url => template_set_recurrence_path(template), :method => :put do |f| %>
+<%= hidden_field_tag :frequency, 'Daily' %>
+<div class="events-recurrence">
+  <!--div class="events-time">
     <table>
       <tr><td>Start:</td><td><input type="text" size="12" value="09:00 AM"></td></tr>
       <tr><td>End:</td><td><input type="text" size="12" value="05:00 PM"></td></tr>
     </table>
     <br>
-  </div>
+  </div-->
   
   <div id="tabs<%= template.id %>" class="events-recurrence-tabs">
     <ul>
@@ -41,30 +43,45 @@
       <li><a href="#tabs<%= template.id %>-4">Annually</a></li>
     </ul>
     <div id="tabs<%= template.id %>-1">
-      <input type="radio" group="daily"> Every <input type="text" size="2" value="1"> day(s)<br>
-      <input type="radio" group="daily"> Every weekday
+      <input type="radio" group="daily" name="daily_every" value="day" checked="true"s> Every <input type="text" size="2" value="1" name="daily_every_interval"> day(s)<br>
+      <input type="radio" group="daily" name="daily_every" value="weekday">Every weekday
     </div>
     <div id="tabs<%= template.id %>-2">
-      Recur every <input type="text" value="1" size="2"> week(s) on:<br>
+      Recur every <input type="text" value="1" size="2" name="weekly"> week(s) on:<br>
       <table>
         <tr>
-          <td><input type="checkbox"> Sunday</td>
-          <td><input type="checkbox"> Monday</td>
-          <td><input type="checkbox"> Tuesday</td>
-          <td><input type="checkbox"> Wednesday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Sunday">Sunday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Monday">Monday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Tuesday">Tuesday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Wednesday">Wednesday</td>
         </tr>
         <tr>
-          <td><input type="checkbox"> Thursday</td>
-          <td><input type="checkbox"> Friday</td>
-          <td><input type="checkbox"> Saturday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Thursday">Thursday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Friday">Friday</td>
+          <td><input type="checkbox" name="weekly_day[]" checked="true" value="Saturday">Saturday</td>
           <td></td>
         </tr>
       </table>
     </div>
     <div id="tabs<%= template.id %>-3">
-      <input type="radio" group="monthly"> <input type="text" size="2" value="1"> of every <input type="text" size="2" value="1"> month(s)<br>
-      <input type="radio" group="monthly"> The <select><option>first</option><option>second</option><option>third</option><option>fourth</option><option>fifth</option></select> 
-        <select><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select> of every <input type="text" size="2" value="1"> month(s)
+      <input type="radio" group="monthly" name="monthly" value="day" checked="true"> Day <input type="text" size="2" value="1" name="monthly_day"> of every <input type="text" size="2" value="1" name="monthly_interval"> month(s)<br>
+      <input type="radio" group="monthly" name="monthly" value="week">
+        The <select name="monthly_weekday_ordinal">
+              <option value="1">first</option>
+              <option value="2">second</option>
+              <option value="3">third</option>
+              <option value="4">fourth</option>
+              <option value="5">fifth</option>
+            </select> 
+        <select name="monthly_weekday_day">
+          <option>Monday</option>
+          <option>Tuesday</option>
+          <option>Wednesday</option>
+          <option>Thursday</option>
+          <option>Friday</option>
+          <option>Saturday</option>
+          <option>Sunday</option>
+        </select> of every <input type="text" size="2" value="1" name="monthly_weekday_interval"> month(s)
     </div>
     <div id="tabs<%= template.id %>-4">
     </div>
@@ -75,17 +92,40 @@
     
     <table>
       <tr>
-        <td>Start: <input type="text"></td>
+        <td>Start: <input type="text" name="range_start" id="range_start" value="<%= DateTime.now.strftime('%m/%d/%Y') %>"></td>
         <td>
-          <p><input type="radio" group="annually"> No end date<br/>
-             <input type="radio" group="annually"> End after: <input type="text" size="2" value="10"> occurrences<br/>
-             <input type="radio" group="annually"> End by: <input type="text" ></p>
+          <p><input type="radio" group="annually" name="range_no_end"> No end date<br/>
+             <input type="radio" group="annually" name="range_end_after_interval"> End after: <input type="text" size="2" value="10"> occurrences<br/>
+             <input type="radio" group="annually" name="range_end"> End by: <input type="text"  name="range_end_date"></p>
         </td>
       </tr>
     </table>
   </div>
   
   <div class="events-recurrence-save">
-    <a href="#">Save</a>
+    <input type="submit" value="Save"> - <a href="#">Save</a>
   </div>
 </div>
+<% end %>
+
+<script>
+// Use the <OL> as a value selector for frequency
+(function() {
+
+  var Frequency = {
+    setValue : function(event) {
+      var form_field = $("input#frequency");
+      form_field.val(this.text);
+    }
+  };
+
+  $(document).ready(function() {
+                    var frequencies = $(".events-recurrence-tabs > ul li a");
+                    for (var i=0; i < frequencies.length; i++) {
+                      $(frequencies[i]).on("click", Frequency.setValue);
+                    }
+                    
+                    $("input#range_start").datepicker();
+  });
+}());
+</script>
