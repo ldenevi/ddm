@@ -16,4 +16,6 @@ module ApplicationHelper
       datetime.strftime("%-m/%d/%Y %l:%M %P")
     end
   end
+  
+  
 end
