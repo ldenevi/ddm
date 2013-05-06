@@ -1,4 +1,4 @@
-class Notification::Reviews < ActionMailer::Base
+class Notifications::Reviews < ActionMailer::Base
   default from: "from@example.com"
 
   # Subject can be set in your I18n file at config/locales/en.yml
