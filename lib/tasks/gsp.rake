@@ -2,6 +2,18 @@ require 'fileutils'
 
 namespace :gsp do
 
+  namespace :app do
+    desc "Deploy reviews"
+    task :deploy_reviews => :environment do
+      include IceCube
+      # TODO: Make the deploy date and start date configurable, rather than fixed
+      deploy_date = Time.now - 3.days
+      organization_templates = OrganizationTemplate.all.select { |ot| !ot.schedule.empty? && Schedule.from_hash(ot.schedule).occurs_on?(deploy_date) }
+      puts "%d organization templates to deploy" % organization_templates.size
+      organization_templates.each { |ot| ot.deploy_review }
+    end
+  end
+
   namespace :db do
     desc "Dump all saved templates into GSP import format"
     task :dump_templates => :environment do
@@ -14,7 +26,7 @@ template = GspTemplate.create({:agency => Agency.find_by_acronym('%s'),
                                :display_name => '%s',
                                :description => '%s',
                                :regulatory_review_name => '%s',
-                               :frequency => '%s'.force_encoding('UTF-8'),                            
+                               :frequency => '%s'.force_encoding('UTF-8'),
                                :objectives => "%s".force_encoding('UTF-8')
                                })
 
