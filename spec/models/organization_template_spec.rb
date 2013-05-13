@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe OrganizaitonTemplate do
+describe OrganizationTemplate do
   describe 'data validations' do
     it 'should prevent hazardous field values' do
       pending 'must have purchased data, agency fields, and organization'
