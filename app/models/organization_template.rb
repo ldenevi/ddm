@@ -33,6 +33,7 @@ class OrganizationTemplate < ActiveRecord::Base
   make_ecotree :class_name => 'OrganizationTemplate', :children => 'organization_templates'
   
   # Recurrence schedule
+  include IceCube
   serialize :schedule, Hash
   
   def tasks_array
@@ -49,7 +50,7 @@ class OrganizationTemplate < ActiveRecord::Base
                         :organization_template => self, :status => GSP::STATUS::PENDING,
                         :assigned_at => Time.now, :deployed_at => Time.now,
                         :targeted_completion_at => calculate_due_date,
-                        :targeted_start_at => Time.now,
+                        :targeted_start_at => Time.now + 1.week,
                         :schedule => schedule
     review.tasks = generate_tasks
     review
@@ -60,6 +61,11 @@ class OrganizationTemplate < ActiveRecord::Base
     review = generate_review
     review.save!
     review
+    Notifications::Reviews.deploy(review).deliver
+  end
+  
+  def occurs_on?(datetime)
+    !schedule.empty? && Schedule.from_hash(schedule).occurs_on?(datetime)
   end
   
   def deploy_all_reviews
