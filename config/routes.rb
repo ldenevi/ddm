@@ -9,7 +9,9 @@ GSP::Application.routes.draw do
 
   get "templates/list"
 
+  # Home
   root :to => 'home#index'
+  get "reviews", :to => 'home#reviews', :as => 'home_reviews'
   
   devise_for :users, :controllers => { :sessions => :sessions }
   

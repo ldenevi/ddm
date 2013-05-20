@@ -26,4 +26,8 @@ class HomeController < ApplicationController
                                     :legend => ['Conformance', 'Non-Conformance', "In-Process"],
                                     :data => [0, 0, @active_tasks.size])
   end
+
+  def reviews
+    @active_reviews = current_user.active_reviews
+  end
 end
