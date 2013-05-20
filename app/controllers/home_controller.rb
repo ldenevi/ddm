@@ -7,4 +7,8 @@ class HomeController < ApplicationController
     @upcoming_reviews = current_user.upcoming_reviews
     @past_due_reviews = current_user.past_due_reviews
   end
+
+  def reviews
+    @active_reviews = current_user.active_reviews
+  end
 end

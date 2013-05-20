@@ -3,3 +3,83 @@
  * © Copyright 2013. Green Status Pro. All Rights Reserved.
  */
 
+.panel {
+  clear: both;
+  background-color: #EEE;
+  -webkit-box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, .2);
+  box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, .2);
+}
+
+.panel table th:first-child {
+  -webkit-border-radius:10px 0px 0px 0px;
+  border-radius:10px 0px 0px 0px;
+}
+
+.panel table th:last-child {
+  -webkit-border-radius:0px 10px 0px 0px;
+  border-radius:0px 10px 0px 0px;
+}
+
+.panel table th {
+  padding: 8px;
+  font-size: 11pt;
+  color: white;
+  text-align: left;
+}
+
+.panel table td {
+  padding: 8px;
+  text-align: center;
+}
+
+.panel table td:first-child {
+  text-align:left;
+}
+
+  .panel-reviews {
+    border: 1px solid #3BA173;
+  }
+    .panel-reviews table th {
+      background-color: #3BA173;
+    }
+    .panel-reviews table td {
+      border-top: 1px solid #3BA173;
+    }
+    .panel-reviews div {
+      padding: 10px;
+      font-size: 8pt;
+      border-top: 1px solid #3BA173;
+    }
+
+  .panel-non-conformance {
+    border: 1px solid #FF000D;
+  }
+    .panel-non-conformance table th {
+      background-color: red;
+    }
+    .panel-non-conformance table td {
+      border-top: 1px solid #FF000D;
+    }
+
+  .panel-past-due {
+    border: 1px solid #3BA173;
+  }
+    .panel-past-due table th {
+      background-color: #FFF55C;
+      color: #7C3800;
+    }
+    .panel-past-due table td {
+      border-top: 1px solid #3BA173;
+    }
+    
+
+.review-graphs {
+  border:1px solid black;
+  position: relative;
+  left: 650px;
+  width: 500px;
+}
+
+
+
+
