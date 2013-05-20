@@ -61,7 +61,7 @@ end
 
 # = Features =
 # gem 'prawn'
-# gem 'lazy_high_charts'
+gem 'googlecharts'
 # gem 'even_calendar'
 # gem 'chronic'
 
