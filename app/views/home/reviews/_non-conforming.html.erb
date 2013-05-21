@@ -5,22 +5,12 @@
       <th>Task</th>
     </tr>
     
+    <% @non_conforming_tasks.each do |task| %>
     <tr>
-      <td>ISO 9001:2008 – Control of Production and Service Provision Checklist</td>
-      <td>Task name</td>
+      <td><%= task.review.name %></td>
+      <td><%= task.name %></td>
     </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td>Task name</td>
-    </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td>Task name</td>
-    </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td>Task name</td>
-    </tr>
+    <% end %>
     
     
   </table>

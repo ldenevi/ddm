@@ -5,14 +5,12 @@
       <th>Status</th>
     </tr>
     
+    <% @active_reviews.each do |review| %>
     <tr>
-      <td>ISO 9001:2008 – Control of Production and Service Provision Checklist</td>
-      <td></td>
+      <td><%= review.name %></td>
+      <td><%= review.status %></td>
     </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td></td>
-    </tr>
+    <% end %>
     
     
   </table>

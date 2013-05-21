@@ -6,26 +6,13 @@
       <th>Days Late</th>
     </tr>
     
+    <% @past_due_tasks.each do |task|%>
     <tr>
-      <td>ISO 9001:2008 – Control of Production and Service Provision Checklist</td>
-      <td>Task name</td>
-      <td>3</td>
+      <td><%= task.review.name %></td>
+      <td><%= task.name %></td>
+      <td><%= Time.now - task.expected_completion_at %></td>
     </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td>Task name</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td>Task name</td>
-      <td>3</td>
-    </tr>
-    <tr>
-      <td>ISO 9001:2008 - Continual Improvement Checklist</td>
-      <td>Task name</td>
-      <td>3</td>
-    </tr>
+    <% end %>
     
   </table>
 </div>
