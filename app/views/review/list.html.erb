@@ -1,0 +1,14 @@
+<section class="review-panel-space">
+  <% @reviews.each do |review| %>
+  <%= render 'review/list/scheduled', :review => review %>
+  <% end %>
+</section>
+
+<script>
+$('document').ready(function() {
+  var articles = $('.review-panel');
+  articles.on('click', function() {
+    location.href = '/review/show/' + $(this).data('review-id');
+  });
+});
+</script>

@@ -27,7 +27,9 @@
     var options = {'title':'Task Findings',
                    'width':400,
                    'height':200,
-                   'backgroundColor': 'transparent'};
+                   'backgroundColor': 'transparent',
+                   'slices' : [{ color: '#007C43' }, { color: '#FFA65C' }, { color: '#FF000D' }] ,
+                   is3D : true};
 
     // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.PieChart(document.getElementById('task_findings_graph'));

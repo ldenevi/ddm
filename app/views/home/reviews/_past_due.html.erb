@@ -1,16 +1,16 @@
 <div class="panel panel-past-due">
   <table>
     <tr>
-      <th>Review</th>
+      <th>Late Reviews</th>
       <th>Past Due Task</th>
       <th>Days Late</th>
     </tr>
     
     <% @past_due_tasks.each do |task|%>
     <tr>
-      <td><%= task.review.name %></td>
-      <td><%= task.name %></td>
-      <td><%= Time.now - task.expected_completion_at %></td>
+      <td><%= link_to task.review.name, show_review_path(task.review_id) %></td>
+      <td><%= link_to task.name, task_show_path(task.id) %></td>
+      <td><%= time_ago_in_words(task.expected_completion_at) %></td>
     </tr>
     <% end %>
     

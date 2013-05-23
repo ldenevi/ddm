@@ -19,6 +19,7 @@ class Review < ActiveRecord::Base
   has_one    :owner, :class_name => 'User'
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
   has_many   :tasks,    :order => 'sequence'
+  has_many   :completed_tasks, :class_name => 'Task', :order => 'sequence', :conditions => "status = 'Completed'"
   has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
 end

@@ -7,11 +7,18 @@
     
     <% @non_conforming_tasks.each do |task| %>
     <tr>
-      <td><%= task.review.name %></td>
-      <td><%= task.name %></td>
+      <td><%= link_to task.review.name, show_review_path(task.review_id) %></td>
+      <td><%= link_to task.name, task_show_path(task.id) %></td>
     </tr>
     <% end %>
     
     
   </table>
+  
+  <div>
+    <p>View 4 more ...</p>
+    <!--p>Completed and in conformance</p>
+    <p>Not completed but all tasks in conformance</p>
+    <p>At least one review item in non-conformance</p-->
+  </div>
 </div>

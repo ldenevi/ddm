@@ -10,32 +10,43 @@
   box-shadow: 1px 1px 1px 2px rgba(0, 0, 0, .2);
 }
 
-.panel table th:first-child {
-  -webkit-border-radius:10px 0px 0px 0px;
-  border-radius:10px 0px 0px 0px;
-  text-align: left;
-}
+  .panel table th:first-child {
+    -webkit-border-radius:10px 0px 0px 0px;
+    border-radius:10px 0px 0px 0px;
+    text-align: left;
+  }
 
-.panel table th:last-child {
-  -webkit-border-radius:0px 10px 0px 0px;
-  border-radius:0px 10px 0px 0px;
-}
+  .panel table th:last-child {
+    -webkit-border-radius:0px 10px 0px 0px;
+    border-radius:0px 10px 0px 0px;
+  }
 
-.panel table th {
-  padding: 8px;
-  font-size: 11pt;
-  color: white;
-  text-align: center;
-}
+  .panel table th {
+    padding: 8px;
+    font-size: 11pt;
+    color: white;
+    text-align: center;
+  }
 
-.panel table td {
-  padding: 8px;
-  text-align: center;
-}
+  .panel table td {
+    padding: 8px;
+    text-align: center;
+  }
 
-.panel table td:first-child {
-  text-align:left;
-}
+  .panel table td:first-child {
+    text-align:left;
+  }
+  
+  .panel table td a,
+  .panel table td a:link,
+  .panel table td a:visited {
+    text-decoration: none;
+    color: black;
+  }
+  
+  .panel table td a:hover {
+    text-decoration: underline;
+  }
 
   .panel-reviews {
     border: 1px solid #3BA173;
@@ -87,6 +98,9 @@
   left: 650px;
   width: 400px;
   background-color: #EEE;
+}
+
+.graph {
 }
 
 

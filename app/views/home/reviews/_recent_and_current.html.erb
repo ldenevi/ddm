@@ -1,14 +1,14 @@
 <div class="panel panel-reviews">
   <table>
     <tr>
-      <th>Reviews</th>
-      <th>Status</th>
+      <th>Completed Reviews</th>
+      <th>Completion Date</th>
     </tr>
     
     <% @active_reviews.each do |review| %>
     <tr>
-      <td><%= review.name %></td>
-      <td><%= review.status %></td>
+      <td><%= link_to review.name, show_review_path(review.id) %></td>
+      <td><%= Time.now.to_formatted_s(:review_date) %></td>
     </tr>
     <% end %>
     
@@ -17,8 +17,8 @@
   
   <div>
     <p>Period: 1 year previous - Today</p>
-    <p>Completed and in conformance</p>
+    <!--p>Completed and in conformance</p>
     <p>Not completed but all tasks in conformance</p>
-    <p>At least one review item in non-conformance</p>
+    <p>At least one review item in non-conformance</p-->
   </div>
 </div>

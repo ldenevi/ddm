@@ -18,24 +18,23 @@
     data.addColumn('string', 'Status');
     data.addColumn('number', 'Count');
     data.addRows([
-      ['Completed', 105],
-      ['Open', 16],
-      ['Past Due', 4]
+      ['Completed', 100],
+      ['In-Process', 20]
     ]);
 
     // Set chart options
-    var options = {'title':'Task Status',
+    var options = {'title':'Non-Conforming Reviews',
                    'width':400,
                    'height':200,
                    'backgroundColor': 'transparent',
-                   'slices' : [{ color: '#007C43' }, { color: '#FFA65C' }, { color: '#FF000D' }] ,
+                   'slices' : [{ color: '#FF000D' }, { color: '#FF5C65' }] ,
                    is3D : true};
 
     // Instantiate and draw our chart, passing in some options.
-    var chart = new google.visualization.PieChart(document.getElementById('task_status_graph'));
+    var chart = new google.visualization.PieChart(document.getElementById('conforming_non_conforming_graph'));
     chart.draw(data, options);
   }
 </script>
 
-<div id="task_status_graph">
+<div id="conforming_non_conforming_graph">
 </div>
