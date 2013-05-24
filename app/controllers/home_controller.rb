@@ -27,7 +27,10 @@ class HomeController < ApplicationController
                                     :data => [0, 0, @active_tasks.size])
   end
 
+  # TODO add methods to Task and Review models for these...
   def reviews
-    @active_reviews = current_user.active_reviews
+    @active_reviews       = current_user.active_reviews
+    @non_conforming_tasks = Task.limit(3)
+    @past_due_tasks       = Task.limit(5)
   end
 end

@@ -1,8 +1,13 @@
 class ReviewController < ApplicationController
-  layout :false, :except => :show
+  layout :false, :except => [:show, :list]
   
   def show
     @review = Review.find(params[:id])
+  end
+  
+  # TODO Active and upcoming reviews
+  def list
+    @reviews = current_user.organization.reviews
   end
   
   def show_task

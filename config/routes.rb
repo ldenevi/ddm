@@ -1,4 +1,8 @@
 GSP::Application.routes.draw do
+  get "reviews/list"
+
+  get "reviews/show"
+
   get "calendar/show"
 
   get "reports/list"
@@ -10,7 +14,8 @@ GSP::Application.routes.draw do
   get "templates/list"
 
   # Home
-  root :to => 'home#index'
+  #root :to => 'home#index'
+  root :to => 'home#reviews'
   get "reviews", :to => 'home#reviews', :as => 'home_reviews'
   
   devise_for :users, :controllers => { :sessions => :sessions }
@@ -50,6 +55,8 @@ GSP::Application.routes.draw do
   
   # Review
   get "review/show/:id", :to => "review#show", :as => "show_review"
+  get "review/list", :to => "review#list", :as => "list_reviews"
+  
   get "review/task/:id/show", :to => "review#show_task", :as => "task_show"
   get "tasks/active", :to => "review#active_tasks", :as => "active_tasks"
   post "tasks/mark_completed/:id", :to => "review#mark_task_as_completed", :as => 'mark_task_completed'
@@ -81,11 +88,11 @@ GSP::Application.routes.draw do
   get "organization/overview",  :to => 'organization#overview',  :as => 'organization_overview'
   get "organization/templates",  :to => 'organization#templates',  :as => 'organization_templates'
 
-  # Review
-  get "organization/deployable_list",  :to => 'organization#deploy_reviews',  :as => 'deployable_list'
-  get "organization/generate_review/:purchased_template_id",  :to => 'organization#generate_review',  :as => 'generate_review'
-  put "organization/update_review/:review_id", :to => 'organization#update_review'
-  get "organization/deployed_reviews", :to => 'organization#deployed_reviews', :as => 'deployed_reviews'
+    # Review
+    get "organization/deployable_list",  :to => 'organization#deploy_reviews',  :as => 'deployable_list'
+    get "organization/generate_review/:purchased_template_id",  :to => 'organization#generate_review',  :as => 'generate_review'
+    put "organization/update_review/:review_id", :to => 'organization#update_review'
+    get "organization/deployed_reviews", :to => 'organization#deployed_reviews', :as => 'deployed_reviews'
   
   post "organization/share_template/:purchased_template_id", :to => 'organization#share_template', :as => 'share_template'
 end
