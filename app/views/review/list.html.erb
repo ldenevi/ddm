@@ -10,5 +10,13 @@ $('document').ready(function() {
   articles.on('click', function() {
     location.href = '/review/show/' + $(this).data('review-id');
   });
+  
+  articles.each(function(index, article) {
+    var progress_bar = $('.review-progress-bar', article);
+    progress_bar.progressbar({"value" : progress_bar.data('progress')});
+    if (parseInt(progress_bar.data('progress')) > 95) {
+      $('.ui-widget-header', progress_bar).addClass('ui-progressbar-completed');
+    }
+  });
 });
 </script>

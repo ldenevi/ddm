@@ -1,31 +1,30 @@
-<article class="review-panel" data-review-id="<%= review.id %>">
+<article class="review-panel" data-review-id="<%= review.id %>"  title="<%= review.progress %>% Completed">
   <div>
     <p style="color:#7C0006"><%= review.name %></p>
+    <div>
+      <table>
+        <tr>
+          <td>Start Date</td>
+          <td>Due Date</td>
+        </tr>
+        <tr>
+          <td><%= review.targeted_start_at.to_formatted_s(:review_date) %></td>
+          <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <p><%= review.tasks.size %> Tasks</p>
+      <p>Completed....</p>
+      <p>Not started</p>
+      <p>In-Process</p>
+    </div>
+    <div>
+      <p>Owner: </p>
+      <p>Task Reviewer(s): <%= review.tasks.map(&:executor).map(&:eponym).uniq.join(', ') %></p>
+    </div>
   </div>
-  <div>
-    <table>
-      <tr>
-        <td>Start Date</td>
-        <td>Due Date</td>
-      </tr>
-      <tr>
-        <td><%= review.targeted_start_at.to_formatted_s(:review_date) %></td>
-        <td><%= review.targeted_completion_at.to_formatted_s(:review_date) %></td>
-      </tr>
-    </table>
+  <div data-progress="<%= review.progress %>" class="review-progress-bar">
   </div>
-  <div>
-    <p><%= review.tasks.size %> Tasks</p>
-    <p>Completed....</p>
-    <p>Not started</p>
-    <p>In-Process</p>
-  </div>
-  <div>
-    <p>Owner: </p>
-    <p>Task Reviewer(s): <%= review.tasks.map(&:executor).map(&:eponym).uniq.join(', ') %></p>
-  </div>
-  
-  <% 3.times do %>
-    
-  <% end %>
 </article>
+

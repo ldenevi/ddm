@@ -22,4 +22,9 @@ class Review < ActiveRecord::Base
   has_many   :completed_tasks, :class_name => 'Task', :order => 'sequence', :conditions => "status = 'Completed'"
   has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
+  
+  def progress
+    completed_tasks = tasks.select { |t| [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING].include?(t.status) }
+    (((completed_tasks.size.to_f) / tasks.size.to_f) * 100).to_i
+  end
 end
