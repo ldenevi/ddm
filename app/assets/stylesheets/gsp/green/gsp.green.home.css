@@ -47,6 +47,11 @@
   .panel table td a:hover {
     text-decoration: underline;
   }
+  
+  .panel .expand-panel {
+    padding-left: 30px;
+    padding-top: 10px;
+  }
 
   .panel-reviews {
     border: 1px solid #3BA173;

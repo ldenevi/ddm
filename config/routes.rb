@@ -17,6 +17,7 @@ GSP::Application.routes.draw do
   #root :to => 'home#index'
   root :to => 'home#reviews'
   get "reviews", :to => 'home#reviews', :as => 'home_reviews'
+  get "test", :to => 'home#panel_test'
   
   devise_for :users, :controllers => { :sessions => :sessions }
   

@@ -82,7 +82,44 @@
   ajax.add_task          = function (template_type, template_id, task_sequence, params) { };
   ajax.remove_task       = function (template_type, template_id, task_sequence) { };
   
-  
-  
-
 }($GSP, window));
+
+
+/*
+ * Google Graph wrapper
+ */
+
+
+(function($GSP, $, undefined) {
+"use strict";
+  google.load("visualization", "1", { packages:["corechart"] });
+  
+  $GSP.pie_charts  = [];
+  $GSP.addPieChart = function(config) { $GSP.pie_charts.push(config); };
+  
+  $GSP.drawCharts  = function() {
+    for (var i=0; i < $GSP.pie_charts.length; i++) {
+      var info     = $GSP.pie_charts[i];
+      var has_data = (info.rows.length > 0);
+      var rows     = (has_data ? info.rows : [['No data', 1]]);
+          rows.splice(0,0, ['Name','Count']);
+      var data     = new google.visualization.arrayToDataTable(rows);
+      var options  = {
+                        title  : info.title,
+                        width  : 400,
+                        height : 200,
+                        backgroundColor: 'transparent',
+                        is3D : true,
+                        slices : (has_data) ? info.colors : [{ color: '#DDD' }]
+                      };
+      var chart = new google.visualization.PieChart(document.getElementById(info.id));
+      chart.draw(data, options);
+    }
+  };
+  
+})($GSP, jQuery);
+
+$('document').ready(function() { 
+  google.setOnLoadCallback($GSP.drawCharts);
+  
+});

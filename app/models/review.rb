@@ -19,7 +19,9 @@ class Review < ActiveRecord::Base
   has_one    :owner, :class_name => 'User'
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
   has_many   :tasks,    :order => 'sequence'
-  has_many   :completed_tasks, :class_name => 'Task', :order => 'sequence', :conditions => "status = 'Completed'"
+  has_many   :completed_tasks,  :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
+  has_many   :incomplete_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["status NOT IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
+  has_many   :non_conforming_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::NON_CONFORMING]]
   has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
   
@@ -32,7 +34,86 @@ class Review < ActiveRecord::Base
   end
   
   def progress
-    completed_tasks = tasks.select { |t| [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING].include?(t.status) }
     (((completed_tasks.size.to_f) / tasks.size.to_f) * 100).to_i
   end
+  
+  def complete!
+    actual_completion_at = Time.now
+    status = GSP::STATUS::COMPLETED
+  end
+
+
+  class << self
+public
+    def completed(scope = {}, current_user = nil)
+      fetch(:completed, scope, current_user)
+    end
+    
+    def in_process(scope = {}, current_user = nil)
+      fetch(:in_process, scope, current_user)
+    end
+    
+    def past_due(scope = {}, current_user = nil)
+      fetch(:past_due, scope, current_user)
+    end
+    
+    def completed_non_conforming(scope = {}, current_user = nil)
+      fetch(:completed_non_conforming, scope, current_user)
+    end
+    
+    def in_process_non_conforming(scope = {}, current_user = nil)
+      fetch(:in_process_non_conforming, scope, current_user)
+    end
+    
+    def conforming(scope = {}, current_user = nil)
+      fetch(:conforming, scope, current_user)
+    end
+    
+    def non_conforming(scope = {}, current_user = nil)
+      fetch(:non_conforming, scope, current_user)
+    end
+    
+
+private
+    def fetch(status, scope = {}, current_user = nil)
+      # Date range to be considered for display
+      ago = Time.now - 12.months
+      
+      # Constrain reviews that will be fetched to the user's organization
+      scope = begin
+        case scope
+          when :all
+            {}
+          when :by_owner
+            {:owner_id => current_user}
+          when :in_organization
+            {:organization_id => current_user.organization_id}
+          else
+            scope
+        end
+      end
+      
+      case status
+        when :completed
+          self.where(scope.merge({:actual_completion_at => ago..Time.now}))
+        when :in_process
+          self.where(scope.merge({:targeted_start_at => ago..Time.now, :status => GSP::STATUS::ACTIVE}))
+        when :past_due
+          self.where(scope.merge({:targeted_completion_at => ago..Time.now, :status => GSP::STATUS::PAST_DUE}))
+        when :completed_non_conforming
+          self.where(scope.merge({:actual_completion_at => ago..Time.now})).select { |review| review.incomplete_tasks.size > 0 }
+        when :in_process_non_conforming
+          self.where(scope.merge({:targeted_completion_at => ago..Time.now, :status => GSP::STATUS::ACTIVE})).select { |review| review.incomplete_tasks.size > 0 }
+        when :conforming
+          self.where(scope.merge({:targeted_completion_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size == 0 }
+        when :non_conforming
+          self.where(scope.merge({:targeted_completion_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size > 0 }
+          
+      end
+    end
+    
+  end
+  
+  
+  
 end
