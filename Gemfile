@@ -53,7 +53,7 @@ group :development, :test do
   gem 'capybara'
   
   # Simplify data fixturing
-  gem 'factory_girl'
+  gem 'factory_girl_rails', "~> 4.0"
   
   # Cloud deployment
   # gem 'heroku'
