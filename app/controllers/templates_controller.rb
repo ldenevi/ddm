@@ -25,7 +25,7 @@ class TemplatesController < ApplicationController
     @template = OrganizationTemplate.find(params[:id])
     @review   = @template.generate_review
     @possible_review_owner_options  = [[current_user.eponym, current_user.id]]
-    @possible_task_executor_options = current_user.organization.users.map { |u| [u.eponym, u.id] }
+    @possible_task_reviewer_options = current_user.organization.users.map { |u| [u.eponym, u.id] }
   end
   
   def deploy_review
@@ -158,12 +158,12 @@ class TemplatesController < ApplicationController
       when 'responsible_party'
         current_user.organization.users.map { |u| [u.eponym, u.id] }
         
-      # Task#executor
+      # Task#reviewer
       #
       # List of users who can execute a task
       # TODO: Make it list only users with the power to execute tasks
       #
-      when 'executor'
+      when 'reviewer'
         current_user.organization.users.map { |u| [u.eponym, u.id] }
         
       else

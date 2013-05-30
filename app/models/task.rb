@@ -1,5 +1,5 @@
 class Task < ActiveRecord::Base
-  validate :executor, :presence => true
+  validate :reviewer, :presence => true
   validate :instructions, :presence => true
   validate :sequence, :presence => true
   validate :status, :presence => true
@@ -7,10 +7,10 @@ class Task < ActiveRecord::Base
   
   # Display information
   attr_accessible :comments, 
-                  :executor, :executor_id,
+                  :reviewer, :reviewer_id,
                   :completion_percentage, :instructions,
                   :name, :review, :sequence, :status
-  belongs_to :executor, :class_name => 'User'
+  belongs_to :reviewer, :class_name => 'User'
   belongs_to :review
   has_many   :comments, :as => :commentable
   
@@ -22,7 +22,7 @@ class Task < ActiveRecord::Base
   serialize :schedule, Hash
   
   def assign_to(user_id)
-    self.executor_id = (user_id.is_a?(User)) ? user_id.id : user_id
+    self.reviewer_id = (user_id.is_a?(User)) ? user_id.id : user_id
     self.assigned_at = Time.now
     self.save
   end

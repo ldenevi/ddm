@@ -35,7 +35,7 @@
     </div>
     <div>
       <p>Owner: </p>
-      <p>Task Reviewer(s): <%= review.tasks.map(&:executor).map(&:eponym).uniq.join(', ') %></p>
+      <p>Task Reviewer(s): <%= review.tasks.map(&:reviewer).map(&:eponym).uniq.join(', ') %></p>
     </div>
   </div>
   <div data-progress="<%= review.progress %>" class="review-progress-bar">

@@ -3,7 +3,7 @@
   <%= task_form.hidden_field :name %>
   <%= task_form.hidden_field :instructions %>
   <%= task_form.hidden_field :status %>
-  <%= task_form.hidden_field :executor_id %>
+  <%= task_form.hidden_field :reviewer_id %>
   
   <div>
     <p>
@@ -18,7 +18,7 @@
     
     <table>
       <tr>
-        <td width="200">Executor</td>
+        <td width="200">Reviewer</td>
         <td>Start</td>
         <td>Due Date</td>
         <td>Status</td>
@@ -26,11 +26,7 @@
       
       <tr>
         <td nowrap>
-          <!--span data-inline-edit="select"
-                data-template-id="<%= @review.id || 0 %>"
-                data-template-type="<%= @review.class %>"
-                data-field-name="executor"><%= current_user.eponym %></span-->
-          <%= task_form.select :executor_id, @possible_task_executor_options %>
+          <%= task_form.select :reviewer_id, @possible_task_reviewer_options %>
         </td>
         <td nowrap><%= task_form.text_field :start_at, :value => task.start_at.to_formatted_s(:review_date), :size => 15, :class => 'task-start-at review-date' %></td>
         <td nowrap><%= task_form.text_field :expected_completion_at, :value => task.expected_completion_at.to_formatted_s(:review_date), :size => 15, :class => 'task-due-at review-date' %></td>

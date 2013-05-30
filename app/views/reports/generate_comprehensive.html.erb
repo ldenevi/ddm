@@ -28,12 +28,12 @@
         <table>
           <tr>
             <th rowspan="2"><%= task.sequence %></th>
-            <th>Executor</th>
+            <th>Reviewer</th>
             <th>Start Date</th>
             <th>Completion Date</th>
           </tr>
           <tr>
-            <td><%= task.executor.eponym %></td>
+            <td><%= task.reviewer.eponym %></td>
             <td><%= (task.start_at) ? task.start_at.to_formatted_s(:review_date) : 'Not started' %></td>
             <td><%= (task.actual_completion_at) ? task.actual_completion_at.to_formatted_s(:review_date) : '&nbsp;'.html_safe %></td>
           </tr>

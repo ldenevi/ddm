@@ -130,7 +130,7 @@ private
     
     JSON.parse(tasks).each_with_index do |t, i|
       _tasks << Task.new(:name => t["name"], :instructions => t["instructions"], :sequence => (i + 1), 
-                         :status => GSP::STATUS::PENDING, :executor => organization.owner,
+                         :status => GSP::STATUS::PENDING, :reviewer => organization.owner,
                          :assigned_at => Time.now,
                          :start_at => start_at,
                          :expected_completion_at => start_at)

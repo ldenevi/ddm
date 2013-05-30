@@ -141,7 +141,6 @@ ActiveRecord::Schema.define(:version => 20130422191122) do
     t.integer  "responsible_party_id"
     t.string   "frequency"
     t.string   "name"
-    t.integer  "owner_id"
     t.integer  "organization_id"
     t.integer  "organization_template_id"
     t.string   "status"
@@ -162,24 +161,24 @@ ActiveRecord::Schema.define(:version => 20130422191122) do
   add_index "reviews", ["responsible_party_id"], :name => "index_reviews_on_responsible_party_id"
 
   create_table "tasks", :force => true do |t|
-    t.integer  "executor_id",                                               :null => false
+    t.integer  "reviewer_id",                                               :null => false
     t.float    "completion_percentage"
     t.text     "instructions",                                              :null => false
     t.string   "name"
     t.integer  "review_id",                                                 :null => false
     t.integer  "sequence",               :default => 1,                     :null => false
-    t.string   "status",                 :default => "Pending",             :null => false
+    t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-05-21 16:59:43', :null => false
+    t.datetime "expected_completion_at", :default => '2013-06-13 21:24:55', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
     t.text     "schedule"
   end
 
-  add_index "tasks", ["executor_id"], :name => "index_tasks_on_executor_id"
   add_index "tasks", ["review_id"], :name => "index_tasks_on_review_id"
+  add_index "tasks", ["reviewer_id"], :name => "index_tasks_on_reviewer_id"
   add_index "tasks", ["status"], :name => "index_tasks_on_status"
 
   create_table "users", :force => true do |t|

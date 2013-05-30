@@ -12,7 +12,7 @@
     
     <table>
       <tr>
-        <td width="200">Executor</td>
+        <td width="200">Reviewer</td>
         <td>Start</td>
         <td>Due Date</td>
         <td>Status</td>
@@ -23,7 +23,7 @@
           <span data-inline-edit="select"
                 data-template-id="<%= @review.id || 0 %>"
                 data-template-type="<%= @review.class %>"
-                data-field-name="executor"><%= task.executor.eponym %></span>
+                data-field-name="reviewer"><%= task.reviewer.eponym %></span>
         </td>
         <td nowrap><%= task.start_at.to_formatted_s(:review_date) %></td>
         <td nowrap><%= task.expected_completion_at.to_formatted_s(:review_date) %></td>

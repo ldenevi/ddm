@@ -15,9 +15,9 @@ c_manufac = Organization.create(:full_name => 'Manufacturing', :parent => c_main
 
 puts "Creating users..."
 owner   = User.create :email => 'dsoroka@rrleduc.com', :password => 'abcd1234', :first_name => "Dave", :last_name => "Soroka", :organization => c_main
-main_exec_1 = User.create :email => 'executor1@rrleduc.com', :password => 'abcd1234', :first_name => "Executor", :last_name => "1", :organization => c_main
-main_exec_2 = User.create :email => 'executor2@rrleduc.com', :password => 'abcd1234', :first_name => "Executor", :last_name => "2", :organization => c_main
-main_exec_2 = User.create :email => 'executor3@rrleduc.com', :password => 'abcd1234', :first_name => "Executor", :last_name => "3", :organization => c_main
+main_exec_1 = User.create :email => 'reviewer1@rrleduc.com', :password => 'abcd1234', :first_name => "Executor", :last_name => "1", :organization => c_main
+main_exec_2 = User.create :email => 'reviewer2@rrleduc.com', :password => 'abcd1234', :first_name => "Executor", :last_name => "2", :organization => c_main
+main_exec_2 = User.create :email => 'reviewer3@rrleduc.com', :password => 'abcd1234', :first_name => "Executor", :last_name => "3", :organization => c_main
 sales   = User.create :email => 'eric@rrleduc.com', :password => 'abcd1234', :first_name => "Eric", :last_name => "LeDuc", :organization => c_sales
 manufac = User.create :email => 'paul@rrleduc.com', :password => 'abcd1234', :first_name => "Paul", :last_name => "Blouin", :organization => c_manufac
 

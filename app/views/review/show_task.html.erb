@@ -31,7 +31,7 @@
   <div class="task-fields">
     <h3><%= @task.review.name %> - <%= @task.review.targeted_start_at.to_formatted_s(:review_date) %></h3>
     <span>Person responsible for this task:</span>
-    <span><%= @task.executor.eponym %></span>
+    <span><%= @task.reviewer.eponym %></span>
     <% if @task.is_completed? %>
     <br>
     <span>Completed at: <%= @task.actual_completion_at.to_formatted_s(:review_date) %></span>
