@@ -45,19 +45,23 @@ class Review < ActiveRecord::Base
   end
   
   def complete!
-    update_attributes(:actual_completion_at => Time.now, :status => GSP::STATUS::COMPLETED)
+    (incomplete_tasks.size == 0) ? update_attributes(:actual_completion_at => Time.now, :status => GSP::STATUS::COMPLETED) : false
   end
   
   def activate!
-    if (Time.now > targeted_start_at && actual_completion_at == nil)
-      update_attribute(:status, GSP::STATUS::ACTIVE)
-    else
-      false
-    end
+    (Time.now > targeted_start_at) ? update_attribute(:status, GSP::STATUS::ACTIVE) : false
   end
   
   def is_conforming?
     non_conforming_tasks.size == 0
+  end
+  
+  def is_active?
+    self.status == GSP::STATUS::ACTIVE && Time.now > targeted_start_at
+  end
+  
+  def past_due?
+    self.status == GSP::STATUS::PAST_DUE && Time.now > targeted_completion_at
   end
 
 
@@ -126,7 +130,6 @@ private
           self.where(scope.merge({:targeted_start_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size == 0 }
         when :non_conforming
           self.where(scope.merge({:targeted_start_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size > 0 }
-          
       end
     end
     

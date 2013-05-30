@@ -36,7 +36,7 @@ class Task < ActiveRecord::Base
   end
   
   def reopen!
-    update_attributes(:status => GSP::STATUS::TASK::PENDING, :actual_completion_at => nil)
+    update_attributes(:status => GSP::STATUS::TASK::INACTIVE, :actual_completion_at => nil)
   end
   
   def is_completed?
