@@ -14,11 +14,11 @@ class Review < ActiveRecord::Base
   # Tracking
   attr_accessible :actual_completion_at, :actual_start_at,
                   :targeted_completion_at, :targeted_start_at,
-                  :assigned_at, :deployed_at, :owner, :owner_id
+                  :assigned_at, :deployed_at
   
   # Relationship
   attr_accessible :organization_template_id, :tasks_attributes
-  has_one    :owner, :class_name => 'User'
+  has_one    :responsible_party, :class_name => 'User'
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
   
   # Tasks

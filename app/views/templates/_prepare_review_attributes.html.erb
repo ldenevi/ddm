@@ -23,7 +23,7 @@
               data-template-id="<%= @review.id || 0 %>"
               data-template-type="<%= @review.class %>"
               data-field-name="responsible_party"><%= current_user.eponym %></span-->
-        <%= review_form.select :owner_id, @possible_review_owner_options %>
+        <%= review_form.select :responsible_party_id, @possible_review_owner_options %>
       </td>
       
       <td nowrap><span><%= review_form.text_field :targeted_start_at, :value => @review.targeted_start_at.to_formatted_s(:review_date),  :size => 15, :id => 'review_start_date', :class => 'review-date' %></span></td>

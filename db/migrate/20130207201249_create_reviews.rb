@@ -5,7 +5,6 @@ class CreateReviews < ActiveRecord::Migration
       t.references :responsible_party
       t.string     :frequency
       t.string     :name
-      t.references :owner
       t.references :organization
       t.references :organization_template
       t.string     :status
