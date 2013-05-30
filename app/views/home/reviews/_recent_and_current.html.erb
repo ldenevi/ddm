@@ -5,7 +5,7 @@
       <th>Completion Date</th>
     </tr>
     
-    <% @active_reviews.each do |review| %>
+    <% @completed_reviews.each do |review| %>
     <tr>
       <td><%= link_to review.name, show_review_path(review.id) %></td>
       <td><%= Time.now.to_formatted_s(:review_date) %></td>

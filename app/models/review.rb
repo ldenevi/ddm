@@ -1,3 +1,5 @@
+# TODO Remove 'owner_id' column
+
 class Review < ActiveRecord::Base
   # Display information
   attr_accessible :frequency, :name,
@@ -18,10 +20,15 @@ class Review < ActiveRecord::Base
   attr_accessible :organization_template_id, :tasks_attributes
   has_one    :owner, :class_name => 'User'
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
+  
+  # Tasks
   has_many   :tasks,    :order => 'sequence'
   has_many   :completed_tasks,  :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
+  has_many   :pending_tasks,    :class_name => 'Task', :order => 'sequence', :conditions => ["start_at > ? AND status = ?", Time.now, GSP::STATUS::TASK::INACTIVE]
+  has_many   :active_tasks,     :class_name => 'Task', :order => 'sequence', :conditions => ["? > start_at AND status NOT IN (?)", Time.now, [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
   has_many   :incomplete_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["status NOT IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
   has_many   :non_conforming_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::NON_CONFORMING]]
+  
   has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
   
@@ -38,8 +45,19 @@ class Review < ActiveRecord::Base
   end
   
   def complete!
-    actual_completion_at = Time.now
-    status = GSP::STATUS::COMPLETED
+    update_attributes(:actual_completion_at => Time.now, :status => GSP::STATUS::COMPLETED)
+  end
+  
+  def activate!
+    if (Time.now > targeted_start_at && actual_completion_at == nil)
+      update_attribute(:status, GSP::STATUS::ACTIVE)
+    else
+      false
+    end
+  end
+  
+  def is_conforming?
+    non_conforming_tasks.size == 0
   end
 
 
@@ -85,7 +103,7 @@ private
           when :all
             {}
           when :by_owner
-            {:owner_id => current_user}
+            {:responsible_party_id => current_user}
           when :in_organization
             {:organization_id => current_user.organization_id}
           else
@@ -101,13 +119,13 @@ private
         when :past_due
           self.where(scope.merge({:targeted_completion_at => ago..Time.now, :status => GSP::STATUS::PAST_DUE}))
         when :completed_non_conforming
-          self.where(scope.merge({:actual_completion_at => ago..Time.now})).select { |review| review.incomplete_tasks.size > 0 }
+          self.where(scope.merge({:actual_completion_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size > 0 }
         when :in_process_non_conforming
-          self.where(scope.merge({:targeted_completion_at => ago..Time.now, :status => GSP::STATUS::ACTIVE})).select { |review| review.incomplete_tasks.size > 0 }
+          self.where(scope.merge({:targeted_start_at => ago..Time.now, :status => GSP::STATUS::ACTIVE})).select { |review| review.non_conforming_tasks.size > 0 }
         when :conforming
-          self.where(scope.merge({:targeted_completion_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size == 0 }
+          self.where(scope.merge({:targeted_start_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size == 0 }
         when :non_conforming
-          self.where(scope.merge({:targeted_completion_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size > 0 }
+          self.where(scope.merge({:targeted_start_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size > 0 }
           
       end
     end

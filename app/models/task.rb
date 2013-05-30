@@ -27,16 +27,16 @@ class Task < ActiveRecord::Base
     self.save
   end
   
-  def complete!
-    self.status = GSP::STATUS::COMPLETED
-    self.actual_completion_at = Time.now
-    self.save
+  def conform!
+    update_attributes(:status => GSP::STATUS::TASK::CONFORMING, :actual_completion_at => Time.now)
+  end
+  
+  def not_conform!
+    update_attributes(:status => GSP::STATUS::TASK::NON_CONFORMING, :actual_completion_at => Time.now)
   end
   
   def reopen!
-    self.status = GSP::STATUS::PENDING
-    self.actual_completion_at = nil
-    self.save
+    update_attributes(:status => GSP::STATUS::TASK::PENDING, :actual_completion_at => nil)
   end
   
   def is_completed?

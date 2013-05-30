@@ -352,10 +352,27 @@
   .review-panel .ui-widget-header { background: #FFA65C; }
   .review-panel .ui-progressbar-completed { background: #007C43; }
   
-  .review-panel .review-panel div:first-child p {
+  .review-panel div:first-child > p:first-child {
     font-weight: bold;
     text-align: center;
     background: none;
+  }
+  
+  .review-panel table {
+    width: 100%;
+    margin: 5px 0 5px 0;
+  }
+  
+  .review-panel table td { 
+    text-align: center
+  }
+  
+  .review-panel .review-tasks-overview tr td {
+    text-align: left;
+  }
+  .review-panel .review-tasks-overview tr td:first-child {
+    width: 20px;
+    text-align: right;
   }
   
 .review-panel:after {

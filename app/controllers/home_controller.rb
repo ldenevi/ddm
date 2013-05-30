@@ -12,9 +12,9 @@ class HomeController < ApplicationController
 
   # TODO add methods to Task and Review models for these...
   def reviews
-    @active_reviews       = current_user.active_reviews
-    @non_conforming_tasks = Task.limit(3)
-    @past_due_tasks       = Task.limit(5)
+    @completed_reviews    = Review.completed(:by_owner, current_user)
+    @non_conforming_tasks = Review.non_conforming(:by_owner, current_user).map(&:non_conforming_tasks).flatten
+    @past_due_tasks       = Review.past_due.map(&:tasks)
     
     # Graphs
     
@@ -27,19 +27,19 @@ class HomeController < ApplicationController
     rows = (completed.size + in_process.size + past_due.size == 0) ? [] : [["Completed", completed.size], ["In-Process", in_process.size], ["Past Due", past_due.size]]
     @review_status  = {:id=>"review_status_graph", :title=>"Review Status", :rows=> rows, :colors=>[{"color"=>"#007C43"}, {"color"=>"#00FF8B"}, {"color"=>"#FFF55C"}]}.to_json
     
-    # Non-Conforming
-    completed_non_conforming  = Review.completed_non_conforming :by_owner, current_user
-    in_process_non_conforming = Review.in_process_non_conforming :by_owner, current_user
-    
-    rows = (completed_non_conforming.size + in_process_non_conforming.size == 0) ? [] : [["Completed", completed_non_conforming.size], ["In-Process", in_process_non_conforming.size]]
-    @non_conforming  = {:id=>"non_conforming_graph", :title=>"Non-Conforming Reviews", :rows=> rows, :colors=>[{ color: '#FF000D' }, { color: '#FF5C65' }]}.to_json
-    
     # Conforming vs. Non-Conforming
     conforming  = Review.conforming :by_owner, current_user
     non_conforming = Review.non_conforming :by_owner, current_user
     
     rows = (conforming.size + non_conforming.size == 0) ? [] : [["Conforming", conforming.size], ["Non-Conforming", non_conforming.size]]
     @conforming_non_conforming  = {:id=>"conforming_non_conforming_graph", :title=>"Conforming vs. Non-Conforming Reviews", :rows=> rows, :colors=>[{ color: '#007C43' }, { color: '#FF000D' }]}.to_json
+    
+    # Non-Conforming
+    completed_non_conforming  = Review.completed_non_conforming :by_owner, current_user
+    in_process_non_conforming = Review.in_process_non_conforming :by_owner, current_user
+    
+    rows = (completed_non_conforming.size + in_process_non_conforming.size == 0) ? [] : [["Completed", completed_non_conforming.size], ["In-Process", in_process_non_conforming.size]]
+    @non_conforming  = {:id=>"non_conforming_graph", :title=>"Non-Conforming Reviews", :rows=> rows, :colors=>[{ color: '#FF000D' }, { color: '#FF5C65' }]}.to_json
     
     
   end
