@@ -48,7 +48,7 @@ class Review < ActiveRecord::Base
   end
   
   def activate!
-    (Time.now > targeted_start_at) ? update_attribute(:status, GSP::STATUS::ACTIVE) : false
+    (Time.now > targeted_start_at) ? update_attributes(:actual_completion_at => nil, :status => GSP::STATUS::ACTIVE) : false
   end
   
   def is_conforming?
