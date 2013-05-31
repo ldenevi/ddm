@@ -44,6 +44,7 @@ class User < ActiveRecord::Base
     true #organization.owner == self
   end
   
+  # TODO Instead of an id (which could be any number from any model), pass a GspTemplate object
   def purchase_template(template_id)
     return false unless can_purchase_templates?
     

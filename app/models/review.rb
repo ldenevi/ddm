@@ -18,7 +18,6 @@ class Review < ActiveRecord::Base
   
   # Relationship
   attr_accessible :organization_template_id, :tasks_attributes
-  has_one    :responsible_party, :class_name => 'User'
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
   
   # Tasks

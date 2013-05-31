@@ -48,7 +48,7 @@ class OrganizationTemplate < ActiveRecord::Base
     review = Review.new :responsible_party => organization.owner, :frequency => frequency,
                         :name => regulatory_review_name, :organization => organization,
                         :organization_template => self, :status => GSP::STATUS::PENDING,
-                        :assigned_at => Time.now, :deployed_at => Time.now,
+                        :assigned_at => nil, :deployed_at => Time.now,
                         :targeted_completion_at => calculate_due_date,
                         :targeted_start_at => Time.now + 1.week,
                         :schedule => schedule
@@ -60,8 +60,8 @@ class OrganizationTemplate < ActiveRecord::Base
     # Create Code
     review = generate_review
     review.save!
-    review
     Notifications::Reviews.deploy(review).deliver
+    review
   end
   
   def occurs_on?(datetime)
