@@ -29,8 +29,8 @@ class TemplatesController < ApplicationController
   end
   
   def deploy_review
-    review = Review.create params[:review]
-    redirect_to :controller => 'home', :action => 'index'
+    review = Review.create(params[:review])
+    redirect_to :controller => 'home', :action => 'reviews'
   end
   
   def show
