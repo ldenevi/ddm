@@ -34,7 +34,7 @@
       </table>
     </div>
     <div>
-      <p>Owner: </p>
+      <p>Owner: <%= review.responsible_party.eponym %></p>
       <p>Task Reviewer(s): <%= review.tasks.map(&:reviewer).map(&:eponym).uniq.join(', ') %></p>
     </div>
   </div>

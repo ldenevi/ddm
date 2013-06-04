@@ -8,7 +8,8 @@
 $('document').ready(function() {
   var articles = $('.review-panel');
   articles.on('click', function() {
-    location.href = '/review/show/' + $(this).data('review-id');
+    // location.href = '/review/show/' + $(this).data('review-id');
+    location.href = '/index'
   });
   
   articles.each(function(index, article) {
