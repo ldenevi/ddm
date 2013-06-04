@@ -35,7 +35,7 @@ class Review < ActiveRecord::Base
   attr_accessible :schedule
   serialize :schedule, Hash
   
-  def initialize(args, none)
+  def initialize(args, none = nil)
     super(args)
   end
   
