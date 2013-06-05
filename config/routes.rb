@@ -58,6 +58,7 @@ GSP::Application.routes.draw do
   # Review
   get "review/show/:id", :to => "review#show", :as => "show_review"
   get "review/list", :to => "review#list", :as => "list_reviews"
+  get "review/task_list/:id", :to => "review#task_list", :as => "list_tasks"
   
   get "review/task/:id/show", :to => "review#show_task", :as => "task_show"
   get "tasks/active", :to => "review#active_tasks", :as => "active_tasks"

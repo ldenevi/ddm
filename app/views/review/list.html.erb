@@ -9,7 +9,7 @@ $('document').ready(function() {
   var articles = $('.review-panel');
   articles.on('click', function() {
     // location.href = '/review/show/' + $(this).data('review-id');
-    location.href = '/index'
+    location.href = '/review/task_list/' + $(this).data('review-id');
   });
   
   articles.each(function(index, article) {

@@ -1,5 +1,5 @@
 class ReviewController < ApplicationController
-  layout :false, :except => [:show, :list]
+  layout :false, :except => [:show, :list, :task_list]
   
   def show
     @review = Review.find(params[:id])
@@ -17,6 +17,11 @@ class ReviewController < ApplicationController
   
   def active_tasks
     @active_tasks = current_user.active_tasks
+  end
+  
+  def task_list
+    @review = Review.includes(:agency, :tasks => :reviewer).find(params[:id])
+    @tasks  = @review.tasks
   end
   
   def mark_task_as_completed

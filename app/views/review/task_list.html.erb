@@ -1,0 +1,29 @@
+<script src="/assets/gsp/gsp.task.manager.js" type="text/javascript"></script>
+
+<div class="panel review-task-list-panel">
+  <h2><%= @review.name %><br><%= @review.targeted_start_at.strftime("%D") %></h2>
+  <table id="task_list">
+    <thead>
+      <tr>
+        <th title="Agency">&nbsp;</th>
+        <th title="Sequence number">#</th>
+        <th>Task name</th>
+        <th>Reviewer</th>
+        <th>Start Date</th>
+        <th>Due Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @tasks.each do |task| %>
+      <tr data-task-id="<%= task.id %>">
+        <td title="<%= task.agency.name %>"><%= task.agency.acronym %></td>
+        <td><%= task.sequence %></td>
+        <td> <%= link_to task.name, task_show_path(task.id) %></td>
+        <td><%= task.reviewer.eponym %></td>
+        <td><%= task.start_at.strftime("%D") %></td>
+        <td><%= task.expected_completion_at.strftime("%D") %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

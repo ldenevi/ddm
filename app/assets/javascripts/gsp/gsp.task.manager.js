@@ -201,8 +201,9 @@
   
   var TaskManager = function() {
     // Get DOM elements  
-    $active_tasks_list    = $("#active_tasks_list");
-    $completed_tasks_list = $("#completed_tasks_list");
+    // $active_tasks_list    = $("#active_tasks_list");
+    // $completed_tasks_list = $("#completed_tasks_list");
+    $task_list = $("#task_list");
     
     // Create dialog box
     $("#content:last-child").after($dialog);
@@ -213,8 +214,10 @@
       modal: true
     });
     
-    $("tr", $active_tasks_list).each(function(i, e) { Row($(e)); });
-    $("tr", $completed_tasks_list).each(function(i, e) { Row($(e)); });
+    // $("tr", $active_tasks_list).each(function(i, e) { Row($(e)); });
+    // $("tr", $completed_tasks_list).each(function(i, e) { Row($(e)); });
+    $("tr", $task_list).each(function(i, e) { Row($(e)); });
+    
 
   };
   

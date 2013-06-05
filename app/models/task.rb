@@ -13,6 +13,7 @@ class Task < ActiveRecord::Base
   belongs_to :reviewer, :class_name => 'User'
   belongs_to :review
   has_many   :comments, :as => :commentable
+  has_one    :agency, :through => :review
   
   # Tracking
   attr_accessible :actual_completion_at, :assigned_at, :expected_completion_at,
