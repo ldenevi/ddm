@@ -404,6 +404,14 @@
   margin-bottom: 10px;
 }
 
+.review-task-list-panel table tbody tr:hover {
+  background-color: #FFCFA6;
+}
+
+.review-task-list-panel table td a {
+  font-weight: bold;
+}
+
 .review-task-list-panel table td,
 .review-task-list-panel table th {
   margin: 10px;
