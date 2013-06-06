@@ -18,7 +18,7 @@
     </div>
     
     
-    <div id="report_objective"><p><%= @review.organization_template.objectives %></p></div>
+    <div id="report_objective"><p><%= @review.organization_template.objectives.html_safe %></p></div>
   </div>
   
   <div id="report_tasks">
