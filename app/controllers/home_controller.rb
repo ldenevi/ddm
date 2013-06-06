@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  before_filter :check_browser, :only => [:reviews]
+  
   def index
     @user = current_user
     @active_tasks = current_user.active_tasks
@@ -37,9 +39,7 @@ class HomeController < ApplicationController
     in_process_non_conforming = Review.in_process_non_conforming :by_owner, current_user
     
     rows = (completed_non_conforming.size + in_process_non_conforming.size == 0) ? [] : [["Completed", completed_non_conforming.size], ["In-Process", in_process_non_conforming.size]]
-    @non_conforming  = {:id=>"non_conforming_graph", :title=>"Non-Conforming Reviews", :rows=> rows, :colors=>[{ color: '#FF000D' }, { color: '#FF5C65' }]}.to_json
-    
-    
+    @non_conforming  = {:id=>"non_conforming_graph", :title=>"Non-Conforming Reviews", :rows=> rows, :colors=>[{ color: '#FF000D' }, { color: '#FF5C65' }]}.to_json    
   end
   
   def panel_test

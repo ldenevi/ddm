@@ -1,0 +1,20 @@
+
+<div id="unsupported-browser-dialog" title="Unsupported web browser" style="display:none">
+  <p>
+    <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+    Green Status Pro (GSP) does not support your web browser. You may experience limited functionality and visual incoherences.</p>
+    <p>To benefit from the full GSP experience, please upgrade your web browers to the latest version.</p>
+</div>
+
+<script>
+$('document').ready(function() {
+  $( "#unsupported-browser-dialog" ).dialog({
+        modal: true,
+        buttons: {
+          Ok: function() {
+            $( this ).dialog( "close" );
+          }
+        }
+      });
+});
+</script>

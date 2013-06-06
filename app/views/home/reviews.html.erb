@@ -10,3 +10,4 @@
   <%= render 'home/reviews/graphs/non-conforming' %>
 </div>
 
+<%= render('shared/unsupported_browser') unless @is_browser_supported %>

@@ -13,6 +13,7 @@ gem 'devise'    # User authentication
 gem 'rubyzip'   # Zip compression
 gem 'ice_cube'  # Scheduler
 gem 'recurring_select' # iCal recurrence input user interface
+gem 'useragent' # Detect web browser
 
 # Gems used only for assets and not required
 # in production environments by default.
