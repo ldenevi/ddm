@@ -232,26 +232,18 @@
                                       source_row.row.removeClass("task-conforming");
                                       source_row.row.removeClass("task-not-conforming");
                                     });
-    
-    
-    
-    /*
-    status_button.on("click", task_worksheet_object.changeStatus);
                         
     $('#comment_fake_input').bind(evt_show_comment_form, task_worksheet_object.revealCommentForm);
     $('#comment_entry iframe').bind(evt_hide_comment_form, task_worksheet_object.concealCommentForm);
                         
     $('#comment_fake_input').on('click', function () { $(this).trigger(evt_show_comment_form);  });
     $("#comment_entry iframe").on("blur", function () { $(this).trigger(evt_hide_comment_form); });
-    */
     
   }
   
   
   var TaskManager = function() {
     // Get DOM elements  
-    // $active_tasks_list    = $("#active_tasks_list");
-    // $completed_tasks_list = $("#completed_tasks_list");
     $task_list = $("#task_list");
     
     // Create dialog box
@@ -263,8 +255,6 @@
       modal: true
     });
     
-    // $("tr", $active_tasks_list).each(function(i, e) { Row($(e)); });
-    // $("tr", $completed_tasks_list).each(function(i, e) { Row($(e)); });
     $("tr", $task_list).each(function(i, e) { Row($(e)); });
     
 
