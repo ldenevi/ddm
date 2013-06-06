@@ -8,7 +8,7 @@ class ReportsController < ApplicationController
   end
   
   def comprehensive
-    @reviews = (current_user) ? current_user.organization.reviews : []
+    @reviews = (current_user) ? current_user.organization.reviews.sort_by(&:targeted_completion_at) : []
   end
   
   def generate_comprehensive
