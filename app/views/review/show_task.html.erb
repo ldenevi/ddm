@@ -40,7 +40,7 @@
   
   <div class="task-objective">
     <h3>Review objective</h3>
-    <span><%= @task.review.organization_template.objectives %></span>
+    <span><%= @task.review.organization_template.objectives.html_safe %></span>
   </div>
   
   <div class="task-content">
