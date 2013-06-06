@@ -26,7 +26,12 @@ class ReviewController < ApplicationController
   
   def mark_task_as_completed
     @task = Task.find(params[:id])
-    @task.complete!
+    case params[:status]
+      when 'conforming'
+        @task.conform!
+      when 'not_conforming'
+        @task.not_conform!
+    end
     render :text => 'Done'
   end
   

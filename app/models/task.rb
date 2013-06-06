@@ -43,4 +43,12 @@ class Task < ActiveRecord::Base
   def is_completed?
     !self.actual_completion_at.nil?
   end
+  
+  def is_conforming?
+    self.status == GSP::STATUS::TASK::CONFORMING
+  end
+  
+  def is_not_conforming?
+    self.status == GSP::STATUS::TASK::NON_CONFORMING
+  end
 end

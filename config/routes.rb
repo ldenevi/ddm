@@ -62,7 +62,7 @@ GSP::Application.routes.draw do
   
   get "review/task/:id/show", :to => "review#show_task", :as => "task_show"
   get "tasks/active", :to => "review#active_tasks", :as => "active_tasks"
-  post "tasks/mark_completed/:id", :to => "review#mark_task_as_completed", :as => 'mark_task_completed'
+  post "tasks/mark_completed/:id(/:status)", :to => "review#mark_task_as_completed", :as => 'mark_task_completed'
   post "tasks/reopen/:id", :to => "review#reopen_task", :as => 'reopen_task'
   get "tasks/recently_completed_tasks", :to => "review#recently_completed_tasks", :as => 'recently_completed_tasks'
   

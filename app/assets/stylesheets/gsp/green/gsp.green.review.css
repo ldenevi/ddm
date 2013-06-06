@@ -418,3 +418,19 @@
   padding: 5px;
   white-space: nowrap;
 }
+
+.review-task-list-panel .task-conforming {
+  font-weight: normal;
+  color: black;
+  background-color:#5CFFB5;
+  border:1px solid #7C0006;
+}
+
+.review-task-list-panel .task-not-conforming {
+  font-weight: normal;
+  color: black;
+  background-color:#FF5C65;
+  border:1px solid #7C0006;
+}
+
+#dialog-confirm { display: none; }

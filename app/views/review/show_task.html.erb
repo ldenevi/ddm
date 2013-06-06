@@ -5,11 +5,11 @@
     </span>
     <% if @task.is_completed? %>
     <span class="task-reopen">
-      <p><%= link_to "Re-open", reopen_task_path(@task.id), :remote => true, :method => 'post' %></p>
+      <p><%= link_to "Re-open", "#" %></p>
     </span>
     <% else %>
     <span class="task-close">
-      <p><%= link_to "Mark as Completed", mark_task_completed_path(@task.id), :remote => true, :method => 'post' %></p>
+      <p><%= link_to "Mark as Completed", "#" %></p>
     </span>
     <% end %>
     <span class="task-due-date">
@@ -78,12 +78,15 @@
   </div>
 </div>
 
-<script>
-</script>
+<div id="dialog-confirm" title="Complete task">
+  <p>
+    <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+    Are all your findings in conformance?</p>
+</div>
 
 <% if @task.is_completed? %>
 <script>
-  $(".task").attr("class", "task-completed");
+  // $(".task").attr("class", "task-completed");
   
 </script>
 <% end %>

@@ -15,10 +15,19 @@
     </thead>
     <tbody>
       <% @tasks.each do |task| %>
-      <tr data-task-id="<%= task.id %>">
+      <tr data-task-id="<%= task.id %>" class="<%= begin 
+                                                     if task.is_conforming?
+                                                       'task-conforming'
+                                                     elsif task.is_not_conforming?
+                                                       'task-not-conforming'
+                                                     else
+                                                       ''
+                                                     end
+                                                   end
+                                                %>">
         <td title="<%= task.agency.name %>"><%= task.agency.acronym %></td>
         <td><%= task.sequence %></td>
-        <td> <%= link_to task.name, task_show_path(task.id) %></td>
+        <td><%= link_to task.name, task_show_path(task.id) %></td>
         <td><%= task.reviewer.eponym %></td>
         <td><%= task.start_at.strftime("%D") %></td>
         <td><%= task.expected_completion_at.strftime("%D") %></td>

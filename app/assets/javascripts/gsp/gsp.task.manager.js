@@ -66,6 +66,8 @@
     $dialog.trigger('focus');
   }
   
+  /* TODO Dashboard task completion will be reconsidered */
+  
   function mark_completed(event) {
     var row = $(event.target).data("row");
     $.post('/tasks/mark_completed/' + row.id, function(data) {
@@ -186,8 +188,54 @@
                               return false;
                            }
     };
+    
+    var completion_actions = {
+      mark_completed : function(is_conforming) {
+        var status = (is_conforming) ? '/conforming' : '/not_conforming';
+        $.post('/tasks/mark_completed/' + source_row.row.data("task-id") + status, function(data) {
+          }).fail(function () {  alert("Mark complete failed"); });
+      },
+      reopen : function() {
+        $.post('/tasks/reopen/' + source_row.row.data("task-id"), function(data) {
+          }).fail(function () {  alert("Mark complete failed"); });
+      }
+    };
   
-    var status_button = $(".task-close p a, .task-reopen p a", $dialog);
+    var mark_completed_button = $(".task-close p a", $dialog);
+    mark_completed_button.on("click", function() {
+      $("#dialog-confirm").dialog({
+        resizable: false,
+        height:180,
+        modal: true,
+        buttons: {
+          "Conforming": function() {
+                          completion_actions.mark_completed(true);
+                          $( this ).dialog( "close" );
+                          $dialog.dialog("close");
+                          source_row.row.addClass("task-conforming");
+                        },
+          "Not Conforming": function() { 
+                              completion_actions.mark_completed(false);
+                              $( this ).dialog( "close" );
+                              $dialog.dialog("close");
+                              source_row.row.addClass("task-not-conforming");
+                            }
+        }
+      });
+      return false;
+    });
+    
+    var mark_opened_button = $(".task-reopen p a", $dialog);
+    mark_opened_button.on("click", function() {
+                                      completion_actions.reopen();
+                                      $dialog.dialog("close");
+                                      source_row.row.removeClass("task-conforming");
+                                      source_row.row.removeClass("task-not-conforming");
+                                    });
+    
+    
+    
+    /*
     status_button.on("click", task_worksheet_object.changeStatus);
                         
     $('#comment_fake_input').bind(evt_show_comment_form, task_worksheet_object.revealCommentForm);
@@ -195,6 +243,7 @@
                         
     $('#comment_fake_input').on('click', function () { $(this).trigger(evt_show_comment_form);  });
     $("#comment_entry iframe").on("blur", function () { $(this).trigger(evt_hide_comment_form); });
+    */
     
   }
   
