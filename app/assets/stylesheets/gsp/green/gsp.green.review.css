@@ -433,4 +433,17 @@
   border:1px solid #7C0006;
 }
 
+.review-task-list-panel .task-past-due {
+  font-weight: normal;
+  background-color:#FFF55C;
+  border:1px solid #7C0006;
+}
+.review-task-list-panel .task-past-due a,
+.review-task-list-panel .task-past-due a:hover,
+.review-task-list-panel .task-past-due a:link,
+.review-task-list-panel .task-past-due a:visited, {
+  color: #7C3800;
+}
+
+
 #dialog-confirm { display: none; }

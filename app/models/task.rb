@@ -51,4 +51,8 @@ class Task < ActiveRecord::Base
   def is_not_conforming?
     self.status == GSP::STATUS::TASK::NON_CONFORMING
   end
+  
+  def is_past_due?
+    expected_completion_at < Time.now
+  end
 end

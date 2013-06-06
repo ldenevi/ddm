@@ -20,6 +20,8 @@
                                                        'task-conforming'
                                                      elsif task.is_not_conforming?
                                                        'task-not-conforming'
+                                                     elsif task.is_past_due?
+                                                       'task-past-due'
                                                      else
                                                        ''
                                                      end
