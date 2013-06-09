@@ -344,14 +344,17 @@
   }
   
   /* Completion progress bar */
-  .review-panel > .review-progress-bar {
+  .review-panel .review-progress-bar {
     position: relative;
     top: -20px;
   }
   
   .review-panel .ui-progressbar { background: #DDD; border: 1px solid black; height: 1em; }
   .review-panel .ui-widget-header { background: #FFA65C; }
-  .review-panel .ui-progressbar-completed { background: #007C43; }
+  
+  /* Completed colors */
+  .review-panel > .review-conforming  .ui-progressbar-completed { background: #007C43; }
+  .review-panel > .review-non-conforming  .ui-progressbar-completed { background: #A13B40; }
   
   .review-panel div:first-child > p:first-child {
     font-weight: bold;

@@ -38,7 +38,9 @@
       <p>Task Reviewer(s): <%= review.tasks.map(&:reviewer).map(&:eponym).uniq.join(', ') %></p>
     </div>
   </div>
-  <div data-progress="<%= review.progress %>" class="review-progress-bar">
+  <div class="<%= (review.is_conforming?) ? 'review-conforming' : 'review-non-conforming' %>">
+    <div data-progress="<%= review.progress %>" class="review-progress-bar">
+    </div>
   </div>
 </article>
 
