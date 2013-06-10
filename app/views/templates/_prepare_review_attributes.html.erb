@@ -17,7 +17,7 @@
       <td>Status</td>
     </tr>
     
-    <tr>
+    <tr class="date-range">
       <td nowrap>
         <!--span data-inline-edit="select"
               data-template-id="<%= @review.id || 0 %>"
@@ -25,9 +25,8 @@
               data-field-name="responsible_party"><%= current_user.eponym %></span-->
         <%= review_form.select :responsible_party_id, @possible_review_owner_options %>
       </td>
-      
-      <td nowrap><span><%= review_form.text_field :targeted_start_at, :value => @review.targeted_start_at.to_formatted_s(:review_date),  :size => 15, :id => 'review_start_date', :class => 'review-date' %></span></td>
-      <td nowrap><span><%= review_form.text_field :targeted_completion_at, :value => @review.targeted_completion_at.to_formatted_s(:review_date), :size => 15, :id => 'review_due_date', :class => 'review-date' %></span></td>
+      <td nowrap><%= review_form.text_field :targeted_start_at, :value => @review.targeted_start_at.to_formatted_s(:review_date),  :size => 15, :id => 'review_start_date', :class => 'review-date start-date' %></td>
+      <td nowrap><%= review_form.text_field :targeted_completion_at, :value => @review.targeted_completion_at.to_formatted_s(:review_date), :size => 15, :id => 'review_due_date', :class => 'review-date end-date' %></td>
       <td><span style="color:red"><%= @review.status %></span></td>
     </tr>
   </table>

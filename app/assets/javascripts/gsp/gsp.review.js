@@ -92,7 +92,14 @@
     this.task_paginator = new TaskPaginator(this);
     
     // Add JQuery UI DatePicker to all date fields
-    $(this.classes.date).datepicker({dateFormat:"MM d, yy"});
+    $(".date-range").each(function(index, element) {
+                            $("td > .start-date", element).datepicker({dateFormat:"MM d, yy", numberOfMonths:3, onClose:function(selectedDate) {
+                                                                                                                        $(".end-date", element).datepicker( "option", "minDate", selectedDate);
+                                                                                                                      }});
+                            $("td > .end-date", element).datepicker({dateFormat:"MM d, yy", numberOfMonths:3, onClose:function(selectedDate) {
+                                                                                                                        $(".start-date", element).datepicker( "option", "maxDate", selectedDate);
+                                                                                                                      }});
+                          });
     
   };
   
