@@ -14,7 +14,7 @@ class HomeController < ApplicationController
   def reviews
     @completed_reviews    = Review.completed(:by_owner, current_user)
     @non_conforming_tasks = Review.non_conforming(:by_owner, current_user).map(&:non_conforming_tasks).flatten
-    @past_due_tasks       = Review.past_due.map(&:tasks)
+    @past_due_tasks       = Review.past_due.map(&:past_due_tasks).flatten
     
     # Graphs
     

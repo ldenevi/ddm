@@ -23,10 +23,11 @@ class Review < ActiveRecord::Base
   # Tasks
   has_many   :tasks,    :order => 'sequence'
   has_many   :completed_tasks,  :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
-  has_many   :pending_tasks,    :class_name => 'Task', :order => 'sequence', :conditions => ["start_at > ? AND status = ?", Time.now, GSP::STATUS::TASK::INACTIVE]
-  has_many   :active_tasks,     :class_name => 'Task', :order => 'sequence', :conditions => ["? > start_at AND status NOT IN (?)", Time.now, [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
+  has_many   :pending_tasks,    :class_name => 'Task', :order => 'sequence', :conditions => ["start_at > ? OR status = ?", Time.now, GSP::STATUS::TASK::INACTIVE]
+  has_many   :active_tasks,     :class_name => 'Task', :order => 'sequence', :conditions => ["? > start_at AND expected_completion_at > ? AND status NOT IN (?)", Time.now, Time.now, [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
   has_many   :incomplete_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["status NOT IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
   has_many   :non_conforming_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::NON_CONFORMING]]
+  has_many   :past_due_tasks, :class_name => 'Task', :order => 'sequence', :conditions => ["expected_completion_at < ? OR status IN (?)", Time.now, GSP::STATUS::TASK::PAST_DUE]
   
   has_one    :agency,   :through => :organization_template
   accepts_nested_attributes_for :tasks, :allow_destroy => true
@@ -63,7 +64,6 @@ class Review < ActiveRecord::Base
     self.status == GSP::STATUS::PAST_DUE && Time.now > targeted_completion_at
   end
 
-
   class << self
 public
     def completed(scope = {}, current_user = nil)
@@ -92,6 +92,22 @@ public
     
     def non_conforming(scope = {}, current_user = nil)
       fetch(:non_conforming, scope, current_user)
+    end
+    
+    def update_all_status!
+      # Active
+      reviews = includes(:tasks).where("reviews.targeted_start_at < ?", Time.now)
+      unless reviews.empty?
+        Task.where("id IN (?)", reviews.map(&:active_tasks).flatten.map(&:id)).update_all(:status => GSP::STATUS::TASK::ACTIVE)
+        Review.update_all(:status => GSP::STATUS::ACTIVE, :id => reviews.map(&:id))
+      end
+      
+      # Past Due
+      reviews = includes(:tasks).where("reviews.targeted_completion_at < ? OR (tasks.expected_completion_at < ? AND tasks.status NOT IN (?))", Time.now - 1.year, Time.now, [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING])
+      unless reviews.empty?
+        Task.where("id IN (?)", reviews.map(&:past_due_tasks).flatten.map(&:id)).update_all(:status => GSP::STATUS::TASK::PAST_DUE)
+        Review.update_all(:status => GSP::STATUS::PAST_DUE, :id => reviews.map(&:id))
+      end      
     end
     
 
