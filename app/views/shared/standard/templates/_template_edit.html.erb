@@ -1,14 +1,17 @@
 <div>
-  <%= form_for @template, :url => 'yahoo.com', :method => :put do |t| %>
+  <%= form_for @template, :url => update_organization_template_path, :method => :put do |t| %>
+    <div style="text-align:right">
+      <%= t.submit "Save Changes" %>
+      <br><br>
+    </div>
     <!-- Agency -->
     <div class="template-editor-attribute">
       <p class="template-editor-attribute-label"><%= t.label :agency_id, 'Agency' %>:</p>
       <p class="template-editor-attribute-field">
-        <select name="[template]agency_id">
-          <% Agency.all.each do |a| %>
-          <option value="<%= a.id %>"><%= [a.id.to_s, a.acronym, a.name].join(" - ") %></option>
-          <% end %>
-        </select>
+        <%=
+          options = Agency.all.map { |a| [[a.id.to_s, a.acronym, a.name].join(" - "), a.id] }
+          t.select(:agency_id, options_for_select(options), :selected => 3)
+        %>
       </p>
     </div>
     
@@ -80,4 +83,5 @@
     CKEDITOR.replaceAll();
   });
   
+  alert(<%= @template.agency_id %>);
 </script>

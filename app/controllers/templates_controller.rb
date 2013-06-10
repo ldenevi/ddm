@@ -1,7 +1,7 @@
 class TemplatesController < ApplicationController
   before_filter :use_ckeditor, :only => [:temporary_template_display, :new_organization_template, :show]
   before_filter :editable, :only => [:temporary_template_display, :new_task, :destroy_task, :new_organization_template, :show]
-  layout false, :only => [:settings]
+  layout false, :only => [:settings, :show_readonly]
   prepend_view_path 'app/views/shared/standard'
 
   def list
@@ -36,6 +36,17 @@ class TemplatesController < ApplicationController
   def show
     @template = OrganizationTemplate.find(params[:id])
     render "shared/standard/show"
+  end
+  
+  def show_readonly
+    @template = OrganizationTemplate.find(params[:id])
+    render "shared/standard/templates/readonly/show"
+  end
+  
+  def update
+    @template = OrganizationTemplate.find(params[:id])
+    @template.update_attributes(params[:organization_template])
+    redirect_to :back
   end
   
   # Add custom organization template

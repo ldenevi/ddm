@@ -135,8 +135,8 @@
       <li><a href="#template_editor">Edit</a></li>
     <% end %>
   </ul>
-  <div id="template_readonly">
-    <%= render '/shared/standard/templates/template_readonly', :template => @template %>
+  <div id="template_readonly" data-template-id="<%= @template.id%>">
+    <img src="/images/green/loading.gif">
   </div>
   
   <% unless @readonly %>
@@ -148,6 +148,11 @@
 <script>
   $(function() {
     $( "#tabs" ).tabs();
+  });
+  
+  $('document').ready(function() {
+    var readonly = $("#template_readonly");
+    readonly.load("/template/show_readonly/" + readonly.data("template-id"));
   });
 </script>
 

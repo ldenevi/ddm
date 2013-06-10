@@ -37,6 +37,10 @@ GSP::Application.routes.draw do
   delete "gsp_template/:t_id/:task_sequence/destroy_task", :to => 'templates#destroy_task'
   get "templates/field_options/:field_name", :to => 'templates#field_options'
   
+    # New 'Standard' model
+    get "template/show_readonly/:id", :to => 'templates#show_readonly'
+    put "template/update/:id", :to => 'templates#update', :as => 'update_organization_template'
+  
   
   # Organization Templates
   get "template/list", :to => 'templates#list'
