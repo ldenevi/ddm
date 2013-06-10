@@ -2,7 +2,7 @@
 
 <div class="panel review-task-list-panel">
   <h2><%= @review.name %><br>Start: <%= @review.targeted_start_at.to_formatted_s(:review_date) %></h2>
-  <table id="task_list">
+  <table class="task_list">
     <thead>
       <tr>
         <th title="Agency">&nbsp;</th>
@@ -29,7 +29,7 @@
                                                 %>">
         <td title="<%= task.agency.name %>"><%= task.agency.acronym %></td>
         <td><%= task.sequence %></td>
-        <td><%= link_to task.name, task_show_path(task.id) %></td>
+        <td class="task_link"><%= link_to task.name, task_show_path(task.id) %></td>
         <td><%= task.reviewer.eponym %></td>
         <td><%= task.start_at.strftime("%D") %></td>
         <td><%= task.expected_completion_at.strftime("%D") %></td>

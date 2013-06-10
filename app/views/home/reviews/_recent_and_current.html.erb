@@ -1,5 +1,5 @@
 <div class="panel panel-reviews">
-  <table>
+  <table id="task_list">
     <tr>
       <th>Completed Reviews</th>
       <th>Completion Date</th>
@@ -7,7 +7,7 @@
     
     <% @completed_reviews.each do |review| %>
     <tr>
-      <td><%= link_to review.name, show_review_path(review.id) %></td>
+      <td><%= link_to review.name, list_tasks_path(review.id) %></td>
       <td><%= Time.now.to_formatted_s(:review_date) %></td>
     </tr>
     <% end %>
