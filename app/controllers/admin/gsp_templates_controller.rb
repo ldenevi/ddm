@@ -1,6 +1,7 @@
 class Admin::GspTemplatesController < ApplicationController
   before_filter :use_ckeditor, :only => [:show, :new]
   before_filter :editable, :only => [:show, :new]
+  layout false, :only => [:show_readonly]
 
   def editable
     @is_editable = true
@@ -36,6 +37,11 @@ class Admin::GspTemplatesController < ApplicationController
     @readonly = true
     # @tasks = JSON.parse(@template.tasks)
     render 'shared/standard/show'
+  end
+  
+  def show_readonly
+    @template = GspTemplate.find(params[:id])
+    render "shared/standard/templates/readonly/show"
   end
   
 end

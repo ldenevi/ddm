@@ -128,14 +128,14 @@
 </style>
 
 
-<div id="tabs">
+<div id="tabs" title="<%= @template.class.to_s %>">
   <ul>
     <li><a href="#template_readonly">View</a></li>
     <% unless @readonly %>
       <li><a href="#template_editor">Edit</a></li>
     <% end %>
   </ul>
-  <div id="template_readonly" data-template-id="<%= @template.id%>">
+  <div id="template_readonly" data-template-id="<%= @template.id %>" data-template-class="<%= @template.class.to_s %>">
     <img src="/images/green/loading.gif">
   </div>
   
@@ -152,7 +152,11 @@
   
   $('document').ready(function() {
     var readonly = $("#template_readonly");
-    readonly.load("/template/show_readonly/" + readonly.data("template-id"));
+    
+    if (readonly.data("template-class") == "GspTemplate")
+      readonly.load("/admin/gsp_templates/show_readonly/" + readonly.data("template-id"));
+    else
+      readonly.load("/template/show_readonly/" + readonly.data("template-id"));
   });
 </script>
 

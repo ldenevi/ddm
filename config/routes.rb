@@ -39,6 +39,7 @@ GSP::Application.routes.draw do
   
     # New 'Standard' model
     get "template/show_readonly/:id", :to => 'templates#show_readonly'
+    get "admin/gsp_templates/show_readonly/:id", :to => "admin/gsp_templates#show_readonly"
     put "template/update/:id", :to => 'templates#update', :as => 'update_organization_template'
   
   
