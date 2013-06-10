@@ -24,12 +24,12 @@
         <td>Status</td>
       </tr>
       
-      <tr>
+      <tr class="date-range">
         <td nowrap>
           <%= task_form.select :reviewer_id, @possible_task_reviewer_options %>
         </td>
-        <td nowrap><%= task_form.text_field :start_at, :value => task.start_at.to_formatted_s(:review_date), :size => 15, :class => 'task-start-at review-date' %></td>
-        <td nowrap><%= task_form.text_field :expected_completion_at, :value => task.expected_completion_at.to_formatted_s(:review_date), :size => 15, :class => 'task-due-at review-date' %></td>
+        <td nowrap><%= task_form.text_field :start_at, :value => task.start_at.to_formatted_s(:review_date), :size => 15, :class => 'task-start-at review-date start-date' %></td>
+        <td nowrap><%= task_form.text_field :expected_completion_at, :value => task.expected_completion_at.to_formatted_s(:review_date), :size => 15, :class => 'task-due-at review-date end-date' %></td>
         <td><span style="color:red"><%= task.status %></span></td>
       </tr>
     </table>
