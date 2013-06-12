@@ -7,7 +7,7 @@
   position: relative;
   background-color: #007C43;
   width: 100%;
-  min-height: 100px;
+  min-height: 85px;
   background-image: url("/images/green/top-menu-bg.png");
   background-repeat: repeat-x;
   background-position: left bottom;
@@ -21,11 +21,15 @@
   vertical-align: bottom;
 }
 
+#top-menu-logo img {
+  height: 70px;
+}
+
 #top-menu-links {
   display:block;
   position: relative;
-  margin: 0px 0px 0px 250px;
-  padding-top: 65px;
+  margin: 0px 0px 0px 180px;
+  padding-top: 55px;
 }
 
 #top-menu-links ul {
@@ -44,7 +48,7 @@
   text-decoration: none;
   text-transform: uppercase;
   font-family: Calibri, Arial;
-  font-size: 12pt;
+  font-size: 11pt;
 }
 
 #top-menu-links ul li a:hover {
