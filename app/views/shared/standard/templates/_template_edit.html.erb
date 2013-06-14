@@ -1,4 +1,4 @@
-<div>
+<div class="standard-editor">
   <%= form_for @template, :url => update_organization_template_path, :method => :put do |t| %>
     <div style="text-align:right">
       <%= t.submit "Save Changes" %>
@@ -10,7 +10,7 @@
       <p class="template-editor-attribute-field">
         <%=
           options = Agency.all.map { |a| [[a.id.to_s, a.acronym, a.name].join(" - "), a.id] }
-          t.select(:agency_id, options_for_select(options), :selected => 3)
+          t.select(:agency_id, options_for_select(options, :selected => @template.agency_id))
         %>
       </p>
     </div>
@@ -35,7 +35,7 @@
     
     
     <!-- Tasks -->
-    <div class="template-editor-tasks">
+    <div class="template-editor-tasks" id="task_list">
       <h2>Tasks</h2>
       
       <% @template.tasks_array.each_with_index do |task, index| %>
@@ -46,13 +46,13 @@
           <!-- Task name -->
           <div class="template-editor-attribute">
             <p class="template-editor-attribute-label"><%= label_tag("[tasks][%d]name" % index, 'Name') %>:</p>
-            <p class="template-editor-attribute-field"><%= text_field_tag("[tasks][%d]instructions" % index, task["name"]) %></p>
+            <p class="template-editor-attribute-field"><%= text_field_tag("[tasks][%d]name" % index, task["name"], :class=> 'task-name') %></p>
           </div>
           
           <!-- Task instructions -->
           <div class="template-editor-attribute">
             <p class="template-editor-attribute-label"><%= label_tag("[tasks][%d]instructions" % index, 'Instruction') %>:</p>
-            <p class="template-editor-attribute-field"><%= text_area_tag("[tasks][%d]instructions" % index, task["instructions"], :size => '90x20', :onclick => 'CKEDITOR.replace(this)') %></p>
+            <p class="template-editor-attribute-field"><%= text_area_tag("[tasks][%d]instructions" % index, task["instructions"], :size => '90x20', :class => 'task-instructions') %></p>
           </div>
         </div>
       </div>
@@ -72,15 +72,34 @@
       .sortable({
         axis: "y",
         handle: "h3",
+        cursor: "move",
+        start: function(event, ui) {
+          console.log(ui);
+        },
         stop: function( event, ui ) {
+          resort_task_names();
           // IE doesn't register the blur when sorting
           // so trigger focusout handlers to remove .ui-state-focus
           ui.item.children( "h3" ).triggerHandler( "focusout" );
         }
       });
     
-    CKEDITOR.editorConfig = function( config ) {	config.uiColor = 'red'; }
     CKEDITOR.replaceAll();
   });
+  
+  function resort_task_names() {
+    var tasks = $("#task_list .template-editor-accordian-group");
+    tasks.each(function(index, element) {
+                  var name = $(".template-editor-attribute-field > .task-name", element);
+                  var instructions = $(".template-editor-attribute-field > .task-instructions", element);
+
+                  var old_name = name.attr("name");
+                  var new_name = "[tasks]["+index+"]name";
+                      name.attr("name", new_name);
+                  var old_instructions = name.attr("name");
+                  var new_instructions = "[tasks]["+index+"]instructions";
+                      instructions.attr("name", new_instructions);
+               });
+  }
   
 </script>

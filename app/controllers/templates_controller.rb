@@ -45,8 +45,11 @@ class TemplatesController < ApplicationController
   
   def update
     @template = OrganizationTemplate.find(params[:id])
+    @template.tasks = params[:tasks].map { |k, v| v }.to_json
+    @template.save!
     @template.update_attributes(params[:organization_template])
     redirect_to :back
+    # render :text => "<pre>#{params[:organization_template].inspect}</pre>"
   end
   
   # Add custom organization template
