@@ -67,14 +67,15 @@
   $(function() {
     $( ".template-editor-tasks" )
       .accordion({
-        header: "> div > h3"
+        header: "> div > h3",
+        collapsible: true,
+        active: false
       })
       .sortable({
         axis: "y",
         handle: "h3",
         cursor: "move",
         start: function(event, ui) {
-          console.log(ui);
         },
         stop: function( event, ui ) {
           resort_task_names();
