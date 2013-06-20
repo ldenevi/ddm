@@ -33,36 +33,30 @@ class TemplatesController < ApplicationController
     redirect_to :controller => 'home', :action => 'reviews'
   end
   
-  def show
-    @template = OrganizationTemplate.find(params[:id])
-    render "shared/standard/show"
-  end
-  
-  def show_readonly
-    @template = OrganizationTemplate.find(params[:id])
-    render "shared/standard/templates/readonly/show"
-  end
-  
-  def update
-    @template = OrganizationTemplate.find(params[:id])
-    @template.tasks = params[:tasks].map { |k, v| v }.to_json
-    @template.save!
-    @template.update_attributes(params[:organization_template])
-    redirect_to :back
-    # render :text => "<pre>#{params[:organization_template].inspect}</pre>"
-  end
+  # TODO: DRY this up. These three methods are repeat in Admin/GSPTemplateController
+    def show
+      @template = OrganizationTemplate.find(params[:id])
+      render "shared/standard/show"
+    end
+    
+    def show_readonly
+      @template = OrganizationTemplate.find(params[:id])
+      render "shared/standard/templates/readonly/show"
+    end
+    
+    def update
+      @template = OrganizationTemplate.find(params[:id])
+      @template.tasks = params[:tasks].map { |k, v| v }.to_json
+      @template.save!
+      @template.update_attributes(params[:organization_template])
+      redirect_to :back
+    end
   
   # Add custom organization template
-  #def new_organization_template
-  #  @all_organization_templates_options = current_user.organization.organization_templates.map { |t| [t.full_name, t.id] }
-  #  @copy_source = GspTemplate.find params[:source_template_id] unless params[:source_template_id].nil?
-  #end
-  
   # Organization admin/owner can create custom templates
   def new_organization_template
     @agency = Agency.in_house
     @template = OrganizationTemplate.new :agency => @agency, :agency_display_name => @agency.name, :organization => current_user.organization
-    # render "shared/standard/show"
   end
   
   def post_organization_template
@@ -82,7 +76,6 @@ class TemplatesController < ApplicationController
   
   def settings
     @template = OrganizationTemplate.find(params[:id])
-    # @possible_owners = current_user.organization.users
     @possible_owners = current_user.organization.users
   end
   
@@ -103,11 +96,8 @@ class TemplatesController < ApplicationController
     
     template = OrganizationTemplate.find(params[:id])
     template.schedule = schedule.to_hash
-    template.save!
-    
+    template.save!    
     template.deploy_review if schedule.occurs_on?(Time.now)
-    
-    #render :nothing => true
     redirect_to :back
   end
   

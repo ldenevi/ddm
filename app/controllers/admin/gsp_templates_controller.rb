@@ -31,17 +31,24 @@ class Admin::GspTemplatesController < ApplicationController
     template = GspTemplate.create attrs
     redirect_to :action => 'new'
   end
-  
-  def show
-    @template = GspTemplate.find(params[:id])
-    @readonly = true
-    # @tasks = JSON.parse(@template.tasks)
-    render 'shared/standard/show'
-  end
-  
-  def show_readonly
-    @template = GspTemplate.find(params[:id])
-    render "shared/standard/templates/readonly/show"
-  end
+    
+    # TODO: DRY this up. These three methods are repeated in TemplatesController
+    def show
+      @template = GspTemplate.find(params[:id])
+      render 'shared/standard/show'
+    end
+    
+    def show_readonly
+      @template = GspTemplate.find(params[:id])
+      render "shared/standard/templates/readonly/show"
+    end
+    
+    def update
+      @template = GspTemplate.find(params[:id])
+      @template.tasks = params[:tasks].map { |k, v| v }.to_json
+      @template.save!
+      @template.update_attributes(params[:gsp_template])
+      redirect_to :back
+    end
   
 end

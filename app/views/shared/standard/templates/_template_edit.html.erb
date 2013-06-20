@@ -1,5 +1,9 @@
+<%
+  form_put_url = (@template.is_a?(OrganizationTemplate)) ? update_organization_template_path : update_gsp_template_path
+%>
+
 <div class="standard-editor">
-  <%= form_for @template, :url => update_organization_template_path, :method => :put do |t| %>
+  <%= form_for @template, :url => form_put_url, :method => :put do |t| %>
     <div style="text-align:right">
       <%= t.submit "Save Changes" %>
       <br><br>
