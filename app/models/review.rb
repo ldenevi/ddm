@@ -136,8 +136,7 @@ private
         when :in_process
           self.where(scope.merge({:targeted_start_at => ago..Time.now, :status => GSP::STATUS::ACTIVE}))
         when :past_due
-          # self.where(scope.merge({:targeted_completion_at => ago..Time.now, :status => GSP::STATUS::PAST_DUE}))
-          self.includes(:tasks).where(scope).select { |r| r.past_due_taks > 0 }
+          self.includes(:tasks).where(scope).select { |r| r.past_due_tasks.size > 0 }
         when :completed_non_conforming
           self.where(scope.merge({:actual_completion_at => ago..Time.now})).select { |review| review.non_conforming_tasks.size > 0 }
         when :in_process_non_conforming
