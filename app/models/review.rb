@@ -21,7 +21,7 @@ class Review < ActiveRecord::Base
   has_many   :comments, :order => 'created_at DESC', :as => :commentable
   
   # Tasks
-  has_many   :tasks,    :order => 'sequence'
+  has_many   :tasks,    :order => 'sequence', :dependent => :destroy
   has_many   :completed_tasks,  :class_name => 'Task', :order => 'sequence', :conditions => ["status IN (?)", [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
   has_many   :pending_tasks,    :class_name => 'Task', :order => 'sequence', :conditions => ["start_at > ? OR status = ?", Time.now, GSP::STATUS::TASK::INACTIVE]
   has_many   :active_tasks,     :class_name => 'Task', :order => 'sequence', :conditions => ["? > start_at AND expected_completion_at > ? AND status NOT IN (?)", Time.now, Time.now, [GSP::STATUS::TASK::CONFORMING, GSP::STATUS::TASK::NON_CONFORMING]]
