@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  before_filter :check_browser, :only => [:reviews]
+  # before_filter :check_browser, :only => [:reviews]
   
   def index
     @user = current_user
