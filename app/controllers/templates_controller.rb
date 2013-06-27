@@ -83,7 +83,6 @@ class TemplatesController < ApplicationController
   
   def set_recurrence
     schedule = Schedule.new(DateTime.strptime(params[:range_start], "%m/%d/%Y"))
-    puts params.inspect
   
     case params[:frequency]
       when "Daily"
@@ -97,6 +96,7 @@ class TemplatesController < ApplicationController
     template = OrganizationTemplate.find(params[:id])
     template.schedule = schedule.to_hash
     template.save!    
+    template.set_next_deploy_on
     template.deploy_review if schedule.occurs_on?(Time.now)
     redirect_to :back
   end

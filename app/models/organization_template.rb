@@ -50,7 +50,7 @@ class OrganizationTemplate < ActiveRecord::Base
                         :organization_template => self, :status => GSP::STATUS::PENDING,
                         :assigned_at => nil, :deployed_at => Time.now,
                         :targeted_completion_at => calculate_due_date,
-                        :targeted_start_at => Time.now + 1.week,
+                        :targeted_start_at => (schedule && schedule[:start_date]) ? schedule[:start_date] : Time.now + 1.week,
                         :schedule => schedule
     review.tasks = generate_tasks
     review
@@ -60,6 +60,7 @@ class OrganizationTemplate < ActiveRecord::Base
     # Create Code
     review = generate_review
     review.save!
+    self.set_next_deploy_on
     Notifications::Reviews.deploy(review).deliver
     review
   end
@@ -121,6 +122,13 @@ class OrganizationTemplate < ActiveRecord::Base
     else
       Time.now.end_of_week
     end
+  end
+  
+  def set_next_deploy_on
+    s = Schedule.from_hash(schedule)
+    dates = s.occurrences_between(Time.now, Time.now + 2.years)
+    self.next_deploy_on = dates.first.nil? ? nil : dates.first.to_date
+    self.save!
   end
   
 private

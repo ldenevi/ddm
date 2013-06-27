@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130422191122) do
+ActiveRecord::Schema.define(:version => 20130627154410) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -108,6 +108,7 @@ ActiveRecord::Schema.define(:version => 20130422191122) do
     t.datetime "created_at",                                :null => false
     t.datetime "updated_at",                                :null => false
     t.text     "schedule"
+    t.date     "next_deploy_on"
   end
 
   add_index "organization_templates", ["approved_by_id"], :name => "index_organization_templates_on_approved_by_id"

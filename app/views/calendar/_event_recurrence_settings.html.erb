@@ -108,6 +108,10 @@
 </div>
 <% end %>
 
+<div>
+  <p></p>
+</div>
+
 <script>
 // Use the <OL> as a value selector for frequency
 (function() {
@@ -129,7 +133,10 @@
   });
   
   $(document).on("ajax:success", function(e, data, status, xhr) {
-                                    alert("Sent");
+                                    $(".balloon[gsp-ui-balloon-active=true]").fadeOut(300, function() {
+                                                                                            $(this).attr("gsp-ui-balloon-active", "false");
+                                                                                            location.reload();
+                                                                                          });
                                  });
 }());
 </script>
