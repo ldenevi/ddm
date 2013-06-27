@@ -3,13 +3,30 @@ require 'fileutils'
 namespace :gsp do
 
   namespace :app do
+    # TODO: Dry this up
     desc "Deploy reviews"
     task :deploy_reviews => :environment do
       # TODO: Make the deploy date and start date configurable, rather than fixed
-      deploy_date = Time.now + 1.week
-      organization_templates = OrganizationTemplate.all.select { |ot| ot.occurs_on?(deploy_date) }
+      organization_templates = OrganizationTemplate.where(:next_deploy_on => Time.now.to_date)
       puts "%d organization templates to deploy" % organization_templates.size
-      organization_templates.each { |ot| ot.deploy_review }
+      reviews = organization_templates.map { |ot| ot.deploy_review }
+      puts "%d reviews deployed" % reviews.size
+    end
+    
+    desc "Deploy next week's reviews"
+    task :deploy_next_week_reviews => :environment do
+      # TODO: Make the deploy date and start date configurable, rather than fixed
+      organization_templates = OrganizationTemplate.where(:next_deploy_on => Time.now.to_date + 1.week)
+      puts "%d organization templates to deploy" % organization_templates.size
+      reviews = organization_templates.map { |ot| ot.deploy_review }
+      puts "%d reviews deployed" % reviews.size
+    end
+    
+    desc "List reviews to deploy"
+    task :reviews_to_deploy => :environment do
+      OrganizationTemplate.where(:next_deploy_on => Time.now.to_date).each do |ot|
+        puts ot.inspect
+      end
     end
   end
 

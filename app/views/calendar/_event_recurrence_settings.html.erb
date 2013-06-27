@@ -24,7 +24,7 @@
 
   </style>
 
-<%= form_for @template, :url => template_set_recurrence_path(template), :method => :put do |f| %>
+<%= form_for @template, :url => template_set_recurrence_path(template), :method => :put, :remote => true do |f| %>
 <%= hidden_field_tag :frequency, 'Daily' %>
 <div class="events-recurrence">
   <!--div class="events-time">
@@ -103,10 +103,14 @@
   </div>
   
   <div class="events-recurrence-save">
-    <a href="#">Save</a>
+    <%= f.submit "Save" %>
   </div>
 </div>
 <% end %>
+
+<div>
+  <p></p>
+</div>
 
 <script>
 // Use the <OL> as a value selector for frequency
@@ -127,5 +131,12 @@
                     
                     $("input#range_start").datepicker();
   });
+  
+  $(document).on("ajax:success", function(e, data, status, xhr) {
+                                    $(".balloon[gsp-ui-balloon-active=true]").fadeOut(300, function() {
+                                                                                            $(this).attr("gsp-ui-balloon-active", "false");
+                                                                                            location.reload();
+                                                                                          });
+                                 });
 }());
 </script>
