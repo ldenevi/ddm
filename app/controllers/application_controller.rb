@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
     supported_browsers = {:chrome => 25, :firefox => 8, :ie => 10, :safari => 20, :opera => 8}
     useragent = UserAgent.parse(request.env["HTTP_USER_AGENT"])
     @is_browser_supported = (supported_browsers[useragent.browser.downcase.to_sym] && (useragent.version.to_a[0] >= supported_browsers[useragent.browser.downcase.to_sym]))
+    
+    @is_browser_supported = true
     @browser_info = request
   end
   
