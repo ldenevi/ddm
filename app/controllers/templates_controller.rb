@@ -189,6 +189,11 @@ class TemplatesController < ApplicationController
   # review ajax urls
   def review_update_attributes; update_attributes(Review, params); end
   
+  def send_ical
+    template = OrganizationTemplate.find(params[:id])
+    send_data template.ical, :filename => "%s.ics" % template.full_name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+  end
+  
 private
   def update_attributes(object, params)
     template = object.find(params[:id])

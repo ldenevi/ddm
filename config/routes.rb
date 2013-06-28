@@ -53,6 +53,7 @@ GSP::Application.routes.draw do
   put "template/set_recurrence/:id", :to => "templates#set_recurrence", :as => "template_set_recurrence"
   get "template/new", :to => "templates#new_organization_template", :as => 'new_organization_template'
   post "template/create", :to => "templates#create"
+  get "template/send_ical/:id", :to => "templates#send_ical", :as => 'send_ical'
   
   # GSP Templates
   get "admin/gsp_templates/index", :to => "admin/gsp_templates#index", :as => 'admin_templates'

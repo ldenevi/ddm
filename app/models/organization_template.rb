@@ -102,7 +102,7 @@ class OrganizationTemplate < ActiveRecord::Base
     shared
   end
   
-  # Date functions
+# Date functions
   def self.length_of_time_to_complete_review
     30.days
   end
@@ -124,11 +124,26 @@ class OrganizationTemplate < ActiveRecord::Base
     end
   end
   
+# Schedule methods
   def set_next_deploy_on
     s = Schedule.from_hash(schedule)
     dates = s.occurrences_between(Time.now, Time.now + 2.years)
     self.next_deploy_on = dates.first.nil? ? nil : dates.first.to_date
     self.save!
+  end
+  
+  def ical
+    event = ["BEGIN:VCALENDAR"]
+    event << "PRODID:-//GSP Inc//GSP Calendar//EN"
+    event << "VERSION:2.0"
+    event << "CALSCALE:GREGORIAN"
+    event << "METHOD:PUBLISH"
+    event << "BEGIN:VEVENT"
+    event << Schedule.from_hash(schedule).to_ical
+    event << "SUMMARY:#{full_name}"
+    event << "END:VEVENT"
+    event << "END:VCALENDAR"
+    event.join("\n")
   end
   
 private
