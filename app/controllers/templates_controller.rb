@@ -191,7 +191,7 @@ class TemplatesController < ApplicationController
   
   def send_ical
     template = OrganizationTemplate.find(params[:id])
-    send_data template.ical, :filename => "%s.ics" % template.full_name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+    send_data template.ical, :filename => "%s.ics" % template.regulatory_review_name.gsub!(/[^0-9A-Za-z.\-]/, '_')
   end
   
 private
