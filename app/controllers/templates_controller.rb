@@ -91,6 +91,8 @@ class TemplatesController < ApplicationController
         recurrence_weekly(schedule, params)
       when "Monthly"
         recurrence_monthly(schedule, params)
+      when "Annually"
+        recurrence_annually(schedule, params)
     end
     
     template = OrganizationTemplate.find(params[:id])
@@ -98,7 +100,8 @@ class TemplatesController < ApplicationController
     template.save!    
     template.set_next_deploy_on
     template.deploy_review if schedule.occurs_on?(Time.now)
-    redirect_to :back
+    render :text => params.inspect
+    # redirect_to :back
   end
   
   # Daily
@@ -118,6 +121,7 @@ class TemplatesController < ApplicationController
     end
   end
   
+  # Monthly
   def recurrence_monthly(schedule, params)
     case params[:monthly]
       when "day"
@@ -127,6 +131,11 @@ class TemplatesController < ApplicationController
         week[params[:monthly_weekday_day].downcase.to_sym] = [params[:monthly_weekday_ordinal].to_i]
         schedule.add_recurrence_rule(Rule.monthly(params[:monthly_weekday_interval].to_i).day_of_week(week))
     end
+  end
+  
+  # Annually
+  def recurrence_annually(schedule, params)
+    schedule.add_recurrence_rule(Rule.yearly)
   end
   
   #
@@ -191,7 +200,7 @@ class TemplatesController < ApplicationController
   
   def send_ical
     template = OrganizationTemplate.find(params[:id])
-    send_data template.ical, :filename => "%s.ics" % template.regulatory_review_name.gsub!(/[^0-9A-Za-z.\-]/, '_')
+    send_data template.ical, :filename => ("%s.ics" % template.regulatory_review_name.gsub!(/[^0-9A-Za-z.\-]/, '_'))
   end
   
 private
