@@ -100,8 +100,7 @@ class TemplatesController < ApplicationController
     template.save!    
     template.set_next_deploy_on
     template.deploy_review if schedule.occurs_on?(Time.now)
-    render :text => params.inspect
-    # redirect_to :back
+    redirect_to :back
   end
   
   # Daily
