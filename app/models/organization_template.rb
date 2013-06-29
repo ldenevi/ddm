@@ -140,7 +140,7 @@ class OrganizationTemplate < ActiveRecord::Base
     event << "METHOD:PUBLISH"
     event << "BEGIN:VEVENT"
     event << Schedule.from_hash(schedule).to_ical
-    event << "SUMMARY:#{full_name}"
+    event << "SUMMARY:#{regulatory_review_name}"
     event << "END:VEVENT"
     event << "END:VCALENDAR"
     event.join("\n")
