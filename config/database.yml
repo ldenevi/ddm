@@ -49,7 +49,7 @@ test:
 production:
   adapter: postgresql
   encoding: unicode
-  database: gsp_production
+  database: gsp_app
   pool: 5
-  username: app
-  password:
+  username: gsp_app
+  password: 6p4HLugYre5M
