@@ -16,7 +16,6 @@ module GSP::FileManager::Storage
     end
     
     def save_to_filesystem!
-      puts storage_path
       File.open(storage_path, 'wb') { |f| f.write(data) }
     end
     
