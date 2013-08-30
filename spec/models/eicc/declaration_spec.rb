@@ -1,11 +1,17 @@
 require 'spec_helper'
 
+EICC_XLS_FILEPATH = File.join(File.dirname(__FILE__), "declaration_spec_data", "eicc.xls")
+
 describe Eicc::Declaration do
   context "(in general)" do
     let (:declaration) { Eicc::Declaration.new }
     
     it "should contain required data" do
       declaration.should_not be_valid
+    end
+    
+    it "should respond to .generate" do
+      Eicc::Declaration.generate(EICC_XLS_FILEPATH).class.should eq(Eicc::Declaration)
     end
     
     it "should convert Excel into CSV" do
@@ -25,7 +31,7 @@ describe Eicc::Declaration do
   
   context "during valid Excel file submission" do
     let (:declaration) do
-      Eicc::Declaration.new :uploaded_excel => BinaryFile.generate(:filename => 'eicc.xls', :data => File.read(File.join(File.dirname(__FILE__), "declaration_spec_data", "eicc.xls")))
+      Eicc::Declaration.new :uploaded_excel => BinaryFile.generate(:filename => 'eicc.xls', :data => File.read(EICC_XLS_FILEPATH))
     end
     
     it "should convert Excel into multiple CSV files per worksheet" do

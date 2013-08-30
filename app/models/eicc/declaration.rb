@@ -50,7 +50,6 @@ class Eicc::Declaration < ActiveRecord::Base
     self.csv_worksheets.each do |csv|
       case csv.filename
       when 'eicc.csv.3'
-        # TODO create Declaration
         strip_declaration(csv.data)
         strip_minerals(csv.data)
       when 'eicc.csv.4'
@@ -63,6 +62,13 @@ class Eicc::Declaration < ActiveRecord::Base
       end
     end
     return true
+  end
+  
+  def self.generate(excel_filepath)
+    obj = new :uploaded_excel => BinaryFile.generate(:filename => 'eicc.xls', :data => File.read(excel_filepath))
+    obj.convert_to_csv
+    obj.strip_worksheets
+    obj
   end
   
 private
