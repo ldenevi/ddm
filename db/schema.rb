@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627154410) do
+ActiveRecord::Schema.define(:version => 20130828200307) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -55,6 +55,43 @@ ActiveRecord::Schema.define(:version => 20130627154410) do
   add_index "comments", ["author_id"], :name => "index_comments_on_author_id"
   add_index "comments", ["body"], :name => "index_comments_on_body"
   add_index "comments", ["title"], :name => "index_comments_on_title"
+
+  create_table "eicc_declaration_questions", :force => true do |t|
+    t.integer  "declaration_id"
+    t.integer  "sequence"
+    t.text     "question"
+    t.string   "tantalum"
+    t.text     "tantalum_comment"
+    t.string   "tungsten"
+    t.text     "tungsten_comment"
+    t.string   "tin"
+    t.text     "tin_comment"
+    t.string   "gold"
+    t.text     "gold_comment"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  create_table "eicc_declarations", :force => true do |t|
+    t.integer  "client_id"
+    t.integer  "task_id"
+    t.datetime "gsp_template_input_at"
+    t.string   "validation_status"
+    t.string   "language"
+    t.datetime "completion_at"
+    t.text     "invalid_reasons"
+    t.string   "company_name"
+    t.text     "declaration_scope"
+    t.text     "description_of_scope"
+    t.string   "company_unique_identifier"
+    t.string   "address"
+    t.string   "authorized_company_representative_name"
+    t.string   "representative_title"
+    t.string   "representative_email"
+    t.string   "representative_phone"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+  end
 
   create_table "gsp_templates", :force => true do |t|
     t.float    "price"
