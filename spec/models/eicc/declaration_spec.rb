@@ -50,6 +50,7 @@ describe Eicc::Declaration do
       declaration.mineral_questions.size.should_not eq(0)
       declaration.company_level_questions.size.should_not eq(0)
       declaration.smelter_list.size.should_not eq(0)
+      declaration.standard_smelter_names.size.should_not eq(0)
     end
   end
   

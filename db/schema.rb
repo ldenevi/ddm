@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130904194832) do
+ActiveRecord::Schema.define(:version => 20130906103843) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -122,6 +122,17 @@ ActiveRecord::Schema.define(:version => 20130904194832) do
     t.text     "comment"
     t.datetime "created_at",                                       :null => false
     t.datetime "updated_at",                                       :null => false
+  end
+
+  create_table "eicc_standard_smelter_names", :force => true do |t|
+    t.integer  "declaration_id"
+    t.string   "metal"
+    t.string   "standard_smelter_name"
+    t.string   "known_alias"
+    t.string   "facility_location_country"
+    t.string   "smelter_id"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "gsp_templates", :force => true do |t|

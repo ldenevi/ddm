@@ -15,6 +15,7 @@ class Eicc::Declaration < ActiveRecord::Base
   has_many :mineral_questions, :class_name => Eicc::MineralsQuestion
   has_many :company_level_questions, :class_name => Eicc::CompanyLevelQuestion
   has_many :smelter_list, :class_name => Eicc::SmelterList
+  has_many :standard_smelter_names, :class_name => Eicc::StandardSmelterName
   
   has_one  :uploaded_excel,  :as => :attachable, :class_name => BinaryFile
   has_many :csv_worksheets,  :as => :attachable, :class_name => BinaryFile
@@ -55,12 +56,9 @@ class Eicc::Declaration < ActiveRecord::Base
         strip_minerals(csv.data)
         strip_company_level_questions(csv.data)
       when 'eicc.csv.4'
-        # TODO create Smelter's list
         strip_smelter_list(csv.data)
-        
       when 'eicc.csv.5'
-        # TODO create standard smelter name
-        
+        strip_standard_smelter_names(csv.data)
       end
     end
     return true
@@ -236,6 +234,32 @@ private
                                                     :mineral_source_location => rows[i][smelter_list_definition[:source_country_column]],
                                                     :comment => rows[i][smelter_list_definition[:comment_column]])
       sequence += 1
+      i += 1
+    end
+  end
+  
+  # Standard smelter names
+  def standard_smelter_name_definition
+    {
+      :start_row => 2,
+      :end_row => 199,
+      :metal_column => 0,
+      :standard_smelter_name_column => 1,
+      :known_alias_column => 2,
+      :facility_location_column => 3,
+      :smelter_id_column => 4
+    }
+  end
+  
+  def strip_standard_smelter_names(csv)
+    rows  = CSV.new(csv).read
+    i     = standard_smelter_name_definition[:start_row]
+    while i < standard_smelter_name_definition[:end_row]
+      self.standard_smelter_names << Eicc::StandardSmelterName.new(:metal => rows[i][standard_smelter_name_definition[:metal_column]],
+                                                                      :standard_smelter_name => rows[i][standard_smelter_name_definition[:standard_smelter_name_column]],
+                                                                      :known_alias => rows[i][standard_smelter_name_definition[:known_alias_column]],
+                                                                      :facility_location_country => rows[i][standard_smelter_name_definition[:facility_location_column]],
+                                                                      :smelter_id => rows[i][standard_smelter_name_definition[:smelter_id_column]])
       i += 1
     end
   end
