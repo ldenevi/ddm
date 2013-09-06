@@ -8,6 +8,9 @@ describe Eicc::Declaration do
     
     it "should contain required data" do
       declaration.should_not be_valid
+      declaration.should respond_to :mineral_questions
+      declaration.should respond_to :company_level_questions
+      declaration.should respond_to :smelter_list
     end
     
     it "should respond to .generate" do
@@ -43,7 +46,10 @@ describe Eicc::Declaration do
       declaration.convert_to_csv.should be_true
       declaration.should respond_to(:strip_worksheets)
       declaration.strip_worksheets.should be_true
+      
       declaration.mineral_questions.size.should_not eq(0)
+      declaration.company_level_questions.size.should_not eq(0)
+      declaration.smelter_list.size.should_not eq(0)
     end
   end
   

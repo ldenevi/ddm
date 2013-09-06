@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130828200307) do
+ActiveRecord::Schema.define(:version => 20130904194832) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -56,20 +56,14 @@ ActiveRecord::Schema.define(:version => 20130828200307) do
   add_index "comments", ["body"], :name => "index_comments_on_body"
   add_index "comments", ["title"], :name => "index_comments_on_title"
 
-  create_table "eicc_declaration_questions", :force => true do |t|
+  create_table "eicc_company_level_questions", :force => true do |t|
     t.integer  "declaration_id"
     t.integer  "sequence"
     t.text     "question"
-    t.string   "tantalum"
-    t.text     "tantalum_comment"
-    t.string   "tungsten"
-    t.text     "tungsten_comment"
-    t.string   "tin"
-    t.text     "tin_comment"
-    t.string   "gold"
-    t.text     "gold_comment"
-    t.datetime "created_at",       :null => false
-    t.datetime "updated_at",       :null => false
+    t.text     "answer",         :default => ""
+    t.text     "comment"
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
   end
 
   create_table "eicc_declarations", :force => true do |t|
@@ -91,6 +85,43 @@ ActiveRecord::Schema.define(:version => 20130828200307) do
     t.string   "representative_phone"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+  end
+
+  create_table "eicc_minerals_questions", :force => true do |t|
+    t.integer  "declaration_id"
+    t.integer  "sequence"
+    t.text     "question"
+    t.string   "tantalum",         :default => ""
+    t.text     "tantalum_comment"
+    t.string   "tungsten",         :default => ""
+    t.text     "tungsten_comment"
+    t.string   "tin",              :default => ""
+    t.text     "tin_comment"
+    t.string   "gold",             :default => ""
+    t.text     "gold_comment"
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
+  create_table "eicc_smelter_lists", :force => true do |t|
+    t.integer  "declaration_id"
+    t.integer  "line_number"
+    t.string   "metal",                            :default => ""
+    t.string   "smelter_reference_list",           :default => ""
+    t.string   "standard_smelter_name",            :default => ""
+    t.string   "facility_location_country",        :default => ""
+    t.string   "smelter_id"
+    t.string   "facility_location_street_address"
+    t.string   "facility_location_city"
+    t.string   "facility_location_province"
+    t.string   "facility_contact_name"
+    t.string   "facility_contact_email"
+    t.string   "proposed_next_steps"
+    t.string   "mineral_source"
+    t.string   "mineral_source_location"
+    t.text     "comment"
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
   end
 
   create_table "gsp_templates", :force => true do |t|
@@ -208,7 +239,7 @@ ActiveRecord::Schema.define(:version => 20130828200307) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-06-13 21:24:55', :null => false
+    t.datetime "expected_completion_at", :default => '2013-09-18 17:25:29', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
