@@ -235,7 +235,8 @@ private
                                                     :mineral_source => rows[i][smelter_list_definition[:source_column]],
                                                     :mineral_source_location => rows[i][smelter_list_definition[:source_country_column]],
                                                     :comment => rows[i][smelter_list_definition[:comment_column]])
-      sequence += 1     
+      sequence += 1
+      i += 1
     end
   end
   
