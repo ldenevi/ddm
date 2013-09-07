@@ -6,8 +6,8 @@ class Notifications::Reviews < ActionMailer::Base
   #
   #   en.notification.reviews.deploy.subject
   #
-  def deploy(review)
-    @greeting = "E-Mail test, breh"
+  def deploy_test(review)
+    @greeting = "E-Mail test"
     mail :to => "leo.denevi@greenstatuspro.com", :subject => "[TEST] Review #{review.name} deployed" #email
   end
   
