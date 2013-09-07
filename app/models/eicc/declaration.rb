@@ -179,9 +179,9 @@ private
     sequence = 0
     
     while i < company_level_questions_definition[:end_row]
-      question = rows[i][company_level_questions_definition[:question_column]]
-      answer   = rows[i][company_level_questions_definition[:answer_column]]
-      comment  = rows[i][company_level_questions_definition[:comment_column]]
+      question = rows[i][company_level_questions_definition[:question_column]] || ""
+      answer   = rows[i][company_level_questions_definition[:answer_column]] || ""
+      comment  = rows[i][company_level_questions_definition[:comment_column]] || ""
       
       i += 2
       

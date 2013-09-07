@@ -1,11 +1,11 @@
 class CreateBinaryFiles < ActiveRecord::Migration
   def change
     create_table :binary_files do |t|
-      t.string  :filename,        :null => false
+      t.string  :filename,        :null => true
       # t.binary  :data,            :null => false
-      t.text    :mime_types,      :null => false
-      t.integer :attachable_id,   :null => false
-      t.string  :attachable_type, :null => false
+      t.text    :mime_types,      :null => true
+      t.integer :attachable_id,   :null => true
+      t.string  :attachable_type, :null => true
       t.string  :type
       
       # GSP::FileManager::Storage

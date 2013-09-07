@@ -1,4 +1,12 @@
 GSP::Application.routes.draw do
+
+  # EICC Declaration
+  get "eicc/declaration/index"
+  get "eicc/declaration/list"
+  get "eicc/declaration/new"
+  get "eicc/declaration/show"
+  post "eicc/declaration/upload"
+
   get "reviews/list"
 
   get "reviews/show"

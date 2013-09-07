@@ -25,10 +25,10 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
   add_index "agencies", ["name"], :name => "index_agencies_on_name"
 
   create_table "binary_files", :force => true do |t|
-    t.string   "filename",        :null => false
-    t.text     "mime_types",      :null => false
-    t.integer  "attachable_id",   :null => false
-    t.string   "attachable_type", :null => false
+    t.string   "filename"
+    t.text     "mime_types"
+    t.integer  "attachable_id"
+    t.string   "attachable_type"
     t.string   "type"
     t.string   "storage_path",    :null => false
     t.datetime "created_at",      :null => false
@@ -58,8 +58,8 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
 
   create_table "eicc_company_level_questions", :force => true do |t|
     t.integer  "declaration_id"
-    t.integer  "sequence"
-    t.text     "question"
+    t.integer  "sequence",       :default => 0
+    t.text     "question",       :default => ""
     t.text     "answer",         :default => ""
     t.text     "comment"
     t.datetime "created_at",                     :null => false
@@ -250,7 +250,7 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-09-18 17:25:29', :null => false
+    t.datetime "expected_completion_at", :default => '2013-09-21 20:04:26', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
