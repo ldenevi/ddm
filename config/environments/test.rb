@@ -29,11 +29,11 @@ GSP::Application.configure do
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address              => "smtpout.secureserver.net",
-    :port                 => 25,
+    :address              => "smtp.mandrillapp.com",
+    :port                 => 587,
     :domain               => 'greenstatuspro.com',
-    :user_name            => 'gsp-notification@greenstatuspro.com',
-    :password             => 'abcd1234',
+    :user_name            => 'john.logan@greenstatuspro.com',
+    :password             => 'OZyacctNtHnJ8BSZLlTpLw',
     :authentication       => 'plain',
     :enable_starttls_auto => true
   }
