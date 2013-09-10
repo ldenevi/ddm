@@ -53,3 +53,4 @@ production:
   pool: 5
   username: gsp_app
   password: 6p4HLugYre5M
+  host: 10.62.29.5
