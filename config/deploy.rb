@@ -1,7 +1,7 @@
 require 'bundler/capistrano'
 
 set :application, "GSP App"
-set :repository,  "ssh://git@leverett.greenstatuspro.com/home/git/repositories/gsp-app.git"
+set :repository,  "ssh://git@gitlab.greenstatuspro.com:gsp-app.git"
 
 set :scm, :git
 set :branch, "master"
