@@ -25,10 +25,10 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
   add_index "agencies", ["name"], :name => "index_agencies_on_name"
 
   create_table "binary_files", :force => true do |t|
-    t.string   "filename"
-    t.text     "mime_types"
-    t.integer  "attachable_id"
-    t.string   "attachable_type"
+    t.string   "filename",        :null => false
+    t.text     "mime_types",      :null => false
+    t.integer  "attachable_id",   :null => false
+    t.string   "attachable_type", :null => false
     t.string   "type"
     t.string   "storage_path",    :null => false
     t.datetime "created_at",      :null => false
@@ -250,7 +250,7 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-09-21 20:04:26', :null => false
+    t.datetime "expected_completion_at", :default => '2013-09-25 15:56:39', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
