@@ -29,5 +29,17 @@ describe Eicc::DeclarationController do
       response.should be_success
     end
   end
+  
+  describe "POST 'upload'" do
+
+    it "can upload a license" do
+      filepath = File.join(Rails.root, 'spec/models/eicc/declaration_spec_data/eicc.xls')
+      file     = File.open(filepath)
+      uploaded_file = ActionDispatch::Http::UploadedFile.new(:tempfile => file, :filename => File.basename(filepath), :content_type => 'application/vnd.ms-excel')
+      
+      post :upload, :attachment => uploaded_file
+      response.should be_success
+    end
+  end
 
 end
