@@ -3,5 +3,5 @@ class Eicc::CompanyLevelQuestion < ActiveRecord::Base
   
   validates :question, :presence => true
   validates :sequence, :presence => true, :numericality => { :only_integer => true, :message => "'%{value}' is not a number" }
-  validates :answer,   :inclusion => { :in => %(Yes No), :message => "'%{value}' is not either 'Yes' or 'No'" }
+  validates :answer,   :inclusion => { :in => ['Yes', 'No'], :message => "'%{value}' is not either 'Yes' or 'No'" }
 end
