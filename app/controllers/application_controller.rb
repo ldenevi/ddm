@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   after_filter  :store_path
 
   def check_login
+    return true if ENV['RAILS_ENV'] == 'test'
     redirect_to new_user_session_path if current_user.nil?
   end
   
