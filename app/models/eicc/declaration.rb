@@ -17,10 +17,10 @@ class Eicc::Declaration < ActiveRecord::Base
   has_many :smelter_list, :class_name => Eicc::SmelterList
   has_many :standard_smelter_names, :class_name => Eicc::StandardSmelterName
   
-  has_one  :uploaded_excel,  :as => :attachable, :class_name => BinaryFile
+  has_one  :uploaded_excel,  :as => :attachable, :class_name => Spreadsheet
   has_many :csv_worksheets,  :as => :attachable, :class_name => BinaryFile
   has_one  :csv_declaration, :as => :attachable, :class_name => BinaryFile
-  has_one  :cas_smelter_list, :as => :attachable, :class_name => BinaryFile
+  has_one  :csv_smelter_list, :as => :attachable, :class_name => BinaryFile
   has_one  :csv_standard_smelter_names, :as => :attachable, :class_name => BinaryFile
   
   require 'fileutils'
