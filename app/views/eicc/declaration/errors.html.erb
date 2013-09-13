@@ -1,0 +1,55 @@
+<div id="eicc_declaration_report_">
+  <section>
+    <ul>
+      <li><span>Company name: </span>  <span><%= @declaration.errors[:company_name].first %></span></li>
+      <li><span>Declaration scope: </span>  <span><%= @declaration.errors[:declaration_scope].first %></span></li>
+      <li><span>Description of scope: </span>  <span><%= @declaration.errors[:description_of_scope].first %></span></li>
+      <li><span>Company unique identifier: </span>  <span><%= @declaration.errors[:company_unique_identifier].first %></span></li>
+      <li><span>Address: </span>  <span><%= @declaration.errors[:address].first %></span></li>
+      <li><span>Authorized company representative name: </span>  <span><%= @declaration.errors[:authorized_company_representative_name].first %></span></li>
+      <li><span>Representative title: </span>  <span><%= @declaration.errors[:representative_title].first %></span></li>
+      <li><span>Representative email: </span>  <span><%= @declaration.errors[:representative_email].first %></span></li>
+      <li><span>Representative phone: </span>  <span><%= @declaration.errors[:representative_phone].first %></span></li>
+      <li><span>Date of completion: </span>  <span><%= @declaration.errors[:completion_at].first %></span></li>
+    </ul>
+  </section>
+  
+  
+  <section>
+    <ul>
+      <% @declaration.mineral_questions.each do |mq| %>
+      <li>
+        <p><span><%= mq.question %></span></p>
+        <p>
+          <span>Tin</span> <span><%= mq.errors[:tin].first %></span><br>
+          <span>Tantalum</span> <span><%= mq.errors[:tantalum].first %></span><br>
+          <span>Tungsten</span> <span><%= mq.errors[:tungsten].first %></span><br>
+          <span>Gold</span> <span><%= mq.errors[:gold].first %></span><br>
+        </p>
+      </li>
+      <% end %>
+    </ul>
+  </section>
+  
+  
+  <section>
+    <ul>
+      <% @declaration.company_level_questions.each do |clq| %>
+      <li>
+        <p><span><%= clq.question %></span></p>
+        <p>
+          <span>Answer</span> <span><%= clq.errors[:answer].first %></span><br>
+          <span>Comment</span> <span><%= clq.errors[:comment].first %></span><br>
+        </p>
+      </li>
+      <% end %>
+    </ul>
+  </section>
+  
+  
+  <section>
+    <ul>
+      <li><span><%= %></span>  <span><%= %></span></li>
+    </ul>
+  </section>
+</div>

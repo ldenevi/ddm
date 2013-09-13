@@ -12,7 +12,8 @@ class Eicc::DeclarationController < ApplicationController
   end
   
   def upload
-    begin
+    beginMultiple
+Excels
       if params[:attachment]
         # TODO Temporary file storage management
         temppath = File.join('tmp', 'uploaded_files')
@@ -26,6 +27,8 @@ class Eicc::DeclarationController < ApplicationController
         
         dec.valid?
         @errors = dec.errors.inspect
+        @declaration = dec
+        render :template => 'eicc/declaration/errors'
       end
       
     end
