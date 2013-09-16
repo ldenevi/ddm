@@ -5,13 +5,23 @@ class Eicc::Declaration < ActiveRecord::Base
                   :invalid_reasons, :language, :representative_email,
                   :representative_phone, :representative_title, :task_id, :validation_status,
                   :uploaded_excel
+                  
+  # FIXME Find a better way to load this file into memory
+  def self.error_messages
+    @@error_messages = YAML::load_file("config/eicc_validation_error_messages.yml")
+  end
 
-  validates :authorized_company_representative_name, :client_id,
-            :company_name, :completion_at,
-            :declaration_scope, :gsp_template_input_at,
-            :invalid_reasons, :language, :representative_email,
-            :task_id, :validation_status, :presence => true
-           
+  validates :client_id, :presence => true
+  validates :company_name, :presence => { :message => ": You must provide your company name on the declaration tab cell D8." }
+  validates :declaration_scope, :presence => { :message => ": You must determine the scope of declaration on the declaration tab cell D9." }
+  validates :authorized_company_representative_name, :presence => { :message => ": You must provide Authorized Company Representative contact name in Declaration tab cell D14." }
+  validates :representative_email, :presence => { :message => ": You must provide an email for Authorized Company Representative on Declaration tab cell D16." }
+  validates :completion_at, :presence => { :message => ": You must provide date the form was completed on Declaration tab cell D18." }
+
+  validates_each :language do |record, attr, value|
+    record.errors.add(attr, (": For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%s' as per the SEC rules, the report must be submitted in English.  Therefore, we cannot accept this report.  Please re-submit the report in English." % record.uploaded_excel.filename)) if value.nil? || ["English"].include?(value)
+  end  
+  
   has_many :mineral_questions, :class_name => Eicc::MineralsQuestion
   has_many :company_level_questions, :class_name => Eicc::CompanyLevelQuestion
   has_many :smelter_list, :class_name => Eicc::SmelterList
@@ -26,6 +36,8 @@ class Eicc::Declaration < ActiveRecord::Base
   require 'fileutils'
   require 'digest/md5'
   require 'csv'
+  
+  
   def convert_to_csv
     # ./tmp/eicc_conversions/UID
     @dirpath = File.join(Rails.root, "tmp", "eicc_conversions", Digest::MD5.hexdigest(Time.now.to_s + rand.to_s))
@@ -70,6 +82,13 @@ class Eicc::Declaration < ActiveRecord::Base
     obj.strip_worksheets
     obj
   end
+  
+  
+  def validate_fields
+    
+  end
+  
+  
   
 private
 

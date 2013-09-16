@@ -6,6 +6,7 @@ GSP::Application.routes.draw do
   get "eicc/declaration/new"
   get "eicc/declaration/show"
   post "eicc/declaration/upload"
+  post "eicc/declaration/validate_single_eicc_spreadsheet"
 
   get "reviews/list"
 

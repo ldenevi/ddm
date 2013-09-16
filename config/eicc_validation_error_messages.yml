@@ -1,0 +1,24 @@
+---
+:unknown_file_format: ! 'For the Conflict Minerals reporting requirement, your EICC-GeSI
+  Conflict Minerals Report, “%s” does not have an xls. or .xlsx extension.  Therefore,
+  our system could not read the file.  Please re-submit per EICC-GeSI instruction
+  #8, with the file name format: companyname-date.xls (date as YYYY-DD-MM)'
+:not_english: For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict
+  Minerals Report, “Submitted File Name” as per the SEC rules, the report must be
+  submitted in English.  Therefore, we cannot accept this report.  Please re-submit
+  the report in English.
+:missing_information: For the Conflict Minerals reporting requirement, it is mandatory
+  that you provide data for all required fields in your EICC-GeSI Conflict Minerals
+  report, original file name.  You have not provided the required information. Therefore,
+  we cannot accept this report.  Please provide that following missing information
+  and resubmit this report.
+:missing_information_details:
+  :company_name: You must provide your company name on the declaration tab cell D8.
+  :declaration_scope: You must determine the scope of declaration on the declaration
+    tab cell D9.
+  :representative_name: You must provide Authorized Company Representative contact
+    name in Declaration tab cell D14.
+  :representative_email: You must provide an email for Authorized Company Representative
+    on Declaration tab cell D16.
+  :completion_date: You must provide date the form was completed on Declaration tab
+    cell D18.

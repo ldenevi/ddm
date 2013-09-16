@@ -1,8 +1,8 @@
 <h1>Eicc::Declaration#new</h1>
 <p>Find me in app/views/eicc/declaration/new.html.erb</p>
 
-<%= form_tag('upload', :multipart => true) do |form| %>
-  <%= label_tag :attachment, :'Attach file' %>: <%= file_field_tag :attachment %>
+<%= form_tag('validate_single_eicc_spreadsheet', :multipart => true) do |form| %>
+  <%= label_tag :spreadsheet, :'Attach file' %>: <%= file_field_tag :spreadsheet %>
   <br>
   <%= submit_tag "submit",  :disable_with => 'Uploading...', :class => 'submit' %>
 <% end %>

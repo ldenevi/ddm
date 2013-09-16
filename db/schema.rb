@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130906103843) do
+ActiveRecord::Schema.define(:version => 20130913223310) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -135,6 +135,20 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
     t.datetime "updated_at",                :null => false
   end
 
+  create_table "eicc_validation_statuses", :force => true do |t|
+    t.string   "type"
+    t.integer  "parent_id"
+    t.integer  "user_id"
+    t.string   "uploaded_file_path"
+    t.string   "filename"
+    t.string   "status",                                              :null => false
+    t.string   "representative_email"
+    t.text     "message"
+    t.boolean  "is_spreadsheet_return_email_sent", :default => false
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
+  end
+
   create_table "gsp_templates", :force => true do |t|
     t.float    "price"
     t.integer  "agency_id"
@@ -250,7 +264,7 @@ ActiveRecord::Schema.define(:version => 20130906103843) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-09-25 15:56:39', :null => false
+    t.datetime "expected_completion_at", :default => '2013-09-29 20:03:20', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false

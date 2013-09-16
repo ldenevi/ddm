@@ -8,10 +8,10 @@ describe Eicc::MineralsQuestion do
       invalid_doc.should_not be_valid
       expect(invalid_doc.errors.full_messages).to include("Sequence '' is not a number")
       expect(invalid_doc.errors.full_messages).to include("Question can't be blank")
-      expect(invalid_doc.errors.full_messages).to include("Gold '' is not either 'Yes', 'No', nor 'Unknown'")
-      expect(invalid_doc.errors.full_messages).to include("Tantalum '' is not either 'Yes', 'No', nor 'Unknown'")
-      expect(invalid_doc.errors.full_messages).to include("Tin '' is not either 'Yes', 'No', nor 'Unknown'")
-      expect(invalid_doc.errors.full_messages).to include("Tungsten '' is not either 'Yes', 'No', nor 'Unknown'")
+      expect(invalid_doc.errors.full_messages).to include("Gold : You must declare if Gold is in use within the scope of products declared within this survey response on the Declaration tab cell D24.")
+      expect(invalid_doc.errors.full_messages).to include("Tantalum : You must declare if Tantalum is in use within the scope of products declared within this survey response on the Declaration tab cell D22.")
+      expect(invalid_doc.errors.full_messages).to include("Tin : You must declare if Tin is in use within the scope of products declared within this survey response on the Declaration tab cell D23.")
+      expect(invalid_doc.errors.full_messages).to include("Tungsten : You must declare if Tungsten is in use within the scope of products declared within this survey response on the Declaration tab cell D25.")
     end
   end
   
