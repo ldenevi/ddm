@@ -1,2 +1,86 @@
-<h1>Eicc::Declaration#index</h1>
-<p>Find me in app/views/eicc/declaration/index.html.erb</p>
+<p><%= image_tag "/assets/eicc/eicc_gesi.png" %></p>
+
+
+<style>
+  #new_button {
+    padding: 20px;
+    background-color:cadetblue;
+    color: white;
+  }
+  
+    #new_button a,
+    #new_button a:visited,
+    #new_button a:link {
+      color:white;
+      text-decoration:none;
+      font-weight: bold;
+    }
+    
+    #new_button a:hover {
+      text-decoration:underline;
+    }
+  
+  
+  #processed-declarations table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+    #processed-declarations table td {
+      text-align: center;
+    }
+  
+  #processed-declarations table, td, th {
+    border: 1px solid black;
+    padding: 5px;
+    margin: 0;
+  }
+</style>
+
+<div id="new_button">
+  <%= link_to "> Begin new EICC-GeSI declaration check...", begin_new_eicc_declaration_check_path %>
+</div>
+
+<hr>
+
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Previously processed</a></li>
+    <li><a href="#tabs-2">Help</a></li>
+  </ul>
+
+  <div id="tabs-1 processed-declarations">
+    <table>
+      <thead>
+        <tr>
+          <th>Uploaded at</th>
+          <th title="Number of uploaded declarations">Declarations</th>
+          <th title="Number of risky declarations">Risks</th>
+          <th>Reports</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @validation_statuses.each do |vs| %>
+        <tr>
+          <td><%= link_to vs.created_at.to_formatted_s(:local), upload_eicc_declarations_path(vs.id) %></td>
+          <td><%= vs.individual_validation_statuses.size %></td>
+          <td><%= 0 %></td>
+          <td>View</td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+  <div id="tabs-2">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris auctor posuere hendrerit. Suspendisse aliquet augue quis lacus vehicula, suscipit pharetra nulla fringilla. Cras quis blandit velit. Maecenas sit amet ipsum eros. Maecenas vel venenatis ligula. Vestibulum porttitor aliquet ante quis fringilla. Phasellus hendrerit faucibus dolor quis ornare. Sed rutrum metus eget dolor ornare auctor. Praesent ac leo non eros vulputate tempus a id nisi.</p>
+
+    <p>Sed tincidunt, velit sed accumsan congue, mi lectus malesuada turpis, vel egestas neque magna id est. Cras mollis tellus sit amet purus elementum, a lobortis sapien pulvinar. Sed in tempus libero. Quisque eu diam luctus, mollis tellus vel, volutpat eros. Duis iaculis, turpis eget dictum varius, velit tellus consectetur dolor, eget condimentum felis nisl sit amet purus. Pellentesque aliquet tempor lacus, sed aliquet lectus hendrerit eu. Etiam in sollicitudin diam. Proin quis erat ut sapien convallis congue ac quis tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam lacinia dapibus placerat. In consequat, est eget tincidunt ornare, sem leo dignissim ligula, id rutrum odio enim eget neque.</p>
+
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut rhoncus erat. Maecenas ac semper nisi. Suspendisse aliquam varius urna a bibendum. Vivamus nec congue arcu. Nam sagittis libero in suscipit luctus. Vestibulum bibendum, nulla vel hendrerit egestas, risus ante pharetra leo, quis consectetur eros quam eget ante.</p>
+  </div>
+</div>
+
+<script>
+  $(document).ready( function() {  $( "#tabs" ).tabs(); });
+</script>

@@ -1,14 +1,18 @@
 class Eicc::DeclarationController < ApplicationController
   def index
+    @validation_statuses = Eicc::ValidationStatus.where :parent_id => nil
   end
 
   def list
   end
 
   def new
+    @validation_status = Eicc::ValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
+    redirect_to :action => :show, :id => @validation_status.id
   end
 
   def show
+    @validation_status = Eicc::ValidationStatus.find params[:id]
   end
   
   def upload
@@ -35,15 +39,18 @@ class Eicc::DeclarationController < ApplicationController
   
   
   def validate_single_eicc_spreadsheet
+    successully_processed = false
+  
     begin
       @validation_status = begin
         begin
           Eicc::ValidationStatus.find params[:validation_status_id]
         rescue
-          Eicc::ValidationStatus.create :status => "Processing", :representative_email => current_user.email
+          Eicc::ValidationStatus.create :status => "Processing", :representative_email => (current_user.nil? ? nil : current_user.email)
         end
       end
-
+      
+      @validation_status.update_attributes(:status => "Processing")
       
       # FIXME This assumes all file storage is successful
       @temporary_filepath = generate_temporary_filepath(params[:spreadsheet].original_filename)
@@ -58,27 +65,57 @@ class Eicc::DeclarationController < ApplicationController
       @validation_status.individual_validation_statuses << @individual_validation_status
       @validation_status.save!
 
-      begin                   
+      begin        
+      
+        # Attempt to read and validate declaration without raising any expectations           
         @declaration = Eicc::Declaration.generate File.join(@temporary_filepath)
+        
+        20.times { puts @declaration.uploaded_excel.storage_path }
         
         @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet")
         if @declaration.valid?
-          @individual_validation_status.update_attributes(:status => "Green", :representative_email => @declaration.representative_email, :message => "")
+          @individual_validation_status.update_attributes(:status => "Green",
+                                                          :representative_email => @declaration.representative_email,
+                                                          :company_name => @declaration.company_name,
+                                                          :message => "")
         else
           # TODO Metric validations, generate clear report
-          @individual_validation_status.update_attributes(:status => "Invalid", :representative_email => @declaration.representative_email, :message => @declaration.errors.full_messages.uniq)
+          @individual_validation_status.update_attributes(:status => "Invalid", 
+                                                          :representative_email => @declaration.representative_email,
+                                                          :company_name => @declaration.company_name,
+                                                          :message => @declaration.errors.full_messages.uniq.to_json)
         end
         
+        successully_processed = true
+        
+        
+      # An exception was raised for any reason
       rescue
-        # TODO E-Mail Leo
-        @individual_validation_status.update_attributes(:status => "Error", :representative_email => @declaration.representative_email, :message => (Eicc::Declaration[:unknown_file_format] % params[:spreadsheet].original_filename))
+        @individual_validation_status.update_attributes(:status => "Error",
+                                                        :representative_email => (@declaration.nil? ? "" : @declaration.representative_email),
+                                                        :company_name =>(@declaration.nil? ? "" :  @declaration.company_name),
+                                                        :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename))
         @validation_status.update_attributes(:status => "Error")
+        # TODO E-Mail Leo
+        successully_processed = false
       end
       
-
     ensure
       @validation_status.update_attributes(:status => "Completed")
     end
+    
+        
+    render :json => { :success => successully_processed }
+  end
+  
+  # TODO Only pull validation status of current_user
+  def show_validation_statuses
+    @validation_status = Eicc::ValidationStatus.find params[:id]
+    render :layout => false
+  end
+  
+  def download_uploaded_eicc_spreadsheet
+    send_file Eicc::IndividualValidationStatus.find(params[:id]).uploaded_file_path
   end
   
 private

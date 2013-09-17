@@ -139,10 +139,12 @@ ActiveRecord::Schema.define(:version => 20130913223310) do
     t.string   "type"
     t.integer  "parent_id"
     t.integer  "user_id"
+    t.integer  "declaration_id"
     t.string   "uploaded_file_path"
     t.string   "filename"
     t.string   "status",                                              :null => false
     t.string   "representative_email"
+    t.string   "company_name"
     t.text     "message"
     t.boolean  "is_spreadsheet_return_email_sent", :default => false
     t.datetime "created_at",                                          :null => false
@@ -264,7 +266,7 @@ ActiveRecord::Schema.define(:version => 20130913223310) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-09-29 20:03:20', :null => false
+    t.datetime "expected_completion_at", :default => '2013-10-01 17:10:20', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false

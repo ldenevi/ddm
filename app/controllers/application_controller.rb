@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :check_login
+  before_filter :check_login, :except => :validate_single_eicc_spreadsheet
   after_filter  :store_path
 
   def check_login

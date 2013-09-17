@@ -1,0 +1,23 @@
+<table border="1">
+  <tr>
+    <td><%= @validation_status.status %></td>
+    <td><%= @validation_status.user.eponym %></td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td><%= @validation_status.message %></td>
+    <td>&nbsp;</td>
+    <td><%= @validation_status.uploaded_at %></td>
+  </tr>
+  
+  <% @validation_status.individual_validation_statuses.each do |ivs| %>
+  <tr>
+    <td><%= ivs.status %></td>
+    <td><%= ivs.company_name %></td>
+    <td><%= ivs.representative_email %></td>
+    <td><%= link_to ivs.filename, download_uploaded_eicc_spreadsheet_path(ivs.id) %></td>
+    <td><%= ivs.message %></td>
+    <td><%= ivs.is_spreadsheet_return_email_sent %></td>
+    <td><%= ivs.uploaded_at %></td>
+  </tr>
+  <% end %>
+</table>

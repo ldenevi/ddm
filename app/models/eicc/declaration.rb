@@ -18,9 +18,11 @@ class Eicc::Declaration < ActiveRecord::Base
   validates :representative_email, :presence => { :message => ": You must provide an email for Authorized Company Representative on Declaration tab cell D16." }
   validates :completion_at, :presence => { :message => ": You must provide date the form was completed on Declaration tab cell D18." }
 
+=begin
   validates_each :language do |record, attr, value|
-    record.errors.add(attr, (": For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%s' as per the SEC rules, the report must be submitted in English.  Therefore, we cannot accept this report.  Please re-submit the report in English." % record.uploaded_excel.filename)) if value.nil? || ["English"].include?(value)
-  end  
+    record.errors.add(attr, ": For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%%' as per the SEC rules, the report must be submitted in English.  Therefore, we cannot accept this report.  Please re-submit the report in English.") if value.nil? || ["English"].include?(value)
+  end 
+=end 
   
   has_many :mineral_questions, :class_name => Eicc::MineralsQuestion
   has_many :company_level_questions, :class_name => Eicc::CompanyLevelQuestion
@@ -55,7 +57,7 @@ class Eicc::Declaration < ActiveRecord::Base
     ensure
       # There should be a set of CSV files outputted
       return false if Dir.glob(File.join(@dirpath, "*.csv.*")).empty?
-      FileUtils.rm_rf @dirpath
+      ## FileUtils.rm_rf @dirpath
     end
     return true
   end
@@ -77,12 +79,16 @@ class Eicc::Declaration < ActiveRecord::Base
   end
   
   def self.generate(excel_filepath)
-    obj = new :uploaded_excel => BinaryFile.generate(:filename => 'eicc.xls', :data => File.read(excel_filepath))
+    obj = new :uploaded_excel => BinaryFile.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
     obj.convert_to_csv
     obj.strip_worksheets
     obj
   end
   
+  
+  def self.unknown_file_format
+    "For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%s' does not have an xls. or .xlsx extension, or is not an Excel spreadsheet.  Therefore, our system could not read the file.  Please re-submit per EICC-GeSI instruction #8, with the file name format: companyname-date.xls (date as YYYY-DD-MM)"
+  end
   
   def validate_fields
     
@@ -97,6 +103,7 @@ private
       :company_name => {:row => 6, :column => 3},
       :declaration_scope => {:row => 7, :column => 3},
       :description_of_scope => {:row => 8, :column => 3},
+      :language => {:row => 1, :column => 11},
       :company_unique_identifier => {:row => 10, :column => 3},
       :address => {:row => 11, :column => 3},
       :authorized_company_representative_name => {:row => 12, :column => 3},
@@ -116,6 +123,8 @@ private
         self.declaration_scope = row[declaration_cell_definition[:declaration_scope][:column]]
       when declaration_cell_definition[:description_of_scope][:row]
         self.description_of_scope = row[declaration_cell_definition[:description_of_scope][:column]]
+      when declaration_cell_definition[:language][:row]
+        self.language = "English" # row[declaration_cell_definition[:language][:column]]
       when declaration_cell_definition[:company_unique_identifier][:row]
         self.company_unique_identifier = row[declaration_cell_definition[:company_unique_identifier][:column]]
       when declaration_cell_definition[:address][:row]

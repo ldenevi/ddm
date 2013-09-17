@@ -3,10 +3,12 @@ GSP::Application.routes.draw do
   # EICC Declaration
   get "eicc/declaration/index"
   get "eicc/declaration/list"
-  get "eicc/declaration/new"
-  get "eicc/declaration/show"
+  get "eicc/declaration/new", :to => "eicc/declaration#new", :as => "begin_new_eicc_declaration_check"
+  get "eicc/declaration/show/:id", :to => "eicc/declaration#show", :as => "upload_eicc_declarations"
   post "eicc/declaration/upload"
-  post "eicc/declaration/validate_single_eicc_spreadsheet"
+  post "eicc/declaration/validate_single_eicc_spreadsheet/:validation_status_id", :to => "eicc/declaration#validate_single_eicc_spreadsheet"
+  get "eicc/declaration/show_validation_statuses/:id", :to => "eicc/declaration#show_validation_statuses"
+  get "eicc/declaration/download_uploaded_eicc_spreadsheet/:id", :to => "eicc/declaration#download_uploaded_eicc_spreadsheet", :as => "download_uploaded_eicc_spreadsheet"
 
   get "reviews/list"
 
