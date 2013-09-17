@@ -1,23 +1,84 @@
-<table border="1">
-  <tr>
-    <td><%= @validation_status.status %></td>
-    <td><%= @validation_status.user.eponym %></td>
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-    <td><%= @validation_status.message %></td>
-    <td>&nbsp;</td>
-    <td><%= @validation_status.uploaded_at %></td>
-  </tr>
+<style>
+  #individual_validation_statuses table {
+    border-collapse: collapse;
+    font-size: 8pt;
+  }
   
-  <% @validation_status.individual_validation_statuses.each do |ivs| %>
-  <tr>
-    <td><%= ivs.status %></td>
-    <td><%= ivs.company_name %></td>
-    <td><%= ivs.representative_email %></td>
-    <td><%= link_to ivs.filename, download_uploaded_eicc_spreadsheet_path(ivs.id) %></td>
-    <td><%= ivs.message %></td>
-    <td><%= ivs.is_spreadsheet_return_email_sent %></td>
-    <td><%= ivs.uploaded_at %></td>
-  </tr>
-  <% end %>
-</table>
+    #individual_validation_statuses th,
+    #individual_validation_statuses td {
+      padding: 3px;
+      border: 1px solid grey;
+    }
+    
+    #individual_validation_statuses th {
+      background-color: #3BA173;
+      color: white;
+      white-space:nowrap;
+    }
+  #overview table {
+    border-collapse: collapse;
+    font-size: 8pt;
+    width: 450px;
+  }
+  
+    #overview td {
+      padding: 5px;
+    }
+</style>
+
+<div id="overview">
+  <table border="1">
+    <tr>
+      <td>Processed on:</td>
+      <td><%= @validation_status.updated_at.to_formatted_s(:review_date) %></td>
+    </tr>
+    <tr>
+      <td># processed:</td>
+      <td><%= @validation_status.individual_validation_statuses.size %></td>
+    </tr>
+    <tr>
+      <td>Admin:</td>
+      <td><%= @validation_status.user.eponym %> - <%= @validation_status.user.email %></td>
+    </tr>
+    <tr>
+      <td>Brief:</td>
+      <td>
+        <ul>
+          <li><%= "%d Accepted" % @validation_status.accepted_individual_validation_statuses.size %></li>
+          <li><%= "%d High Risk" % @validation_status.high_risk_individual_validation_statuses.size %></li>
+          <li><%= "%d Invalid" % @validation_status.invalid_individual_validation_statuses.size %></li>
+          <li><%= "%d Error " % @validation_status.individual_validation_statuses_with_errors.size %></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>
+  
+<div id="individual_validation_statuses">
+  <table>
+    <thead>
+      <tr>
+        <th>Company</th>
+        <th>Status</th>
+        <th>CM Report File</th>
+        <th>Representative E-Mail</th>
+        <th>Results E-Mailed</th>
+        <th>Results</th>
+        <th>Uploaded At</th>
+      </tr>
+    </thead>
+    
+    <% @validation_status.individual_validation_statuses.each do |ivs| %>
+    <tr class="<%= cycle('odd', 'even') %>">
+      <td><%= ivs.company_name %></td>
+      <td><%= ivs.status %></td>
+      <td><%= link_to ivs.filename, download_uploaded_eicc_spreadsheet_path(ivs.id) %></td>
+      <td><%= ivs.representative_email %></td>
+      <td><%= (ivs.is_spreadsheet_return_email_sent) ? "Yes" : "No" %></td>
+      <td><ul><%= ivs.message.html_safe %></ul></td>
+      <td><%= ivs.uploaded_at.to_formatted_s(:short) %></td>
+    </tr>
+    <% end %>
+  </table>
+</div>
+

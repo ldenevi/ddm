@@ -83,7 +83,7 @@ class Eicc::DeclarationController < ApplicationController
           @individual_validation_status.update_attributes(:status => "Invalid", 
                                                           :representative_email => @declaration.representative_email,
                                                           :company_name => @declaration.company_name,
-                                                          :message => @declaration.errors.full_messages.uniq.to_json)
+                                                          :message => @declaration.errors.full_messages.uniq.map { |m| "<li>#{m}</li>" }.join("\n"))
         end
         
         successully_processed = true

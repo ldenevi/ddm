@@ -49,7 +49,7 @@
     <li><a href="#tabs-2">Help</a></li>
   </ul>
 
-  <div id="tabs-1 processed-declarations">
+  <div id="tabs-1">
     <table>
       <thead>
         <tr>
@@ -64,7 +64,7 @@
         <tr>
           <td><%= link_to vs.created_at.to_formatted_s(:local), upload_eicc_declarations_path(vs.id) %></td>
           <td><%= vs.individual_validation_statuses.size %></td>
-          <td><%= 0 %></td>
+          <td><%= vs.high_risk_individual_validation_statuses.size + vs.invalid_individual_validation_statuses.size %></td>
           <td>View</td>
         </tr>
         <% end %>

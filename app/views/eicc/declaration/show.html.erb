@@ -28,37 +28,37 @@
       width: 600px;
       height: 400px;
     }
+  
 </style>
 
+  <div id="file_uploader"></div>
 
-<div id="file_uploader"></div>
-
-<script>
-  $(document).ready(function () {
-    $('#file_uploader').fineUploader({
-      request: {
-        endpoint: '/eicc/declaration/validate_single_eicc_spreadsheet/' + $("input[name=validation_status_id]").val(),
-        inputName: 'spreadsheet',
-        params: {"authenticity_token" : $("input[name=authenticity_token]").val(), "validation_status_id" : $("input[name=validation_status_id]").val() }
-      },
-      
-      validation: {
-        allowedExtensions : ["xls", "xlsx"]
-      }
+  <script>
+    $(document).ready(function () {
+      $('#file_uploader').fineUploader({
+        request: {
+          endpoint: '/eicc/declaration/validate_single_eicc_spreadsheet/' + $("input[name=validation_status_id]").val(),
+          inputName: 'spreadsheet',
+          params: {"authenticity_token" : $("input[name=authenticity_token]").val(), "validation_status_id" : $("input[name=validation_status_id]").val() }
+        },
+        
+        validation: {
+          allowedExtension : ["xls", "xlsx"]
+        }
+      });
     });
-  });
-  
-  
-  $("#file_uploader").on("submitted", function(event, id, name) {
-    var promise = new qq.Promise();
+    
+    
+    $("#file_uploader").on("submitted", function(event, id, name) {
+      var promise = new qq.Promise();
 
-    console.log(name);
-    promise.success();
- 
-    return promise;
- 
-  });
-</script>
+      console.log(name);
+      promise.success();
+   
+      return promise;
+   
+    });
+  </script>
 
 
 
