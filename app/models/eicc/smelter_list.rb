@@ -4,5 +4,5 @@ class Eicc::SmelterList < ActiveRecord::Base
                   :metal, :mineral_source, :mineral_source_location, :proposed_next_steps, :smelter_id, :smelter_reference_list,
                   :standard_smelter_name
                   
-  validates :metal, :smelter_reference_list, :standard_smelter_name, :facility_location_country, :presence => true
+  # validates :metal, :smelter_reference_list, :standard_smelter_name, :facility_location_country, :presence => true
 end

@@ -4,9 +4,11 @@ class Eicc::MineralsQuestion < ActiveRecord::Base
   validates :sequence, :numericality => { :only_integer => true, :message => "'%{value}' is not a number" }
   validates :question, :presence => true
     
+=begin
   validates_each :gold, :tantalum, :tin, :tungsten do |record, attr, value|
     record.errors.add(attr, record.error_messages[record.sequence.to_i][attr]) if value.nil? || value.empty?
   end  
+=end
   
   belongs_to :declaration, :class_name => 'Declaration'
   

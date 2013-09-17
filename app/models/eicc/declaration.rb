@@ -11,7 +11,7 @@ class Eicc::Declaration < ActiveRecord::Base
     @@error_messages = YAML::load_file("config/eicc_validation_error_messages.yml")
   end
 
-  validates :client_id, :presence => true
+  # validates :client_id, :presence => true
   validates :company_name, :presence => { :message => ": You must provide your company name on the declaration tab cell D8." }
   validates :declaration_scope, :presence => { :message => ": You must determine the scope of declaration on the declaration tab cell D9." }
   validates :authorized_company_representative_name, :presence => { :message => ": You must provide Authorized Company Representative contact name in Declaration tab cell D14." }
