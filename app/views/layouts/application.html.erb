@@ -3,11 +3,16 @@
 <head>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
-  <%= stylesheet_link_tag :application, :media => "all" %>
+  <%= stylesheet_link_tag "application", :media => "all" %>
   <%= stylesheet_link_tag '/assets/jquery/pepper-grinder/jquery-ui.css', :media => "all" %>
   <%= stylesheet_link_tag "/assets/gsp/green/gsp.green.#{params[:controller]}.css", :media => "all" %>
   
-  <%= javascript_include_tag :jquery, 'jquery-ui', 'jquery.jeditable', :rails, :eco_tree, 'gsp/gsp.js'  %>
+  <%= javascript_include_tag "jquery" %>
+  <%= javascript_include_tag "jquery-ui" %>
+  <%= javascript_include_tag "jquery.jeditable" %>
+  <%= javascript_include_tag "rails" %>
+  <%= javascript_include_tag "eco_tree" %>
+  <%= javascript_include_tag "gsp/gsp.js"  %>
   <%= javascript_include_tag 'ckeditor/ckeditor.js' if @use_ckeditor  %>
   <%= javascript_include_tag 'gsp/gsp.template.manager.js' if @is_editable  %>
   <%= javascript_include_tag 'https://www.google.com/jsapi' %>
