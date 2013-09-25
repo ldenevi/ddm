@@ -10,6 +10,8 @@ class Eicc::Declaration < ActiveRecord::Base
   def self.error_messages
     @@error_messages = YAML::load_file("config/eicc_validation_error_messages.yml")
   end
+  
+  validates_with Eicc::DeclarationValidator
 
   # validates :client_id, :presence => true
   validates :company_name, :presence => { :message => ": You must provide your company name on the declaration tab cell D8." }

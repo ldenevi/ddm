@@ -1,6 +1,7 @@
 class Eicc::ValidationStatus < ActiveRecord::Base
   attr_accessible :filename, :is_spreadsheet_return_email_sent, :message,
-                  :representative_email, :status, :type, :uploaded_file_path, :user
+                  :representative_email, :status, :type, :uploaded_file_path, :user,
+                  :declaration
 
   validates :status, :presence => true
   
@@ -14,6 +15,7 @@ class Eicc::ValidationStatus < ActiveRecord::Base
   has_many :individual_validation_statuses_with_errors, :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Error" }, :foreign_key => "parent_id"
   
   belongs_to :user
+  belongs_to :declaration, :class_name => "Eicc::Declaration"
   
   def uploaded_at
     created_at

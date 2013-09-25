@@ -69,10 +69,9 @@ class Eicc::DeclarationController < ApplicationController
       
         # Attempt to read and validate declaration without raising any expectations           
         @declaration = Eicc::Declaration.generate File.join(@temporary_filepath)
+        @declaration.save!(:validate => false)
         
-        20.times { puts @declaration.uploaded_excel.storage_path }
-        
-        @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet")
+        @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet", :declaration => @declaration)
         if @declaration.valid?
           @individual_validation_status.update_attributes(:status => "Green",
                                                           :representative_email => @declaration.representative_email,
@@ -80,7 +79,8 @@ class Eicc::DeclarationController < ApplicationController
                                                           :message => "")
         else
           # TODO Metric validations, generate clear report
-          @individual_validation_status.update_attributes(:status => "Invalid", 
+          status = @declaration.errors.full_messages.join("").downcase.match("high risk").nil? ? "Invalid" : "High Risk"
+          @individual_validation_status.update_attributes(:status => status, 
                                                           :representative_email => @declaration.representative_email,
                                                           :company_name => @declaration.company_name,
                                                           :message => @declaration.errors.full_messages.uniq.map { |m| "<li>#{m}</li>" }.join("\n"))
@@ -94,7 +94,7 @@ class Eicc::DeclarationController < ApplicationController
         @individual_validation_status.update_attributes(:status => "Error",
                                                         :representative_email => (@declaration.nil? ? "" : @declaration.representative_email),
                                                         :company_name =>(@declaration.nil? ? "" :  @declaration.company_name),
-                                                        :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename))
+                                                        :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename) + $!.full_message)
         @validation_status.update_attributes(:status => "Error")
         # TODO E-Mail Leo
         successully_processed = false
