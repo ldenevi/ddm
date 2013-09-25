@@ -4,9 +4,10 @@ class CreateEiccStandardSmelterNames < ActiveRecord::Migration
       t.integer :declaration_id
       t.string :metal
       t.string :standard_smelter_name
-      t.string :known_alias
+      t.text :known_alias
       t.string :facility_location_country
       t.string :smelter_id
+      t.text   :risk_level => ""
 
       t.timestamps
     end

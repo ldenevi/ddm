@@ -16,7 +16,8 @@ class CreateEiccSmelterLists < ActiveRecord::Migration
       t.string :proposed_next_steps
       t.string :mineral_source
       t.string :mineral_source_location
-      t.text :comment
+      t.text   :comment
+      t.text   :risk_level => ""
 
       t.timestamps
     end

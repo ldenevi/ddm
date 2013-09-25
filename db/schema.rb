@@ -128,7 +128,7 @@ ActiveRecord::Schema.define(:version => 20130913223310) do
     t.integer  "declaration_id"
     t.string   "metal"
     t.string   "standard_smelter_name"
-    t.string   "known_alias"
+    t.text     "known_alias"
     t.string   "facility_location_country"
     t.string   "smelter_id"
     t.datetime "created_at",                :null => false
@@ -266,7 +266,7 @@ ActiveRecord::Schema.define(:version => 20130913223310) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-10-01 17:10:20', :null => false
+    t.datetime "expected_completion_at", :default => '2013-10-09 16:19:05', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
