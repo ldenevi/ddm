@@ -94,7 +94,7 @@ class Eicc::DeclarationController < ApplicationController
         @individual_validation_status.update_attributes(:status => "Error",
                                                         :representative_email => (@declaration.nil? ? "" : @declaration.representative_email),
                                                         :company_name =>(@declaration.nil? ? "" :  @declaration.company_name),
-                                                        :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename) + $!.full_message)
+                                                        :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename))
         @validation_status.update_attributes(:status => "Error")
         # TODO E-Mail Leo
         successully_processed = false
