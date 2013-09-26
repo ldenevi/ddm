@@ -1,5 +1,5 @@
 class Eicc::MineralsQuestion < ActiveRecord::Base
-  attr_accessible :declaration, :gold, :gold_comment, :question, :sequence, :tantalum, :tantalum_comment, :tin, :tin_comment, :tungsten, :tungsten_comment
+  attr_accessible :declaration, :gold, :gold_comment, :question, :sequence, :tantalum, :tantalum_comment, :tin, :tin_comment, :tungsten, :tungsten_comment, :risk_level
   
   validates :sequence, :numericality => { :only_integer => true, :message => "'%{value}' is not a number" }
   validates :question, :presence => true

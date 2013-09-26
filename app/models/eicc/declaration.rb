@@ -10,6 +10,8 @@ class Eicc::Declaration < ActiveRecord::Base
   def self.error_messages
     @@error_messages = YAML::load_file("config/eicc_validation_error_messages.yml")
   end
+  
+  validates_with Eicc::DeclarationValidator
 
   # validates :client_id, :presence => true
   validates :company_name, :presence => { :message => ": You must provide your company name on the declaration tab cell D8." }
@@ -164,7 +166,7 @@ private
     while i < minerals_cell_definition[:end_row]
       question = rows[i][minerals_cell_definition[:question_column]]
       
-      i += 2
+      i += 1
       tantalum_answer  = rows[i][minerals_cell_definition[:answer_column]]
       tantalum_comment = rows[i][minerals_cell_definition[:comment_column]]
       
@@ -221,7 +223,7 @@ private
   # Smelter list
   def smelter_list_definition
     {
-      :start_row => 9,
+      :start_row => 3,
       :end_row => 2000,
       :metal_column => 0,
       :reference_list_column => 1,
