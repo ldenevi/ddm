@@ -12,6 +12,7 @@ class CreateEiccValidationStatuses < ActiveRecord::Migration
       t.string  :company_name
       t.text    :message
       t.boolean :is_spreadsheet_return_email_sent, :default => "false"
+      t.integer :review_id
 
       t.timestamps
     end

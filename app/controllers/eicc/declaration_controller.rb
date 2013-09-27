@@ -109,8 +109,14 @@ class Eicc::DeclarationController < ApplicationController
   end
   
   # TODO Only pull validation status of current_user
+  # TODO Use a better technique instead of polling
   def show_validation_statuses
     @validation_status = Eicc::ValidationStatus.find params[:id]
+    
+    if @validation_status.status == "Completed" && @validation_status.review.nil?
+      @validation_status.review = @validation_status.generate_review
+      @validation_status.save!
+    end
     render :layout => false
   end
   

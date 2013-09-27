@@ -38,10 +38,12 @@
     <% end %>
   </div>
   
+  <% if @task.review.organization_template %>
   <div class="task-objective">
     <h3>Review objective</h3>
     <span><%= @task.review.organization_template.objectives.html_safe %></span>
   </div>
+  <% end %>
   
   <div class="task-content">
     

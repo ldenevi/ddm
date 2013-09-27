@@ -51,6 +51,15 @@
         </ul>
       </td>
     </tr>
+    <tr>
+      <td colspan="2">
+        <% if @validation_status.review %>
+          <%= link_to "Go to review", list_tasks_path(@validation_status.review_id) %>
+        <% else %>
+          Review pending...
+        <% end %>
+      </td>
+    </tr>
   </table>
 </div>
   

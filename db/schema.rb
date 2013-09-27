@@ -147,6 +147,7 @@ ActiveRecord::Schema.define(:version => 20130913223310) do
     t.string   "company_name"
     t.text     "message"
     t.boolean  "is_spreadsheet_return_email_sent", :default => false
+    t.integer  "review_id"
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
   end

@@ -27,7 +27,7 @@
                                                      end
                                                    end
                                                 %>">
-        <td title="<%= task.agency.name %>"><%= task.agency.acronym %></td>
+        <td title="<%= task.agency.name unless task.agency.nil? %>"><%= task.agency.acronym unless task.agency.nil? %></td>
         <td><%= task.sequence %></td>
         <td class="task_link"><%= link_to task.name, task_show_path(task.id) %></td>
         <td><%= task.reviewer.eponym %></td>
