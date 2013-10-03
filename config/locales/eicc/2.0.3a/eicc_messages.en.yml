@@ -8,10 +8,10 @@ eicc:
     :declaration: 
       :no_presence:
         :language: "Report Rejected: Respondent did not provide its Conflict Minerals Report in English as required by the SEC"
-        :company_name: "You must provide your company name on the declaration tab cell D8"
+        :company_name: "Validation Needed: Respondent has not provided a company name"
         :declaration_scope: "Validation Needed: Respondent has declared it is reporting at the product level but has not listed products on the Report's Product List"
-        :authorized_company_representative_name: "You must provide Authorized Company Representative contact name in Declaration tab cell D14"
-        :representative_email: "You must provide an email for Authorized Company Representative on Declaration tab cell D16"
+        :authorized_company_representative_name: "Validation Needed: Respondent has not provided an Authorized Company Representative contact name"
+        :representative_email: "Validation Needed: Respondent has not provided a representative e-mail"
         :completion_at: "Validation Needed: Respondent did not provide a date of completion"
         :mineral_questions: "Validation Needed: Respondent did not provide any inputs for all required Questions 1 through 6"
         :company_level_questions: "Validation Needed: Respondent did not provide any inputs for all required Company-level Questions A through J"
