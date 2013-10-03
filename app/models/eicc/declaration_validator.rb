@@ -2,11 +2,11 @@ class Eicc::DeclarationValidator < ActiveModel::Validator
   attr_accessor :base, :minerals, :company_level, :smelters_list, :standard_smelter_names
   
   attr_writer :messages
-  def messages
-    @messages ||= Eicc::Declaration.validation_messages
-  end
+  @messages = Eicc::Declaration.validation_messages
 
   def validate(record)
+    raise Exception, "Report rejected: could not read file" if record.csv_declaration.nil?
+  
     @base = record.errors[:base]
     @minerals = record.errors[:minerals]
     @company_level = record.errors[:company_level]
