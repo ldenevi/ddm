@@ -92,7 +92,7 @@ class Eicc::Declaration < ActiveRecord::Base
   end
   
   def self.unknown_file_format
-    "For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%s' does not have an xls. or .xlsx extension, or is not an Excel spreadsheet.  Therefore, our system could not read the file.  Please re-submit per EICC-GeSI instruction #8, with the file name format: companyname-date.xls (date as YYYY-DD-MM)"
+    "Report Rejected: Respondent did not provide its Conflict Minerals Report using the EICC-GeSI Report template in Excel format"
   end
   
 private
