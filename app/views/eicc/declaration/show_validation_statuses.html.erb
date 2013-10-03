@@ -82,7 +82,7 @@
       <td><%= ivs.company_name %></td>
       <td><%= ivs.status %></td>
       <td><%= link_to ivs.filename, download_uploaded_eicc_spreadsheet_path(ivs.id) %></td>
-      <td><%= ivs.representative_email %></td>
+      <td><%= mail_to ivs.representative_email %></td>
       <td><%= (ivs.is_spreadsheet_return_email_sent) ? "Yes" : "No" %></td>
       <td><ul><%= ivs.message.html_safe %></ul></td>
       <td><%= ivs.uploaded_at.to_formatted_s(:short) %></td>

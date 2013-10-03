@@ -7,18 +7,21 @@ class Eicc::Declaration < ActiveRecord::Base
                   :uploaded_excel
                   
   # FIXME Find a better way to load this file into memory
-  def self.error_messages
-    @@error_messages = YAML::load_file("config/eicc_validation_error_messages.yml")
-  end
+  cattr_accessor :cell_definitions
+  yaml = YAML::load_file(File.join('config', 'locales', 'eicc', '2.0.3a', 'eicc.yml'))
+  @@cell_definitions = yaml["eicc"]["cell_definitions"]
+  
+  cattr_accessor :validation_messages
+  yaml = YAML::load_file(File.join('config', 'locales', 'eicc', '2.0.3a', 'eicc_messages.en.yml'))
+  @@validation_messages = yaml["eicc"]["en"]
   
   validates_with Eicc::DeclarationValidator
 
-  # validates :client_id, :presence => true
-  validates :company_name, :presence => { :message => ": You must provide your company name on the declaration tab cell D8." }
-  validates :declaration_scope, :presence => { :message => ": You must determine the scope of declaration on the declaration tab cell D9." }
-  validates :authorized_company_representative_name, :presence => { :message => ": You must provide Authorized Company Representative contact name in Declaration tab cell D14." }
-  validates :representative_email, :presence => { :message => ": You must provide an email for Authorized Company Representative on Declaration tab cell D16." }
-  validates :completion_at, :presence => { :message => ": You must provide date the form was completed on Declaration tab cell D18." }
+  validates :company_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:company_name] }
+  validates :declaration_scope, :presence => { :message =>  @@validation_messages[:declaration][:no_presence][:declaration_scope] }
+  validates :authorized_company_representative_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:authorized_company_representative_name] }
+  validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
+  validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
 
 =begin
   validates_each :language do |record, attr, value|
@@ -40,6 +43,7 @@ class Eicc::Declaration < ActiveRecord::Base
   require 'fileutils'
   require 'digest/md5'
   require 'csv'
+  
   
   
   def convert_to_csv
@@ -87,60 +91,46 @@ class Eicc::Declaration < ActiveRecord::Base
     obj
   end
   
-  
   def self.unknown_file_format
     "For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%s' does not have an xls. or .xlsx extension, or is not an Excel spreadsheet.  Therefore, our system could not read the file.  Please re-submit per EICC-GeSI instruction #8, with the file name format: companyname-date.xls (date as YYYY-DD-MM)"
   end
   
-  def validate_fields
-    
-  end
-  
-  
-  
 private
-
-  def declaration_cell_definition
-    {
-      :company_name => {:row => 6, :column => 3},
-      :declaration_scope => {:row => 7, :column => 3},
-      :description_of_scope => {:row => 8, :column => 3},
-      :language => {:row => 1, :column => 11},
-      :company_unique_identifier => {:row => 10, :column => 3},
-      :address => {:row => 11, :column => 3},
-      :authorized_company_representative_name => {:row => 12, :column => 3},
-      :representative_title => {:row => 13, :column => 3},
-      :representative_email => {:row => 14, :column => 3},
-      :representative_phone => {:row => 15, :column => 3},
-      :date_of_completion => {:row => 16, :column => 3}
-    }
-  end
-    
   def strip_declaration(csv)
     CSV.new(csv).each_with_index do |row, index|
       case index
-      when declaration_cell_definition[:company_name][:row]
-        self.company_name = row[declaration_cell_definition[:company_name][:column]]
-      when declaration_cell_definition[:declaration_scope][:row]
-        self.declaration_scope = row[declaration_cell_definition[:declaration_scope][:column]]
-      when declaration_cell_definition[:description_of_scope][:row]
-        self.description_of_scope = row[declaration_cell_definition[:description_of_scope][:column]]
-      when declaration_cell_definition[:language][:row]
-        self.language = "English" # row[declaration_cell_definition[:language][:column]]
-      when declaration_cell_definition[:company_unique_identifier][:row]
-        self.company_unique_identifier = row[declaration_cell_definition[:company_unique_identifier][:column]]
-      when declaration_cell_definition[:address][:row]
-        self.address = row[declaration_cell_definition[:address][:column]]
-      when declaration_cell_definition[:authorized_company_representative_name][:row]
-        self.authorized_company_representative_name = row[declaration_cell_definition[:authorized_company_representative_name][:column]]
-      when declaration_cell_definition[:representative_title][:row]
-        self.representative_title = row[declaration_cell_definition[:representative_title][:column]]
-      when declaration_cell_definition[:representative_email][:row]
-        self.representative_email = row[declaration_cell_definition[:representative_email][:column]]
-      when declaration_cell_definition[:representative_phone][:row]
-        self.representative_phone = row[declaration_cell_definition[:representative_phone][:column]]
-      when declaration_cell_definition[:date_of_completion][:row]
-        self.completion_at = row[declaration_cell_definition[:date_of_completion][:column]]
+      when @@cell_definitions["declaration"]["company_name"]["row"]
+        self.company_name = row[@@cell_definitions["declaration"]["company_name"]["column"]]
+        
+      when @@cell_definitions["declaration"]["declaration_scope"]["row"]
+        self.declaration_scope = row[@@cell_definitions["declaration"]["declaration_scope"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["description_of_scope"]["row"]
+        self.description_of_scope = row[@@cell_definitions["declaration"]["description_of_scope"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["language"]["row"]
+        self.language = "English" #  row[@@cell_definitions["declaration"]["language"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["company_unique_identifier"]["row"]
+        self.company_unique_identifier = row[@@cell_definitions["declaration"]["company_unique_identifier"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["address"]["row"]
+        self.address = row[@@cell_definitions["declaration"]["address"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["authorized_company_representative_name"]["row"]
+        self.authorized_company_representative_name = row[@@cell_definitions["declaration"]["authorized_company_representative_name"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["representative_title"]["row"]
+        self.representative_title = row[@@cell_definitions["declaration"]["representative_title"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["representative_email"]["row"]
+        self.representative_email = row[@@cell_definitions["declaration"]["representative_email"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["representative_phone"]["row"]
+        self.representative_phone = row[@@cell_definitions["declaration"]["representative_phone"]["column"]]
+        
+      when  @@cell_definitions["declaration"]["date_of_completion"]["row"]
+        self.completion_at = row[@@cell_definitions["declaration"]["date_of_completion"]["column"]]
       end
     end
   end

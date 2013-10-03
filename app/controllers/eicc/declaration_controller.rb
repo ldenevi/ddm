@@ -104,7 +104,6 @@ class Eicc::DeclarationController < ApplicationController
       @validation_status.update_attributes(:status => "Completed")
     end
     
-        
     render :json => { :success => successully_processed }
   end
   
