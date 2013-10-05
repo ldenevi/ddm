@@ -5,7 +5,7 @@ class Eicc::DeclarationValidator < ActiveModel::Validator
   @messages = Eicc::Declaration.validation_messages
 
   def validate(record)
-    raise Exception, "Report rejected: could not read file" if record.csv_declaration.nil?
+    raise Exception, "Report rejected: could not read file" if record.csv_worksheets.empty? || record.csv_worksheets.nil?
   
     @base = record.errors[:base]
     @minerals = record.errors[:minerals]

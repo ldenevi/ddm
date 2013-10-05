@@ -35,7 +35,7 @@ class Eicc::Declaration < ActiveRecord::Base
   has_many :standard_smelter_names, :class_name => Eicc::StandardSmelterName
   
   has_one  :uploaded_excel,  :as => :attachable, :class_name => Spreadsheet
-  has_many :csv_worksheets,  :as => :attachable, :class_name => BinaryFile
+  attr_accessor :csv_worksheets
   has_one  :csv_declaration, :as => :attachable, :class_name => BinaryFile
   has_one  :csv_smelter_list, :as => :attachable, :class_name => BinaryFile
   has_one  :csv_standard_smelter_names, :as => :attachable, :class_name => BinaryFile
@@ -44,51 +44,31 @@ class Eicc::Declaration < ActiveRecord::Base
   require 'digest/md5'
   require 'csv'
   
-  
-  
-  def convert_to_csv
-    # ./tmp/eicc_conversions/UID
-    @dirpath = File.join(Rails.root, "tmp", "eicc_conversions", Digest::MD5.hexdigest(Time.now.to_s + rand.to_s))
-    begin
-      FileUtils.mkdir_p @dirpath
-      self.uploaded_excel.save_to_filesystem!
-      FileUtils.copy_file(self.uploaded_excel.storage_path, File.join(@dirpath, self.uploaded_excel.filename))
-      ssconvert_output = `ssconvert -S '#{File.join(@dirpath, self.uploaded_excel.filename)}' '#{File.join(@dirpath, 'eicc.csv')}'`
-      File.open(File.join(@dirpath, "ssconvert_output.txt"), 'w') { |f| f.write(ssconvert_output) }
-      
-      # Create worksheet objects
-      Dir.glob(File.join(@dirpath, "*.csv.*")).each do |path|
-        self.csv_worksheets << BinaryFile.generate(:filename => File.basename(path), :data => File.read(path)) 
-      end
-    ensure
-      # There should be a set of CSV files outputted
-      return false if Dir.glob(File.join(@dirpath, "*.csv.*")).empty?
-      ## FileUtils.rm_rf @dirpath
-    end
-    return true
+  def self.generate(excel_filepath)
+    obj = new :uploaded_excel => BinaryFile.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
+    gnumeric_csv = GSP::Eicc::Excel::Converters::Gnumeric::Gnumeric.new(excel_filepath)
+    obj.csv_worksheets = gnumeric_csv.worksheets
+    obj.strip_worksheets
+    obj
   end
   
   def strip_worksheets
-    self.csv_worksheets.each do |csv|
-      case csv.filename
+    self.csv_worksheets.each do |worksheet|
+      case worksheet.filename
       when 'eicc.csv.3'
-        strip_declaration(csv.data)
-        strip_minerals(csv.data)
-        strip_company_level_questions(csv.data)
+        strip_declaration(worksheet.csv)
+        worksheet.csv.rewind
+        strip_minerals(worksheet.csv)
+        worksheet.csv.rewind
+        strip_company_level_questions(worksheet.csv)
+        worksheet.csv.rewind
       when 'eicc.csv.4'
-        strip_smelter_list(csv.data)
+        strip_smelter_list(worksheet.csv)
       when 'eicc.csv.5'
-        strip_standard_smelter_names(csv.data)
+        strip_standard_smelter_names(worksheet.csv)
       end
     end
     return true
-  end
-  
-  def self.generate(excel_filepath)
-    obj = new :uploaded_excel => BinaryFile.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
-    obj.convert_to_csv
-    obj.strip_worksheets
-    obj
   end
   
   def self.unknown_file_format
@@ -97,7 +77,7 @@ class Eicc::Declaration < ActiveRecord::Base
   
 private
   def strip_declaration(csv)
-    CSV.new(csv).each_with_index do |row, index|
+    csv.each_with_index do |row, index|
       case index
       when @@cell_definitions["declaration"]["company_name"]["row"]
         self.company_name = row[@@cell_definitions["declaration"]["company_name"]["column"]]
@@ -149,7 +129,7 @@ private
     
   # I hhhaaaaaate this code, but it goes...
   def strip_minerals(csv)
-    rows  = CSV.new(csv).read
+    rows  = csv.read
     i     = minerals_cell_definition[:start_row]
     sequence = 0
     
@@ -194,7 +174,7 @@ private
   end
   
   def strip_company_level_questions(csv)
-    rows  = CSV.new(csv).read
+    rows  = csv.read
     i     = company_level_questions_definition[:start_row]
     sequence = 0
     
@@ -233,7 +213,7 @@ private
   end
   
   def strip_smelter_list(csv)
-    rows  = CSV.new(csv).read
+    rows  = csv.read
     i     = smelter_list_definition[:start_row]
     sequence = 0
     
@@ -272,7 +252,7 @@ private
   end
   
   def strip_standard_smelter_names(csv)
-    rows  = CSV.new(csv).read
+    rows  = csv.read
     i     = standard_smelter_name_definition[:start_row]
     while i < standard_smelter_name_definition[:end_row]
       self.standard_smelter_names << Eicc::StandardSmelterName.new(:metal => rows[i][standard_smelter_name_definition[:metal_column]],
