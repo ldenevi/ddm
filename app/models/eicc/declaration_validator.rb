@@ -1,7 +1,7 @@
 class Eicc::DeclarationValidator < ActiveModel::Validator
   attr_accessor :base, :minerals, :company_level, :smelters_list, :standard_smelter_names
   
-  attr_writer :messages
+  attr_accessor :messages
   @messages = Eicc::Declaration.validation_messages
 
   def validate(record)
@@ -21,6 +21,8 @@ class Eicc::DeclarationValidator < ActiveModel::Validator
 private
   # FIXME: This needs to be DRY'd up, once we implement the i18n
   def validate_minerals_declaration(record)
+    @messages ||= Eicc::Declaration.validation_messages
+    
     if record.mineral_questions.size == 0
       @minerals << @messages[:declaration][:no_presence][:mineral_questions]
       return
@@ -41,6 +43,8 @@ private
   
   
   def validate_company_level_declaration(record)
+    @messages ||= Eicc::Declaration.validation_messages
+    
     if record.company_level_questions.size == 0
       @company_level << @messages[:declaration][:no_presence][:company_level_questions]
     end
@@ -80,15 +84,18 @@ private
   end
   
   def cross_check_minerals_and_smelter_list(record)
+    # TODO: This needs to be fixed. Perhaps the validation_messages YAML data should be pulled from within declaration_validator.rb (here), rather than the Declaration model. This means that all other sub-models need to have their validation code updated.
+    @messages ||= Eicc::Declaration.validation_messages
+    
     # Match mineral source if declared
     sourced_minerals  = record.smelter_list.map { |sl| sl.metal.to_s.downcase }
     declared_minerals = record.mineral_questions.first
     
     return if declared_minerals.nil? || sourced_minerals.empty?
     
-    @base << @message[:cross_check][:minerals_question_1][:flagged][:tantalum] unless declared_minerals.tantalum == "Yes" && sourced_minerals.include?("tantalum")
-    @base << @message[:cross_check][:minerals_question_1][:flagged][:tin]      unless declared_minerals.tin == "Yes" && sourced_minerals.include?("tin")
-    @base << @message[:cross_check][:minerals_question_1][:flagged][:gold]     unless declared_minerals.gold == "Yes" && sourced_minerals.include?("gold")
-    @base << @message[:cross_check][:minerals_question_1][:flagged][:tungsten] unless declared_minerals.tungsten == "Yes" && sourced_minerals.include?("tungsten")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tantalum] unless declared_minerals.tantalum == "Yes" && sourced_minerals.include?("tantalum")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tin]      unless declared_minerals.tin == "Yes" && sourced_minerals.include?("tin")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:gold]     unless declared_minerals.gold == "Yes" && sourced_minerals.include?("gold")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tungsten] unless declared_minerals.tungsten == "Yes" && sourced_minerals.include?("tungsten")
   end
 end
