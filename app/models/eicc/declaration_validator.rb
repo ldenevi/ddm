@@ -47,14 +47,33 @@ private
     
     record.company_level_questions.each_with_index do |clq, index|
       case index
+        when 0
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          next
         when 1
-          @base << "High risk: No website address provided for publicly accessible policy" if clq.answer == "Yes" && clq.comment.to_s.empty?
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @base << @messages[:company_level][index][:flagged][:is_yes_but_no_url] if clq.answer == "Yes" && clq.comment.to_s.empty?
+          next
+        when 2
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          next
+        when 3
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          next
+        when 4
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
           next
         when 5
-          @base << "High risk: No alternative described for question B69" if clq.answer == "No" && clq.comment.to_s.empty?
+         @base << @messages[:company_level][index][:flagged][:is_no_but_no_comment] if clq.answer == "No" && clq.comment.to_s.empty?
+          next
+        when 6
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          next
+        when 7
+          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
           next
         when 8
-          @base << "High risk: No description of corrective action management in G75" if clq.answer == "Yes" && clq.comment.to_s.empty?
+          @base << @messages[:company_level][index][:flagged][:is_yes_but_no_comment] if clq.answer == "Yes" && clq.comment.to_s.empty?
           next
       end
     end
@@ -67,9 +86,9 @@ private
     
     return if declared_minerals.nil? || sourced_minerals.empty?
     
-    @base << "High risk: Tantalum declared on D22, but no Tantalum source found in smelter list" unless declared_minerals.tantalum == "Yes" && sourced_minerals.include?("tantalum")
-    @base << "High risk: Tin declared on D23, but no Tin source found in smelter list"           unless declared_minerals.tin == "Yes" && sourced_minerals.include?("tin")
-    @base << "High risk: Gold declared on D24, but no Gold source found in smelter list"         unless declared_minerals.gold == "Yes" && sourced_minerals.include?("gold")
-    @base << "High risk: Tungsten declared on D25, but no Tungsten source found in smelter list" unless declared_minerals.tungsten == "Yes" && sourced_minerals.include?("tungsten")
+    @base << @message[:cross_check][:minerals_question_1][:flagged][:tantalum] unless declared_minerals.tantalum == "Yes" && sourced_minerals.include?("tantalum")
+    @base << @message[:cross_check][:minerals_question_1][:flagged][:tin]      unless declared_minerals.tin == "Yes" && sourced_minerals.include?("tin")
+    @base << @message[:cross_check][:minerals_question_1][:flagged][:gold]     unless declared_minerals.gold == "Yes" && sourced_minerals.include?("gold")
+    @base << @message[:cross_check][:minerals_question_1][:flagged][:tungsten] unless declared_minerals.tungsten == "Yes" && sourced_minerals.include?("tungsten")
   end
 end
