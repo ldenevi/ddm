@@ -98,9 +98,6 @@ class Eicc::DeclarationController < ApplicationController
         @validation_status.update_attributes(:status => "Error")
         # TODO E-Mail Leo
         successully_processed = false
-        
-        puts $!.message
-        puts $!.backtrace.join("\n")
       end
       
     ensure
@@ -115,7 +112,9 @@ class Eicc::DeclarationController < ApplicationController
   def show_validation_statuses
     @validation_status = Eicc::ValidationStatus.find params[:id]
     
-    if @validation_status.status == "Completed" && @validation_status.review.nil?
+    if (@validation_status.status == "Completed" && @validation_status.review.nil?) || (@validation_status.review && @validation_status.review.tasks.size != @validation_status.individual_validation_statuses.size)
+      # TODO WARNING! Destroying the review may have the effect of destroying previously entered comments, if they reopen the batch process later and upload a freash Excel!!
+      @validation_status.review.destroy if @validation_status.review
       @validation_status.review = @validation_status.generate_review
       @validation_status.save!
     end
