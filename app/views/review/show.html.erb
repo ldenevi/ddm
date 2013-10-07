@@ -17,11 +17,13 @@
   </ul>
   <div id="review_prepare">
     <div style="font-family:Arial">
+      <% if @review.agency %>
       <div style="float:left; margin-right:5px;">
         <img src="/images/agencies/<%= @review.agency.acronym.downcase %>.png">
       </div>
+      <% end %>
       <div>
-        <h2><%= "%s (%s)" % [@review.agency.name, @review.agency.acronym] %></h2>
+        <% if @review.agency; %><h2><%= "%s (%s)" % [@review.agency.name, @review.agency.acronym] %></h2><% ; end %>
         <h3><%= @review.name %></h3>
       </div>
     </div>
@@ -30,9 +32,11 @@
       <form name="review_form"></form>
       <h3>
         <span><%= @review.frequency %></span> Review</h3>
-        
+      
+      <% if @review.organization_template %>
       <%= render "show_attributes", :review => @review %>
       <%= render "show_tasks", :tasks => @review.tasks %>
+      <% end %>
     </div>
   </div>
   
