@@ -1,0 +1,9 @@
+development:
+  host: officeconv.greenstatuspro.com
+  port: 3000
+test:
+  host: officeconv.greenstatuspro.com
+  port: 3000
+production:
+  host: officeconv.greenstatuspro.com
+  port: 3000

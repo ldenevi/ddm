@@ -14,6 +14,7 @@ gem 'rubyzip'   # Zip compression
 gem 'ice_cube'  # Scheduler
 gem 'recurring_select' # iCal recurrence input user interface
 gem 'useragent' # Detect web browser
+gem 'rest-client' # For GSP::Eicc::Excel::Converters::OfficeConv
 
 # Gems used only for assets and not required
 # in production environments by default.

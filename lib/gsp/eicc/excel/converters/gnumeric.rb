@@ -25,10 +25,8 @@ module GSP::Eicc::Excel::Converters::Gnumeric
       @csv_output_directory_path = File.join('tmp', 'gsp', 'eicc', 'excel_conversions', Digest::MD5.hexdigest(Time.now.to_s + file_path))
       
       # If it's an .xlsx file, convert it to .xls first
-      # TODO Check for unoconv errors, and handle them....
-      if File.extname(file_path) == ".xlsx"
-        unoconvert = GSP::Eicc::Excel::Converters::UnoConvert::UnoConvert.xlsx_to_xls file_path, :output_directory => @csv_output_directory_path
-        file_path  = unoconvert.xls_file_path.first
+      unless File.extname(file_path) == ".xls"
+        file_path = GSP::Eicc::Excel::Converters::OfficeConv::Convert.to_xls(file_path, :output_dirpath => @csv_output_directory_path)
       end
       
       @excel_file_path = file_path
