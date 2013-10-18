@@ -95,6 +95,12 @@ eicc:
           :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 4"
           :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 4"
           :tungsten: "Invalid Data: Respondent provided an invalid answer for TUNGSTEN in Question 4"
+        :flagged:
+          :is_no_and_less_than_50_percent:
+            :tantalum: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of TANTALUM"
+            :tin: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of TIN"
+            :gold: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of GOLD"
+            :tungsten: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of TUNGSTEN"
       # 5) For each of the following metals, have you identified all of the smelters your company and its suppliers use to supply the products included within the declaration scope indicated above?
       - 
         :no_presence:
@@ -156,7 +162,7 @@ eicc:
           :message: "Invalid Data: Respondent provided an invalid answer for Question B"
         :flagged:
           :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question B of the Company-level questions. Check the answer and comment"
-          :is_yes_but_no_url: "Validation Needed: Respondent reported its conflict minerals policy was posted on its website but it did not provide the URL in the comments box"
+          :is_yes_but_no_url: "Validation Needed: In question B, respondent reported its conflict minerals policy was posted on its website but it did not provide the URL in the comments box"
       # C. Do you require your direct suppliers to be DRC conflict-free?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question C"
@@ -198,8 +204,8 @@ eicc:
             - "No"
           :message: "Invalid Data: Respondent provided an invalid answer for Question F"
         :flagged:
-          :is_no_and_has_comment: "Validation Needed: Ensure response in comments box is acceptable"
-          :is_no_but_no_comment: "Validation Needed: Respondent reported it does not request its suppliers to use this Conflict Minerals Reporting Template, but it did not provide a description of the report format it requires in the comments box"
+          :is_no_and_has_comment: "Validation Needed: Ensure response in comments box is acceptable for Question F"
+          :is_no_but_no_comment: "Validation Needed: In Question F, respondent reported it does not request its suppliers to use this Conflict Minerals Reporting Template, but it did not provide a description of the report format it requires in the comments box"
       # G. Do you request smelter names from your suppliers?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question G"
@@ -233,6 +239,7 @@ eicc:
           :message: "Invalid Data: Respondent provided an invalid answer for Question I"
         :flagged:
           :is_yes_but_no_comment: "Validation Needed: Respondent reported its verification process includes corrective action management but it did not provide a description of the corrective actions in the comments box"
+          :is_no: "Validation Needed: The Respondent answered \"NO\" to Question I of the Company-level questions. Check the answer and comment"
       # J. Are you subject to the SEC Conflict Minerals disclosure requirement rule?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question J"
