@@ -1,8 +1,8 @@
 class Eicc::IndividualValidationStatus < Eicc::ValidationStatus
-  attr_accessible :declaration, :company_name
+  attr_accessible :filename, :is_spreadsheet_return_email_sent, :message,
+                  :representative_email, :status, :type, :uploaded_file_path, :user,
+                  :declaration, :review, :company_name
   
-  belongs_to :parent, :class_name => "Eicc::ValidationStatus"
+  belongs_to :parent, :class_name => "Eicc::BatchValidationStatus"
   belongs_to :declaration, :class_name => "Eicc::Declaration"
-  
-  # validates :uploaded_file_path, :filename, :is_spreadsheet_return_email_sent, :presence => true
 end

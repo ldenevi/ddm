@@ -1,18 +1,19 @@
 class Eicc::DeclarationController < ApplicationController
   def index
-    @validation_statuses = Eicc::ValidationStatus.where :parent_id => nil
+    @validation_statuses = Eicc::BatchValidationStatus.where :parent_id => nil
   end
 
   def list
   end
 
   def new
-    @validation_status = Eicc::ValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
+    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
+    
     redirect_to :action => :show, :id => @validation_status.id
   end
 
   def show
-    @validation_status = Eicc::ValidationStatus.find params[:id]
+    @validation_status = Eicc::BatchValidationStatus.find params[:id]
   end
   
   def upload
@@ -44,9 +45,9 @@ class Eicc::DeclarationController < ApplicationController
     begin
       @validation_status = begin
         begin
-          Eicc::ValidationStatus.find params[:validation_status_id]
+          Eicc::BatchValidationStatus.find params[:validation_status_id]
         rescue
-          Eicc::ValidationStatus.create :status => "Processing", :representative_email => (current_user.nil? ? nil : current_user.email)
+          Eicc::BatchValidationStatus.create :status => "Processing", :representative_email => (current_user.nil? ? nil : current_user.email)
         end
       end
       
@@ -110,7 +111,7 @@ class Eicc::DeclarationController < ApplicationController
   # TODO Only pull validation status of current_user
   # TODO Use a better technique instead of polling
   def show_validation_statuses
-    @validation_status = Eicc::ValidationStatus.find params[:id]
+    @validation_status = Eicc::BatchValidationStatus.find params[:id]
     
     if (@validation_status.status == "Completed" && @validation_status.review.nil?) || (@validation_status.review && @validation_status.review.tasks.size != @validation_status.individual_validation_statuses.size)
       # TODO WARNING! Destroying the review may have the effect of destroying previously entered comments, if they reopen the batch process later and upload a freash Excel!!
