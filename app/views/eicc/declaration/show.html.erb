@@ -31,20 +31,21 @@
   
 </style>
 
-  <div id="file_uploader" title="NOTE: .xlsx spreadsheets temporarily disabled."></div>
+  <div id="file_uploader"></div>
 
   <script>
     $(document).ready(function () {
       $('#file_uploader').fineUploader({
+        maxConnections : 1,
         request: {
           endpoint: '/eicc/declaration/validate_single_eicc_spreadsheet/' + $("input[name=validation_status_id]").val(),
           inputName: 'spreadsheet',
           params: {"authenticity_token" : $("input[name=authenticity_token]").val(), "validation_status_id" : $("input[name=validation_status_id]").val() }
         },
         
-        validation: {
+   /*     validation: {
           allowedExtensions : ["xls", "xlsx"]
-        }
+        } */
       });
     });
     
@@ -54,7 +55,6 @@
 
       console.log(name);
       promise.success();
-   
       return promise;
    
     });
