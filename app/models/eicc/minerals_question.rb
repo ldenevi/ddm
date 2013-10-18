@@ -4,13 +4,13 @@ class Eicc::MineralsQuestion < ActiveRecord::Base
   attr_writer :messages
   @messages = Eicc::Declaration.validation_messages
   
-  validates :sequence, :numericality => { :only_integer => true, :message => "'%{value}' is not a number" }
-  validates :question, :presence => true
+  # validates :sequence, :numericality => { :only_integer => true, :message => "'%{value}' is not a number" }
+  # validates :question, :presence => true
     
   validates_each :gold, :tantalum, :tin, :tungsten do |record, attr, value|
     next unless @messages[:minerals][record.sequence]
-    record.errors.add(attr, @messages[:minerals][record.sequence][:no_presence][attr]) if value.to_s.empty?
-    record.errors.add(attr, @messages[:minerals][record.sequence][:invalid_data][attr]) unless @messages[:minerals][record.sequence][:invalid_data][:expected].include?(value)
+    # record.errors.add(attr, @messages[:minerals][record.sequence][:no_presence][attr]) if value.to_s.empty?
+    # record.errors.add(attr, @messages[:minerals][record.sequence][:invalid_data][attr]) unless @messages[:minerals][record.sequence][:invalid_data][:expected].include?(value)
     
     case record.sequence
       when 1
