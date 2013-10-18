@@ -51,33 +51,65 @@ private
     
     record.company_level_questions.each_with_index do |clq, index|
       case index
+        # A. Do you have a policy in place that includes DRC conflict-free sourcing?
         when 0
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
           next
+        # B. Is this policy publicly available on your website?
         when 1
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
-          @base << @messages[:company_level][index][:flagged][:is_yes_but_no_url] if clq.answer == "Yes" && clq.comment.to_s.empty?
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)          
+          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:flagged][:is_yes_but_no_url] if clq.answer == "Yes" && clq.comment.to_s.empty? # TODO Test whether it's a real URL instead of just empty
           next
+        # C. Do you require your direct suppliers to be DRC conflict-free?
         when 2
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer == "No"
           next
+        # D. Do you require your direct suppliers to source from smelters validated as compliant to a CFS protocol using the CFS Compliant Smelter List?
         when 3
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
+        # E. Have you implemented due diligence measures for conflict-free sourcing?
         when 4
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
+        # F. Do you request your suppliers to fill out this Conflict Minerals Reporting Template?
         when 5
-         @base << @messages[:company_level][index][:flagged][:is_no_but_no_comment] if clq.answer == "No" && clq.comment.to_s.empty?
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_no_and_has_comment] if clq.answer == "No" && clq.comment.to_s.size > 0
+          @company_level << @messages[:company_level][index][:flagged][:is_no_but_no_comment]  if clq.answer == "No" && clq.comment.to_s.empty?
           next
+        # G. Do you request smelter names from your suppliers?
         when 6
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
+        # H. Do you verify due diligence information received from your suppliers?
         when 7
-          @base << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
+        # I. Does your verification process include corrective action management?
         when 8
-          @base << @messages[:company_level][index][:flagged][:is_yes_but_no_comment] if clq.answer == "Yes" && clq.comment.to_s.empty?
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:flagged][:is_yes_but_no_comment] if clq.answer == "Yes" && clq.comment.to_s.empty?
+          next
+        # J. Are you subject to the SEC Conflict Minerals disclosure requirement rule?
+        when 9
+          @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
           next
       end
     end

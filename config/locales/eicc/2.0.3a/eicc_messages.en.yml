@@ -178,7 +178,7 @@ eicc:
             - "Planned once lists become available"
           :message: "Invalid Data: Respondent provided an invalid answer for Question D"
         :flagged:
-          :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question D of the Company-level questions. Check the answer and comment"
+          :is_no: "Validation Needed: The Respondent answered \"NO\" to Question D of the Company-level questions. Check the answer and comment"
       # E. Have you implemented due diligence measures for conflict-free sourcing?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question E"
@@ -188,7 +188,7 @@ eicc:
             - "No"
           :message: "Invalid Data: Respondent provided an invalid answer for Question E"
         :flagged:
-          :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question E of the Company-level questions. Check the answer and comment"
+          :is_no: "Validation Needed: The Respondent answered \"NO\" to Question E of the Company-level questions. Check the answer and comment"
       # F. Do you request your suppliers to fill out this Conflict Minerals Reporting Template?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question F"
@@ -198,7 +198,8 @@ eicc:
             - "No"
           :message: "Invalid Data: Respondent provided an invalid answer for Question F"
         :flagged:
-          :is_no_but_no_comment: "Validation Needed: Respondent reported it does not request its suppliers to use this Conflict Minerals Reporting Template but it did not provide a description of the report format it requires in the comments box"
+          :is_no_and_has_comment: "Validation Needed: Ensure response in comments box is acceptable"
+          :is_no_but_no_comment: "Validation Needed: Respondent reported it does not request its suppliers to use this Conflict Minerals Reporting Template, but it did not provide a description of the report format it requires in the comments box"
       # G. Do you request smelter names from your suppliers?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question G"
@@ -208,7 +209,7 @@ eicc:
             - "No"
           :message: "Invalid Data: Respondent provided an invalid answer for Question G"
         :flagged:
-          :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question G of the Company-level questions. Check the answer and comment"
+          :is_no: "Validation Needed: The Respondent answered \"NO\" to Question G of the Company-level questions. Check the answer and comment"
       # H. Do you verify due diligence information received from your suppliers?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question H"
@@ -221,7 +222,7 @@ eicc:
             - "No"
           :message: "Invalid Data: Respondent provided an invalid answer for Question H"
         :flagged:
-          :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question H of the Company-level questions. Check the answer and comment"
+          :is_no: "Validation Needed: The Respondent answered \"NO\" to Question H of the Company-level questions. Check the answer and comment"
       # I. Does your verification process include corrective action management?
       - 
         :no_presence: "Invalid Data: Respondent did not provide input for Question I"
