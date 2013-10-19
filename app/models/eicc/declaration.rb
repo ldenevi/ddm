@@ -146,7 +146,7 @@ private
       tungsten_answer  = rows[i][minerals_cell_definition[:answer_column]]
       tungsten_comment = rows[i][minerals_cell_definition[:comment_column]]
       
-      i += 1
+      i += 2
       
       self.mineral_questions << Eicc::MineralsQuestion.new(:question => question, :sequence => sequence,
                                                                :tantalum => tantalum_answer, :tantalum_comment => tantalum_comment,
