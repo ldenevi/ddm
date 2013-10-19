@@ -60,10 +60,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
           
           @minerals << @messages[:minerals][index][:flagged][:is_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes"
           @minerals << @messages[:minerals][index][:flagged][:is_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes"
@@ -77,10 +77,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
           next
         # 4) Have you received completed Conflict Minerals Reporting Templates from all of your suppliers?
         when 3
@@ -89,10 +89,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
           
           @minerals << @messages[:minerals][index][:flagged][:is_no_and_less_than_50_percent][:tantalum] if has_tantalum && ["No but > 25%", "No but < 25%", "No - none"].include?(mdec.tantalum.to_s.downcase)
           @minerals << @messages[:minerals][index][:flagged][:is_no_and_less_than_50_percent][:tin]      if has_tin && ["No but > 25%", "No but < 25%", "No - none"].include?(mdec.tin.to_s.downcase)
@@ -106,10 +106,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
           
           @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tantalum.to_s.downcase != "yes"
           @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tin.to_s.downcase != "yes"
@@ -123,10 +123,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
           next
       end
     end

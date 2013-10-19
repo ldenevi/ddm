@@ -23,12 +23,6 @@ class Eicc::Declaration < ActiveRecord::Base
   validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
   validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
 
-=begin
-  validates_each :language do |record, attr, value|
-    record.errors.add(attr, ": For the Conflict Minerals reporting requirement, your EICC-GeSI Conflict Minerals Report, '%%' as per the SEC rules, the report must be submitted in English.  Therefore, we cannot accept this report.  Please re-submit the report in English.") if value.nil? || ["English"].include?(value)
-  end 
-=end 
-  
   has_many :mineral_questions, :class_name => Eicc::MineralsQuestion
   has_many :company_level_questions, :class_name => Eicc::CompanyLevelQuestion
   has_many :smelter_list, :class_name => Eicc::SmelterList
