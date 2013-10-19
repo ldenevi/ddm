@@ -136,7 +136,7 @@ private
   def validate_company_level_declaration(record)
     @messages ||= Eicc::Declaration.validation_messages
     
-    if record.company_level_questions.size != 10
+    if record.company_level_questions.size == 0
       @company_level << @messages[:declaration][:no_presence][:company_level_questions]
     end
     
