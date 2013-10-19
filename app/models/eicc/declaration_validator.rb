@@ -217,9 +217,9 @@ private
     
     return if declared_minerals.nil? || sourced_minerals.empty?
     
-    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tantalum] unless declared_minerals.tantalum == "Yes" && sourced_minerals.include?("tantalum")
-    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tin]      unless declared_minerals.tin == "Yes" && sourced_minerals.include?("tin")
-    @base << @messages[:cross_check][:minerals_question_1][:flagged][:gold]     unless declared_minerals.gold == "Yes" && sourced_minerals.include?("gold")
-    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tungsten] unless declared_minerals.tungsten == "Yes" && sourced_minerals.include?("tungsten")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tantalum] if declared_minerals.tantalum == "Yes" && !sourced_minerals.include?("tantalum")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tin]      if declared_minerals.tin == "Yes" && !sourced_minerals.include?("tin")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:gold]     if declared_minerals.gold == "Yes" && !sourced_minerals.include?("gold")
+    @base << @messages[:cross_check][:minerals_question_1][:flagged][:tungsten] if declared_minerals.tungsten == "Yes" && !sourced_minerals.include?("tungsten")
   end
 end
