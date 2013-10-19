@@ -40,7 +40,7 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:tantalum] if mdec.tantalum.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tin] if mdec.tin.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:gold] if mdec.gold.to_s.strip.empty?
-          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if mdec.tungste.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
           @minerals << @messages[:minerals][index][:invalid_data][:tin] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
@@ -58,7 +58,7 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:tantalum] if has_tantalum && mdec.tantalum.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tin]      if has_tin && mdec.tin.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
-          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungste.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
           @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
@@ -75,7 +75,7 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:tantalum] if has_tantalum && mdec.tantalum.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tin]      if has_tin && mdec.tin.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
-          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungste.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
           @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
@@ -87,7 +87,7 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:tantalum] if has_tantalum && mdec.tantalum.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tin]      if has_tin && mdec.tin.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
-          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungste.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
           @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
@@ -104,7 +104,7 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:tantalum] if has_tantalum && mdec.tantalum.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tin]      if has_tin && mdec.tin.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
-          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungste.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
           @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
@@ -121,7 +121,7 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:tantalum] if has_tantalum && mdec.tantalum.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tin]      if has_tin && mdec.tin.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
-          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungste.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
           @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false && @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
