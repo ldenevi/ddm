@@ -3,21 +3,21 @@ class CreateEiccSmelterLists < ActiveRecord::Migration
     create_table :eicc_smelter_lists do |t|
       t.integer :declaration_id
       t.integer :line_number
-      t.string :metal, :default => ""
-      t.string :smelter_reference_list, :default => ""
-      t.string :standard_smelter_name, :default => ""
-      t.string :facility_location_country, :default => ""
-      t.string :smelter_id
-      t.string :facility_location_street_address
-      t.string :facility_location_city
-      t.string :facility_location_province
-      t.string :facility_contact_name
-      t.string :facility_contact_email
-      t.string :proposed_next_steps
-      t.string :mineral_source
-      t.string :mineral_source_location
-      t.text   :comment
-      t.text   :risk_level => ""
+      t.text :metal, :default => ""
+      t.text :smelter_reference_list, :default => ""
+      t.text :standard_smelter_name, :default => ""
+      t.text :facility_location_country, :default => ""
+      t.text :smelter_id
+      t.text :facility_location_street_address
+      t.text :facility_location_city
+      t.text :facility_location_province
+      t.text :facility_contact_name
+      t.text :facility_contact_email
+      t.text :proposed_next_steps
+      t.text :mineral_source
+      t.text :mineral_source_location
+      t.text :comment
+      t.text :risk_level => ""
 
       t.timestamps
     end
