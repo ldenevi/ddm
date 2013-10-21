@@ -42,10 +42,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold] if mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip) || mdec.tantalum.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tin] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip) || mdec.tin.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:gold] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
           
           has_tantalum = true if mdec.tantalum.to_s.strip.downcase == "yes"
           has_tin = true      if mdec.tin.to_s.strip.downcase == "yes"
@@ -60,10 +60,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip) || mdec.tantalum.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip) || mdec.tin.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:flagged][:is_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes"
           @minerals << @messages[:minerals][index][:flagged][:is_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes"
@@ -77,10 +77,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip) || mdec.tantalum.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip) || mdec.tin.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
           next
         # 4) Have you received completed Conflict Minerals Reporting Templates from all of your suppliers?
         when 3
@@ -89,10 +89,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip) || mdec.tantalum.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip) || mdec.tin.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:flagged][:is_no_and_less_than_50_percent][:tantalum] if has_tantalum && ["No but > 25%", "No but < 25%", "No - none"].include?(mdec.tantalum.to_s.downcase)
           @minerals << @messages[:minerals][index][:flagged][:is_no_and_less_than_50_percent][:tin]      if has_tin && ["No but > 25%", "No but < 25%", "No - none"].include?(mdec.tin.to_s.downcase)
@@ -106,10 +106,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip) || mdec.tantalum.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip) || mdec.tin.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
           
           @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tantalum.to_s.downcase != "yes"
           @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tin.to_s.downcase != "yes"
@@ -123,10 +123,10 @@ private
           @minerals << @messages[:minerals][index][:no_presence][:gold]     if has_gold && mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:no_presence][:tungsten] if has_tungsten && mdec.tungsten.to_s.strip.empty?
           
-          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip)
-          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip)
+          @minerals << @messages[:minerals][index][:invalid_data][:tantalum] unless has_tantalum == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tantalum.to_s.strip) || mdec.tantalum.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tin]      unless has_tin == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tin.to_s.strip) || mdec.tin.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
+          @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
           next
       end
     end
@@ -145,63 +145,63 @@ private
         # A. Do you have a policy in place that includes DRC conflict-free sourcing?
         when 0
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
+          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes" || !clq.answer.to_s.empty?
           next
         # B. Is this policy publicly available on your website?
         when 1
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)          
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?        
           @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes"
           @company_level << @messages[:company_level][index][:flagged][:is_yes_but_no_url] if clq.answer == "Yes" && clq.comment.to_s.empty? # TODO Test whether it's a real URL instead of just empty
           next
         # C. Do you require your direct suppliers to be DRC conflict-free?
         when 2
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer == "No"
           next
         # D. Do you require your direct suppliers to source from smelters validated as compliant to a CFS protocol using the CFS Compliant Smelter List?
         when 3
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
         # E. Have you implemented due diligence measures for conflict-free sourcing?
         when 4
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
         # F. Do you request your suppliers to fill out this Conflict Minerals Reporting Template?
         when 5
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_no_and_has_comment] if clq.answer == "No" && clq.comment.to_s.size > 0
           @company_level << @messages[:company_level][index][:flagged][:is_no_but_no_comment]  if clq.answer == "No" && clq.comment.to_s.empty?
           next
         # G. Do you request smelter names from your suppliers?
         when 6
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
         # H. Do you verify due diligence information received from your suppliers?
         when 7
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
         # I. Does your verification process include corrective action management?
         when 8
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_yes_but_no_comment] if clq.answer == "Yes" && clq.comment.to_s.empty?
           @company_level << @messages[:company_level][index][:flagged][:is_no] if clq.answer == "No"
           next
         # J. Are you subject to the SEC Conflict Minerals disclosure requirement rule?
         when 9
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s)
+          @company_level << @messages[:company_level][index][:invalid_data][:message] unless @messages[:company_level][index][:invalid_data][:expected].include?(clq.answer.to_s) || clq.answer.to_s.empty?
           next
       end
     end
