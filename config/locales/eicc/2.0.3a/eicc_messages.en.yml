@@ -238,7 +238,7 @@ eicc:
             - "No"
           :message: "Invalid Data: Respondent provided an invalid answer for Question I"
         :flagged:
-          :is_yes_but_no_comment: "Validation Needed: Respondent reported its verification process includes corrective action management but it did not provide a description of the corrective actions in the comments box"
+          :is_yes_but_no_comment: "Validation Needed: Respondent reported its verification process includes corrective action management to Question I but it did not provide a description of the corrective actions in the comments box"
           :is_no: "Validation Needed: The Respondent answered \"NO\" to Question I of the Company-level questions. Check the answer and comment"
       # J. Are you subject to the SEC Conflict Minerals disclosure requirement rule?
       - 
