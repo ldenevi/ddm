@@ -33,7 +33,7 @@ private
     has_gold = false
     has_tungsten = false
     
-    record.mineral_questions.each_with_index do |mdec, index|
+    record.mineral_questions.sort_by(&:sequence).each_with_index do |mdec, index|
       case index
         # 1) Are any of the following metals necessary to the functionality or production of your company's products that it manufactures or contracts to manufacture?
         when 0
