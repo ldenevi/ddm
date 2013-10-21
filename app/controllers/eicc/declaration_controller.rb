@@ -80,11 +80,13 @@ class Eicc::DeclarationController < ApplicationController
                                                           :message => "")
         else
           # TODO Metric validations, generate clear report
+          error_messages = @declaration.errors.full_messages.uniq.select { |m| m != "Mineral questions is invalid" }
+          
           status = @declaration.errors.full_messages.join("").downcase.match("high risk").nil? ? "Invalid" : "High Risk"
           @individual_validation_status.update_attributes(:status => status, 
                                                           :representative_email => @declaration.representative_email,
                                                           :company_name => @declaration.company_name,
-                                                          :message => @declaration.errors.full_messages.uniq.map { |m| "<li>#{m}</li>" }.join("\n"))
+                                                          :message => error_messages.map { |m| "<li>#{m}</li>" }.join("\n"))
         end
         
         successully_processed = true
