@@ -140,12 +140,12 @@ private
       @company_level << @messages[:declaration][:no_presence][:company_level_questions]
     end
     
-    record.company_level_questions.each_with_index do |clq, index|
+    record.company_level_questions.sort_by(&:sequence).each_with_index do |clq, index|
       case index
         # A. Do you have a policy in place that includes DRC conflict-free sourcing?
         when 0
           @company_level << @messages[:company_level][index][:no_presence] if clq.answer.to_s.empty?
-          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes" || !clq.answer.to_s.empty?
+          @company_level << @messages[:company_level][index][:flagged][:is_not_yes] if clq.answer != "Yes" && !clq.answer.to_s.empty?
           next
         # B. Is this policy publicly available on your website?
         when 1
