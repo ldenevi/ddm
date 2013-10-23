@@ -19,19 +19,19 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
   # The revision should create the review BEFORE the declaration processing, and the
   # tasks are generated as EICC/GeSI spreadsheets are done processing (or rejected)
   def generate_review
-    review = Review.new :responsible_party => self.user, :name => "EICC Declaration - #{uploaded_at.to_formatted_s(:long)}",
-                          :organization => self.user.organization, :status => GSP::STATUS::ACTIVE,
-                          :assigned_at => Time.now, :deployed_at => Time.now,
-                          :targeted_completion_at => Time.now.end_of_year,
-                          :targeted_start_at => Time.now
+    review = EiccReview.new :responsible_party => self.user, :name => "EICC Declaration - #{uploaded_at.to_formatted_s(:long)}",
+                              :organization => self.user.organization, :status => GSP::STATUS::ACTIVE,
+                              :assigned_at => Time.now, :deployed_at => Time.now,
+                              :targeted_completion_at => Time.now.end_of_year,
+                              :targeted_start_at => Time.now
 
     self.individual_validation_statuses.each_with_index do |ivs, index|
-      task = Task.new(:name => ivs.filename, :instructions => ivs.message,
-                        :sequence => (index + 1),
-                        :status => GSP::STATUS::ACTIVE, :reviewer => self.user,
-                        :assigned_at => Time.now,
-                        :start_at => Time.now,
-                        :expected_completion_at => Time.now.end_of_year)
+      task = EiccTask.new(:name => ivs.filename, :instructions => ivs.message,
+                            :sequence => (index + 1),
+                            :status => GSP::STATUS::ACTIVE, :reviewer => self.user,
+                            :assigned_at => Time.now,
+                            :start_at => Time.now,
+                            :expected_completion_at => Time.now.end_of_year)
       comment = Comment.new :title => ivs.filename, :body => "", :author => user
       comment.attachments << BinaryFile.generate(:filename => ivs.filename, :data => File.read(ivs.uploaded_file_path))
       task.comments << comment
