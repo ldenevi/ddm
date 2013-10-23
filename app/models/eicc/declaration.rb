@@ -34,6 +34,8 @@ class Eicc::Declaration < ActiveRecord::Base
   has_one  :csv_smelter_list, :as => :attachable, :class_name => BinaryFile
   has_one  :csv_standard_smelter_names, :as => :attachable, :class_name => BinaryFile
   
+  has_many :comments, :as => :commentable
+  
   require 'fileutils'
   require 'digest/md5'
   require 'csv'

@@ -1,6 +1,6 @@
 class Eicc::DeclarationController < ApplicationController
   def index
-    @validation_statuses = Eicc::BatchValidationStatus.where :parent_id => nil
+    @validation_statuses = Eicc::BatchValidationStatus.all
   end
 
   def list
