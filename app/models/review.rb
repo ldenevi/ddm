@@ -34,11 +34,7 @@ class Review < ActiveRecord::Base
   
   # Recurrence schedule
   attr_accessible :schedule
-  serialize :schedule, Hash
-  
-  def initialize(args, none = nil)
-    super(args)
-  end
+  serialize :schedule, Hash  
   
   def progress
     (((completed_tasks.size.to_f) / tasks.size.to_f) * 100).to_i
