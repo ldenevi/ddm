@@ -11,7 +11,7 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
   has_many :invalid_individual_validation_statuses,     :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Invalid" }, :foreign_key => "parent_id"
   has_many :individual_validation_statuses_with_errors, :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Error" }, :foreign_key => "parent_id"
   
-  belongs_to :review
+  belongs_to :review, :class_name => "EiccReview"
   belongs_to :declaration, :class_name => "Eicc::Declaration"
   
   # TODO:
@@ -26,7 +26,7 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
                               :targeted_start_at => Time.now
 
     self.individual_validation_statuses.each_with_index do |ivs, index|
-      task = EiccTask.new(:name => ivs.filename, :instructions => ivs.message,
+      task = EiccTask.new(:name => ivs.filename, :instructions => (ivs.message.to_s.empty? ? "None" : ivs.message),
                             :sequence => (index + 1),
                             :status => GSP::STATUS::ACTIVE, :reviewer => self.user,
                             :assigned_at => Time.now,

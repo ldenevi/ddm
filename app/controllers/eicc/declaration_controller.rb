@@ -114,14 +114,18 @@ class Eicc::DeclarationController < ApplicationController
   # TODO Use a better technique instead of polling
   def show_validation_statuses
     @validation_status = Eicc::BatchValidationStatus.find params[:id]
-    
+    render :layout => false
+  end
+  
+  def find_or_create_review
+    @validation_status = Eicc::BatchValidationStatus.find params[:id]
     if (@validation_status.status == "Completed" && @validation_status.review.nil?) || (@validation_status.review && @validation_status.review.tasks.size != @validation_status.individual_validation_statuses.size)
       # TODO WARNING! Destroying the review may have the effect of destroying previously entered comments, if they reopen the batch process later and upload a freash Excel!!
       @validation_status.review.destroy if @validation_status.review
       @validation_status.review = @validation_status.generate_review
       @validation_status.save!
     end
-    render :layout => false
+    redirect_to :controller => '/review', :action => 'task_list', :id => @validation_status.review
   end
   
   def download_uploaded_eicc_spreadsheet

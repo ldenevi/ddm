@@ -9,6 +9,7 @@ GSP::Application.routes.draw do
   post "eicc/declaration/validate_single_eicc_spreadsheet/:validation_status_id", :to => "eicc/declaration#validate_single_eicc_spreadsheet"
   get "eicc/declaration/show_validation_statuses/:id", :to => "eicc/declaration#show_validation_statuses"
   get "eicc/declaration/download_uploaded_eicc_spreadsheet/:id", :to => "eicc/declaration#download_uploaded_eicc_spreadsheet", :as => "download_uploaded_eicc_spreadsheet"
+  get "eicc/declaration/find_or_create_review/:id", :to => "eicc/declaration#find_or_create_review", :as => "find_or_create_review"
 
   get "reviews/list"
 

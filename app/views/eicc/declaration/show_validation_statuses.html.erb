@@ -53,8 +53,8 @@
     </tr>
     <tr>
       <td colspan="2">
-        <% if @validation_status.review %>
-          <%= link_to "Go to review", list_tasks_path(@validation_status.review_id) %>
+        <% if @validation_status.status == "Completed" %>
+          <%= link_to "Go to review", find_or_create_review_path(@validation_status) %>
         <% else %>
           Review pending...
         <% end %>

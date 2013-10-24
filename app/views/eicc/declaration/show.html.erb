@@ -36,7 +36,7 @@
   <script>
     $(document).ready(function () {
       $('#file_uploader').fineUploader({
-        maxConnections : 1,
+        maxConnections : 5,
         request: {
           endpoint: '/eicc/declaration/validate_single_eicc_spreadsheet/' + $("input[name=validation_status_id]").val(),
           inputName: 'spreadsheet',
@@ -73,7 +73,11 @@
       $.get("/eicc/declaration/show_validation_statuses/" + $("input[name=validation_status_id]").val()).done(function(data) {
         $("#validation_statuses").html(data);
       });
-    }, 1000);
+    }, 2000);
+    
+    $.get("/eicc/declaration/show_validation_statuses/" + $("input[name=validation_status_id]").val()).done(function(data) {
+      $("#validation_statuses").html(data);
+    });
   });
 </script>
 
