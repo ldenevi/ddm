@@ -41,13 +41,13 @@
       <td><%= @validation_status.user.eponym %> - <%= @validation_status.user.email %></td>
     </tr>
     <tr>
-      <td>Brief:</td>
+      <td>Summary:</td>
       <td>
         <ul>
           <li><%= "%d Accepted" % @validation_status.accepted_individual_validation_statuses.size %></li>
-          <li><%= "%d High Risk" % @validation_status.high_risk_individual_validation_statuses.size %></li>
-          <li><%= "%d Invalid" % @validation_status.invalid_individual_validation_statuses.size %></li>
-          <li><%= "%d Error " % @validation_status.individual_validation_statuses_with_errors.size %></li>
+          <li><%= "%d High risk" % @validation_status.high_risk_individual_validation_statuses.size %></li>
+          <li><%= "%d Validation needed" % @validation_status.invalid_individual_validation_statuses.size %></li>
+          <li><%= "%d File(s) not readable " % @validation_status.individual_validation_statuses_with_errors.size %></li>
         </ul>
       </td>
     </tr>

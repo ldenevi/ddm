@@ -8,8 +8,8 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
   
   has_many :accepted_individual_validation_statuses,    :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Green" }, :foreign_key => "parent_id"
   has_many :high_risk_individual_validation_statuses,   :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "High Risk" }, :foreign_key => "parent_id"
-  has_many :invalid_individual_validation_statuses,     :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Invalid" }, :foreign_key => "parent_id"
-  has_many :individual_validation_statuses_with_errors, :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Error" }, :foreign_key => "parent_id"
+  has_many :invalid_individual_validation_statuses,     :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Validation needed" }, :foreign_key => "parent_id"
+  has_many :individual_validation_statuses_with_errors, :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "File not readable" }, :foreign_key => "parent_id"
   
   belongs_to :review, :class_name => "EiccReview"
   belongs_to :declaration, :class_name => "Eicc::Declaration"

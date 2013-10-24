@@ -82,7 +82,7 @@ class Eicc::DeclarationController < ApplicationController
           # TODO Metric validations, generate clear report
           error_messages = @declaration.errors.full_messages.uniq.select { |m| m != "Mineral questions is invalid" }
           
-          status = @declaration.errors.full_messages.join("").downcase.match("high risk").nil? ? "Invalid" : "High Risk"
+          status = @declaration.errors.full_messages.join("").downcase.match("high risk").nil? ? "Validation needed" : "High Risk"
           @individual_validation_status.update_attributes(:status => status, 
                                                           :representative_email => @declaration.representative_email,
                                                           :company_name => @declaration.company_name,
@@ -94,11 +94,10 @@ class Eicc::DeclarationController < ApplicationController
         
       # An exception was raised for any reason
       rescue
-        @individual_validation_status.update_attributes(:status => "Error",
+        @individual_validation_status.update_attributes(:status => "File not readable",
                                                         :representative_email => (@declaration.nil? ? "" : @declaration.representative_email),
                                                         :company_name =>(@declaration.nil? ? "" :  @declaration.company_name),
                                                         :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename))
-        @validation_status.update_attributes(:status => "Error")
         # TODO E-Mail Leo
         successully_processed = false
       end
