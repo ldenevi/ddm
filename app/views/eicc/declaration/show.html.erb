@@ -42,6 +42,9 @@
           inputName: 'spreadsheet',
           params: {"authenticity_token" : $("input[name=authenticity_token]").val(), "validation_status_id" : $("input[name=validation_status_id]").val() }
         },
+        text: {
+          failUpload : "File not readable"
+        }
         
    /*     validation: {
           allowedExtensions : ["xls", "xlsx"]
