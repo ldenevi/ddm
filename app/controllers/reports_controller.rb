@@ -132,6 +132,40 @@ class ReportsController < ApplicationController
                  "Validation Status",
                  "Issues"]
                  
+      # Calculation totals
+      calc_declaration_scopes = {:"Company level" => 0, :"Division level" => 0, :"Product category level" => 0, :"Product level" => 0, :"Empty" => 0}
+      calc_company_unique_identified = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_address = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_representative_name  = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_representative_title = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_representative_email = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_representative_phone = {:"Provided" => 0, :"Not Provided" => 0}
+      
+      calc_minerals = [
+                        {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
+                         :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
+                         :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
+                         :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
+                         :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+                        }
+                      
+                      ] * 6
+      
+      calc_company_level = [{:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"Yes included in standard contract language" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"Planned once lists become available" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes (3rd party audit)" => 0, :"Yes (documentation review only)" => 0, :"Yes (internal audit)" => 0, :"Yes (all methods apply)" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
+                            {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}}
+                           ]
+
       @batch.individual_validation_statuses.each do |ivs|
         next if ivs.declaration.nil?
         
@@ -155,8 +189,63 @@ class ReportsController < ApplicationController
           if minerals[sequence]
             mq = minerals[sequence]
             row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
+            
+            case mq.tantalum.to_s.strip
+              when "yes"
+                calc_minerals[sequence][:tantalum][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tantalum][:"No"] += 1
+              else
+                calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
+            end
+            if mq.tantalum.to_s.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            end
+            case mq.tin.to_s.strip
+              when "yes"
+                calc_minerals[sequence][:tin][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tin][:"No"] += 1
+              else
+                calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
+            end
+            if mq.tin.to_s.empty?
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            end
+            case mq.gold.to_s.strip
+              when "yes"
+                calc_minerals[sequence][:gold][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:gold][:"No"] += 1
+              else
+                calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
+            end
+            if mq.gold.to_s.empty?
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            end
+            case mq.tungsten.to_s.strip
+              when "yes"
+                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tungsten][:"No"] += 1
+              else
+                calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
+            end
+            if mq.tungsten.to_s.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            end
+            
           else
             row += [''] * 8
+            
           end
          end
          
@@ -164,6 +253,116 @@ class ReportsController < ApplicationController
           if company_level[sequence]
             clq = company_level[sequence]
             row += [clq.answer, clq.comment]
+            
+            case sequence
+              when 0
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 1
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 2
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "yes included in standard contract language"
+                    calc_company_level[sequence][:answer][:"Yes included in standard contract language"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 3
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "planned once lists become available"
+                    calc_company_level[sequence][:answer][:"Planned once lists become available"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 4
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 5
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 6
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 7
+                case clq.answer.to_s.strip
+                  when "yes (3rd party audit)"
+                    calc_company_level[sequence][:answer][:"Yes (3rd party audit)"] += 1
+                  when "yes (documentation review only)"
+                    calc_company_level[sequence][:answer][:"Yes (documentation review only)"] += 1
+                  when "yes (internal audit)"
+                    calc_company_level[sequence][:answer][:"Yes (internal audit)"] += 1
+                  when "yes (all methods apply)"
+                    calc_company_level[sequence][:answer][:"Yes (all methods apply)"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 8
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+              when 9
+                case clq.answer.to_s.strip
+                  when "yes"
+                    calc_company_level[sequence][:answer][:"Yes"] += 1
+                  when "no"
+                    calc_company_level[sequence][:answer][:"No"] += 1
+                  else
+                    calc_company_level[sequence][:answer][:"No answer provided"] += 1
+                end
+            end
+            
+            if clq.comment.to_s.strip.empty?
+              calc_company_level[sequence][:comment][:"Did not provide comments"] += 1
+            else
+              calc_company_level[sequence][:comment][:"Provided comments"] += 1
+            end
+            
           else
             row += ["", ""]
           end
@@ -238,6 +437,114 @@ class ReportsController < ApplicationController
          
          csv << row
        end
+       
+       
+    
+        # Counts
+        csv << ["",
+            "%d Company level - %d Division level - %d Product category level - %d Product level" % [calc_declaration_scopes[:"Company level"], calc_declaration_scopes[:"Division level"], calc_declaration_scopes[:"Product category level"], calc_declaration_scopes[:"Product level"]],
+            "",
+            "%d Provided - %d Not Provided" % [calc_company_unique_identified[:"Provided"], calc_company_unique_identified[:"Not Provided"]],
+            "%d Provided - %d Not Provided" % [calc_address[:"Provided"], calc_address[:"Not Provided"]],
+            "%d Provided - %d Not Provided" % [calc_representative_name[:"Provided"], calc_representative_name[:"Not Provided"]],
+            "%d Provided - %d Not Provided" % [calc_representative_title[:"Provided"], calc_representative_title[:"Not Provided"]],
+            "%d Provided - %d Not Provided" % [calc_representative_email[:"Provided"], calc_representative_email[:"Not Provided"]],
+            "%d Provided - %d Not Provided" % [calc_representative_phone[:"Provided"], calc_representative_phone[:"Not Provided"]],
+            "",
+            
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tantalum][:"Yes"], calc_minerals[0][:tantalum][:"No"], calc_minerals[0][:tantalum][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tantalum_comment][:"Provided comments"], calc_minerals[0][:tantalum_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tin][:"Yes"], calc_minerals[0][:tin][:"No"], calc_minerals[0][:tin][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tin_comment][:"Provided comments"], calc_minerals[0][:tin_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:gold][:"Yes"], calc_minerals[0][:gold][:"No"], calc_minerals[0][:gold][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:gold_comment][:"Provided comments"], calc_minerals[0][:gold_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tungsten][:"Yes"], calc_minerals[0][:tungsten][:"No"], calc_minerals[0][:tungsten][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tungsten_comment][:"Provided comments"], calc_minerals[0][:tungsten_comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:tantalum][:"Yes"], calc_minerals[1][:tantalum][:"No"], calc_minerals[1][:tantalum][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tantalum_comment][:"Provided comments"], calc_minerals[1][:tantalum_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:tin][:"Yes"], calc_minerals[1][:tin][:"No"], calc_minerals[1][:tin][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tin_comment][:"Provided comments"], calc_minerals[1][:tin_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:gold][:"Yes"], calc_minerals[1][:gold][:"No"], calc_minerals[1][:gold][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:gold_comment][:"Provided comments"], calc_minerals[1][:gold_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:tungsten][:"Yes"], calc_minerals[1][:tungsten][:"No"], calc_minerals[1][:tungsten][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tungsten_comment][:"Provided comments"], calc_minerals[1][:tungsten_comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:tantalum][:"Yes"], calc_minerals[2][:tantalum][:"No"], calc_minerals[2][:tantalum][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tantalum_comment][:"Provided comments"], calc_minerals[2][:tantalum_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:tin][:"Yes"], calc_minerals[2][:tin][:"No"], calc_minerals[2][:tin][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tin_comment][:"Provided comments"], calc_minerals[2][:tin_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:gold][:"Yes"], calc_minerals[2][:gold][:"No"], calc_minerals[2][:gold][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:gold_comment][:"Provided comments"], calc_minerals[2][:gold_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:tungsten][:"Yes"], calc_minerals[2][:tungsten][:"No"], calc_minerals[2][:tungsten][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tungsten_comment][:"Provided comments"], calc_minerals[2][:tungsten_comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:tantalum][:"Yes"], calc_minerals[3][:tantalum][:"No"], calc_minerals[3][:tantalum][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tantalum_comment][:"Provided comments"], calc_minerals[3][:tantalum_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:tin][:"Yes"], calc_minerals[3][:tin][:"No"], calc_minerals[3][:tin][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tin_comment][:"Provided comments"], calc_minerals[3][:tin_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:gold][:"Yes"], calc_minerals[3][:gold][:"No"], calc_minerals[3][:gold][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:gold_comment][:"Provided comments"], calc_minerals[3][:gold_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:tungsten][:"Yes"], calc_minerals[3][:tungsten][:"No"], calc_minerals[3][:tungsten][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tungsten_comment][:"Provided comments"], calc_minerals[3][:tungsten_comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:tantalum][:"Yes"], calc_minerals[4][:tantalum][:"No"], calc_minerals[4][:tantalum][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tantalum_comment][:"Provided comments"], calc_minerals[4][:tantalum_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:tin][:"Yes"], calc_minerals[4][:tin][:"No"], calc_minerals[4][:tin][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tin_comment][:"Provided comments"], calc_minerals[4][:tin_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:gold][:"Yes"], calc_minerals[4][:gold][:"No"], calc_minerals[4][:gold][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:gold_comment][:"Provided comments"], calc_minerals[4][:gold_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:tungsten][:"Yes"], calc_minerals[4][:tungsten][:"No"], calc_minerals[4][:tungsten][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tungsten_comment][:"Provided comments"], calc_minerals[4][:tungsten_comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:tantalum][:"Yes"], calc_minerals[5][:tantalum][:"No"], calc_minerals[5][:tantalum][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tantalum_comment][:"Provided comments"], calc_minerals[5][:tantalum_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:tin][:"Yes"], calc_minerals[5][:tin][:"No"], calc_minerals[5][:tin][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tin_comment][:"Provided comments"], calc_minerals[5][:tin_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:gold][:"Yes"], calc_minerals[5][:gold][:"No"], calc_minerals[5][:gold][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:gold_comment][:"Provided comments"], calc_minerals[5][:gold_comment][:"Did not provide comments"]],
+            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:tungsten][:"Yes"], calc_minerals[5][:tungsten][:"No"], calc_minerals[5][:tungsten][:"No Answer Provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tungsten_comment][:"Provided comments"], calc_minerals[5][:tungsten_comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[0][:answer][:"Yes"], calc_company_level[0][:answer][:"No"], calc_company_level[0][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[0][:comment][:"Provided comments"], calc_company_level[0][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[1][:answer][:"Yes"], calc_company_level[1][:answer][:"No"], calc_company_level[1][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[1][:comment][:"Provided comments"], calc_company_level[1][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d Yes included in standard contract language - %d No - %d No answer provided" % [calc_company_level[2][:answer][:"Yes"], calc_company_level[2][:answer][:"Yes included in standard contract language"], calc_company_level[2][:answer][:"No"], calc_company_level[2][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[2][:comment][:"Provided comments"], calc_company_level[2][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d Planned once lists become available - %d No - %d No answer provided" % 
+              [calc_company_level[3][:answer][:"Yes"], calc_company_level[3][:answer][:"Planned once lists become available"], calc_company_level[3][:answer][:"No"], calc_company_level[3][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[3][:comment][:"Provided comments"], calc_company_level[3][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[4][:answer][:"Yes"], calc_company_level[4][:answer][:"No"], calc_company_level[4][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[4][:comment][:"Provided comments"], calc_company_level[4][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[5][:answer][:"Yes"], calc_company_level[5][:answer][:"No"], calc_company_level[5][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[5][:comment][:"Provided comments"], calc_company_level[5][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[6][:answer][:"Yes"], calc_company_level[6][:answer][:"No"], calc_company_level[6][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[6][:comment][:"Provided comments"], calc_company_level[6][:comment][:"Did not provide comments"]],
+            
+            "%d Yes (3rd party audit) - %d Yes (documentation review only) - %d Yes (internal audit) - %d Yes (all methods apply) - %d No - %d No answer provided" %
+              [calc_company_level[7][:answer][:"Yes (3rd party audit)"],
+               calc_company_level[7][:answer][:"Yes (documentation review only)"],
+               calc_company_level[7][:answer][:"Yes (internal audit)"],
+               calc_company_level[7][:answer][:"Yes (all methods apply)"],
+               calc_company_level[7][:answer][:"No"],
+               calc_company_level[7][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[7][:comment][:"Provided comments"], calc_company_level[7][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[8][:answer][:"Yes"], calc_company_level[8][:answer][:"No"], calc_company_level[8][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[8][:comment][:"Provided comments"], calc_company_level[8][:comment][:"Did not provide comments"]],
+            
+            "%d Yes - %d No - %d No answer provided" % [calc_company_level[9][:answer][:"Yes"], calc_company_level[9][:answer][:"No"], calc_company_level[9][:answer][:"No answer provided"]],
+            "%d Provided comments - %d Did not provide comments" % [calc_company_level[9][:comment][:"Provided comments"], calc_company_level[9][:comment][:"Did not provide comments"]]
+             
+            ]
+       
     end
     
     send_data @csv, :filename => "eicc_consolidated_report.gsp.csv", :type => 'application/csv'
