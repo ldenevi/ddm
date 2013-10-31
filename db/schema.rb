@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131023172700) do
+ActiveRecord::Schema.define(:version => 20131031143821) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20131023172700) do
     t.string   "representative_phone"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.string   "template_version"
   end
 
   create_table "eicc_minerals_questions", :force => true do |t|
@@ -150,6 +151,7 @@ ActiveRecord::Schema.define(:version => 20131023172700) do
     t.integer  "review_id"
     t.datetime "created_at",                                          :null => false
     t.datetime "updated_at",                                          :null => false
+    t.string   "template_version"
   end
 
   create_table "gsp_templates", :force => true do |t|
@@ -268,7 +270,7 @@ ActiveRecord::Schema.define(:version => 20131023172700) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-11-06 18:44:07', :null => false
+    t.datetime "expected_completion_at", :default => '2013-11-07 16:58:21', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
