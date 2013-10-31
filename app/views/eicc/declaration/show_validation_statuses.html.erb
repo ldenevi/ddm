@@ -73,6 +73,7 @@
         <th>Representative E-Mail</th>
         <th>Results E-Mailed</th>
         <th>Issues</th>
+        <th>Template Version</th>
         <th>Uploaded At</th>
       </tr>
     </thead>
@@ -85,6 +86,7 @@
       <td><%= mail_to ivs.representative_email %></td>
       <td><%= (ivs.is_spreadsheet_return_email_sent) ? "Yes" : "No" %></td>
       <td><ul><%= ivs.message.html_safe %></ul></td>
+      <td><%= ivs.template_version %></td>
       <td><%= ivs.uploaded_at.to_formatted_s(:short) %></td>
     </tr>
     <% end %>

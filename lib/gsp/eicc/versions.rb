@@ -1,5 +1,5 @@
 # http://stackoverflow.com/questions/653157/a-better-similarity-ranking-algorithm-for-variable-length-strings
-module Versions
+module GSP::Eicc::Versions
   VERSION_HEADER_DATA_DIRPATH = File.join('lib', 'gsp', 'eicc', 'versions')
   
   VERSIONS = {"1.00" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "1.00.worksheet.0.txt")),
@@ -14,7 +14,7 @@ module Versions
     VERSIONS.each do |k, v|
       similarities << [k, string_similarity(v, worksheet_0)]
     end
-    similarities.sort { |a, b| b[1] <=> a[1] }
+    similarities.sort { |a, b| b[1] <=> a[1] }.first[0]
   end
   
   def string_similarity(str1, str2)

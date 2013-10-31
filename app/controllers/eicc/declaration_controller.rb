@@ -72,7 +72,7 @@ class Eicc::DeclarationController < ApplicationController
         @declaration = Eicc::Declaration.generate File.join(@temporary_filepath)
         @declaration.save!(:validate => false)
         
-        @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet", :declaration => @declaration)
+        @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet", :declaration => @declaration, :template_version => @declaration.template_version)
         if @declaration.valid?
           @individual_validation_status.update_attributes(:status => "Green",
                                                           :representative_email => @declaration.representative_email,

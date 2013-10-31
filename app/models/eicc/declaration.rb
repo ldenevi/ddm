@@ -1,27 +1,16 @@
 class Eicc::Declaration < ActiveRecord::Base
+  extend GSP::Eicc::Versions
+
   attr_accessible :address, :authorized_company_representative_name, :client_id,
                   :company_name, :company_unique_identifier, :completion_at,
                   :declaration_scope, :description_of_scope, :gsp_template_input_at,
                   :invalid_reasons, :language, :representative_email,
                   :representative_phone, :representative_title, :task_id, :validation_status,
-                  :uploaded_excel
-                  
-  # FIXME Find a better way to load this file into memory
-  cattr_accessor :cell_definitions
-  yaml = YAML::load_file(File.join('config', 'locales', 'eicc', '2.0.3a', 'eicc.yml'))
-  @@cell_definitions = yaml["eicc"]["cell_definitions"]
-  
-  cattr_accessor :validation_messages
-  yaml = YAML::load_file(File.join('config', 'locales', 'eicc', '2.0.3a', 'eicc_messages.en.yml'))
-  @@validation_messages = yaml["eicc"]["en"]
-  
-  validates_with Eicc::DeclarationValidator
+                  :uploaded_excel, :template_version
 
-  validates :company_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:company_name] }
-  validates :declaration_scope, :presence => { :message =>  @@validation_messages[:declaration][:no_presence][:declaration_scope] }
-  validates :authorized_company_representative_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:authorized_company_representative_name] }
-  validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
-  validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
+  cattr_reader :structure
+  cattr_reader :cell_definitions
+  cattr_reader :validation_messages
 
   has_many :mineral_questions, :class_name => Eicc::MineralsQuestion
   has_many :company_level_questions, :class_name => Eicc::CompanyLevelQuestion
@@ -43,25 +32,48 @@ class Eicc::Declaration < ActiveRecord::Base
   def self.generate(excel_filepath)
     obj = new :uploaded_excel => BinaryFile.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
     gnumeric_csv = GSP::Eicc::Excel::Converters::Gnumeric::Gnumeric.new(excel_filepath)
+    obj.template_version = get_version(gnumeric_csv.worksheets.first.data)
+    logger.info "Detected version #{obj.template_version}"
     obj.csv_worksheets = gnumeric_csv.worksheets
+    
+    # Fetch definitions and messages for version
+    @@structure           = YAML::load_file(File.join('config', 'eicc', obj.template_version, 'structure.yml'))
+    @@cell_definitions    = YAML::load_file(File.join('config', 'eicc', obj.template_version, 'cell_definitions.yml'))["eicc"]["cell_definitions"]
+    @@validation_messages = YAML::load_file(File.join('config', 'eicc', obj.template_version, 'messages.en.yml'))["eicc"]["en"]
+    
+    # Set validation messages
+    validates_with Eicc::DeclarationValidator
+    validates :company_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:company_name] }
+    validates :declaration_scope, :presence => { :message =>  @@validation_messages[:declaration][:no_presence][:declaration_scope] }
+    validates :authorized_company_representative_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:authorized_company_representative_name] }
+    validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
+    validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
+    
     obj.strip_worksheets
     obj
   end
   
   def strip_worksheets
     self.csv_worksheets.each do |worksheet|
-      case worksheet.filename
-      when 'eicc.csv.3'
+      if worksheet.filename == "eicc.csv.#{@@structure[:declaration]}"
         strip_declaration(worksheet.csv)
         worksheet.csv.rewind
+      end
+      if worksheet.filename == "eicc.csv.#{@@structure[:minerals]}"
         strip_minerals(worksheet.csv)
         worksheet.csv.rewind
+      end
+      if worksheet.filename == "eicc.csv.#{@@structure[:company_level]}"
         strip_company_level_questions(worksheet.csv)
         worksheet.csv.rewind
-      when 'eicc.csv.4'
+      end
+      if worksheet.filename == "eicc.csv.#{@@structure[:smelter_list]}"
         strip_smelter_list(worksheet.csv)
-      when 'eicc.csv.5'
+        worksheet.csv.rewind
+      end
+      if worksheet.filename == "eicc.csv.#{@@structure[:smelter_names]}"
         strip_standard_smelter_names(worksheet.csv)
+        worksheet.csv.rewind
       end
     end
     return true
@@ -72,58 +84,53 @@ class Eicc::Declaration < ActiveRecord::Base
   end
   
 private
+  def declaration_cell_definitions
+    @@cell_definitions["declaration"]
+  end
+  
   def strip_declaration(csv)
     csv.each_with_index do |row, index|
       case index
-      when @@cell_definitions["declaration"]["company_name"]["row"]
-        self.company_name = row[@@cell_definitions["declaration"]["company_name"]["column"]]
+      when declaration_cell_definitions["company_name"]["row"]
+        self.company_name = row[declaration_cell_definitions["company_name"]["column"]]
         
-      when @@cell_definitions["declaration"]["declaration_scope"]["row"]
-        self.declaration_scope = row[@@cell_definitions["declaration"]["declaration_scope"]["column"]]
+      when declaration_cell_definitions["declaration_scope"]["row"]
+        self.declaration_scope = row[declaration_cell_definitions["declaration_scope"]["column"]]
         
-      when  @@cell_definitions["declaration"]["description_of_scope"]["row"]
-        self.description_of_scope = row[@@cell_definitions["declaration"]["description_of_scope"]["column"]]
+      when declaration_cell_definitions["description_of_scope"]["row"]
+        self.description_of_scope = row[declaration_cell_definitions["description_of_scope"]["column"]]
         
-      when  @@cell_definitions["declaration"]["language"]["row"]
+      when declaration_cell_definitions["language"]["row"]
         self.language = "English" #  row[@@cell_definitions["declaration"]["language"]["column"]]
         
-      when  @@cell_definitions["declaration"]["company_unique_identifier"]["row"]
-        self.company_unique_identifier = row[@@cell_definitions["declaration"]["company_unique_identifier"]["column"]]
+      when declaration_cell_definitions["company_unique_identifier"]["row"]
+        self.company_unique_identifier = row[declaration_cell_definitions["company_unique_identifier"]["column"]]
         
-      when  @@cell_definitions["declaration"]["address"]["row"]
+      when declaration_cell_definitions["address"]["row"]
         self.address = row[@@cell_definitions["declaration"]["address"]["column"]]
         
-      when  @@cell_definitions["declaration"]["authorized_company_representative_name"]["row"]
-        self.authorized_company_representative_name = row[@@cell_definitions["declaration"]["authorized_company_representative_name"]["column"]]
+      when declaration_cell_definitions["authorized_company_representative_name"]["row"]
+        self.authorized_company_representative_name = row[declaration_cell_definitions["authorized_company_representative_name"]["column"]]
         
-      when  @@cell_definitions["declaration"]["representative_title"]["row"]
-        self.representative_title = row[@@cell_definitions["declaration"]["representative_title"]["column"]]
+      when declaration_cell_definitions["representative_title"]["row"]
+        self.representative_title = row[declaration_cell_definitions["representative_title"]["column"]]
         
-      when  @@cell_definitions["declaration"]["representative_email"]["row"]
-        self.representative_email = row[@@cell_definitions["declaration"]["representative_email"]["column"]]
+      when declaration_cell_definitions["representative_email"]["row"]
+        self.representative_email = row[declaration_cell_definitions["representative_email"]["column"]]
         
-      when  @@cell_definitions["declaration"]["representative_phone"]["row"]
-        self.representative_phone = row[@@cell_definitions["declaration"]["representative_phone"]["column"]]
+      when declaration_cell_definitions["representative_phone"]["row"]
+        self.representative_phone = row[declaration_cell_definitions["representative_phone"]["column"]]
         
-      when  @@cell_definitions["declaration"]["date_of_completion"]["row"]
-        self.completion_at = row[@@cell_definitions["declaration"]["date_of_completion"]["column"]]
+      when declaration_cell_definitions["date_of_completion"]["row"]
+        self.completion_at = row[declaration_cell_definitions["date_of_completion"]["column"]]
       end
     end
   end
 
   def minerals_cell_definition
-    {
-      :start_row => 19,
-      :end_row => 55,
-      :question_column => 1,
-      :number_of_minerals => 4,
-      :answer_column => 3,
-      :comment_column => 6,
-      :number_of_questions => 6
-    }
+    @@cell_definitions["minerals"]
   end
-    
-  # I hhhaaaaaate this code, but it goes...
+  
   def strip_minerals(csv)
     rows  = csv.read
     i     = minerals_cell_definition[:start_row]
@@ -160,13 +167,7 @@ private
   end
 
   def company_level_questions_definition
-    {
-      :start_row => 57,
-      :end_row => 75,
-      :question_column => 1,
-      :answer_column => 3,
-      :comment_column => 6
-    }
+    @@cell_definitions["company_level"]
   end
   
   def strip_company_level_questions(csv)
@@ -188,24 +189,7 @@ private
   
   # Smelter list
   def smelter_list_definition
-    {
-      :start_row => 3,
-      :end_row => 2000,
-      :metal_column => 0,
-      :reference_list_column => 1,
-      :standard_smelter_list_column => 2,
-      :facility_location_column => 3,
-      :smelter_id_column => 4,
-      :facility_location_street_column => 5,
-      :facility_location_city_column => 6,
-      :facility_location_province_column => 7,
-      :facility_contact_name_column => 8,
-      :facility_contact_email_column => 9,
-      :proposed_next_step_column => 10,
-      :source_column => 11,
-      :source_country_column => 12,
-      :comment_column => 13
-    }
+    @@cell_definitions["smelter_list"]
   end
   
   def strip_smelter_list(csv)
@@ -236,21 +220,13 @@ private
   
   # Standard smelter names
   def standard_smelter_name_definition
-    {
-      :start_row => 2,
-      :end_row => 199,
-      :metal_column => 0,
-      :standard_smelter_name_column => 1,
-      :known_alias_column => 2,
-      :facility_location_column => 3,
-      :smelter_id_column => 4
-    }
+    @@cell_definitions["standard_smelter_name"]
   end
   
   def strip_standard_smelter_names(csv)
     rows  = csv.read
     i     = standard_smelter_name_definition[:start_row]
-    while i < standard_smelter_name_definition[:end_row]
+    while !rows[i].nil?
       self.standard_smelter_names << Eicc::StandardSmelterName.new(:metal => rows[i][standard_smelter_name_definition[:metal_column]],
                                                                       :standard_smelter_name => rows[i][standard_smelter_name_definition[:standard_smelter_name_column]],
                                                                       :known_alias => rows[i][standard_smelter_name_definition[:known_alias_column]],
