@@ -1,0 +1,79 @@
+# EICC-GeSI template
+# Version: 2.00
+#
+
+eicc:
+  cell_definitions:
+    declaration:
+      company_name:
+        row: 6
+        column: 3
+      declaration_scope:
+        row: 7
+        column: 3
+      description_of_scope:
+        row: 8
+        column: 3
+      language:
+        row: 1
+        column: 11
+      company_unique_identifier:
+        row: 10
+        column: 3
+      address:
+        row: 11
+        column: 3
+      authorized_company_representative_name:
+        row: 12
+        column: 3
+      representative_title:
+        row: 13
+        column: 3
+      representative_email:
+        row: 14
+        column: 3
+      representative_phone:
+        row: 15
+        column: 3
+      date_of_completion:
+        row: 16
+        column: 3
+    minerals:
+      :start_row: 19
+      :end_row: 55
+      :question_column: 1
+      :number_of_minerals: 4
+      :answer_column: 3
+      :comment_column: 6
+      :number_of_questions: 6
+    company_level:
+      :start_row: 57
+      :end_row: 75
+      :question_column: 1
+      :answer_column: 3
+      :comment_column: 6
+    smelter_list:
+      :start_row: 3
+      :end_row: 2000
+      :metal_column: 0
+      :reference_list_column: 1
+      :standard_smelter_list_column: 2
+      :facility_location_column: 3
+      :smelter_id_column: 4
+      :facility_location_street_column: 5
+      :facility_location_city_column: 6
+      :facility_location_province_column: 7
+      :facility_contact_name_column: 8
+      :facility_contact_email_column: 9
+      :proposed_next_step_column: 10
+      :source_column: 11
+      :source_country_column: 12
+      :comment_column: 13
+    standard_smelter_name:
+      :start_row: 2
+      :end_row: 187
+      :metal_column: 0
+      :standard_smelter_name_column: 1
+      :known_alias_column: 2
+      :facility_location_column: 3
+      :smelter_id_column: 4

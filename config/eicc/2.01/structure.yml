@@ -1,0 +1,9 @@
+# EICC-GeSI template
+# Version: 2.01
+#
+---
+:declaration: 3
+:minerals: 3
+:company_level: 3
+:smelter_list: 4
+:smelter_names: 5
