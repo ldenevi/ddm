@@ -197,7 +197,7 @@ private
     i     = smelter_list_definition[:start_row]
     sequence = 0
     
-    while i < smelter_list_definition[:end_row]
+    while !rows[i].nil?
       self.smelter_list << Eicc::SmelterList.new(:line_number => sequence,
                                                     :metal => rows[i][smelter_list_definition[:metal_column]],
                                                     :smelter_reference_list => rows[i][smelter_list_definition[:reference_list_column]],
