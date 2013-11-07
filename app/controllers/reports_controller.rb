@@ -550,6 +550,148 @@ class ReportsController < ApplicationController
     send_data @csv, :filename => "eicc_consolidated_report.gsp.csv", :type => 'application/csv'
   end
   
+  def eicc_detailed_smelter_report
+    @batch = Eicc::BatchValidationStatus.find(params[:id])
+    
+    @csv = CSV.generate do |csv|
+      csv << ["Supplier Company Name",
+              # these columns are taken from the declaration, except product list which is an array created from the product list tab
+              "Declaration of Scope",
+              "Description of Scope",
+              # "Product List",
+              "Company Unique Identifier",
+              "Address",
+              "Authorized Company Representative Name",
+              "Representative Title",
+              "Representative E-Mail",
+              "Representative Phone",
+              "Date of Completion",
+              "Question 1 - Tantalum",
+              "Question 1 Comments - Tantalum",
+              "Question 1 - Tin",
+              "Question 1 Comments - Tin",
+              "Question 1 - Gold",
+              "Question 1 Comments - Gold",
+              "Question 1 - Tungsten",
+              "Question 1 Comments - Tungsten",
+              "Date Ingested into GSP",
+              "Original File Name",
+              "Validation Status",
+              # The following repeat for each non-null line in the smelter list
+              "Metal", 
+              "Smelter Reference List", 
+              "Standard Smelter Names", 
+              "Smelter Facility Location Country", 
+              "Smelter ID", 
+              "Smelter Facility Location Street address", 
+              "Smelter Facility Location City", 
+              "Smelter Facility Location State Province", 
+              "Smelter Facility Contact Name", 
+              "Smelter Facility Contact Email", 
+              "Proposed next steps, if applicable", 
+              "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
+              "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
+              "Comments" 
+              ]
+      @batch.individual_validation_statuses.each do |ivs|
+        next if ivs.declaration.nil?
+        
+        dec = ivs.declaration
+        question_1 = dec.mineral_questions.sort_by(&:sequence).first
+        
+        row_first_part = [dec.company_name,
+                          dec.declaration_scope,
+                          dec.description_of_scope,
+                          dec.company_unique_identifier,
+                          dec.address,
+                          dec.authorized_company_representative_name,
+                          dec.representative_title,
+                          dec.representative_email,
+                          dec.representative_phone,
+                          dec.completion_at,
+                          question_1.tantalum,
+                          question_1.tantalum_comment,
+                          question_1.tin,
+                          question_1.tin_comment,
+                          question_1.gold,
+                          question_1.gold_comment,
+                          question_1.tungsten,
+                          question_1.tungsten_comment,
+                          dec.created_at,
+                          dec.uploaded_excel.filename,
+                          ivs.status]
+
+        if dec.smelter_list.nil?
+          csv << row_first_part + ([''] * 13)
+        else
+          dec.smelter_list.each do |smelter|
+            row_second_part = [smelter.metal,
+                               smelter.smelter_reference_list,
+                               smelter.standard_smelter_name,
+                               smelter.facility_location_country,
+                               smelter.smelter_id,
+                               smelter.facility_location_street_address,
+                               smelter.facility_location_city,
+                               smelter.facility_location_province,
+                               smelter.facility_contact_name,
+                               smelter.facility_contact_email,
+                               smelter.proposed_next_steps,
+                               smelter.mineral_source,
+                               smelter.mineral_source_location,
+                               smelter.comment]
+                    
+            row = row_first_part + row_second_part    
+            csv << row       
+          end
+        end
+        
+      end
+    end
+    
+   send_data @csv, :filename => "eicc_detailed_smelter_list_report.gsp.csv", :type => 'application/csv'
+  end
+  
+  def eicc_consolidated_smelter_list
+    @batch = Eicc::BatchValidationStatus.find(params[:id])
+    
+    smelters = {}
+    
+    @batch.individual_validation_statuses.each do |ivs|
+      next if ivs.declaration.nil?
+      dec = ivs.declaration
+      
+      ext_supplier_name = [dec.company_name, dec.declaration_scope, dec.description_of_scope].join(" ")
+      
+      dec.smelter_list.each do |smelter|
+        smelter_key = [smelter.metal.to_s.strip, smelter.smelter_reference_list.to_s.strip, smelter.standard_smelter_name.to_s.strip, smelter.facility_location_country.to_s.strip, smelter.smelter_id.to_s.strip].join('=;=')
+        smelters[smelter_key] = [] if smelters[smelter_key].nil?
+        smelters[smelter_key] << ext_supplier_name
+      end
+    end
+    
+    @csv = CSV.generate do |csv|
+      csv << ["Number of Suppliers",
+              "Supplier Names",
+              "Metal",
+              "Smelter Reference List",
+              "Standard Smelter Names",
+              "Smelter Facility Location Country",
+              "Smelter ID"]
+              
+      smelters.each do |key, value|
+        smelter_info = key.split('=;=')
+        csv << [value.uniq.size,
+                value.uniq.join(', '),
+                smelter_info[0],
+                smelter_info[1],
+                smelter_info[2],
+                smelter_info[3]]
+      end
+    end
+    
+   send_data @csv, :filename => "eicc_consolidated_smelter_list_report.gsp.csv", :type => 'application/csv'
+  end
+  
   
   # Dashboard graphs
   def review_status
