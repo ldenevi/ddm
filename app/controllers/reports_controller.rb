@@ -246,7 +246,7 @@ class ReportsController < ApplicationController
   def eicc_detailed_smelter_report
     @batch = Eicc::BatchValidationStatus.find(params[:id])
     
-    csv = CSV.generate do |csv|
+    @csv = CSV.generate do |csv|
       csv << ["Supplier Company Name",
               # these columns are taken from the declaration, except product list which is an array created from the product list tab
               "Declaration of Scope",
@@ -341,7 +341,48 @@ class ReportsController < ApplicationController
       end
     end
     
-   send_data csv, :filename => "eicc_detailed_smelter_list_report.gsp.csv", :type => 'application/csv'
+   send_data @csv, :filename => "eicc_detailed_smelter_list_report.gsp.csv", :type => 'application/csv'
+  end
+  
+  def eicc_consolidated_smelter_list
+    @batch = Eicc::BatchValidationStatus.find(params[:id])
+    
+    smelters = {}
+    
+    @batch.individual_validation_statuses.each do |ivs|
+      next if ivs.declaration.nil?
+      dec = ivs.declaration
+      
+      ext_supplier_name = [dec.company_name, dec.declaration_scope, dec.description_of_scope].join(" ")
+      
+      dec.smelter_list.each do |smelter|
+        smelter_key = [smelter.metal.to_s.strip, smelter.smelter_reference_list.to_s.strip, smelter.standard_smelter_name.to_s.strip, smelter.facility_location_country.to_s.strip, smelter.smelter_id.to_s.strip].join('=;=')
+        smelters[smelter_key] = [] if smelters[smelter_key].nil?
+        smelters[smelter_key] << ext_supplier_name
+      end
+    end
+    
+    @csv = CSV.generate do |csv|
+      csv << ["Number of Suppliers",
+              "Supplier Names",
+              "Metal",
+              "Smelter Reference List",
+              "Standard Smelter Names",
+              "Smelter Facility Location Country",
+              "Smelter ID"]
+              
+      smelters.each do |key, value|
+        smelter_info = key.split('=;=')
+        csv << [value.uniq.size,
+                value.uniq.join(', '),
+                smelter_info[0],
+                smelter_info[1],
+                smelter_info[2],
+                smelter_info[3]]
+      end
+    end
+    
+   send_data @csv, :filename => "eicc_consolidated_smelter_list_report.gsp.csv", :type => 'application/csv'
   end
   
   

@@ -65,8 +65,13 @@
           <td><%= link_to vs.created_at.to_formatted_s(:local), upload_eicc_declarations_path(vs.id) %></td>
           <td><%= vs.individual_validation_statuses.size %></td>
           <td><%= vs.high_risk_individual_validation_statuses.size + vs.invalid_individual_validation_statuses.size %></td>
-          <td><%= link_to "Consolidated", eicc_consolidated_report_path(vs) %></td>
-          <td><%= link_to "Detailed Smelter List", eicc_detailed_smelter_report_path(vs) %></td>
+          <td>
+            <ul>
+              <li><%= link_to "Consolidated", eicc_consolidated_report_path(vs) %></li>
+              <li><%= link_to "Detailed Smelter List", eicc_detailed_smelter_report_path(vs) %></li>
+              <li><%= link_to "Consolidated Smelter List", eicc_consolidated_smelter_list_report_path(vs) %></li>
+            <ul>
+          </td>
         </tr>
         <% end %>
       </tbody>
