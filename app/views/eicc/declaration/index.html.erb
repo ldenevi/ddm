@@ -66,6 +66,7 @@
           <td><%= vs.individual_validation_statuses.size %></td>
           <td><%= vs.high_risk_individual_validation_statuses.size + vs.invalid_individual_validation_statuses.size %></td>
           <td><%= link_to "Consolidated", eicc_consolidated_report_path(vs) %></td>
+          <td><%= link_to "Detailed Smelter List", eicc_detailed_smelter_report_path(vs) %></td>
         </tr>
         <% end %>
       </tbody>

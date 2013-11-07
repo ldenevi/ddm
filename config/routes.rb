@@ -97,6 +97,7 @@ GSP::Application.routes.draw do
   get "reports/comprehensive", :to => "reports#comprehensive", :as => "comprehensive_list"
   get "reports/review_status", :to => "reports#review_status", :as => "review_status"
   get "reports/eicc_consolidated_report/:id", :to => "reports#eicc_consolidated_report", :as => "eicc_consolidated_report"
+  get "reports/eicc_detailed_smelter_report/:id", :to => "reports#eicc_detailed_smelter_report", :as => "eicc_detailed_smelter_report"
   
   # Calendar
   get "calendar/datafeed/:method", :to => "calendar#datafeed"
