@@ -5,4 +5,9 @@ class Eicc::SmelterList < ActiveRecord::Base
                   :standard_smelter_name
                   
   # validates :metal, :smelter_reference_list, :standard_smelter_name, :facility_location_country, :presence => true
+  
+  
+  def to_s
+    {:@metal => @metal, :@standard_smelter_name => @standard_smelter_name, :@smelter_reference_list => @smelter_reference_list, :@smelter_id => @smelter_id}.inspect
+  end
 end
