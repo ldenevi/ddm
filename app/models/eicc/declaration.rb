@@ -83,6 +83,10 @@ class Eicc::Declaration < ActiveRecord::Base
     "Report Rejected: Respondent did not provide its Conflict Minerals Report using the EICC-GeSI Report template in Excel format"
   end
   
+  def to_s
+    self.attributes.inspect
+  end
+  
 private
   def declaration_cell_definitions
     @@cell_definitions["declaration"]
@@ -198,6 +202,11 @@ private
     sequence = 0
     
     while !rows[i].nil?
+      if rows[i].uniq.size < 4
+        i += 1
+        next
+      end
+      
       self.smelter_list << Eicc::SmelterList.new(:line_number => sequence,
                                                     :metal => rows[i][smelter_list_definition[:metal_column]],
                                                     :smelter_reference_list => rows[i][smelter_list_definition[:reference_list_column]],
@@ -227,6 +236,10 @@ private
     rows  = csv.read
     i     = standard_smelter_name_definition[:start_row]
     while !rows[i].nil?
+     if rows[i].uniq.size < 4
+        i += 1
+        next
+      end
       self.standard_smelter_names << Eicc::StandardSmelterName.new(:metal => rows[i][standard_smelter_name_definition[:metal_column]],
                                                                       :standard_smelter_name => rows[i][standard_smelter_name_definition[:standard_smelter_name_column]],
                                                                       :known_alias => rows[i][standard_smelter_name_definition[:known_alias_column]],
@@ -236,8 +249,5 @@ private
     end
   end
   
-  def to_s
-    self.attributes.inspect
-  end
   
 end
