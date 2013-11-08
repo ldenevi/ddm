@@ -13,6 +13,7 @@ load "./db/seeds/clients/gsp.rb"
 load "./db/seeds/clients/springfield.rb"
 load "./db/seeds/clients/cohasset.rb"
 load "./db/seeds/clients/linsly.rb"
+load "./db/seeds/clients/au.rb"
 
 if ENV["GSP_CLIENT"]
   Dir["./db/seeds/templates/#{ENV['GSP_CLIENT']}/*.rb"].each { |t| load t }
