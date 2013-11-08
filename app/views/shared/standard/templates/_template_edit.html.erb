@@ -67,7 +67,6 @@
 </div>
 
 <script>
-
   $(function() {
     $( ".template-editor-tasks" )
       .accordion({
@@ -80,12 +79,19 @@
         handle: "h3",
         cursor: "move",
         start: function(event, ui) {
+          // CKEditor loses its data when using JQquery.sortable
+          // So we need to destroy the editor and recreate it manually
+          var editor = CKEDITOR.instances[$("textarea", ui.item).attr("id")];
+          editor.destroy();
         },
         stop: function( event, ui ) {
           resort_task_names();
           // IE doesn't register the blur when sorting
           // so trigger focusout handlers to remove .ui-state-focus
           ui.item.children( "h3" ).triggerHandler( "focusout" );
+          
+          // Recreate editor
+          CKEDITOR.replace($("textarea", ui.item)[0]);
         }
       });
     
