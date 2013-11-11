@@ -1,4 +1,5 @@
 class ReportsController < ApplicationController
+  include ReportsHelper
   layout 'print', :only => 'generate_comprehensive'
 
   def list
@@ -547,7 +548,7 @@ class ReportsController < ApplicationController
        
     end
     
-    send_data @csv, :filename => "eicc_consolidated_report.gsp.csv", :type => 'application/csv'
+    send_data @csv, :filename => report_filename("eicc_consolidated_report.gsp.csv"), :type => 'application/csv'
   end
   
   def eicc_detailed_smelter_report
@@ -648,7 +649,7 @@ class ReportsController < ApplicationController
       end
     end
     
-   send_data @csv, :filename => "eicc_detailed_smelter_list_report.gsp.csv", :type => 'application/csv'
+   send_data @csv, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.csv"), :type => 'application/csv'
   end
   
   def eicc_consolidated_smelter_list
@@ -689,7 +690,7 @@ class ReportsController < ApplicationController
       end
     end
     
-   send_data @csv, :filename => "eicc_consolidated_smelter_list_report.gsp.csv", :type => 'application/csv'
+   send_data @csv, :filename => report_filename("eicc_consolidated_smelter_list_report.gsp.csv"), :type => 'application/csv'
   end
   
   
