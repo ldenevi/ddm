@@ -6,5 +6,5 @@ module GSP
   autoload :UI, File.join('gsp', 'ui')
   autoload :Users, File.join('gsp', 'users')
   
-  VERSION = '0.3.8'
+  VERSION = '0.3.8a'
 end
