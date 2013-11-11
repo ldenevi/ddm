@@ -7,7 +7,7 @@ class Eicc::DeclarationController < ApplicationController
   end
 
   def new
-    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user_id => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
+    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
     redirect_to :action => :show, :id => @validation_status.id
   end
 
