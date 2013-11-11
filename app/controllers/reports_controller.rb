@@ -13,12 +13,12 @@ class ReportsController < ApplicationController
   end
   
   def generate_comprehensive
-    @review = Review.includes({:tasks => :comments}).where(:id => params[:id]).first
+    @review = Review.includes({:tasks => :comments}).where(:id => params[:id], :organization_id => current_user.organization.id).first
   end
   
   require 'csv'
   def eicc_consolidated_report
-    @batch = Eicc::BatchValidationStatus.find(params[:id])
+    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
     
      @csv = CSV.generate do |csv|
        csv << ["Supplier Company Name",
@@ -552,7 +552,7 @@ class ReportsController < ApplicationController
   end
   
   def eicc_detailed_smelter_report
-    @batch = Eicc::BatchValidationStatus.find(params[:id])
+    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
     
     @csv = CSV.generate do |csv|
       csv << ["Supplier Company Name",
@@ -653,7 +653,7 @@ class ReportsController < ApplicationController
   end
   
   def eicc_consolidated_smelter_list
-    @batch = Eicc::BatchValidationStatus.find(params[:id])
+    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
     
     smelters = {}
     
