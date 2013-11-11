@@ -670,22 +670,22 @@ class ReportsController < ApplicationController
     end
     
     @csv = CSV.generate do |csv|
-      csv << ["Number of Suppliers",
-              "Supplier Names",
-              "Metal",
+      csv << ["Metal",
               "Smelter Reference List",
               "Standard Smelter Names",
               "Smelter Facility Location Country",
-              "Smelter ID"]
+              "Smelter ID",
+              "Number of Suppliers",
+              "Supplier Names"]
               
       smelters.each do |key, value|
         smelter_info = key.split('=;=')
-        csv << [value.uniq.size,
-                value.uniq.join(', '),
-                smelter_info[0],
+        csv << [smelter_info[0],
                 smelter_info[1],
                 smelter_info[2],
-                smelter_info[3]]
+                smelter_info[3],
+                value.uniq.size,
+                value.uniq.join(', ')]
       end
     end
     
