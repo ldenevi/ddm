@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
+  before_filter :store_path
   before_filter :check_login, :except => :validate_single_eicc_spreadsheet
-  after_filter  :store_path
 
   def check_login
     return true if ENV['RAILS_ENV'] == 'test'
@@ -22,9 +22,13 @@ protected
     @use_ckeditor = true
   end
 
+  def after_sign_in_path_for(resource)
+    session[:return_to] || root_path
+  end
+
 private  
   def store_path
-    session[:return_to] = request.fullpath
+    session[:return_to] = request.fullpath unless request.fullpath =~ /\/users/
   end
   
   def clear_store_path
@@ -35,4 +39,5 @@ private
     redirect_to(session[:return_to] || alternate)
     clear_stored_location
   end
+  
 end
