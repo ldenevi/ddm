@@ -2,7 +2,7 @@ class ReviewController < ApplicationController
   layout :false, :except => [:show, :list, :task_list]
   
   def show
-    @review = Review.where(:id => params[:id], :user_id => current_user.id).first
+    @review = Review.where(:id => params[:id], :organization_id => current_user.organization.id).first
   end
   
   # TODO Active and upcoming reviews
@@ -20,7 +20,7 @@ class ReviewController < ApplicationController
   end
   
   def task_list
-    @review = Review.includes(:agency, :tasks => :reviewer).where(:id => params[:id], :user_id => current_user.id).first
+    @review = Review.includes(:agency, :tasks => :reviewer).where(:id => params[:id], :organization_id => current_user.organization.id).first
     @tasks  = @review.tasks
   end
   
