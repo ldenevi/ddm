@@ -1,19 +1,18 @@
 class Eicc::DeclarationController < ApplicationController
   def index
-    @validation_statuses = Eicc::BatchValidationStatus.all
+    @validation_statuses = Eicc::BatchValidationStatus.where(:user_id => current_user)
   end
 
   def list
   end
 
   def new
-    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
-    
+    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user_id => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
     redirect_to :action => :show, :id => @validation_status.id
   end
 
   def show
-    @validation_status = Eicc::BatchValidationStatus.find params[:id]
+    @validation_status = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user).first
   end
   
   def upload
