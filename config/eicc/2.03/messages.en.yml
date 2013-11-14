@@ -254,7 +254,7 @@ eicc:
       :no_presence:
         :metal: "Invalid Data: Respondent did not provide a Metal under smelter list"
         :smelter_reference_list: "Invalid Data: Respondent did not provide a smelter reference list under smelter list"
-        :standard_smelter_name: "Invalid Data: Respondent did not provide a standard smelter names under smelter list"
+        :standard_smelter_name: "Invalid Data: Respondent did not provide a standard smelter name under smelter list"
         :facility_location_country: "Invalid Data: Respondent did not provide a smelter facility country under smelter list"
         
     # Cross-check between spreadsheet tabs
