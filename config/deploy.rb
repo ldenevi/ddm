@@ -36,7 +36,12 @@ namespace :deploy do
   task :restart, :roles => :app, :except => { :no_release => true } do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
+  task :create_uploaded_files_symlink, :roles => :app do
+    run "ln -s #{deploy_to}/shared/uploaded_files public/uploaded_files"
+  end
 end
+
+after "deploy", "deploy:create_uploaded_files_symlink"
 
 namespace :db do
   task :migrate, :roles => :app do
