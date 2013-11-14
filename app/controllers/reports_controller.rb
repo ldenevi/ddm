@@ -661,7 +661,17 @@ class ReportsController < ApplicationController
       next if ivs.declaration.nil?
       dec = ivs.declaration
       
-      ext_supplier_name = [dec.company_name, dec.declaration_scope, dec.description_of_scope].join(" ")
+      case dec.declaration_scope
+        when /^A./
+          ext_supplier_name = dec.company_name
+        when /^B./
+          ext_supplier_name = "#{dec.company_name} (division level for #{dec.description_of_scope})"
+        when /^C./
+          ext_supplier_name = "#{dec.company_name} (product category level for #{dec.description_of_scope})"
+        when /^D./
+          ext_supplier_name = "%s (for following products %s)" % [dec.company_name, ""]
+      end
+      
       
       dec.smelter_list.each do |smelter|
         smelter_key = [smelter.metal.to_s.strip, smelter.smelter_reference_list.to_s.strip, smelter.standard_smelter_name.to_s.strip, smelter.facility_location_country.to_s.strip, smelter.smelter_id.to_s.strip].join('=;=')
