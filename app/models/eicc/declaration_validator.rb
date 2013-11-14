@@ -222,4 +222,11 @@ private
     @base << @messages[:cross_check][:minerals_question_1][:flagged][:gold]     if declared_minerals.gold == "Yes" && !sourced_minerals.include?("gold")
     @base << @messages[:cross_check][:minerals_question_1][:flagged][:tungsten] if declared_minerals.tungsten == "Yes" && !sourced_minerals.include?("tungsten")
   end
+  
+  def validate_smelter_list(record)
+    @messages ||= Eicc::Declaration.validation_messages
+    record.smelter_list.each do |smelter|
+      @smelter_list << @messages[:smelter_list][:no_presence][:standard_smelter_name] if smelter.standard_smelter_name.to_s.empty?
+    end
+  end
 end
