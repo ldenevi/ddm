@@ -37,7 +37,7 @@ namespace :deploy do
     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
   end
   task :create_uploaded_files_symlink, :roles => :app do
-    run "ln -s #{deploy_to}/shared/uploaded_files public/uploaded_files"
+    run "ln -s #{deploy_to}/shared/uploaded_files #{deploy_to}/current/public/uploaded_files"
   end
 end
 
