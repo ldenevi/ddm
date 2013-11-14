@@ -202,7 +202,11 @@ private
     sequence = 0
     
     while !rows[i].nil?
-      if rows[i].uniq.size < 4
+      rows_test = rows[i].uniq
+      if rows_test.size < 4
+        if rows_test.size == 2 && rows_test[1].to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/)
+          break
+        end
         i += 1
         next
       end
