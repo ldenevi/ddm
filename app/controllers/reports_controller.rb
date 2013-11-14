@@ -678,13 +678,14 @@ class ReportsController < ApplicationController
               "Smelter ID",
               "Number of Suppliers",
               "Supplier Names"]
-              
+# later on do a sort such that it comes out with all tantalum smelters alphabeticcally first, then all tin, gold, and tungsten smelters each alpha             
       smelters.each do |key, value|
         smelter_info = key.split('=;=')
         csv << [smelter_info[0],
                 smelter_info[1],
                 smelter_info[2],
                 smelter_info[3],
+                smelter_info[4],
                 value.uniq.size,
                 value.uniq.join(', ')]
       end
