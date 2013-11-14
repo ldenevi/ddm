@@ -33,6 +33,9 @@ class Eicc::Declaration < ActiveRecord::Base
     obj = new :uploaded_excel => BinaryFile.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
     gnumeric_csv = GSP::Eicc::Excel::Converters::Gnumeric::Gnumeric.new(excel_filepath)
     obj.template_version = get_version(gnumeric_csv.worksheets.first.data)
+    
+    raise StandardError, "Old template version" if obj.template_version == "1.00"
+    
     logger.info "Detected version #{obj.template_version}"
     obj.csv_worksheets = gnumeric_csv.worksheets
     
@@ -80,7 +83,7 @@ class Eicc::Declaration < ActiveRecord::Base
   end
   
   def self.unknown_file_format
-    "Report Rejected: Respondent did not provide its Conflict Minerals Report using the EICC-GeSI Report template in Excel format"
+    "Report Rejected: Respondent did not provide its Conflict Minerals Report using the EICC-GeSI Report template in Excel format, or the EICC-GeSI template version is not 2.00 or newer"
   end
   
   def to_s
