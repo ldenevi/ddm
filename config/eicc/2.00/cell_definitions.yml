@@ -16,7 +16,7 @@ eicc:
         column: 3
       language:
         row: 1
-        column: 11
+        column: 3
       company_unique_identifier:
         row: 10
         column: 3
