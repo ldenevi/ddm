@@ -17,13 +17,13 @@ class ReportsController < ApplicationController
   end
   
   require 'csv'
-  def eicc_consolidated_report
+    def eicc_consolidated_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
     
      @csv = CSV.generate do |csv|
        csv << ["Supplier Company Name",
                  "Declaration Scope",
-                 "Description of Scope",
+                 "Description of Scope", #remember to add Product List
                  "Company Unique Identifier",
                  "Address",
                  "Authorized Company Representative Name",
@@ -131,17 +131,17 @@ class ReportsController < ApplicationController
                  "Date Ingested into GSP",
                  "Original File Name",
                  "Validation Status",
-                 "Issues"]
+                 "Issues"]     #finished writing header row - will add to next rows in ivs declaration loop  and then write final total row unless we move totals higher
                  
-      # Calculation totals
-      calc_declaration_scopes = {:"Company level" => 0, :"Division level" => 0, :"Product category level" => 0, :"Product level" => 0, :"Empty" => 0}
-      calc_company_unique_identified = {:"Provided" => 0, :"Not Provided" => 0}
+      # Calculation totals initialization to 0
+      calc_declaration_scope = {:"Company level" => 0, :"Division level" => 0, :"Product category level" => 0, :"Product level" => 0, :"Empty" => 0}
+      calc_company_unique_identifier = {:"Provided" => 0, :"Not Provided" => 0}
       calc_address = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_name  = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_title = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_email = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_phone = {:"Provided" => 0, :"Not Provided" => 0}
-      
+     
       calc_minerals = [
                         {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
                          :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
@@ -152,8 +152,76 @@ class ReportsController < ApplicationController
                          :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
                          :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
                         }
-                      
-                      ] * 6
+                        #sequence 0 - minerals question 1 above
+                      ]  + [
+		      {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+			 }
+			 #sequence 1 - minerals question 2 above 
+			     ]  + [
+		      {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
+                         :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+			 }
+			 #sequence 2 - minerals question 3 above
+			   ]  + [
+		      {:tantalum => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0,  :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tin => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :gold => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tungsten => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+			 }
+                         #sequence 3 - minerals question 4 above
+			   ]  + [
+		      {:tantalum => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tin => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :gold => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tungsten => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
+                         :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+			 }
+                          #sequence 4 - minerals question 5 above
+			   ]  + [
+		      {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
+                         :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
+                         :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
+                         :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                         :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
+                         :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+			 }
+                           #sequence 5 - minerals question 6 above
+			  ]
+		      
+		      
+		      
+		      
+		      
+		      
+		      
+		      
+		      
+		      
+		      
+		      
+		      
       
       calc_company_level = [{:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
                             {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
@@ -167,7 +235,7 @@ class ReportsController < ApplicationController
                             {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}}
                            ]
 
-      @batch.individual_validation_statuses.each do |ivs|
+      @batch.individual_validation_statuses.each do |ivs|    # beginning of declaration loop
         next if ivs.declaration.nil?
         
         dec = ivs.declaration
@@ -186,12 +254,12 @@ class ReportsController < ApplicationController
                dec.representative_phone,
                dec.completion_at]
                
-         (0..5).to_a.each do |sequence|
+         (0..0).to_a.each do |sequence|         
           if minerals[sequence]
             mq = minerals[sequence]
             row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
             
-            case mq.tantalum.to_s.strip
+            case mq.tantalum.to_s.strip.downcase
               when "yes"
                 calc_minerals[sequence][:tantalum][:"Yes"] += 1
               when "no"
@@ -199,12 +267,12 @@ class ReportsController < ApplicationController
               else
                 calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
             end
-            if mq.tantalum.to_s.empty?
-              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
-            else
+            if mq.tantalum_comment.to_s.empty?
               calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
             end
-            case mq.tin.to_s.strip
+            case mq.tin.to_s.strip.downcase
               when "yes"
                 calc_minerals[sequence][:tin][:"Yes"] += 1
               when "no"
@@ -212,12 +280,12 @@ class ReportsController < ApplicationController
               else
                 calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
             end
-            if mq.tin.to_s.empty?
-              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
-            else
+            if mq.tin_comment.to_s.empty?
               calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
             end
-            case mq.gold.to_s.strip
+            case mq.gold.to_s.strip.downcase
               when "yes"
                 calc_minerals[sequence][:gold][:"Yes"] += 1
               when "no"
@@ -225,12 +293,12 @@ class ReportsController < ApplicationController
               else
                 calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
             end
-            if mq.gold.to_s.empty?
-              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
-            else
+            if mq.gold_comment.to_s.empty?
               calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
             end
-            case mq.tungsten.to_s.strip
+            case mq.tungsten.to_s.strip.downcase
               when "yes"
                 calc_minerals[sequence][:tungsten][:"Yes"] += 1
               when "no"
@@ -238,17 +306,461 @@ class ReportsController < ApplicationController
               else
                 calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
             end
-            if mq.tungsten.to_s.empty?
-              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
-            else
+            if mq.tungsten_comment.to_s.empty?
               calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
             end
+                      
+          end
+        end
+        
+        
+        
+        (1..1).to_a.each do |sequence|         
+            mq = minerals[sequence]
+            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
             
-          else
-            row += [''] * 8
+            if minerals[0].tantalum == "yes" 
+              calc_minerals[sequence][:tantalum:]["Answer not Required"] += 1
+            else  
+            case mq.tantalum.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tantalum][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tantalum][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:tantalum][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
+            end
+            end  
+            if mq.tantalum_comment.to_s.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tin == "yes" 
+              calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            else 
+            case mq.tin.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tin][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tin][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:tin][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tin_comment.to_s.empty?
+              calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].gold == "yes" 
+              calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            else
+            case mq.gold.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:gold][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:gold][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:gold][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
+            end
+            end
+            else if mq.gold_comment.to_s.empty?
+              calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tungsten == "yes" 
+              calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            else
+              case mq.tungsten.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tungsten][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:tungsten][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
+              end
+              end
+            if mq.tungsten_comment.to_s.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            end
+                      
+          end
+        end
+        
+        
+        (2..2).to_a.each do |sequence|         
+          if minerals[sequence]
+            mq = minerals[sequence]
+            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
             
+            if minerals[0].tantalum == "yes" 
+              calc_minerals[sequence][:tantalum:]["Answer not Required"] += 1
+            else
+            case mq.tantalum.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tantalum][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tantalum][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:tantalum][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
+            end
+            end  
+            if mq.tantalum_comment.to_s.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tin == "yes" 
+              calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            else
+            case mq.tin.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tin][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tin][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:tin][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
+            end
+            end  
+            if mq.tin_comment.to_s.empty?
+              calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].gold == "yes" 
+              calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            else
+            case mq.gold.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:gold][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:gold][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:gold][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
+            end
+            end  
+            if mq.gold_comment.to_s.empty?
+              calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tungsten == "yes" 
+              calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            else
+            case mq.tungsten.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tungsten][:"No"] += 1
+              when "uncertain or unknown"
+                calc_minerals[sequence][:tungsten][:"Uncertain or Unknown"] += 1
+              else
+                calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
+            end
+            end  
+            if mq.tungsten_comment.to_s.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            end
+                      
+          end
+        end
+
+        
+        (3..3).to_a.each do |sequence|        
+          if minerals[sequence]
+            mq = minerals[sequence]
+            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
+            
+            if minerals[0].tantalum == "yes" 
+              calc_minerals[sequence][:tantalum:]["Answer not Required"] += 1
+            else
+            case mq.tantalum.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tantalum][:"Yes"] += 1
+              when "no - none"
+                calc_minerals[sequence][:tantalum][:"No - None"] += 1
+              when "no but > 75%"
+                calc_minerals[sequence][:tantalum][:"No but > 75%"] += 1
+              when "no but > 50%"
+                calc_minerals[sequence][:tantalum][:"No but > 50%"] += 1
+              when "no but > 25%"
+                calc_minerals[sequence][:tantalum][:"No but > 25% "] += 1
+              when "no but < 25%"
+                calc_minerals[sequence][:tantalum][:"No but < 25%"] += 1
+              else
+                calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tantalum_comment.to_s.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tin == "yes" 
+              calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            else
+            case mq.tin.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tin][:"Yes"] += 1
+              when "no - none"
+                calc_minerals[sequence][:tin][:"No - None"] += 1
+              when "no but > 75%"
+                calc_minerals[sequence][:tin][:"No but > 75%"] += 1
+              when "no but > 50%"
+                calc_minerals[sequence][:tin][:"No but > 50%"] += 1
+              when "no but > 25%"
+                calc_minerals[sequence][:tin][:"No but > 25% "] += 1
+              when "no but < 25%"
+                calc_minerals[sequence][:tin][:"No but < 25%"] += 1
+              else
+              calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tin_comment.to_s.empty?
+              calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].gold == "yes" 
+              calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            else
+            case mq.gold.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:gold][:"Yes"] += 1
+              when "no - none"
+                calc_minerals[sequence][:gold][:"No - None"] += 1
+              when "no but > 75%"
+                calc_minerals[sequence][:gold][:"No but > 75%"] += 1
+              when "no but > 50%"
+                calc_minerals[sequence][:gold][:"No but > 50%"] += 1
+              when "no but > 25%"
+                calc_minerals[sequence][:gold][:"No but > 25% "] += 1
+              when "no but < 25%"
+                calc_minerals[sequence][:gold][:"No but < 25%"] += 1
+              else
+                calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.gold_comment.to_s.empty?
+              calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tungsten == "yes" 
+              calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            else
+            case mq.tungsten.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+              when "no - none"
+                calc_minerals[sequence][:tungsten][:"No - None"] += 1
+              when "no but > 75%"
+                calc_minerals[sequence][:tungsten][:"No but > 75%"] += 1
+              when "no but > 50%"
+                calc_minerals[sequence][:tungsten][:"No but > 50%"] += 1
+              when "no but > 25%"
+                calc_minerals[sequence][:tungsten][:"No but > 25% "] += 1
+              when "no but < 25%"
+                calc_minerals[sequence][:tungsten][:"No but < 25%"] += 1
+              else
+                calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tungsten_comment.to_s.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            end
+                      
+          end
+        end
+        
+        (4..4).to_a.each do |sequence|         
+          if minerals[sequence]
+            mq = minerals[sequence]
+            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
+            
+            if minerals[0].tantalum == "yes" 
+              calc_minerals[sequence][:tantalum:]["Answer not Required"] += 1
+            else
+            case mq.tantalum.to_s.strip.downcase
+              when "yes all smelters have been provided"
+                calc_minerals[sequence][:tantalum][:"Yes all smelters have been provided"] += 1
+              when "no"
+                calc_minerals[sequence][:tantalum][:"No"] += 1
+              else
+                calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tantalum_comment.to_s.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tin == "yes" 
+              calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            else
+            case mq.tin.to_s.strip.downcase
+              when "yes all smelters have been provided"
+                calc_minerals[sequence][:tin][:"Yes all smelters have been provided"] += 1
+              when "no"
+                calc_minerals[sequence][:tin][:"No"] += 1
+              else
+                calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tin_comment.to_s.empty?
+              calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].gold == "yes" 
+              calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            else
+            case mq.gold.to_s.strip.downcase
+              when "yes all smelters have been provided"
+                calc_minerals[sequence][:gold][:"Yes all smelters have been provided"] += 1
+              when "no"
+                calc_minerals[sequence][:gold][:"No"] += 1
+              else
+                calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.gold_comment.to_s.empty?
+              calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tungsten == "yes" 
+              calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            else
+            case mq.tungsten.to_s.strip.downcase
+              when "yes all smelters have been provided"
+                calc_minerals[sequence][:tungsten][:"Yes all smelters have been provided"] += 1
+              when "no"
+                calc_minerals[sequence][:tungsten][:"No"] += 1
+              else
+                calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tungsten_comment.to_s.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            end
+                      
           end
          end
+         
+         
+        (5..5).to_a.each do |sequence|         
+          if minerals[sequence]
+            mq = minerals[sequence]
+            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
+            
+            if minerals[0].tantalum == "yes" 
+              calc_minerals[sequence][:tantalum:]["Answer not Required"] += 1
+            else
+            case mq.tantalum.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tantalum][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tantalum][:"No"] += 1
+              when "unknown"
+                calc_minerals[sequence][:tantalum][:"Unknown"] += 1
+              else
+                calc_minerals[sequence][:tantalum][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tantalum_comment.to_s.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tin == "yes" 
+              calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            else
+            case mq.tin.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tin][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tin][:"No"] += 1
+              when "unknown"
+                calc_minerals[sequence][:tin][:"Unknown"] += 1
+              else
+                calc_minerals[sequence][:tin][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tin_comment.to_s.empty?
+              calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].gold == "yes" 
+              calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            else
+            case mq.gold.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:gold][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:gold][:"No"] += 1
+              when "unknown"
+                calc_minerals[sequence][:gold][:"Unknown"] += 1
+              else
+                calc_minerals[sequence][:gold][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.gold_comment.to_s.empty?
+              calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            end
+            if minerals[0].tungsten == "yes" 
+              calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            else
+            case mq.tungsten.to_s.strip.downcase
+              when "yes"
+                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+              when "no"
+                calc_minerals[sequence][:tungsten][:"No"] += 1
+              when "unknown"
+                calc_minerals[sequence][:tungsten][:"Unknown"] += 1
+              else
+                calc_minerals[sequence][:tungsten][:"No Answer Provided"] += 1
+            end
+            end
+            if mq.tungsten_comment.to_s.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            end
+                      
+          end
+         end
+         # end of minerlas questions
+         
          
          (0..9).to_a.each do |sequence|
           if company_level[sequence]
@@ -443,9 +955,10 @@ class ReportsController < ApplicationController
     
         # Counts
         csv << ["",
-            "%d Company level - %d Division level - %d Product category level - %d Product level" % [calc_declaration_scopes[:"Company level"], calc_declaration_scopes[:"Division level"], calc_declaration_scopes[:"Product category level"], calc_declaration_scopes[:"Product level"]],
+
+            "%d Company level - %d Division level - %d Product category level - %d Product level - %d Empty" % [calc_declaration_scope[:"Company level"], calc_declaration_scope[:"Division level"], calc_declaration_scope[:"Product category level"], calc_declaration_scope[:"Product level"], calc_declaration_scope[:"Empty"]],
             "",
-            "%d Provided - %d Not Provided" % [calc_company_unique_identified[:"Provided"], calc_company_unique_identified[:"Not Provided"]],
+            "%d Provided - %d Not Provided" % [calc_company_unique_identifier[:"Provided"], calc_company_unique_identifier[:"Not Provided"]],
             "%d Provided - %d Not Provided" % [calc_address[:"Provided"], calc_address[:"Not Provided"]],
             "%d Provided - %d Not Provided" % [calc_representative_name[:"Provided"], calc_representative_name[:"Not Provided"]],
             "%d Provided - %d Not Provided" % [calc_representative_title[:"Provided"], calc_representative_title[:"Not Provided"]],
@@ -462,49 +975,49 @@ class ReportsController < ApplicationController
             "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tungsten][:"Yes"], calc_minerals[0][:tungsten][:"No"], calc_minerals[0][:tungsten][:"No Answer Provided"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tungsten_comment][:"Provided comments"], calc_minerals[0][:tungsten_comment][:"Did not provide comments"]],
             
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:tantalum][:"Yes"], calc_minerals[1][:tantalum][:"No"], calc_minerals[1][:tantalum][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:tantalum][:"Yes"], calc_minerals[1][:tantalum][:"No"], calc_minerals[1][:tantalum][:"No Answer Provided"], calc_minerals[1][:tantalum][:"Answer not Required"], calc_minerals[1][:tantalum][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tantalum_comment][:"Provided comments"], calc_minerals[1][:tantalum_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:tin][:"Yes"], calc_minerals[1][:tin][:"No"], calc_minerals[1][:tin][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:tin][:"Yes"], calc_minerals[1][:tin][:"No"], calc_minerals[1][:tin][:"No Answer Provided"], calc_minerals[1][:tin][:"Answer not Required"], calc_minerals[1][:tin][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tin_comment][:"Provided comments"], calc_minerals[1][:tin_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:gold][:"Yes"], calc_minerals[1][:gold][:"No"], calc_minerals[1][:gold][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:gold][:"Yes"], calc_minerals[1][:gold][:"No"], calc_minerals[1][:gold][:"No Answer Provided"], calc_minerals[1][:gold][:"Answer not Required"], calc_minerals[1][:gold][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:gold_comment][:"Provided comments"], calc_minerals[1][:gold_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[1][:tungsten][:"Yes"], calc_minerals[1][:tungsten][:"No"], calc_minerals[1][:tungsten][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:tungsten][:"Yes"], calc_minerals[1][:tungsten][:"No"], calc_minerals[1][:tungsten][:"No Answer Provided"], calc_minerals[1][:tungsten][:"Answer not Required"], calc_minerals[1][:tungsten][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tungsten_comment][:"Provided comments"], calc_minerals[1][:tungsten_comment][:"Did not provide comments"]],
             
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:tantalum][:"Yes"], calc_minerals[2][:tantalum][:"No"], calc_minerals[2][:tantalum][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:tantalum][:"Yes"], calc_minerals[2][:tantalum][:"No"], calc_minerals[2][:tantalum][:"No Answer Provided"], calc_minerals[2][:tantalum][:"Answer not Required"], calc_minerals[2][:tantalum][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tantalum_comment][:"Provided comments"], calc_minerals[2][:tantalum_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:tin][:"Yes"], calc_minerals[2][:tin][:"No"], calc_minerals[2][:tin][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:tin][:"Yes"], calc_minerals[2][:tin][:"No"], calc_minerals[2][:tin][:"No Answer Provided"], calc_minerals[2][:tin][:"Answer not Required"], calc_minerals[2][:tin][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tin_comment][:"Provided comments"], calc_minerals[2][:tin_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:gold][:"Yes"], calc_minerals[2][:gold][:"No"], calc_minerals[2][:gold][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:gold][:"Yes"], calc_minerals[2][:gold][:"No"], calc_minerals[2][:gold][:"No Answer Provided"], calc_minerals[2][:gold][:"Answer not Required"], calc_minerals[2][:gold][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:gold_comment][:"Provided comments"], calc_minerals[2][:gold_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[2][:tungsten][:"Yes"], calc_minerals[2][:tungsten][:"No"], calc_minerals[2][:tungsten][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:tungsten][:"Yes"], calc_minerals[2][:tungsten][:"No"], calc_minerals[2][:tungsten][:"No Answer Provided"], calc_minerals[2][:tungsten][:"Answer not Required"], calc_minerals[2][:tungsten][:"Uncertain or Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tungsten_comment][:"Provided comments"], calc_minerals[2][:tungsten_comment][:"Did not provide comments"]],
             
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:tantalum][:"Yes"], calc_minerals[3][:tantalum][:"No"], calc_minerals[3][:tantalum][:"No Answer Provided"]],
+            "%d Yes - %d No but > 75% - %d No but > 50% - %d No but > 25% - %d No but < 25% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:tantalum][:"Yes"], calc_minerals[3][:tantalum][:"No but > 75%"], calc_minerals[3][:tantalum][:"No but > 50%"],calc_minerals[3][:tantalum][:"No but > 25%"], calc_minerals[3][:tantalum][:"No but < 25%"], calc_minerals[3][:tantalum][:"No - None"],  calc_minerals[3][:tantalum][:"No Answer Provided"], calc_minerals[3][:tantalum][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tantalum_comment][:"Provided comments"], calc_minerals[3][:tantalum_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:tin][:"Yes"], calc_minerals[3][:tin][:"No"], calc_minerals[3][:tin][:"No Answer Provided"]],
+            "%d Yes - %d No but > 75% - %d No but > 50% - %d No but > 25% - %d No but < 25% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:tin][:"Yes"],  calc_minerals[3][:tin][:"No but > 75%"], calc_minerals[3][:tin][:"No but > 50%"],calc_minerals[3][:tin][:"No but > 25%"], calc_minerals[3][:tin][:"No but < 25%"], calc_minerals[3][:tin][:"No - None"], calc_minerals[3][:tin][:"No Answer Provided"], calc_minerals[3][:tin][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tin_comment][:"Provided comments"], calc_minerals[3][:tin_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:gold][:"Yes"], calc_minerals[3][:gold][:"No"], calc_minerals[3][:gold][:"No Answer Provided"]],
+            "%d Yes - %d No but > 75% - %d No but > 50% - %d No but > 25% - %d No but < 25% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:gold][:"Yes"],  calc_minerals[3][:gold][:"No but > 75%"], calc_minerals[3][:gold][:"No but > 50%"],calc_minerals[3][:gold][:"No but > 25%"], calc_minerals[3][:gold][:"No but < 25%"], calc_minerals[3][:gold][:"No - None"], calc_minerals[3][:gold][:"No Answer Provided"], calc_minerals[3][:gold][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:gold_comment][:"Provided comments"], calc_minerals[3][:gold_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[3][:tungsten][:"Yes"], calc_minerals[3][:tungsten][:"No"], calc_minerals[3][:tungsten][:"No Answer Provided"]],
+            "%d Yes - %d No but > 75% - %d No but > 50% - %d No but > 25% - %d No but < 25% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:tungsten][:"Yes"],  calc_minerals[3][:tungsten][:"No but > 75%"], calc_minerals[3][:tungsten][:"No but > 50%"],calc_minerals[3][:tungsten][:"No but > 25%"], calc_minerals[3][:tungsten][:"No but < 25%"], calc_minerals[3][:tungsten][:"No - None"], calc_minerals[3][:tungsten][:"No Answer Provided"], calc_minerals[3][:tungsten][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tungsten_comment][:"Provided comments"], calc_minerals[3][:tungsten_comment][:"Did not provide comments"]],
-            
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:tantalum][:"Yes"], calc_minerals[4][:tantalum][:"No"], calc_minerals[4][:tantalum][:"No Answer Provided"]],
+
+            "%d Yes all smelters have been provided - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:tantalum][:"Yes all smelters have been provided"], calc_minerals[4][:tantalum][:"No"], calc_minerals[4][:tantalum][:"No Answer Provided"], calc_minerals[4][:tantalum][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tantalum_comment][:"Provided comments"], calc_minerals[4][:tantalum_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:tin][:"Yes"], calc_minerals[4][:tin][:"No"], calc_minerals[4][:tin][:"No Answer Provided"]],
+            "%d Yes all smelters have been provided - %d No - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:tin][:"Yes all smelters have been provided"], calc_minerals[4][:tin][:"No"], calc_minerals[4][:tin][:"No Answer Provided"], calc_minerals[4][:tin][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tin_comment][:"Provided comments"], calc_minerals[4][:tin_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:gold][:"Yes"], calc_minerals[4][:gold][:"No"], calc_minerals[4][:gold][:"No Answer Provided"]],
+            "%d Yes all smelters have been provided - %d No - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:gold][:"Yes all smelters have been provided"], calc_minerals[4][:gold][:"No"], calc_minerals[4][:gold][:"No Answer Provided"], calc_minerals[4][:gold][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:gold_comment][:"Provided comments"], calc_minerals[4][:gold_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[4][:tungsten][:"Yes"], calc_minerals[4][:tungsten][:"No"], calc_minerals[4][:tungsten][:"No Answer Provided"]],
+            "%d Yes all smelters have been provided - %d No - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:tungsten][:"Yes all smelters have been provided"], calc_minerals[4][:tungsten][:"No"], calc_minerals[4][:tungsten][:"No Answer Provided"], calc_minerals[4][:tungsten][:"Answer not Required"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tungsten_comment][:"Provided comments"], calc_minerals[4][:tungsten_comment][:"Did not provide comments"]],
             
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:tantalum][:"Yes"], calc_minerals[5][:tantalum][:"No"], calc_minerals[5][:tantalum][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:tantalum][:"Yes"], calc_minerals[5][:tantalum][:"No"], calc_minerals[5][:tantalum][:"No Answer Provided"], calc_minerals[5][:tantalum][:"Answer not Required"], calc_minerals[5][:tantalum][:"Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tantalum_comment][:"Provided comments"], calc_minerals[5][:tantalum_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:tin][:"Yes"], calc_minerals[5][:tin][:"No"], calc_minerals[5][:tin][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:tin][:"Yes"], calc_minerals[5][:tin][:"No"], calc_minerals[5][:tin][:"No Answer Provided"], calc_minerals[5][:tin][:"Answer not Required"], calc_minerals[5][:tin][:"Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tin_comment][:"Provided comments"], calc_minerals[5][:tin_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:gold][:"Yes"], calc_minerals[5][:gold][:"No"], calc_minerals[5][:gold][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:gold][:"Yes"], calc_minerals[5][:gold][:"No"], calc_minerals[5][:gold][:"No Answer Provided"], calc_minerals[5][:gold][:"Answer not Required"], calc_minerals[5][:gold][:"Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:gold_comment][:"Provided comments"], calc_minerals[5][:gold_comment][:"Did not provide comments"]],
-            "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[5][:tungsten][:"Yes"], calc_minerals[5][:tungsten][:"No"], calc_minerals[5][:tungsten][:"No Answer Provided"]],
+            "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:tungsten][:"Yes"], calc_minerals[5][:tungsten][:"No"], calc_minerals[5][:tungsten][:"No Answer Provided"], calc_minerals[5][:tungsten][:"Answer not Required"], calc_minerals[5][:tungsten][:"Unknown"]],
             "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tungsten_comment][:"Provided comments"], calc_minerals[5][:tungsten_comment][:"Did not provide comments"]],
             
             "%d Yes - %d No - %d No answer provided" % [calc_company_level[0][:answer][:"Yes"], calc_company_level[0][:answer][:"No"], calc_company_level[0][:answer][:"No answer provided"]],
@@ -550,6 +1063,16 @@ class ReportsController < ApplicationController
     
     send_data @csv, :filename => report_filename("eicc_consolidated_report.gsp.csv"), :type => 'application/csv'
   end
+  
+  # ISSUES TO DISCUSS
+# how are we getting the latest spread sheet from each extended company name/scope/product list?
+# when we ad review id will be able to have this same report work as either a batch-only report by entering a parameter of batch and the batch id or a "complete" report by entering "review" and review_id as parameters
+# not computing "answer not required" for minerals questions 2 through 6
+# not computing alternate answers such as "Uncertain or Unknown"  for minerals questions 2(sequence 1) and 3 (sequence 2), all  options for minerals question 4(sequence 3),  and unknown for minerals question 6 (sequnce 5). Minerals question 5 (sequence 4) the answer for "yes" is technically "yes all smelters have been provided" 
+
+# not computing Totals yet - can decide later where to put them 2nd row or last row? Can use the same technique I used on detailed smelter report to change row placement
+# IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS 
+  
   
   def eicc_detailed_smelter_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
