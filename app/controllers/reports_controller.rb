@@ -137,7 +137,7 @@ class ReportsController < ApplicationController
       calc_declaration_scope = {:"Company level" => 0, :"Division level" => 0, :"Product category level" => 0, :"Product level" => 0, :"Not Provided" => 0}
       calc_company_unique_identifier = {:"Provided" => 0, :"Not Provided" => 0}
       calc_address = {:"Provided" => 0, :"Not Provided" => 0}
-      calc_representative_name  = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_authorized_company_representative_name  = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_title = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_email = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_phone = {:"Provided" => 0, :"Not Provided" => 0}
@@ -245,16 +245,16 @@ class ReportsController < ApplicationController
 
 	# add calc totals for this loop
 	case dec.declaration_scope	
-           when /^A./
-              calc_declaration_scope[:"description_scope"][:"Company Level"] += 1
-           when /^B./
-              calc_declaration_scope[:"description_scope"][:"Company Level"] += 1
-           when /^C./
-              calc_declaration_scope[:"description_scope"][:"Company Level"] += 1
-           when /^D./
-              calc_declaration_scope[:"description_scope"][:"Company Level"] += 1
-           else
-	      calc_declaration_scope[:"description_scope"][:"Not Provided"] += 1
+	  when /^A./
+	    calc_declaration_scope[:"Company level"] += 1
+	  when /^B./
+              calc_declaration_scope[:"Division level"] += 1
+	  when /^C./
+             calc_declaration_scope[:"Product category level"] += 1
+          when /^D./
+             calc_declaration_scope[:"Product level"] += 1
+          else
+	    calc_declaration_scope[:"Not Provided"] += 1
         end
       
 	       
@@ -271,10 +271,10 @@ class ReportsController < ApplicationController
 	end
 
 
-	if dec.representative_name .to_s.strip.empty?
-		calc_representative_name [:"Not Provided"] += 1
+	if dec.authorized_company_representative_name.to_s.strip.empty?
+		calc_authorized_company_representative_name[:"Not Provided"] += 1
 	else
-		calc_representative_name [:"Provided"] += 1
+		calc_authorized_company_representative_name[:"Provided"] += 1
 	end
 
 
@@ -374,7 +374,7 @@ class ReportsController < ApplicationController
         row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
         if minerals[0].tantalum.to_s.strip.downcase == "yes" 
-          calc_minerals[sequence][:tantalum]["Answer not Required"] += 1
+          calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
         else  
           case mq.tantalum.to_s.strip.downcase
             when "yes"
@@ -395,7 +395,7 @@ class ReportsController < ApplicationController
         end
         
         if minerals[0].tin.to_s.strip.downcase == "yes" 
-         calc_minerals[sequence][:tin]["Answer not Required"] += 1
+         calc_minerals[sequence][:tin][:"Answer not Required"] += 1
         else 
           case mq.tin.to_s.strip.downcase
             when "yes"
@@ -416,7 +416,7 @@ class ReportsController < ApplicationController
         end
         
         if minerals[0].gold.to_s.strip.downcase == "yes" 
-          calc_minerals[sequence][:gold]["Answer not Required"] += 1
+          calc_minerals[sequence][:gold][:"Answer not Required"] += 1
         else
           case mq.gold.to_s.strip.downcase
             when "yes"
@@ -437,7 +437,7 @@ class ReportsController < ApplicationController
         end
         
         if minerals[0].tungsten.to_s.strip.downcase == "yes" 
-          calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+          calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
         else
           case mq.tungsten.to_s.strip.downcase
             when "yes"
@@ -465,7 +465,7 @@ class ReportsController < ApplicationController
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
           if minerals[0].tantalum.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tantalum]["Answer not Required"] += 1
+            calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
           else
             case mq.tantalum.to_s.strip.downcase
               when "yes"
@@ -486,7 +486,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].tin.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            calc_minerals[sequence][:tin][:"Answer not Required"] += 1
           else
             case mq.tin.to_s.strip.downcase
               when "yes"
@@ -507,7 +507,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].gold.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            calc_minerals[sequence][:gold][:"Answer not Required"] += 1
           else
             case mq.gold.to_s.strip.downcase
               when "yes"
@@ -528,7 +528,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].tungsten.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
             case mq.tungsten.to_s.strip.downcase
               when "yes"
@@ -557,7 +557,7 @@ class ReportsController < ApplicationController
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
           if minerals[0].tantalum.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tantalum]["Answer not Required"] += 1
+            calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
           else
             case mq.tantalum.to_s.strip.downcase
               when "yes"
@@ -584,7 +584,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].tin.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            calc_minerals[sequence][:tin][:"Answer not Required"] += 1
           else
             case mq.tin.to_s.strip.downcase
               when "yes"
@@ -611,7 +611,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].gold.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            calc_minerals[sequence][:gold][:"Answer not Required"] += 1
           else
             case mq.gold.to_s.strip.downcase
               when "yes"
@@ -638,7 +638,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].tungsten.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
             case mq.tungsten.to_s.strip.downcase
               when "yes"
@@ -673,7 +673,7 @@ class ReportsController < ApplicationController
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
           if minerals[0].tantalum == "yes" 
-            calc_minerals[sequence][:tantalum]["Answer not Required"] += 1
+            calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
           else
             case mq.tantalum.to_s.strip.downcase
               when "yes all smelters have been provided"
@@ -692,7 +692,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].tin.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tin]["Answer not Required"] += 1
+            calc_minerals[sequence][:tin][:"Answer not Required"] += 1
           else
             case mq.tin.to_s.strip.downcase
               when "yes all smelters have been provided"
@@ -711,7 +711,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].gold.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:gold]["Answer not Required"] += 1
+            calc_minerals[sequence][:gold][:"Answer not Required"] += 1
           else
             case mq.gold.to_s.strip.downcase
               when "yes all smelters have been provided"
@@ -730,7 +730,7 @@ class ReportsController < ApplicationController
           end
           
           if minerals[0].tungsten.to_s.strip.downcase == "yes" 
-            calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+            calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
             case mq.tungsten.to_s.strip.downcase
               when "yes all smelters have been provided"
@@ -758,7 +758,7 @@ class ReportsController < ApplicationController
       row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
       if minerals[0].tantalum.to_s.strip.downcase == "yes" 
-        calc_minerals[sequence][:tantalum]["Answer not Required"] += 1
+        calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
       else
         case mq.tantalum.to_s.strip.downcase
           when "yes"
@@ -779,7 +779,7 @@ class ReportsController < ApplicationController
       end
       
       if minerals[0].tin.to_s.strip.downcase == "yes" 
-        calc_minerals[sequence][:tin]["Answer not Required"] += 1
+        calc_minerals[sequence][:tin][:"Answer not Required"] += 1
       else
         case mq.tin.to_s.strip.downcase
           when "yes"
@@ -799,7 +799,7 @@ class ReportsController < ApplicationController
       calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
       end
       if minerals[0].gold.to_s.strip.downcase == "yes" 
-      calc_minerals[sequence][:gold]["Answer not Required"] += 1
+      calc_minerals[sequence][:gold][:"Answer not Required"] += 1
       else
       case mq.gold.to_s.strip.downcase
       when "yes"
@@ -818,7 +818,7 @@ class ReportsController < ApplicationController
       calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
       end
       if minerals[0].tungsten.to_s.strip.downcase == "yes" 
-      calc_minerals[sequence][:tungsten]["Answer not Required"] += 1
+      calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
       else
       case mq.tungsten.to_s.strip.downcase
       when "yes"
@@ -1039,7 +1039,7 @@ class ReportsController < ApplicationController
         "",
         "%d Provided - %d Not Provided" % [calc_company_unique_identifier[:"Provided"], calc_company_unique_identifier[:"Not Provided"]],
         "%d Provided - %d Not Provided" % [calc_address[:"Provided"], calc_address[:"Not Provided"]],
-        "%d Provided - %d Not Provided" % [calc_representative_name[:"Provided"], calc_representative_name[:"Not Provided"]],
+        "%d Provided - %d Not Provided" % [calc_authorized_company_representative_name[:"Provided"], calc_authorized_company_representative_name[:"Not Provided"]],
         "%d Provided - %d Not Provided" % [calc_representative_title[:"Provided"], calc_representative_title[:"Not Provided"]],
         "%d Provided - %d Not Provided" % [calc_representative_email[:"Provided"], calc_representative_email[:"Not Provided"]],
         "%d Provided - %d Not Provided" % [calc_representative_phone[:"Provided"], calc_representative_phone[:"Not Provided"]],
