@@ -64,6 +64,7 @@ end
 # = Features =
 # gem 'prawn'
 gem 'googlecharts'
+gem 'axlsx'
 # gem 'even_calendar'
 # gem 'chronic'
 
