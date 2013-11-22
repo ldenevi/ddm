@@ -1254,7 +1254,111 @@ class ReportsController < ApplicationController
     send_data @csv, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.csv"), :type => 'application/csv'
   end
   
+  
+  #============================================================
+  # EICC Consolidated Smelter List Report
+  #    
+  require 'axlsx'
   def eicc_consolidated_smelter_list
+    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
+    
+    @latest_declarations = []
+    
+    # Only select the latest declaration submitted by "company_name"
+    prev_company = nil
+    Eicc::IndividualValidationStatus.where(:parent_id => @batch.id).order("company_name ASC, created_at DESC").each do |ivs|
+      next if prev_company == ivs.company_name
+      next if ivs.declaration.nil?
+      @latest_declarations << ivs.declaration
+      prev_company = ivs.company_name
+    end
+    
+    # Group declarations by smelter
+    declarations_by_smelter = {}
+    
+    @latest_declarations.each do |declaration|
+      declaration.smelter_list.each do |smelter|
+        smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id,
+                       smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province, smelter.facility_contact_name,
+                       smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source, smelter.mineral_source_location, smelter.comment]
+        declarations_by_smelter[smelter_key] = [] if declarations_by_smelter[smelter_key].nil?
+        declarations_by_smelter[smelter_key] << declaration
+      end
+    end
+    
+    # Gather all the required data and sort
+    header = ["Metal",
+              "Smelter Reference List",
+              "Standard Smelter Names",
+              "Smelter Facility Location Country",
+              "Smelter ID",
+              "Smelter Facility Location Street Address",
+              "Smelter Facility Location City",
+              "Smelter Facility Location State / Province",
+              "Smelter Facility Contact Name",
+              "Smelter Facility Contact Email",
+              "Proposed next steps, if applicable",
+              "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+              "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+              "Comments",
+              "Source EICC Report"]
+
+    rows = []
+    declarations_by_smelter.each do |smelter_key, declarations|
+      rows << smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]
+    end
+    
+    rows = rows.sort_by { |e| [e[0], e[1]] }
+    
+    # Create spreadsheet
+    spreadsheet = Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "GSP Consolidated Smelters List") do |sheet|
+        # Style
+        header_style = nil
+        row_style    = nil
+        
+        p.workbook.styles do |style|
+          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
+          row_style    = style.add_style :b => false, :sz => 9
+        end
+        
+        # GSP Logo image
+        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+          image.width  = 4
+          image.height = 3
+          image.hyperlink.tooltip = "Green Status Pro"
+          image.start_at 0, 0
+          image.end_at 2, 1
+        end
+        sheet.add_row(['']).height = 86.0
+        sheet.merge_cells "A1:B1"
+        
+        # Add header row
+        sheet.add_row(header, :style => header_style).height = 48.0
+        
+        # Append data rows
+        rows.each do |r|
+          sheet.add_row(r, :style => row_style)
+        end
+        
+        # Freeze pane over data rows
+        sheet.sheet_view.pane do |pane|
+          pane.top_left_cell = "A3"
+          pane.state = :frozen_split
+          pane.y_split = 2
+          pane.x_split = 0
+          pane.active_pane = :bottom_right
+        end
+
+        
+      end
+    end
+    
+    send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_list_report.gsp.xlsx"), :type => 'application/excel'
+  end
+  
+  
+  def eicc_consolidated_smelter_list_old
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
     
     smelters = {}
