@@ -113,15 +113,12 @@ class ReportsController < ApplicationController
               "Number of standard smelter names provided - Tantalum",
               "Number of 'Smelter not list' names provided - Tantalum",
               "Number of 'Smelter not yet identified' names provided - Tantalum",
-              "Number of non-Conflict Free smelters - Tantalum",
-              "Number of standard smelter names provided - Tin",
+               "Number of standard smelter names provided - Tin",
               "Number of 'Smelter not list' names provided - Tin",
               "Number of 'Smelter not yet identified' names provided - Tin",
-              "Number of non-Conflict Free smelters - Tin",
               "Number of standard smelter names provided - Gold",
               "Number of 'Smelter not list' names provided - Gold",
               "Number of 'Smelter not yet identified' names provided - Gold",
-              "Number of non-Conflict Free smelters - Gold",
               "Number of standard smelter names provided - Tungsten",
               "Number of 'Smelter not list' names provided - Tungsten",
               "Number of 'Smelter not yet identified' names provided - Tungsten",
@@ -1019,10 +1016,10 @@ class ReportsController < ApplicationController
       end
     end
 
-    row += [smelter_group_tantalum[:identified].size, smelter_group_tantalum[:not_listed].size, smelter_group_tantalum[:not_yet_identified].size, '']
-    row += [smelter_group_tin[:identified].size, smelter_group_tin[:not_listed].size, smelter_group_tin[:not_yet_identified].size, '']
-    row += [smelter_group_gold[:identified].size, smelter_group_gold[:not_listed].size, smelter_group_gold[:not_yet_identified].size, '']
-    row += [smelter_group_tungsten[:identified].size, smelter_group_tungsten[:not_listed].size, smelter_group_tungsten[:not_yet_identified].size, '']
+    row += [smelter_group_tantalum[:identified].size, smelter_group_tantalum[:not_listed].size, smelter_group_tantalum[:not_yet_identified].size]
+    row += [smelter_group_tin[:identified].size, smelter_group_tin[:not_listed].size, smelter_group_tin[:not_yet_identified].size]
+    row += [smelter_group_gold[:identified].size, smelter_group_gold[:not_listed].size, smelter_group_gold[:not_yet_identified].size]
+    row += [smelter_group_tungsten[:identified].size, smelter_group_tungsten[:not_listed].size, smelter_group_tungsten[:not_yet_identified].size]
 
     # Extra data
     row += [dec.created_at, dec.uploaded_excel.filename, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
