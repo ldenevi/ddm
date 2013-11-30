@@ -16,12 +16,12 @@ class ReportsController < ApplicationController
     @review = Review.includes({:tasks => :comments}).where(:id => params[:id], :organization_id => current_user.organization.id).first
   end
   
-  require 'csv'
+  require 'axlsx'
   def eicc_consolidated_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
-    @csv = CSV.generate do |csv|
-      csv << ["Supplier Company Name",
+    #@csv = CSV.generate do |csv|
+      header = ["Supplier Company Name",
               "Declaration Scope",
               "Description of Scope", #remember to add Product List
               "Company Unique Identifier",
@@ -111,19 +111,16 @@ class ReportsController < ApplicationController
 
               # Smelter list
               "Number of standard smelter names provided - Tantalum",
-              "Number of 'Smelter not list' names provided - Tantalum",
+              "Number of 'Smelter not listed' names provided - Tantalum",
               "Number of 'Smelter not yet identified' names provided - Tantalum",
-              "Number of non-Conflict Free smelters - Tantalum",
-              "Number of standard smelter names provided - Tin",
-              "Number of 'Smelter not list' names provided - Tin",
+               "Number of standard smelter names provided - Tin",
+              "Number of 'Smelter not listed' names provided - Tin",
               "Number of 'Smelter not yet identified' names provided - Tin",
-              "Number of non-Conflict Free smelters - Tin",
               "Number of standard smelter names provided - Gold",
-              "Number of 'Smelter not list' names provided - Gold",
+              "Number of 'Smelter not listed' names provided - Gold",
               "Number of 'Smelter not yet identified' names provided - Gold",
-              "Number of non-Conflict Free smelters - Gold",
               "Number of standard smelter names provided - Tungsten",
-              "Number of 'Smelter not list' names provided - Tungsten",
+              "Number of 'Smelter not listed' names provided - Tungsten",
               "Number of 'Smelter not yet identified' names provided - Tungsten",
               "Number of non-Conflict Free smelters - Tungsten",
 
@@ -223,7 +220,7 @@ class ReportsController < ApplicationController
               {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
               {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}}
              ]
-
+     rows = []
     @batch.individual_validation_statuses.each do |ivs|    # beginning of declaration loop
       next if ivs.declaration.nil?
 
@@ -839,7 +836,7 @@ class ReportsController < ApplicationController
       
     end
   end
-# end of minerlas questions
+# end of minerals questions
 
 
   (0..9).to_a.each do |sequence|
@@ -1019,21 +1016,21 @@ class ReportsController < ApplicationController
       end
     end
 
-    row += [smelter_group_tantalum[:identified].size, smelter_group_tantalum[:not_listed].size, smelter_group_tantalum[:not_yet_identified].size, '']
-    row += [smelter_group_tin[:identified].size, smelter_group_tin[:not_listed].size, smelter_group_tin[:not_yet_identified].size, '']
-    row += [smelter_group_gold[:identified].size, smelter_group_gold[:not_listed].size, smelter_group_gold[:not_yet_identified].size, '']
-    row += [smelter_group_tungsten[:identified].size, smelter_group_tungsten[:not_listed].size, smelter_group_tungsten[:not_yet_identified].size, '']
+    row += [smelter_group_tantalum[:identified].size, smelter_group_tantalum[:not_listed].size, smelter_group_tantalum[:not_yet_identified].size]
+    row += [smelter_group_tin[:identified].size, smelter_group_tin[:not_listed].size, smelter_group_tin[:not_yet_identified].size]
+    row += [smelter_group_gold[:identified].size, smelter_group_gold[:not_listed].size, smelter_group_gold[:not_yet_identified].size]
+    row += [smelter_group_tungsten[:identified].size, smelter_group_tungsten[:not_listed].size, smelter_group_tungsten[:not_yet_identified].size]
 
     # Extra data
     row += [dec.created_at, dec.uploaded_excel.filename, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
 
-    csv << row
+    rows << row
   end
 
 
 
     # Counts
-    csv << ["",
+    totals =  ["TOTALS",
 
         "%d Company level - %d Division level - %d Product category level - %d Product level - %d Empty" % [calc_declaration_scope[:"Company level"], calc_declaration_scope[:"Division level"], calc_declaration_scope[:"Product category level"], calc_declaration_scope[:"Product level"], calc_declaration_scope[:"Not Provided"]],
         "",
@@ -1138,9 +1135,63 @@ class ReportsController < ApplicationController
 
         ]
 
+    ### end   # of @csv loop
+    ###  here on down is new stuff
+    
+      rows = rows.sort_by { |e| [e[0], e[1], e[2]] }
+
+        # Create spreadsheet
+    spreadsheet = Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "GSP Declarations List") do |sheet|
+        # Style                                                      
+        header_style = nil
+        row_style    = nil
+	totals_style = nil
+        
+        p.workbook.styles do |style|
+          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
+          row_style    = style.add_style :b => false, :sz => 9
+	  totals_style = style.add_style :b => true, :sz => 6, :alignment => { :wrap_text => true, :horizontal => :left }
+
+        end
+        
+        # GSP Logo image
+        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+          image.width  = 4
+          image.height = 3
+          image.hyperlink.tooltip = "Green Status Pro"
+          image.start_at 0, 0
+          image.end_at 2, 1
+        end
+        sheet.add_row(['']).height = 86.0
+        sheet.merge_cells "A1:B1"
+        
+        # Add header row
+        sheet.add_row(header, :style => header_style).height = 48.0
+        
+        # Append data rows
+        rows.each do |r|
+          sheet.add_row(r, :style => row_style)
+	end
+  
+	# Add totals row
+	sheet.add_row(totals, :style => totals_style).height =  48.0
+	
+        # Freeze pane over data rows
+        sheet.sheet_view.pane do |pane|
+          pane.top_left_cell = "A3"
+          pane.state = :frozen_split
+          pane.y_split = 2
+          pane.x_split = 0
+          pane.active_pane = :bottom_right
+        end
+
+        
+      end
     end
 
-    send_data @csv, :filename => report_filename("eicc_consolidated_report.gsp.csv"), :type => 'application/csv'
+     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_report.gsp.xlsx"), :type => 'application/excel'
+    ### (old) send_data @csv, :filename => report_filename("eicc_consolidated_report.gsp.csv"), :type => 'application/csv'
   end
 
 # TODO ISSUES TO DISCUSS
@@ -1156,9 +1207,25 @@ class ReportsController < ApplicationController
   def eicc_detailed_smelter_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
-    @csv = CSV.generate do |csv|
-      csv << ["Supplier Company Name",
-              # these columns are taken from the declaration, except product list which is an array created from the product list tab
+    #@csv = CSV.generate do |csv|
+      header = ["Metal", 
+	      "Smelter Reference List", 
+              "Standard Smelter Names", 
+              "Smelter Facility Location Country", 
+              "Smelter ID", 
+              "Smelter Facility Location Street address", 
+              "Smelter Facility Location City", 
+              "Smelter Facility Location State Province", 
+              "Smelter Facility Contact Name", 
+              "Smelter Facility Contact Email", 
+              "Proposed next steps, if applicable", 
+              "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
+              "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
+              "Comments",
+	      "Original Excel File Name",
+	      "Date File Ingested into GSP",
+              "Validation Status",
+	      "Supplier Company Name",
               "Declaration of Scope",
               "Description of Scope",
               # "Product List",
@@ -1176,33 +1243,21 @@ class ReportsController < ApplicationController
               "Question 1 - Gold",
               "Question 1 Comments - Gold",
               "Question 1 - Tungsten",
-              "Question 1 Comments - Tungsten",
-              "Date Ingested into GSP",
-              "Original File Name",
-              "Validation Status",
-              # The following repeat for each non-null line in the smelter list
-              "Metal", 
-              "Smelter Reference List", 
-              "Standard Smelter Names", 
-              "Smelter Facility Location Country", 
-              "Smelter ID", 
-              "Smelter Facility Location Street address", 
-              "Smelter Facility Location City", 
-              "Smelter Facility Location State Province", 
-              "Smelter Facility Contact Name", 
-              "Smelter Facility Contact Email", 
-              "Proposed next steps, if applicable", 
-              "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
-              "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
-              "Comments" 
+              "Question 1 Comments - Tungsten"
               ]
+	      
+	 rows = []     
       @batch.individual_validation_statuses.each do |ivs|
         next if ivs.declaration.nil?
 
         dec = ivs.declaration
         question_1 = dec.mineral_questions.sort_by(&:sequence).first
 
-        row_first_part = [dec.company_name,
+        row_second_part = [
+	                  dec.uploaded_excel.filename,
+			  dec.created_at,
+                          ivs.status,
+			  dec.company_name,
                           dec.declaration_scope,
                           dec.description_of_scope,
                           dec.company_unique_identifier,
@@ -1219,16 +1274,14 @@ class ReportsController < ApplicationController
                           question_1.gold,
                           question_1.gold_comment,
                           question_1.tungsten,
-                          question_1.tungsten_comment,
-                          dec.created_at,
-                          dec.uploaded_excel.filename,
-                          ivs.status]
+                          question_1.tungsten_comment
+                          ]
 
         if dec.smelter_list.nil?
-          csv << row_first_part + ([''] * 13)
+          row <<  ([''] * 13) + row_second_part
         else
           dec.smelter_list.each do |smelter|
-            row_second_part = [smelter.metal,
+            row_first_part = [smelter.metal,
                                smelter.smelter_reference_list,
                                smelter.standard_smelter_name,
                                smelter.facility_location_country,
@@ -1244,14 +1297,63 @@ class ReportsController < ApplicationController
                                smelter.comment]
 
             row = row_first_part + row_second_part    
-            csv << row       
+            rows << row       
           end
         end
 
       end
+    ### end  # of old csv loop
+    
+       
+       rows = rows.sort_by { |e| [ e[17], e[18], e[19], e[0], e[1], e[2], e[3] ] }
+    
+    # Create spreadsheet
+    spreadsheet = Axlsx::Package.new do |p|
+      p.workbook.add_worksheet(:name => "GSP Detailed Smelters List") do |sheet|
+        # Style
+        header_style = nil
+        row_style    = nil
+        
+        p.workbook.styles do |style|
+          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
+          row_style    = style.add_style :b => false, :sz => 9
+        end
+        
+        # GSP Logo image
+        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+          image.width  = 4
+          image.height = 3
+          image.hyperlink.tooltip = "Green Status Pro"
+          image.start_at 0, 0
+          image.end_at 2, 1
+        end
+        sheet.add_row(['']).height = 86.0
+        sheet.merge_cells "A1:B1"
+        
+        # Add header row
+        sheet.add_row(header, :style => header_style).height = 48.0
+        
+        # Append data rows
+        rows.each do |r|
+          sheet.add_row(r, :style => row_style)
+        end
+        
+        # Freeze pane over data rows
+        sheet.sheet_view.pane do |pane|
+          pane.top_left_cell = "A3"
+          pane.state = :frozen_split
+          pane.y_split = 2
+          pane.x_split = 0
+          pane.active_pane = :bottom_right
+        end
+
+        
+      end
     end
 
-    send_data @csv, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.csv"), :type => 'application/csv'
+     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.xlsx"), :type => 'application/excel'
+
+    ### send_data @csv, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.csv"), :type => 'application/csv'
   end
   
   
