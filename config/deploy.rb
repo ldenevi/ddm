@@ -14,7 +14,7 @@ default_run_options[:pty] = true
 
 
 # Menu options for targeted machines
-unles fetch(:stage, nil)
+unless fetch(:stage, nil)
   set :stage do
     Capistrano::CLI.ui.choose do |menu|
       menu.header = "Deploy to which server?"
