@@ -122,8 +122,6 @@ class ReportsController < ApplicationController
               "Number of standard smelter names provided - Tungsten",
               "Number of 'Smelter not listed' names provided - Tungsten",
               "Number of 'Smelter not yet identified' names provided - Tungsten",
-              "Number of non-Conflict Free smelters - Tungsten",
-
               # Extra data                 
               "Date Ingested into GSP",
               "Original File Name",
@@ -238,7 +236,7 @@ class ReportsController < ApplicationController
       dec.representative_title,
       dec.representative_email,
       dec.representative_phone,
-      dec.completion_at]
+      dec.completion_at]                    #strftime('%B %d, %Y')]   # dec.completion_at.strftime('%d, %B, %Y')(:local)]
 
 	# add calc totals for this loop
 	case dec.declaration_scope	
@@ -1022,7 +1020,7 @@ class ReportsController < ApplicationController
     row += [smelter_group_tungsten[:identified].size, smelter_group_tungsten[:not_listed].size, smelter_group_tungsten[:not_yet_identified].size]
 
     # Extra data
-    row += [dec.created_at, dec.uploaded_excel.filename, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
+    row += [dec.created_at.to_formatted_s(:local), dec.uploaded_excel.filename, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
 
     rows << row
   end
@@ -1032,111 +1030,110 @@ class ReportsController < ApplicationController
     # Counts
     totals =  ["TOTALS",
 
-        "%d Company level - %d Division level - %d Product category level - %d Product level - %d Empty" % [calc_declaration_scope[:"Company level"], calc_declaration_scope[:"Division level"], calc_declaration_scope[:"Product category level"], calc_declaration_scope[:"Product level"], calc_declaration_scope[:"Not Provided"]],
+        "%d Company level \n%d Division level \n%d Product category level \n%d Product level \n%d Empty" % [calc_declaration_scope[:"Company level"], calc_declaration_scope[:"Division level"], calc_declaration_scope[:"Product category level"], calc_declaration_scope[:"Product level"], calc_declaration_scope[:"Not Provided"]],
         "",
-        "%d Provided - %d Not Provided" % [calc_company_unique_identifier[:"Provided"], calc_company_unique_identifier[:"Not Provided"]],
-        "%d Provided - %d Not Provided" % [calc_address[:"Provided"], calc_address[:"Not Provided"]],
-        "%d Provided - %d Not Provided" % [calc_authorized_company_representative_name[:"Provided"], calc_authorized_company_representative_name[:"Not Provided"]],
-        "%d Provided - %d Not Provided" % [calc_representative_title[:"Provided"], calc_representative_title[:"Not Provided"]],
-        "%d Provided - %d Not Provided" % [calc_representative_email[:"Provided"], calc_representative_email[:"Not Provided"]],
-        "%d Provided - %d Not Provided" % [calc_representative_phone[:"Provided"], calc_representative_phone[:"Not Provided"]],
+        "%d Provided \n%d Not Provided" % [calc_company_unique_identifier[:"Provided"], calc_company_unique_identifier[:"Not Provided"]],
+        "%d Provided \n%d Not Provided" % [calc_address[:"Provided"], calc_address[:"Not Provided"]],
+        "%d Provided \n%d Not Provided" % [calc_authorized_company_representative_name[:"Provided"], calc_authorized_company_representative_name[:"Not Provided"]],
+        "%d Provided \n%d Not Provided" % [calc_representative_title[:"Provided"], calc_representative_title[:"Not Provided"]],
+        "%d Provided \n%d Not Provided" % [calc_representative_email[:"Provided"], calc_representative_email[:"Not Provided"]],
+        "%d Provided \n%d Not Provided" % [calc_representative_phone[:"Provided"], calc_representative_phone[:"Not Provided"]],
         "",
 
-        "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tantalum][:"Yes"], calc_minerals[0][:tantalum][:"No"], calc_minerals[0][:tantalum][:"No Answer Provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tantalum_comment][:"Provided comments"], calc_minerals[0][:tantalum_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tin][:"Yes"], calc_minerals[0][:tin][:"No"], calc_minerals[0][:tin][:"No Answer Provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tin_comment][:"Provided comments"], calc_minerals[0][:tin_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:gold][:"Yes"], calc_minerals[0][:gold][:"No"], calc_minerals[0][:gold][:"No Answer Provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:gold_comment][:"Provided comments"], calc_minerals[0][:gold_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided" % [calc_minerals[0][:tungsten][:"Yes"], calc_minerals[0][:tungsten][:"No"], calc_minerals[0][:tungsten][:"No Answer Provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[0][:tungsten_comment][:"Provided comments"], calc_minerals[0][:tungsten_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:tantalum][:"Yes"], calc_minerals[0][:tantalum][:"No"], calc_minerals[0][:tantalum][:"No Answer Provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:tantalum_comment][:"Provided comments"], calc_minerals[0][:tantalum_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:tin][:"Yes"], calc_minerals[0][:tin][:"No"], calc_minerals[0][:tin][:"No Answer Provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:tin_comment][:"Provided comments"], calc_minerals[0][:tin_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:gold][:"Yes"], calc_minerals[0][:gold][:"No"], calc_minerals[0][:gold][:"No Answer Provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:gold_comment][:"Provided comments"], calc_minerals[0][:gold_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:tungsten][:"Yes"], calc_minerals[0][:tungsten][:"No"], calc_minerals[0][:tungsten][:"No Answer Provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:tungsten_comment][:"Provided comments"], calc_minerals[0][:tungsten_comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:tantalum][:"Yes"], calc_minerals[1][:tantalum][:"No"], calc_minerals[1][:tantalum][:"No Answer Provided"], calc_minerals[1][:tantalum][:"Answer not Required"], calc_minerals[1][:tantalum][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tantalum_comment][:"Provided comments"], calc_minerals[1][:tantalum_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:tin][:"Yes"], calc_minerals[1][:tin][:"No"], calc_minerals[1][:tin][:"No Answer Provided"], calc_minerals[1][:tin][:"Answer not Required"], calc_minerals[1][:tin][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tin_comment][:"Provided comments"], calc_minerals[1][:tin_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:gold][:"Yes"], calc_minerals[1][:gold][:"No"], calc_minerals[1][:gold][:"No Answer Provided"], calc_minerals[1][:gold][:"Answer not Required"], calc_minerals[1][:gold][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:gold_comment][:"Provided comments"], calc_minerals[1][:gold_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[1][:tungsten][:"Yes"], calc_minerals[1][:tungsten][:"No"], calc_minerals[1][:tungsten][:"No Answer Provided"], calc_minerals[1][:tungsten][:"Answer not Required"], calc_minerals[1][:tungsten][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[1][:tungsten_comment][:"Provided comments"], calc_minerals[1][:tungsten_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:tantalum][:"Yes"], calc_minerals[1][:tantalum][:"No"], calc_minerals[1][:tantalum][:"No Answer Provided"], calc_minerals[1][:tantalum][:"Answer not Required"], calc_minerals[1][:tantalum][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:tantalum_comment][:"Provided comments"], calc_minerals[1][:tantalum_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:tin][:"Yes"], calc_minerals[1][:tin][:"No"], calc_minerals[1][:tin][:"No Answer Provided"], calc_minerals[1][:tin][:"Answer not Required"], calc_minerals[1][:tin][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:tin_comment][:"Provided comments"], calc_minerals[1][:tin_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:gold][:"Yes"], calc_minerals[1][:gold][:"No"], calc_minerals[1][:gold][:"No Answer Provided"], calc_minerals[1][:gold][:"Answer not Required"], calc_minerals[1][:gold][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:gold_comment][:"Provided comments"], calc_minerals[1][:gold_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:tungsten][:"Yes"], calc_minerals[1][:tungsten][:"No"], calc_minerals[1][:tungsten][:"No Answer Provided"], calc_minerals[1][:tungsten][:"Answer not Required"], calc_minerals[1][:tungsten][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:tungsten_comment][:"Provided comments"], calc_minerals[1][:tungsten_comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:tantalum][:"Yes"], calc_minerals[2][:tantalum][:"No"], calc_minerals[2][:tantalum][:"No Answer Provided"], calc_minerals[2][:tantalum][:"Answer not Required"], calc_minerals[2][:tantalum][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tantalum_comment][:"Provided comments"], calc_minerals[2][:tantalum_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:tin][:"Yes"], calc_minerals[2][:tin][:"No"], calc_minerals[2][:tin][:"No Answer Provided"], calc_minerals[2][:tin][:"Answer not Required"], calc_minerals[2][:tin][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tin_comment][:"Provided comments"], calc_minerals[2][:tin_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:gold][:"Yes"], calc_minerals[2][:gold][:"No"], calc_minerals[2][:gold][:"No Answer Provided"], calc_minerals[2][:gold][:"Answer not Required"], calc_minerals[2][:gold][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:gold_comment][:"Provided comments"], calc_minerals[2][:gold_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Uncertain or Unknown" % [calc_minerals[2][:tungsten][:"Yes"], calc_minerals[2][:tungsten][:"No"], calc_minerals[2][:tungsten][:"No Answer Provided"], calc_minerals[2][:tungsten][:"Answer not Required"], calc_minerals[2][:tungsten][:"Uncertain or Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[2][:tungsten_comment][:"Provided comments"], calc_minerals[2][:tungsten_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:tantalum][:"Yes"], calc_minerals[2][:tantalum][:"No"], calc_minerals[2][:tantalum][:"No Answer Provided"], calc_minerals[2][:tantalum][:"Answer not Required"], calc_minerals[2][:tantalum][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:tantalum_comment][:"Provided comments"], calc_minerals[2][:tantalum_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:tin][:"Yes"], calc_minerals[2][:tin][:"No"], calc_minerals[2][:tin][:"No Answer Provided"], calc_minerals[2][:tin][:"Answer not Required"], calc_minerals[2][:tin][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:tin_comment][:"Provided comments"], calc_minerals[2][:tin_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:gold][:"Yes"], calc_minerals[2][:gold][:"No"], calc_minerals[2][:gold][:"No Answer Provided"], calc_minerals[2][:gold][:"Answer not Required"], calc_minerals[2][:gold][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:gold_comment][:"Provided comments"], calc_minerals[2][:gold_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:tungsten][:"Yes"], calc_minerals[2][:tungsten][:"No"], calc_minerals[2][:tungsten][:"No Answer Provided"], calc_minerals[2][:tungsten][:"Answer not Required"], calc_minerals[2][:tungsten][:"Uncertain or Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:tungsten_comment][:"Provided comments"], calc_minerals[2][:tungsten_comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No but > 75%% - %d No but > 50%% - %d No but > 25%% - %d No but < 25%% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:tantalum][:"Yes"], calc_minerals[3][:tantalum][:"No but > 75%"], calc_minerals[3][:tantalum][:"No but > 50%"],calc_minerals[3][:tantalum][:"No but > 25%"], calc_minerals[3][:tantalum][:"No but < 25%"], calc_minerals[3][:tantalum][:"No - None"],  calc_minerals[3][:tantalum][:"No Answer Provided"], calc_minerals[3][:tantalum][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tantalum_comment][:"Provided comments"], calc_minerals[3][:tantalum_comment][:"Did not provide comments"]],
-        "%d Yes - %d No but > 75%% - %d No but > 50%% - %d No but > 25%% - %d No but < 25%% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:tin][:"Yes"],  calc_minerals[3][:tin][:"No but > 75%"], calc_minerals[3][:tin][:"No but > 50%"],calc_minerals[3][:tin][:"No but > 25%"], calc_minerals[3][:tin][:"No but < 25%"], calc_minerals[3][:tin][:"No - None"], calc_minerals[3][:tin][:"No Answer Provided"], calc_minerals[3][:tin][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tin_comment][:"Provided comments"], calc_minerals[3][:tin_comment][:"Did not provide comments"]],
-        "%d Yes - %d No but > 75%% - %d No but > 50%% - %d No but > 25%% - %d No but < 25%% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:gold][:"Yes"],  calc_minerals[3][:gold][:"No but > 75%"], calc_minerals[3][:gold][:"No but > 50%"],calc_minerals[3][:gold][:"No but > 25%"], calc_minerals[3][:gold][:"No but < 25%"], calc_minerals[3][:gold][:"No - None"], calc_minerals[3][:gold][:"No Answer Provided"], calc_minerals[3][:gold][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:gold_comment][:"Provided comments"], calc_minerals[3][:gold_comment][:"Did not provide comments"]],
-        "%d Yes - %d No but > 75%% - %d No but > 50%% - %d No but > 25%% - %d No but < 25%% - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[3][:tungsten][:"Yes"],  calc_minerals[3][:tungsten][:"No but > 75%"], calc_minerals[3][:tungsten][:"No but > 50%"],calc_minerals[3][:tungsten][:"No but > 25%"], calc_minerals[3][:tungsten][:"No but < 25%"], calc_minerals[3][:tungsten][:"No - None"], calc_minerals[3][:tungsten][:"No Answer Provided"], calc_minerals[3][:tungsten][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[3][:tungsten_comment][:"Provided comments"], calc_minerals[3][:tungsten_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:tantalum][:"Yes"], calc_minerals[3][:tantalum][:"No but > 75%"], calc_minerals[3][:tantalum][:"No but > 50%"],calc_minerals[3][:tantalum][:"No but > 25%"], calc_minerals[3][:tantalum][:"No but < 25%"], calc_minerals[3][:tantalum][:"No - None"],  calc_minerals[3][:tantalum][:"No Answer Provided"], calc_minerals[3][:tantalum][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:tantalum_comment][:"Provided comments"], calc_minerals[3][:tantalum_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:tin][:"Yes"],  calc_minerals[3][:tin][:"No but > 75%"], calc_minerals[3][:tin][:"No but > 50%"],calc_minerals[3][:tin][:"No but > 25%"], calc_minerals[3][:tin][:"No but < 25%"], calc_minerals[3][:tin][:"No - None"], calc_minerals[3][:tin][:"No Answer Provided"], calc_minerals[3][:tin][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:tin_comment][:"Provided comments"], calc_minerals[3][:tin_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:gold][:"Yes"],  calc_minerals[3][:gold][:"No but > 75%"], calc_minerals[3][:gold][:"No but > 50%"],calc_minerals[3][:gold][:"No but > 25%"], calc_minerals[3][:gold][:"No but < 25%"], calc_minerals[3][:gold][:"No - None"], calc_minerals[3][:gold][:"No Answer Provided"], calc_minerals[3][:gold][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:gold_comment][:"Provided comments"], calc_minerals[3][:gold_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:tungsten][:"Yes"],  calc_minerals[3][:tungsten][:"No but > 75%"], calc_minerals[3][:tungsten][:"No but > 50%"],calc_minerals[3][:tungsten][:"No but > 25%"], calc_minerals[3][:tungsten][:"No but < 25%"], calc_minerals[3][:tungsten][:"No - None"], calc_minerals[3][:tungsten][:"No Answer Provided"], calc_minerals[3][:tungsten][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:tungsten_comment][:"Provided comments"], calc_minerals[3][:tungsten_comment][:"Did not provide comments"]],
 
-        "%d Yes all smelters have been provided - %d No - None - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:tantalum][:"Yes all smelters have been provided"], calc_minerals[4][:tantalum][:"No"], calc_minerals[4][:tantalum][:"No Answer Provided"], calc_minerals[4][:tantalum][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tantalum_comment][:"Provided comments"], calc_minerals[4][:tantalum_comment][:"Did not provide comments"]],
-        "%d Yes all smelters have been provided - %d No - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:tin][:"Yes all smelters have been provided"], calc_minerals[4][:tin][:"No"], calc_minerals[4][:tin][:"No Answer Provided"], calc_minerals[4][:tin][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tin_comment][:"Provided comments"], calc_minerals[4][:tin_comment][:"Did not provide comments"]],
-        "%d Yes all smelters have been provided - %d No - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:gold][:"Yes all smelters have been provided"], calc_minerals[4][:gold][:"No"], calc_minerals[4][:gold][:"No Answer Provided"], calc_minerals[4][:gold][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:gold_comment][:"Provided comments"], calc_minerals[4][:gold_comment][:"Did not provide comments"]],
-        "%d Yes all smelters have been provided - %d No - %d No Answer Provided - %d Answer not Required" % [calc_minerals[4][:tungsten][:"Yes all smelters have been provided"], calc_minerals[4][:tungsten][:"No"], calc_minerals[4][:tungsten][:"No Answer Provided"], calc_minerals[4][:tungsten][:"Answer not Required"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[4][:tungsten_comment][:"Provided comments"], calc_minerals[4][:tungsten_comment][:"Did not provide comments"]],
+        "%d Yes all smelters have been provided \n%d No \n None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:tantalum][:"Yes all smelters have been provided"], calc_minerals[4][:tantalum][:"No"], calc_minerals[4][:tantalum][:"No Answer Provided"], calc_minerals[4][:tantalum][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:tantalum_comment][:"Provided comments"], calc_minerals[4][:tantalum_comment][:"Did not provide comments"]],
+        "%d Yes all smelters have been provided \n%d No \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:tin][:"Yes all smelters have been provided"], calc_minerals[4][:tin][:"No"], calc_minerals[4][:tin][:"No Answer Provided"], calc_minerals[4][:tin][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:tin_comment][:"Provided comments"], calc_minerals[4][:tin_comment][:"Did not provide comments"]],
+        "%d Yes all smelters have been provided \n%d No \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:gold][:"Yes all smelters have been provided"], calc_minerals[4][:gold][:"No"], calc_minerals[4][:gold][:"No Answer Provided"], calc_minerals[4][:gold][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:gold_comment][:"Provided comments"], calc_minerals[4][:gold_comment][:"Did not provide comments"]],
+        "%d Yes all smelters have been provided \n%d No \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:tungsten][:"Yes all smelters have been provided"], calc_minerals[4][:tungsten][:"No"], calc_minerals[4][:tungsten][:"No Answer Provided"], calc_minerals[4][:tungsten][:"Answer not Required"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:tungsten_comment][:"Provided comments"], calc_minerals[4][:tungsten_comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:tantalum][:"Yes"], calc_minerals[5][:tantalum][:"No"], calc_minerals[5][:tantalum][:"No Answer Provided"], calc_minerals[5][:tantalum][:"Answer not Required"], calc_minerals[5][:tantalum][:"Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tantalum_comment][:"Provided comments"], calc_minerals[5][:tantalum_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:tin][:"Yes"], calc_minerals[5][:tin][:"No"], calc_minerals[5][:tin][:"No Answer Provided"], calc_minerals[5][:tin][:"Answer not Required"], calc_minerals[5][:tin][:"Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tin_comment][:"Provided comments"], calc_minerals[5][:tin_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:gold][:"Yes"], calc_minerals[5][:gold][:"No"], calc_minerals[5][:gold][:"No Answer Provided"], calc_minerals[5][:gold][:"Answer not Required"], calc_minerals[5][:gold][:"Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:gold_comment][:"Provided comments"], calc_minerals[5][:gold_comment][:"Did not provide comments"]],
-        "%d Yes - %d No - %d No Answer Provided - %d Answer not Required - %d Unknown" % [calc_minerals[5][:tungsten][:"Yes"], calc_minerals[5][:tungsten][:"No"], calc_minerals[5][:tungsten][:"No Answer Provided"], calc_minerals[5][:tungsten][:"Answer not Required"], calc_minerals[5][:tungsten][:"Unknown"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_minerals[5][:tungsten_comment][:"Provided comments"], calc_minerals[5][:tungsten_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:tantalum][:"Yes"], calc_minerals[5][:tantalum][:"No"], calc_minerals[5][:tantalum][:"No Answer Provided"], calc_minerals[5][:tantalum][:"Answer not Required"], calc_minerals[5][:tantalum][:"Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:tantalum_comment][:"Provided comments"], calc_minerals[5][:tantalum_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:tin][:"Yes"], calc_minerals[5][:tin][:"No"], calc_minerals[5][:tin][:"No Answer Provided"], calc_minerals[5][:tin][:"Answer not Required"], calc_minerals[5][:tin][:"Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:tin_comment][:"Provided comments"], calc_minerals[5][:tin_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:gold][:"Yes"], calc_minerals[5][:gold][:"No"], calc_minerals[5][:gold][:"No Answer Provided"], calc_minerals[5][:gold][:"Answer not Required"], calc_minerals[5][:gold][:"Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:gold_comment][:"Provided comments"], calc_minerals[5][:gold_comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:tungsten][:"Yes"], calc_minerals[5][:tungsten][:"No"], calc_minerals[5][:tungsten][:"No Answer Provided"], calc_minerals[5][:tungsten][:"Answer not Required"], calc_minerals[5][:tungsten][:"Unknown"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:tungsten_comment][:"Provided comments"], calc_minerals[5][:tungsten_comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[0][:answer][:"Yes"], calc_company_level[0][:answer][:"No"], calc_company_level[0][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[0][:comment][:"Provided comments"], calc_company_level[0][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[0][:answer][:"Yes"], calc_company_level[0][:answer][:"No"], calc_company_level[0][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[0][:comment][:"Provided comments"], calc_company_level[0][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[1][:answer][:"Yes"], calc_company_level[1][:answer][:"No"], calc_company_level[1][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[1][:comment][:"Provided comments"], calc_company_level[1][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[1][:answer][:"Yes"], calc_company_level[1][:answer][:"No"], calc_company_level[1][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[1][:comment][:"Provided comments"], calc_company_level[1][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d Yes included in standard contract language - %d No - %d No answer provided" % [calc_company_level[2][:answer][:"Yes"], calc_company_level[2][:answer][:"Yes included in standard contract language"], calc_company_level[2][:answer][:"No"], calc_company_level[2][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[2][:comment][:"Provided comments"], calc_company_level[2][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d Yes included in standard contract language \n%d No \n%d No answer provided" % [calc_company_level[2][:answer][:"Yes"], calc_company_level[2][:answer][:"Yes included in standard contract language"], calc_company_level[2][:answer][:"No"], calc_company_level[2][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[2][:comment][:"Provided comments"], calc_company_level[2][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d Planned once lists become available - %d No - %d No answer provided" % 
+        "%d Yes \n%d Planned once lists become available \n%d No \n%d No answer provided" % 
         [calc_company_level[3][:answer][:"Yes"], calc_company_level[3][:answer][:"Planned once lists become available"], calc_company_level[3][:answer][:"No"], calc_company_level[3][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[3][:comment][:"Provided comments"], calc_company_level[3][:comment][:"Did not provide comments"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[3][:comment][:"Provided comments"], calc_company_level[3][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[4][:answer][:"Yes"], calc_company_level[4][:answer][:"No"], calc_company_level[4][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[4][:comment][:"Provided comments"], calc_company_level[4][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[4][:answer][:"Yes"], calc_company_level[4][:answer][:"No"], calc_company_level[4][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[4][:comment][:"Provided comments"], calc_company_level[4][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[5][:answer][:"Yes"], calc_company_level[5][:answer][:"No"], calc_company_level[5][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[5][:comment][:"Provided comments"], calc_company_level[5][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[5][:answer][:"Yes"], calc_company_level[5][:answer][:"No"], calc_company_level[5][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[5][:comment][:"Provided comments"], calc_company_level[5][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[6][:answer][:"Yes"], calc_company_level[6][:answer][:"No"], calc_company_level[6][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[6][:comment][:"Provided comments"], calc_company_level[6][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[6][:answer][:"Yes"], calc_company_level[6][:answer][:"No"], calc_company_level[6][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[6][:comment][:"Provided comments"], calc_company_level[6][:comment][:"Did not provide comments"]],
 
-        "%d Yes (3rd party audit) - %d Yes (documentation review only) - %d Yes (internal audit) - %d Yes (all methods apply) - %d No - %d No answer provided" %
+        "%d Yes (3rd party audit) \n%d Yes (documentation review only) \n%d Yes (internal audit) \n%d Yes (all methods apply) \n%d No \n%d No answer provided" %
         [calc_company_level[7][:answer][:"Yes (3rd party audit)"],
         calc_company_level[7][:answer][:"Yes (documentation review only)"],
         calc_company_level[7][:answer][:"Yes (internal audit)"],
         calc_company_level[7][:answer][:"Yes (all methods apply)"],
         calc_company_level[7][:answer][:"No"],
         calc_company_level[7][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[7][:comment][:"Provided comments"], calc_company_level[7][:comment][:"Did not provide comments"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[7][:comment][:"Provided comments"], calc_company_level[7][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[8][:answer][:"Yes"], calc_company_level[8][:answer][:"No"], calc_company_level[8][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[8][:comment][:"Provided comments"], calc_company_level[8][:comment][:"Did not provide comments"]],
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[8][:answer][:"Yes"], calc_company_level[8][:answer][:"No"], calc_company_level[8][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[8][:comment][:"Provided comments"], calc_company_level[8][:comment][:"Did not provide comments"]],
 
-        "%d Yes - %d No - %d No answer provided" % [calc_company_level[9][:answer][:"Yes"], calc_company_level[9][:answer][:"No"], calc_company_level[9][:answer][:"No answer provided"]],
-        "%d Provided comments - %d Did not provide comments" % [calc_company_level[9][:comment][:"Provided comments"], calc_company_level[9][:comment][:"Did not provide comments"]]
-
+        "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[9][:answer][:"Yes"], calc_company_level[9][:answer][:"No"], calc_company_level[9][:answer][:"No answer provided"]],
+        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[9][:comment][:"Provided comments"], calc_company_level[9][:comment][:"Did not provide comments"]]
+ 
         ]
 
-    ### end   # of @csv loop
-    ###  here on down is new stuff
+   
     
       rows = rows.sort_by { |e| [e[0], e[1], e[2]] }
 
@@ -1149,9 +1146,9 @@ class ReportsController < ApplicationController
 	totals_style = nil
         
         p.workbook.styles do |style|
-          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
-          row_style    = style.add_style :b => false, :sz => 9
-	  totals_style = style.add_style :b => true, :sz => 6, :alignment => { :wrap_text => true, :horizontal => :left }
+          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+          row_style    = style.add_style :b => false, :sz => 9,  :alignment => { :wrap_text => true, :horizontal => :left }
+	  totals_style = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color 
 
         end
         
@@ -1163,19 +1160,20 @@ class ReportsController < ApplicationController
           image.start_at 0, 0
           image.end_at 2, 1
         end
-        sheet.add_row(['']).height = 86.0
+        sheet.add_row([''], :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height = 86.0
         sheet.merge_cells "A1:B1"
         
         # Add header row
-        sheet.add_row(header, :style => header_style).height = 48.0
+        sheet.add_row(header, :style => header_style, :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height = 48.0
         
         # Append data rows
         rows.each do |r|
-          sheet.add_row(r, :style => row_style)
+          sheet.add_row(r, :style => row_style,  :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200] )
+	   #check rows can use :ignore and :auto)   row <<  ([''] * 13) + row_second_part
 	end
   
 	# Add totals row
-	sheet.add_row(totals, :style => totals_style).height =  48.0
+	sheet.add_row(totals, :style => totals_style, :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height =  48.0
 	
         # Freeze pane over data rows
         sheet.sheet_view.pane do |pane|
@@ -1315,7 +1313,7 @@ class ReportsController < ApplicationController
         row_style    = nil
         
         p.workbook.styles do |style|
-          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
+          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
           row_style    = style.add_style :b => false, :sz => 9
         end
         
@@ -1366,7 +1364,7 @@ class ReportsController < ApplicationController
     
     @latest_declarations = []
     
-    # Only select the latest declaration submitted by "company_name"
+    # Only select the latest declaration submitted by "company_name" ### FIX!!!  sort and prev_company need to be expressed as EXTENDED COMPANY NAME (company_name,declaration_of_scope,description_of_scope,product_list)
     prev_company = nil
     Eicc::IndividualValidationStatus.where(:parent_id => @batch.id).order("company_name ASC, created_at DESC").each do |ivs|
       next if prev_company == ivs.company_name
@@ -1389,7 +1387,7 @@ class ReportsController < ApplicationController
     end
     
     # Gather all the required data and sort
-    header = ["Metal",
+    header = ["Row Count", "Metal",
               "Smelter Reference List",
               "Standard Smelter Names",
               "Smelter Facility Location Country",
@@ -1403,14 +1401,17 @@ class ReportsController < ApplicationController
               "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
               "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
               "Comments",
-              "Source EICC Report"]
+              "Source EICC Report(s)",
+	      "Number of Source EICC Reports"]
 
     rows = []
+    rows_running_count = 0
     declarations_by_smelter.each do |smelter_key, declarations|
-      rows << smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]
+      rows_running_count += 1
+      rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
     end
     
-    rows = rows.sort_by { |e| [e[0], e[1]] }
+    rows = rows.sort_by { |e| [e[0], e[1], e[2], e[3], e[4]] }  #### added last 3 items to sort
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
@@ -1420,8 +1421,11 @@ class ReportsController < ApplicationController
         row_style    = nil
         
         p.workbook.styles do |style|
-          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
-          row_style    = style.add_style :b => false, :sz => 9
+          header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+          row_style                   = style.add_style :b => false, :sz => 9
+	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+
         end
         
         # GSP Logo image
@@ -1440,7 +1444,9 @@ class ReportsController < ApplicationController
         
         # Append data rows
         rows.each do |r|
-          sheet.add_row(r, :style => row_style)
+           sheet.add_row(r, :style => row_style)
+	  # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
+	  # here is where we would have to do cell formatting for red or yellow warning backgrounds
         end
         
         # Freeze pane over data rows
