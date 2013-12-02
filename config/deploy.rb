@@ -56,7 +56,7 @@ namespace :deploy do
 
   task :create_uploaded_files_symlink do
     on roles(:app) do
-      run "ln -s #{deploy_to}/shared/uploaded_files #{deploy_to}/current/public/uploaded_files"
+      execute("ln -s #{deploy_to}/shared/uploaded_files #{deploy_to}/current/public/uploaded_files")
     end
   end
 
