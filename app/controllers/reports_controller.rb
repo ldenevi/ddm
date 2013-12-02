@@ -236,7 +236,7 @@ class ReportsController < ApplicationController
       dec.representative_title,
       dec.representative_email,
       dec.representative_phone,
-      dec.completion_at.strftime('%B %d, %Y')]   # dec.completion_at.strftime('%d, %B, %Y')(:local)]
+      dec.completion_at]                    #strftime('%B %d, %Y')]   # dec.completion_at.strftime('%d, %B, %Y')(:local)]
 
 	# add calc totals for this loop
 	case dec.declaration_scope	
