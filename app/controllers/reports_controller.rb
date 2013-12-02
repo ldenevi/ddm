@@ -20,7 +20,7 @@ class ReportsController < ApplicationController
   def eicc_consolidated_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
-    #@csv = CSV.generate do |csv|
+    
       header = ["Supplier Company Name",
               "Declaration Scope",
               "Description of Scope", #remember to add Product List
@@ -1135,7 +1135,7 @@ class ReportsController < ApplicationController
 
    
     
-      rows = rows.sort_by { |e| [e[0], e[1], e[2]] }
+      # rows = rows.sort_by { |e| [e[0], e[1], e[2]] }
 
         # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
