@@ -1135,7 +1135,7 @@ class ReportsController < ApplicationController
 
    
     
-      # rows = rows.sort_by { |e| [e[0], e[1], e[2]] }
+      # rows = rows.sort_by { |e| [e[0], e[1], e[2]] } why isn't this working now?
 
         # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
