@@ -1,11 +1,11 @@
-set :application, 'GSP App'
+set :application, 'GSP-App'
 
 # From
 set :repo_url, 'git@gitlab.greenstatuspro.com:gsp-app.git'
 
 # To
 set :deploy_to, "/var/www_rails/gsp-app"
-set :deploy_via, :export
+set :deploy_via, :copy
 
 set :scm, :git
 set :branch, "master"
@@ -33,7 +33,7 @@ set :keep_releases, 10
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 # set :keep_releases, 5
 
-role :db, "50.97.148.133"
+# role :db, "50.97.148.133"
 
 namespace :deploy do
 
