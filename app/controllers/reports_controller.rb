@@ -235,9 +235,10 @@ class ReportsController < ApplicationController
       dec.authorized_company_representative_name,
       dec.representative_title,
       dec.representative_email,
-      dec.representative_phone,
-      dec.completion_at]                    #strftime('%B %d, %Y')]   # dec.completion_at.strftime('%d, %B, %Y')(:local)]
-
+      dec.representative_phone]
+      completed_at_date = 0
+      if dec.completion_at.nil? then completed_at_date = "No Date Given" else completed_at_date = dec.completion_at.strftime('%B %d, %Y') end    # dec.completion_at.strftime('%d, %B, %Y')(:local)]
+      row = row + [completed_at_date]
 	# add calc totals for this loop
 	case dec.declaration_scope	
 	  when /^A./
