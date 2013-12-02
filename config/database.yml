@@ -53,7 +53,7 @@ staging:
   pool: 5
   username: gsp_app
   password: 6p4HLugYre5M
-  host: 50.97.148.133
+  host: 10.62.29.5
 
 production:
   adapter: postgresql
