@@ -1405,14 +1405,21 @@ class ReportsController < ApplicationController
               "Source EICC Report(s)",
 	      "Number of Source EICC Reports"]
 
-    rows = []
-    rows_running_count = 0
+    rows_second_part = []
+    
     declarations_by_smelter.each do |smelter_key, declarations|
-      rows_running_count += 1
-      rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
+      # rows_running_count += 1
+      rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  # rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
     end
     
-    rows = rows.sort_by { |e| [e[0], e[1], e[2], e[3], e[4]] }  #### added last 3 items to sort
+    rows = []
+    rows_running_count = 0
+    rows_second_part = rows_second_part.sort_by { |e| [ e[0], e[1], e[2], e[3]] }  ####   rows = rows.sort_by { |e| [e[0], e[1], e[2], e[3], e[4]] }  #### added last 3 items to sort
+    rows_second_part.each do |r2|
+	    rows_running_count += 1
+	    rows << [rows_running_count] + r2
+    end	    
+   
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
@@ -1420,13 +1427,21 @@ class ReportsController < ApplicationController
         # Style
         header_style = nil
         row_style    = nil
-        
+        top_row_style = nil
+	report_title_style = nil
+	report_date_time_style = nil
+	date_style = nil
+	time_style = nil
+	
+	
         p.workbook.styles do |style|
-          header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
-          row_style                   = style.add_style :b => false, :sz => 9
+          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+	  header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
+          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
 	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
           report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-
+	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
         end
         
         # GSP Logo image
@@ -1436,16 +1451,21 @@ class ReportsController < ApplicationController
           image.hyperlink.tooltip = "Green Status Pro"
           image.start_at 0, 0
           image.end_at 2, 1
-        end
-        sheet.add_row(['']).height = 86.0
+	end
+	
+	top_row = ['', '', '', "CONSOLIDATED \n SMELTER \n LISTING \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
         sheet.merge_cells "A1:B1"
         
+	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
+
         # Add header row
-        sheet.add_row(header, :style => header_style).height = 48.0
+        sheet.add_row(header, :style => header_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
         
         # Append data rows
         rows.each do |r|
-           sheet.add_row(r, :style => row_style)
+           sheet.add_row(r, :style => row_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
 	  # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
 	  # here is where we would have to do cell formatting for red or yellow warning backgrounds
         end
