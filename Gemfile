@@ -39,9 +39,6 @@ gem 'jquery-rails'
 # Use unicorn as the app server
 # gem 'unicorn'
 
-# Deploy with Capistrano
-# gem 'capistrano'
-
 # To use debugger
 # gem 'debugger'
 
@@ -50,13 +47,18 @@ group :development, :test do
   gem 'rspec-rails', '>= 2.0.1'
   gem 'cucumber'
   gem 'database_cleaner'
-  
+
+  # Deploy with Capistrano 3
+  gem 'capistrano', '3.0.1'
+  gem 'capistrano-rails', '1.1.0'
+  gem 'capistrano-bundler', '1.1.1'
+
   # Web browser testing
   gem 'capybara'
-  
+
   # Simplify data fixturing
   gem 'factory_girl_rails', "~> 4.0"
-  
+
   # Cloud deployment
   # gem 'heroku'
 end
