@@ -7,28 +7,28 @@ gem 'rails', '3.2.13'
 
 
 # = Core Gems =
-gem 'pg'        # Database
-gem 'i18n'      # Internationalization
-gem 'devise'    # User authentication
-gem 'rubyzip'   # Zip compression
-gem 'ice_cube'  # Scheduler
-gem 'recurring_select' # iCal recurrence input user interface
-gem 'useragent' # Detect web browser
-gem 'rest-client' # For GSP::Eicc::Excel::Converters::OfficeConv
+gem 'pg', '0.17.0'       # Database
+gem 'i18n', '0.6.1'      # Internationalization
+gem 'devise', '3.0.3'    # User authentication
+gem 'rubyzip', '1.0.0'   # Zip compression
+gem 'ice_cube', '0.11.1' # Scheduler
+gem 'recurring_select', '1.2.0' # iCal recurrence input user interface
+gem 'useragent', '0.10.0' # Detect web browser
+gem 'rest-client', '1.6.7' # For GSP::Eicc::Excel::Converters::OfficeConv
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sass-rails',   '~> 3.2.3'
-  gem 'coffee-rails', '~> 3.2.1'
+  gem 'sass-rails',   '3.2.3'
+  gem 'coffee-rails', '3.2.1'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', '0.5.0', :platforms => :ruby
 
-  gem 'uglifier', '>= 1.0.3'
+  gem 'uglifier', '1.0.3'
 end
 
-gem 'jquery-rails'
+gem 'jquery-rails', '3.0.4'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -44,9 +44,9 @@ gem 'jquery-rails'
 
 # = Development & Testing =
 group :development, :test do
-  gem 'rspec-rails', '>= 2.0.1'
-  gem 'cucumber'
-  gem 'database_cleaner'
+  gem 'rspec-rails', '2.0.1'
+  gem 'cucumber', '1.3.10'
+  gem 'database_cleaner', '1.2.0'
 
   # Deploy with Capistrano 3
   gem 'capistrano', '3.0.1'
@@ -54,10 +54,10 @@ group :development, :test do
   gem 'capistrano-bundler', '1.1.1'
 
   # Web browser testing
-  gem 'capybara'
+  gem 'capybara', '2.2.0'
 
   # Simplify data fixturing
-  gem 'factory_girl_rails', "~> 4.0"
+  gem 'factory_girl_rails', "4.0"
 
   # Cloud deployment
   # gem 'heroku'
@@ -65,8 +65,8 @@ end
 
 # = Features =
 # gem 'prawn'
-gem 'googlecharts'
-gem 'axlsx'
+gem 'googlecharts', '1.6.8'
+gem 'axlsx', '2.0.1'
 # gem 'even_calendar'
 # gem 'chronic'
 
