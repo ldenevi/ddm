@@ -1462,7 +1462,7 @@ class ReportsController < ApplicationController
 
         # Add header row
         sheet.add_row(header, :style => header_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
-        
+           
         # Append data rows
         rows.each do |r|
            sheet.add_row(r, :style => row_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
