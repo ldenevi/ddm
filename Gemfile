@@ -46,7 +46,7 @@ gem 'jquery-rails', '3.0.4'
 
 # = Development & Testing =
 group :development, :test do
-  gem 'rspec-rails', '2.0.1'
+  gem 'rspec-rails', '2.14.0'
   gem 'cucumber', '1.3.10'
   gem 'database_cleaner', '1.2.0'
 
