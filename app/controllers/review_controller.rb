@@ -84,7 +84,7 @@ class ReviewController < ApplicationController
   end
 
   def get_attachment
-    @attachment = BinaryFile.where(:id => params[:id], :user => current_user)
+    @attachment = BinaryFile.where(:id => params[:id], :user_id => current_user).first
     send_data @attachment.file_data, :filename => @attachment.filename #, :type => @attachment.mime_types.first["Content-Type"]
   end
 
