@@ -7,10 +7,11 @@ class BinaryFile < ActiveRecord::Base
   include GSP::FileManager::Storage
   #accept_only_binary_file_subclasses
 
-  attr_accessible :filename, :mime_types
+  attr_accessible :filename, :mime_types, :user
   belongs_to :attachable, :polymorphic => true
-  
+  belongs_to :user
+
   serialize :mime_types, JSON
-  
+
   after_commit :save_to_filesystem!
 end
