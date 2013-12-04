@@ -1252,7 +1252,7 @@ class ReportsController < ApplicationController
         dec = ivs.declaration
         question_1 = dec.mineral_questions.sort_by(&:sequence).first
 
-        row_second_part = [
+        row_middle_part = [
 	                  dec.uploaded_excel.filename,
 			  dec.created_at,
                           ivs.status,
@@ -1264,8 +1264,13 @@ class ReportsController < ApplicationController
                           dec.authorized_company_representative_name,
                           dec.representative_title,
                           dec.representative_email,
-                          dec.representative_phone,
-                          dec.completion_at,
+                          dec.representative_phone]
+			  
+			   completed_at_date = 0
+                           if dec.completion_at.nil? then completed_at_date = "No Date Given" else completed_at_date = dec.completion_at.strftime('%B %d, %Y') end    # dec.completion_at.strftime('%d, %B, %Y')(:local)]
+        
+	row_second_part  = row_middle_part + [completed_at_date, 
+                          
                           question_1.tantalum,
                           question_1.tantalum_comment,
                           question_1.tin,
