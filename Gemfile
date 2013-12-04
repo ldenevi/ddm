@@ -12,6 +12,7 @@ gem 'pg', '0.17.0'       # Database
 gem 'i18n', '0.6.1'      # Internationalization
 gem 'devise', '3.0.3'    # User authentication
 gem 'rubyzip', '1.0.0'   # Zip compression
+gem 'zip-zip', '0.2'     # rubyzip 1.0.0 causes LoadError 'zip/zip'
 gem 'ice_cube', '0.11.1' # Scheduler
 gem 'recurring_select', '1.2.0' # iCal recurrence input user interface
 gem 'useragent', '0.10.0' # Detect web browser
