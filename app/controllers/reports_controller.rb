@@ -1136,9 +1136,9 @@ class ReportsController < ApplicationController
 
    
     
-      # rows = rows.sort_by { |e| [e[0], e[1], e[2]] } why isn't this working now?
+      
 
-        # Create spreadsheet
+        # Create spreadsheet   [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90]
     spreadsheet = Axlsx::Package.new do |p|
       p.workbook.add_worksheet(:name => "GSP Declarations List") do |sheet|
         # Style                                                      
@@ -1159,10 +1159,10 @@ class ReportsController < ApplicationController
           image.height = 3
           image.hyperlink.tooltip = "Green Status Pro"
           image.start_at 0, 0
-          image.end_at 2, 1
+          image.end_at 1, 1
         end
         sheet.add_row([''], :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height = 86.0
-        sheet.merge_cells "A1:B1"
+        #sheet.merge_cells "A1:B1"
         
         # Add header row
         sheet.add_row(header, :style => header_style, :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height = 48.0
@@ -1212,11 +1212,11 @@ class ReportsController < ApplicationController
               "Standard Smelter Names", 
               "Smelter Facility Location Country", 
               "Smelter ID", 
-              "Smelter Facility Location Street address", 
-              "Smelter Facility Location City", 
-              "Smelter Facility Location State Province", 
-              "Smelter Facility Contact Name", 
-              "Smelter Facility Contact Email", 
+              "Smelter Facility Location \n Street Address", 
+              "Smelter Facility Location \n City", 
+              "Smelter Facility Location \n State Province", 
+              "Smelter Facility \n Contact Name", 
+              "Smelter Facility \n Contact Email", 
               "Proposed next steps, if applicable", 
               "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
               "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
@@ -1254,7 +1254,7 @@ class ReportsController < ApplicationController
 
         row_middle_part = [
 	                  dec.uploaded_excel.filename,
-			  dec.created_at,
+			  dec.created_at.to_formatted_s(:local),
                           ivs.status,
 			  dec.company_name,
                           dec.declaration_scope,
@@ -1309,7 +1309,7 @@ class ReportsController < ApplicationController
     ### end  # of old csv loop
     
        
-       rows = rows.sort_by { |e| [ e[17], e[18], e[19], e[0], e[1], e[2], e[3] ] }
+       rows = rows.sort_by { |e| [ e[17].to_s, e[18].to_s, e[19].to_s, e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s ] }
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
@@ -1317,10 +1317,20 @@ class ReportsController < ApplicationController
         # Style
         header_style = nil
         row_style    = nil
+        top_row_style = nil
+	report_title_style = nil
+	report_date_time_style = nil
+	date_style = nil
+	time_style = nil
         
         p.workbook.styles do |style|
-          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
-          row_style    = style.add_style :b => false, :sz => 9
+          header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
+          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
         end
         
         # GSP Logo image
@@ -1331,22 +1341,28 @@ class ReportsController < ApplicationController
           image.start_at 0, 0
           image.end_at 2, 1
         end
-        sheet.add_row(['']).height = 86.0
+ 	
+	top_row = ['', '', '', "DETAILED \n SMELTER \n LISTING \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style, nil, nil, nil] , :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20]).height = 86.0
         sheet.merge_cells "A1:B1"
         
+	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style, nil, nil, nil] , :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20]).height = 22.0
+
+        
         # Add header row
-        sheet.add_row(header, :style => header_style).height = 48.0
+        sheet.add_row(header, :style => header_style, :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20]).height = 48.0
         
         # Append data rows
         rows.each do |r|
-          sheet.add_row(r, :style => row_style)
+          sheet.add_row(r, :style => row_style, :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20])
         end
         
         # Freeze pane over data rows
         sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A3"
+          pane.top_left_cell = "A4"
           pane.state = :frozen_split
-          pane.y_split = 2
+          pane.y_split = 3
           pane.x_split = 0
           pane.active_pane = :bottom_right
         end
@@ -1413,13 +1429,12 @@ class ReportsController < ApplicationController
     rows_second_part = []
     
     declarations_by_smelter.each do |smelter_key, declarations|
-      # rows_running_count += 1
-      rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  # rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
+            rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  # rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
     end
     
     rows = []
     rows_running_count = 0
-    rows_second_part = rows_second_part.sort_by { |e| [ e[0], e[1], e[2], e[3]] }  ####   rows = rows.sort_by { |e| [e[0], e[1], e[2], e[3], e[4]] }  #### added last 3 items to sort
+    rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] } 
     rows_second_part.each do |r2|
 	    rows_running_count += 1
 	    rows << [rows_running_count] + r2
@@ -1477,9 +1492,9 @@ class ReportsController < ApplicationController
         
         # Freeze pane over data rows
         sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A3"
+          pane.top_left_cell = "A4"
           pane.state = :frozen_split
-          pane.y_split = 2
+          pane.y_split = 3
           pane.x_split = 0
           pane.active_pane = :bottom_right
         end
