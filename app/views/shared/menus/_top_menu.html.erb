@@ -5,7 +5,7 @@
     <li class="<%= active_feature('eicc/declaration') %>"><%= link_to 'Ingestor', '/eicc/declaration/index' %></li>
     <li class="<%= active_feature('templates') %>"><%= link_to 'Library', template_list_path %></li>
     <li class="<%= active_feature('calendar') %> "><%= link_to 'Calendar', calendar_show_path %></li>
-    <li class="<%= active_feature('reports') %> "><%= link_to "Reports", reports_list_path %></li>
+    <li class="<%= active_feature('reports') %> "><%= link_to "Reports", comprehensive_list_path %></li>
     <li class="<%= active_feature('store') %>"><a href="">Marketplace</a></li>
     <% if current_user.is_gsp_admin? %><li class="<%= active_feature('admin') %>"><%= link_to "Admin", admin_templates_path %></li><% end %>
     <li class="<%= active_feature('users') %>"><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
