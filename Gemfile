@@ -2,6 +2,7 @@ source 'http://gsp-repo1.greenstatuspro.com:8080/gems/common/'
 source 'http://gsp-repo1.greenstatuspro.com:8080/gems/repo/'
 
 gem 'rails', '3.2.13'
+gem 'passenger', '4.0.26'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
