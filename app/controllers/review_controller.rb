@@ -11,7 +11,7 @@ class ReviewController < ApplicationController
   end
 
   def show_task
-    @task = Task.find(params[:id], :include => {:review => :organization_template})
+    @task = Task.includes({:review => :organization_template}).where("tasks.id = ? AND reviews.organization_id = ?", params[:id], current_user.organization).first
     @comments = @task.comments.reverse
   end
 
@@ -25,7 +25,7 @@ class ReviewController < ApplicationController
   end
 
   def mark_task_as_completed
-    @task = Task.find(params[:id])
+    @task = Task.includes(:review).where("tasks.id = ? AND reviews.organization_id = ?", params[:id], current_user.organization).first
     case params[:status]
       when 'conforming'
         @task.conform!
@@ -36,7 +36,7 @@ class ReviewController < ApplicationController
   end
 
   def reopen_task
-    @task = Task.find(params[:id])
+    @task = Task.includes(:review).where("tasks.id = ? AND reviews.organization_id = ?", params[:id], current_user.organization).first
     @task.reopen!
     render :text => 'Done'
   end
@@ -52,12 +52,12 @@ class ReviewController < ApplicationController
   end
 
   def post_comment_form
-    @task = Task.find(params[:task_id])
+    @task = Task.includes(:review).where("tasks.id = ? AND reviews.organization_id = ?", params[:task_id], current_user.organization).first
     render :layout => nil
   end
 
   def post_comment
-    @task = Task.find(params[:task][:id])
+    @task = Task.includes(:review).where("tasks.id = ? AND reviews.organization_id = ?", params[:task][:id], current_user.organization).first
     @comment = Comment.create params[:comment]
 
     begin
@@ -79,7 +79,7 @@ class ReviewController < ApplicationController
   end
 
   def show_comment
-    @comment = Comment.find(params[:id])
+    @comment = Comment.where(:id => params[:id], :author_id => current_user)
     render :partial => 'task_comment', :content_type => 'text/html'
   end
 
