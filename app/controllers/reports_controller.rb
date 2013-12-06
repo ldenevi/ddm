@@ -1145,12 +1145,22 @@ class ReportsController < ApplicationController
         header_style = nil
         row_style    = nil
 	totals_style = nil
+        top_row_style = nil
+	report_title_style = nil
+	report_date_time_style = nil
+	date_style = nil
+	time_style = nil
+	
         
         p.workbook.styles do |style|
           header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
           row_style    = style.add_style :b => false, :sz => 9,  :alignment => { :wrap_text => true, :horizontal => :left }
 	  totals_style = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color 
-
+          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
         end
         
         # GSP Logo image
@@ -1161,26 +1171,30 @@ class ReportsController < ApplicationController
           image.start_at 0, 0
           image.end_at 1, 1
         end
-        sheet.add_row([''], :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height = 86.0
-        #sheet.merge_cells "A1:B1"
+
+	top_row = ['', '', '', "CONSOLIDATED \n DECLARATIONS \n REPORT \n for: ", "Date:", "Time:", "User:"]
+        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style], :widths => [35, 35, 30, 30, 30, 30, 30]).height = 86.0
         
+        second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym] 
+        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style] , :widths => [35, 35, 30, 30, 30, 30, 30]).height = 22.0
+
         # Add header row
-        sheet.add_row(header, :style => header_style, :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height = 48.0
+        sheet.add_row(header, :style => header_style, :widths => [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90]).height = 48.0
         
         # Append data rows
         rows.each do |r|
-          sheet.add_row(r, :style => row_style,  :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200] )
+          sheet.add_row(r, :style => row_style,  :widths => [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90] )
 	   #check rows can use :ignore and :auto)   row <<  ([''] * 13) + row_second_part
 	end
   
 	# Add totals row
-	sheet.add_row(totals, :style => totals_style, :widths => [30, 30,40,30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 200]).height =  48.0
+	sheet.add_row(totals, :style => totals_style, :widths => [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90]).height =  48.0
 	
         # Freeze pane over data rows
         sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A3"
+          pane.top_left_cell = "A4"
           pane.state = :frozen_split
-          pane.y_split = 2
+          pane.y_split = 3
           pane.x_split = 0
           pane.active_pane = :bottom_right
         end
@@ -1372,8 +1386,7 @@ class ReportsController < ApplicationController
     end
 
      send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.xlsx"), :type => 'application/excel'
-
-    ### send_data @csv, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.csv"), :type => 'application/csv'
+     
   end
   
   
@@ -1498,9 +1511,73 @@ class ReportsController < ApplicationController
           pane.x_split = 0
           pane.active_pane = :bottom_right
         end
-
         
       end
+ 
+# add second worksheet
+      p.workbook.add_worksheet(:name => "Consolidated Smelter Analytics") do |sheet|
+        header_style = nil
+        row_style    = nil
+        top_row_style = nil
+	report_title_style = nil
+	report_date_time_style = nil
+	date_style = nil
+	time_style = nil
+	
+	
+        p.workbook.styles do |style|
+          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+	  header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
+          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
+	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+        end
+        
+        # GSP Logo image
+        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+          image.width  = 4
+          image.height = 3
+          image.hyperlink.tooltip = "Green Status Pro"
+          image.start_at 0, 0
+          image.end_at 2, 1
+	end
+	
+	top_row = ['', '', '', "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
+        sheet.merge_cells "A1:B1"
+        
+	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
+
+        # Add header row
+	header2 = ["Item", "Value"]
+        sheet.add_row(header2, :style => header_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
+        
+        # Append data rows
+        #rows.each do |r|
+	   r1 =[]
+	   r1 = ["Total Number of Entries",  'TBD - in process']
+           sheet.add_row(r1, :style => row_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
+	  # r2 = ["Total Smelters - Gold", 
+	   
+	   
+	  # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
+	  # here is where we would have to do cell formatting for red or yellow warning backgrounds
+        #end
+        
+        # Freeze pane over data rows
+        sheet.sheet_view.pane do |pane|
+          pane.top_left_cell = "A4"
+          pane.state = :frozen_split
+          pane.y_split = 3
+          pane.x_split = 0
+          pane.active_pane = :bottom_right
+        end
+
+      end
+ 
     end
     
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_list_report.gsp.xlsx"), :type => 'application/excel'
