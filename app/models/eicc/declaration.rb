@@ -125,7 +125,7 @@ private
       mineral_row.each do |row|
         row.each do |attrib|
           next if attrib.nil?
-          mineral.send("#{attr}=", rows[i][minerals_cell_definition[attrib]])
+          mineral.send("#{attrib}=", rows[i][minerals_cell_definition[attrib]])
         end
         i += 1
       end
@@ -148,7 +148,7 @@ private
       company_level_question = Eicc::CompanyLevelQuestion.new
       clq_row.each do |attrib|
         next if attrib.nil?
-        company_level_question.send("#{attr}=", rows[i][company_level_questions_definition[attrib]])
+        company_level_question.send("#{attrib}=", rows[i][company_level_questions_definition[attrib]])
       end
       i += 2
       company_level_question.sequence = sequence
@@ -159,7 +159,7 @@ private
 
   # Smelter list
   def smelter_list_definition
-    @@cell_definitions["smelter_list"]
+    @@cell_definitions[:smelter_list]
   end
 
   def strip_smelter_list(csv)
@@ -177,29 +177,20 @@ private
         next
       end
 
-      self.smelter_list << Eicc::SmelterList.new(:line_number => sequence,
-                                                    :metal => rows[i][smelter_list_definition[:metal_column]],
-                                                    :smelter_reference_list => rows[i][smelter_list_definition[:reference_list_column]],
-                                                    :standard_smelter_name => rows[i][smelter_list_definition[:standard_smelter_list_column]],
-                                                    :facility_location_country => rows[i][smelter_list_definition[:facility_location_column]],
-                                                    :smelter_id => rows[i][smelter_list_definition[:smelter_id_column]],
-                                                    :facility_location_street_address => rows[i][smelter_list_definition[:facility_location_street_column]],
-                                                    :facility_location_city => rows[i][smelter_list_definition[:facility_location_city_column]],
-                                                    :facility_location_province => rows[i][smelter_list_definition[:facility_location_province_column]],
-                                                    :facility_contact_name => rows[i][smelter_list_definition[:facility_contact_name_column]],
-                                                    :facility_contact_email => rows[i][smelter_list_definition[:facility_contact_email_column]],
-                                                    :proposed_next_steps => rows[i][smelter_list_definition[:proposed_next_step_column]],
-                                                    :mineral_source => rows[i][smelter_list_definition[:source_column]],
-                                                    :mineral_source_location => rows[i][smelter_list_definition[:source_country_column]],
-                                                    :comment => rows[i][smelter_list_definition[:comment_column]])
+      smelter_list_item = Eicc::SmelterList.new
+      structure_fields[:smelter_list].to_a.each do |field|
+        smelter_list_item.send("#{field.to_s}=", rows[i][smelter_list_definition[field]])
+      end
+      smelter_list_item.line_number = sequence
       sequence += 1
       i += 1
+      self.smelter_list << smelter_list_item
     end
   end
 
   # Standard smelter names
   def standard_smelter_name_definition
-    @@cell_definitions["standard_smelter_name"]
+    @@cell_definitions[:standard_smelter_name]
   end
 
   def strip_standard_smelter_names(csv)
@@ -210,11 +201,12 @@ private
         i += 1
         next
       end
-      self.standard_smelter_names << Eicc::StandardSmelterName.new(:metal => rows[i][standard_smelter_name_definition[:metal_column]],
-                                                                      :standard_smelter_name => rows[i][standard_smelter_name_definition[:standard_smelter_name_column]],
-                                                                      :known_alias => rows[i][standard_smelter_name_definition[:known_alias_column]],
-                                                                      :facility_location_country => rows[i][standard_smelter_name_definition[:facility_location_column]],
-                                                                      :smelter_id => rows[i][standard_smelter_name_definition[:smelter_id_column]])
+
+      standard_smelter_name = Eicc::StandardSmelterName.new
+      structure_fields[:smelter_names].to_a.each do |field|
+        standard_smelter_name.send("#{field.to_s}=", rows[i][standard_smelter_name_definition[field]])
+      end
+      self.standard_smelter_names << standard_smelter_name
       i += 1
     end
   end
