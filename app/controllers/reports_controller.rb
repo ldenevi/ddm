@@ -2,6 +2,8 @@ class ReportsController < ApplicationController
   include ReportsHelper
   layout 'print', :only => 'generate_comprehensive'
 
+  require 'axlsx'
+  
   def list
   end
 
@@ -15,13 +17,14 @@ class ReportsController < ApplicationController
   def generate_comprehensive
     @review = Review.includes({:tasks => :comments}).where(:id => params[:id], :organization_id => current_user.organization.id).first
   end
-  
-  require 'axlsx'
+
+
   def eicc_consolidated_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
-    
-      header = ["Supplier Company Name",
+    rows = []
+      header = ["   #   ",
+	      "Supplier Company Name",
               "Declaration Scope",
               "Description of Scope", #remember to add Product List
               "Company Unique Identifier",
@@ -33,59 +36,59 @@ class ReportsController < ApplicationController
               "Date of Completion",
 
               # Minerals questions
-              "Question 1 - Tantalum",
-              "Question 1 Comments - Tantalum",
-              "Question 1 - Tin",
-              "Question 1 Comments - Tin",
-              "Question 1 - Gold",
-              "Question 1 Comments - Gold",
-              "Question 1 - Tungsten",
-              "Question 1 Comments - Tungsten",
+              "Question 1 \n Tantalum",
+              "Question 1 Comments \n Tantalum",
+              "Question 1 \n Tin",
+              "Question 1 Comments \n Tin",
+              "Question 1 \n Gold",
+              "Question 1 Comments \n Gold",
+              "Question 1 \n Tungsten",
+              "Question 1 Comments \n Tungsten",
 
-              "Question 2 - Tantalum",
-              "Question 2 Comments - Tantalum",
-              "Question 2 - Tin",
-              "Question 2 Comments - Tin",
-              "Question 2 - Gold",
-              "Question 2 Comments - Gold",
-              "Question 2 - Tungsten",
-              "Question 2 Comments - Tungsten",
+              "Question 2 \n Tantalum",
+              "Question 2 Comments \n Tantalum",
+              "Question 2 \n Tin",
+              "Question 2 Comments \n Tin",
+              "Question 2 \n Gold",
+              "Question 2 Comments \n Gold",
+              "Question 2 \n Tungsten",
+              "Question 2 Comments \n Tungsten",
 
-              "Question 3 - Tantalum",
-              "Question 3 Comments - Tantalum",
-              "Question 3 - Tin",
-              "Question 3 Comments - Tin",
-              "Question 3 - Gold",
-              "Question 3 Comments - Gold",
-              "Question 3 - Tungsten",
-              "Question 3 Comments - Tungsten",
+              "Question 3 \n Tantalum",
+              "Question 3 Comments \n Tantalum",
+              "Question 3 \n Tin",
+              "Question 3 Comments \n Tin",
+              "Question 3 \n Gold",
+              "Question 3 Comments \n Gold",
+              "Question 3 \n Tungsten",
+              "Question 3 Comments \n Tungsten",
 
-              "Question 4 - Tantalum",
-              "Question 4 Comments - Tantalum",
-              "Question 4 - Tin",
-              "Question 4 Comments - Tin",
-              "Question 4 - Gold",
-              "Question 4 Comments - Gold",
-              "Question 4 - Tungsten",
-              "Question 4 Comments - Tungsten",
+              "Question 4 \n Tantalum",
+              "Question 4 Comments \n Tantalum",
+              "Question 4 \n Tin",
+              "Question 4 Comments \n Tin",
+              "Question 4 \n Gold",
+              "Question 4 Comments \n Gold",
+              "Question 4 \n Tungsten",
+              "Question 4 Comments \n Tungsten",
 
-              "Question 5 - Tantalum",
-              "Question 5 Comments - Tantalum",
-              "Question 5 - Tin",
-              "Question 5 Comments - Tin",
-              "Question 5 - Gold",
-              "Question 5 Comements - Gold",
-              "Question 5 - Tungsten",
-              "Question 5 Comments - Tungsten",
+              "Question 5 \n Tantalum",
+              "Question 5 Comments \n Tantalum",
+              "Question 5 \n Tin",
+              "Question 5 Comments \n Tin",
+              "Question 5 \n Gold",
+              "Question 5 Comements \n Gold",
+              "Question 5 \n Tungsten",
+              "Question 5 Comments \n Tungsten",
 
-              "Question 6 - Tantalum",
-              "Question 6 Comments - Tantalum",
-              "Question 6 - Tin",
-              "Question 6 Comments - Tin",
-              "Question 6 - Gold",
-              "Question 6 Comments - Gold",
-              "Question 6 - Tungsten",
-              "Question 6 Comments - Tungsten",
+              "Question 6 \n Tantalum",
+              "Question 6 Comments \n Tantalum",
+              "Question 6 \n Tin",
+              "Question 6 Comments \n Tin",
+              "Question 6 \n Gold",
+              "Question 6 Comments \n Gold",
+              "Question 6 \n Tungsten",
+              "Question 6 Comments \n Tungsten",
 
               # Company Level Questions
               "Question A",
@@ -124,101 +127,104 @@ class ReportsController < ApplicationController
               "Number of 'Smelter not yet identified' names provided - Tungsten",
               # Extra data                 
               "Date Ingested into GSP",
-              "Original File Name",
+              "File Name",
               "Validation Status",
               "Issues"]     #finished writing header row - will add to next rows in ivs declaration loop  and then write final total row unless we move totals higher
 
       # Calculation totals initialization to 0
+      calc_company_name = {:"Provided" => 0, :"Not Provided" => 0}
       calc_declaration_scope = {:"Company level" => 0, :"Division level" => 0, :"Product category level" => 0, :"Product level" => 0, :"Not Provided" => 0}
+      calc_description_of_scope = {:"Provided" => 0, :"Not Provided" => 0}
       calc_company_unique_identifier = {:"Provided" => 0, :"Not Provided" => 0}
       calc_address = {:"Provided" => 0, :"Not Provided" => 0}
       calc_authorized_company_representative_name  = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_title = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_email = {:"Provided" => 0, :"Not Provided" => 0}
       calc_representative_phone = {:"Provided" => 0, :"Not Provided" => 0}
+      calc_completion_at = {:"Provided" => 0, :"Not Provided" => 0}
 
       calc_minerals = [
           {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
-           :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+           :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
            :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
-           :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+           :tin_comment => {:"Provided" => 0, :"Not Provided" => 0},
            :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
-           :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+           :gold_comment => {:"Provided" => 0, :"Not Provided" => 0},
            :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0},
-           :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+           :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
           }
     #sequence 0 - minerals question 1 above
       ]  + [
             {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tin_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :gold_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+                 :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
             }
             #sequence 1 - minerals question 2 above 
             ]  + [
             {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tin_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :gold_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
-                 :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+                 :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
             }
             #sequence 2 - minerals question 3 above
             ]  + [
             {:tantalum => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0,  :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tin => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tin_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :gold => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :gold_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tungsten => {:"Yes" => 0, :"No but > 75%" => 0, :"No but > 50%" => 0, :"No but > 25%" => 0, :"No but < 25%" => 0, :"No - None" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+                 :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
             }
                  #sequence 3 - minerals question 4 above
             ]  + [
             {:tantalum => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tin => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tin_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :gold => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :gold_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tungsten => {:"Yes all smelters have been provided" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0},
-                 :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+                 :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
             }
                   #sequence 4 - minerals question 5 above
             ]  + [
             {:tantalum => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
-                 :tantalum_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tin => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
-                 :tin_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :tin_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :gold => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
-                 :gold_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0},
+                 :gold_comment => {:"Provided" => 0, :"Not Provided" => 0},
                  :tungsten => {:"Yes" => 0, :"No" => 0, :"No Answer Provided" => 0,  :"Answer not Required" => 0,  :"Unknown" => 0},
-                 :tungsten_comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}
+                 :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
             }
                    #sequence 5 - minerals question 6 above
             ]
 
 
 
-      calc_company_level = [{:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"Yes included in standard contract language" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"Planned once lists become available" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes (3rd party audit)" => 0, :"Yes (documentation review only)" => 0, :"Yes (internal audit)" => 0, :"Yes (all methods apply)" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}},
-              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided comments" => 0, :"Did not provide comments" => 0}}
+      calc_company_level = [{:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"Yes included in standard contract language" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"Planned once lists become available" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes (3rd party audit)" => 0, :"Yes (documentation review only)" => 0, :"Yes (internal audit)" => 0, :"Yes (all methods apply)" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
+              {:answer => {:"Yes" => 0, :"No" => 0, :"No answer provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}}
              ]
-     rows = []
+    
     @batch.individual_validation_statuses.each do |ivs|    # beginning of declaration loop
       next if ivs.declaration.nil?
 
@@ -239,7 +245,17 @@ class ReportsController < ApplicationController
       completed_at_date = 0
       if dec.completion_at.nil? then completed_at_date = "No Date Given" else completed_at_date = dec.completion_at.strftime('%B %d, %Y') end    # dec.completion_at.strftime('%d, %B, %Y')(:local)]
       row = row + [completed_at_date]
+	
 	# add calc totals for this loop
+
+	if dec.company_name.to_s.strip.empty?
+		calc_company_name[:"Not Provided"] += 1
+	else
+		calc_company_name[:"Provided"] += 1
+	end
+	
+
+
 	case dec.declaration_scope	
 	  when /^A./
 	    calc_declaration_scope[:"Company level"] += 1
@@ -254,6 +270,18 @@ class ReportsController < ApplicationController
         end
       
 	       
+	if dec.description_of_scope.to_s.strip.empty?
+		calc_description_of_scope[:"Not Provided"] += 1
+	else
+		calc_description_of_scope[:"Provided"] += 1
+	end
+	
+	if dec.address.to_s.strip.empty?
+		calc_address[:"Not Provided"] += 1
+	else
+		calc_address[:"Provided"] += 1
+	end
+
 	if dec.company_unique_identifier.to_s.strip.empty?
 		calc_company_unique_identifier[:"Not Provided"] += 1
 	else
@@ -293,7 +321,15 @@ class ReportsController < ApplicationController
 	else
 		calc_representative_phone[:"Provided"] += 1
 	end
-        # end of new insertions for calc totals
+
+
+	if dec.completion_at.to_s.strip.empty?
+		calc_completion_at[:"Not Provided"] += 1
+	else
+		calc_completion_at[:"Provided"] += 1
+	end
+
+      # end of new insertions for calc totals
 
       (0..0).to_a.each do |sequence|         
         if minerals[sequence]
@@ -310,9 +346,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tantalum_comment.to_s.strip.empty?
-           calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+           calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
-           calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+           calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
           
           case mq.tin.to_s.strip.downcase
@@ -325,9 +361,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tin_comment.to_s.strip.empty?
-           calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+           calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
-           calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+           calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
           
           case mq.gold.to_s.strip.downcase
@@ -340,9 +376,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.gold_comment.to_s.strip.empty?
-            calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
           
           case mq.tungsten.to_s.strip.downcase
@@ -355,9 +391,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tungsten_comment.to_s.strip.empty?
-           calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+           calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
-           calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+           calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
           
         end
@@ -385,9 +421,9 @@ class ReportsController < ApplicationController
         end
         
         if mq.tantalum_comment.to_s.strip.empty?
-          calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+          calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
         else
-          calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+          calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
         end
         
         if minerals[0].tin.to_s.strip.downcase == "no" 
@@ -406,9 +442,9 @@ class ReportsController < ApplicationController
         end
         
         if mq.tin_comment.to_s.strip.empty?
-          calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+          calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
         else
-          calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+          calc_minerals[sequence][:tin_comment][:"Provided"] += 1
         end
         
         if minerals[0].gold.to_s.strip.downcase == "no" 
@@ -427,9 +463,9 @@ class ReportsController < ApplicationController
         end
         
         if mq.gold_comment.to_s.strip.empty?
-          calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+          calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
         else
-          calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+          calc_minerals[sequence][:gold_comment][:"Provided"] += 1
         end
         
         if minerals[0].tungsten.to_s.strip.downcase == "no" 
@@ -448,9 +484,9 @@ class ReportsController < ApplicationController
         end
         
         if mq.tungsten_comment.to_s.strip.empty?
-          calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+          calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
         else
-          calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+          calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
         end
       end
 
@@ -476,9 +512,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tantalum_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
           
           if minerals[0].tin.to_s.strip.downcase == "no" 
@@ -497,9 +533,9 @@ class ReportsController < ApplicationController
           end
             
           if mq.tin_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
           
           if minerals[0].gold.to_s.strip.downcase == "no" 
@@ -518,9 +554,9 @@ class ReportsController < ApplicationController
           end  
           
           if mq.gold_comment.to_s.strip.empty?
-            calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
           
           if minerals[0].tungsten.to_s.strip.downcase == "no" 
@@ -539,9 +575,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tungsten_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
         end
       end
@@ -574,9 +610,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tantalum_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
           
           if minerals[0].tin.to_s.strip.downcase == "no" 
@@ -601,9 +637,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tin_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
           
           if minerals[0].gold.to_s.strip.downcase == "no" 
@@ -628,9 +664,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.gold_comment.to_s.strip.empty?
-            calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
           
           if minerals[0].tungsten.to_s.strip.downcase == "no" 
@@ -655,9 +691,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tungsten_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
           
         end
@@ -682,9 +718,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tantalum_comment.to_s.strip.empty?
-           calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+           calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
           
           if minerals[0].tin.to_s.strip.downcase == "no" 
@@ -701,9 +737,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tin_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
           
           if minerals[0].gold.to_s.strip.downcase == "no" 
@@ -720,9 +756,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.gold_comment.to_s.strip.empty?
-            calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
           
           if minerals[0].tungsten.to_s.strip.downcase == "no" 
@@ -739,9 +775,9 @@ class ReportsController < ApplicationController
           end
           
           if mq.tungsten_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+            calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+            calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
             
         end
@@ -769,9 +805,9 @@ class ReportsController < ApplicationController
       end
       
       if mq.tantalum_comment.to_s.strip.empty?
-        calc_minerals[sequence][:tantalum_comment][:"Did not provide comments"] += 1
+        calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
       else
-        calc_minerals[sequence][:tantalum_comment][:"Provided comments"] += 1
+        calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
       end
       
       if minerals[0].tin.to_s.strip.downcase == "no" 
@@ -790,9 +826,9 @@ class ReportsController < ApplicationController
       end
       
       if mq.tin_comment.to_s.strip.empty?
-      calc_minerals[sequence][:tin_comment][:"Did not provide comments"] += 1
+      calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
       else
-      calc_minerals[sequence][:tin_comment][:"Provided comments"] += 1
+      calc_minerals[sequence][:tin_comment][:"Provided"] += 1
       end
       if minerals[0].gold.to_s.strip.downcase == "no" 
       calc_minerals[sequence][:gold][:"Answer not Required"] += 1
@@ -809,9 +845,9 @@ class ReportsController < ApplicationController
       end
       end
       if mq.gold_comment.to_s.strip.empty?
-      calc_minerals[sequence][:gold_comment][:"Did not provide comments"] += 1
+      calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
       else
-      calc_minerals[sequence][:gold_comment][:"Provided comments"] += 1
+      calc_minerals[sequence][:gold_comment][:"Provided"] += 1
       end
       if minerals[0].tungsten.to_s.strip.downcase == "no" 
       calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
@@ -828,9 +864,9 @@ class ReportsController < ApplicationController
       end
       end
       if mq.tungsten_comment.to_s.strip.empty?
-      calc_minerals[sequence][:tungsten_comment][:"Did not provide comments"] += 1
+      calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
       else
-      calc_minerals[sequence][:tungsten_comment][:"Provided comments"] += 1
+      calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
       end
       
     end
@@ -947,9 +983,9 @@ class ReportsController < ApplicationController
       end
 
       if clq.comment.to_s.strip.empty?
-        calc_company_level[sequence][:comment][:"Did not provide comments"] += 1
+        calc_company_level[sequence][:comment][:"Not Provided"] += 1
       else
-        calc_company_level[sequence][:comment][:"Provided comments"] += 1
+        calc_company_level[sequence][:comment][:"Provided"] += 1
       end
 
     else
@@ -1026,96 +1062,95 @@ class ReportsController < ApplicationController
     rows << row
   end
 
-
+   
 
     # Counts
     totals =  ["TOTALS",
-
+        "%d Provided \n%d Not Provided" % [calc_company_name[:"Provided"], calc_company_name[:"Not Provided"]],
         "%d Company level \n%d Division level \n%d Product category level \n%d Product level \n%d Empty" % [calc_declaration_scope[:"Company level"], calc_declaration_scope[:"Division level"], calc_declaration_scope[:"Product category level"], calc_declaration_scope[:"Product level"], calc_declaration_scope[:"Not Provided"]],
-        "",
+        "%d Provided \n%d Not Provided" % [calc_description_of_scope[:"Provided"], calc_description_of_scope[:"Not Provided"]],
         "%d Provided \n%d Not Provided" % [calc_company_unique_identifier[:"Provided"], calc_company_unique_identifier[:"Not Provided"]],
         "%d Provided \n%d Not Provided" % [calc_address[:"Provided"], calc_address[:"Not Provided"]],
         "%d Provided \n%d Not Provided" % [calc_authorized_company_representative_name[:"Provided"], calc_authorized_company_representative_name[:"Not Provided"]],
         "%d Provided \n%d Not Provided" % [calc_representative_title[:"Provided"], calc_representative_title[:"Not Provided"]],
         "%d Provided \n%d Not Provided" % [calc_representative_email[:"Provided"], calc_representative_email[:"Not Provided"]],
         "%d Provided \n%d Not Provided" % [calc_representative_phone[:"Provided"], calc_representative_phone[:"Not Provided"]],
-        "",
-
+        "%d Provided \n%d Not Provided" % [calc_completion_at[:"Provided"], calc_completion_at[:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:tantalum][:"Yes"], calc_minerals[0][:tantalum][:"No"], calc_minerals[0][:tantalum][:"No Answer Provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:tantalum_comment][:"Provided comments"], calc_minerals[0][:tantalum_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[0][:tantalum_comment][:"Provided"], calc_minerals[0][:tantalum_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:tin][:"Yes"], calc_minerals[0][:tin][:"No"], calc_minerals[0][:tin][:"No Answer Provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:tin_comment][:"Provided comments"], calc_minerals[0][:tin_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[0][:tin_comment][:"Provided"], calc_minerals[0][:tin_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:gold][:"Yes"], calc_minerals[0][:gold][:"No"], calc_minerals[0][:gold][:"No Answer Provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:gold_comment][:"Provided comments"], calc_minerals[0][:gold_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[0][:gold_comment][:"Provided"], calc_minerals[0][:gold_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided" % [calc_minerals[0][:tungsten][:"Yes"], calc_minerals[0][:tungsten][:"No"], calc_minerals[0][:tungsten][:"No Answer Provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[0][:tungsten_comment][:"Provided comments"], calc_minerals[0][:tungsten_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[0][:tungsten_comment][:"Provided"], calc_minerals[0][:tungsten_comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:tantalum][:"Yes"], calc_minerals[1][:tantalum][:"No"], calc_minerals[1][:tantalum][:"No Answer Provided"], calc_minerals[1][:tantalum][:"Answer not Required"], calc_minerals[1][:tantalum][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:tantalum_comment][:"Provided comments"], calc_minerals[1][:tantalum_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[1][:tantalum_comment][:"Provided"], calc_minerals[1][:tantalum_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:tin][:"Yes"], calc_minerals[1][:tin][:"No"], calc_minerals[1][:tin][:"No Answer Provided"], calc_minerals[1][:tin][:"Answer not Required"], calc_minerals[1][:tin][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:tin_comment][:"Provided comments"], calc_minerals[1][:tin_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[1][:tin_comment][:"Provided"], calc_minerals[1][:tin_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:gold][:"Yes"], calc_minerals[1][:gold][:"No"], calc_minerals[1][:gold][:"No Answer Provided"], calc_minerals[1][:gold][:"Answer not Required"], calc_minerals[1][:gold][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:gold_comment][:"Provided comments"], calc_minerals[1][:gold_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[1][:gold_comment][:"Provided"], calc_minerals[1][:gold_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[1][:tungsten][:"Yes"], calc_minerals[1][:tungsten][:"No"], calc_minerals[1][:tungsten][:"No Answer Provided"], calc_minerals[1][:tungsten][:"Answer not Required"], calc_minerals[1][:tungsten][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[1][:tungsten_comment][:"Provided comments"], calc_minerals[1][:tungsten_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[1][:tungsten_comment][:"Provided"], calc_minerals[1][:tungsten_comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:tantalum][:"Yes"], calc_minerals[2][:tantalum][:"No"], calc_minerals[2][:tantalum][:"No Answer Provided"], calc_minerals[2][:tantalum][:"Answer not Required"], calc_minerals[2][:tantalum][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:tantalum_comment][:"Provided comments"], calc_minerals[2][:tantalum_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[2][:tantalum_comment][:"Provided"], calc_minerals[2][:tantalum_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:tin][:"Yes"], calc_minerals[2][:tin][:"No"], calc_minerals[2][:tin][:"No Answer Provided"], calc_minerals[2][:tin][:"Answer not Required"], calc_minerals[2][:tin][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:tin_comment][:"Provided comments"], calc_minerals[2][:tin_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[2][:tin_comment][:"Provided"], calc_minerals[2][:tin_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:gold][:"Yes"], calc_minerals[2][:gold][:"No"], calc_minerals[2][:gold][:"No Answer Provided"], calc_minerals[2][:gold][:"Answer not Required"], calc_minerals[2][:gold][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:gold_comment][:"Provided comments"], calc_minerals[2][:gold_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[2][:gold_comment][:"Provided"], calc_minerals[2][:gold_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Uncertain or Unknown" % [calc_minerals[2][:tungsten][:"Yes"], calc_minerals[2][:tungsten][:"No"], calc_minerals[2][:tungsten][:"No Answer Provided"], calc_minerals[2][:tungsten][:"Answer not Required"], calc_minerals[2][:tungsten][:"Uncertain or Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[2][:tungsten_comment][:"Provided comments"], calc_minerals[2][:tungsten_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[2][:tungsten_comment][:"Provided"], calc_minerals[2][:tungsten_comment][:"Not Provided"]],
 
         "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:tantalum][:"Yes"], calc_minerals[3][:tantalum][:"No but > 75%"], calc_minerals[3][:tantalum][:"No but > 50%"],calc_minerals[3][:tantalum][:"No but > 25%"], calc_minerals[3][:tantalum][:"No but < 25%"], calc_minerals[3][:tantalum][:"No - None"],  calc_minerals[3][:tantalum][:"No Answer Provided"], calc_minerals[3][:tantalum][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:tantalum_comment][:"Provided comments"], calc_minerals[3][:tantalum_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[3][:tantalum_comment][:"Provided"], calc_minerals[3][:tantalum_comment][:"Not Provided"]],
         "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:tin][:"Yes"],  calc_minerals[3][:tin][:"No but > 75%"], calc_minerals[3][:tin][:"No but > 50%"],calc_minerals[3][:tin][:"No but > 25%"], calc_minerals[3][:tin][:"No but < 25%"], calc_minerals[3][:tin][:"No - None"], calc_minerals[3][:tin][:"No Answer Provided"], calc_minerals[3][:tin][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:tin_comment][:"Provided comments"], calc_minerals[3][:tin_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[3][:tin_comment][:"Provided"], calc_minerals[3][:tin_comment][:"Not Provided"]],
         "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:gold][:"Yes"],  calc_minerals[3][:gold][:"No but > 75%"], calc_minerals[3][:gold][:"No but > 50%"],calc_minerals[3][:gold][:"No but > 25%"], calc_minerals[3][:gold][:"No but < 25%"], calc_minerals[3][:gold][:"No - None"], calc_minerals[3][:gold][:"No Answer Provided"], calc_minerals[3][:gold][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:gold_comment][:"Provided comments"], calc_minerals[3][:gold_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[3][:gold_comment][:"Provided"], calc_minerals[3][:gold_comment][:"Not Provided"]],
         "%d Yes \n%d No but > 75%% \n%d No but > 50%% \n%d No but > 25%% \n%d No but < 25%% \n%d No - None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[3][:tungsten][:"Yes"],  calc_minerals[3][:tungsten][:"No but > 75%"], calc_minerals[3][:tungsten][:"No but > 50%"],calc_minerals[3][:tungsten][:"No but > 25%"], calc_minerals[3][:tungsten][:"No but < 25%"], calc_minerals[3][:tungsten][:"No - None"], calc_minerals[3][:tungsten][:"No Answer Provided"], calc_minerals[3][:tungsten][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[3][:tungsten_comment][:"Provided comments"], calc_minerals[3][:tungsten_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[3][:tungsten_comment][:"Provided"], calc_minerals[3][:tungsten_comment][:"Not Provided"]],
 
         "%d Yes all smelters have been provided \n%d No \n None \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:tantalum][:"Yes all smelters have been provided"], calc_minerals[4][:tantalum][:"No"], calc_minerals[4][:tantalum][:"No Answer Provided"], calc_minerals[4][:tantalum][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:tantalum_comment][:"Provided comments"], calc_minerals[4][:tantalum_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[4][:tantalum_comment][:"Provided"], calc_minerals[4][:tantalum_comment][:"Not Provided"]],
         "%d Yes all smelters have been provided \n%d No \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:tin][:"Yes all smelters have been provided"], calc_minerals[4][:tin][:"No"], calc_minerals[4][:tin][:"No Answer Provided"], calc_minerals[4][:tin][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:tin_comment][:"Provided comments"], calc_minerals[4][:tin_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[4][:tin_comment][:"Provided"], calc_minerals[4][:tin_comment][:"Not Provided"]],
         "%d Yes all smelters have been provided \n%d No \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:gold][:"Yes all smelters have been provided"], calc_minerals[4][:gold][:"No"], calc_minerals[4][:gold][:"No Answer Provided"], calc_minerals[4][:gold][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:gold_comment][:"Provided comments"], calc_minerals[4][:gold_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[4][:gold_comment][:"Provided"], calc_minerals[4][:gold_comment][:"Not Provided"]],
         "%d Yes all smelters have been provided \n%d No \n%d No Answer Provided \n%d Answer not Required" % [calc_minerals[4][:tungsten][:"Yes all smelters have been provided"], calc_minerals[4][:tungsten][:"No"], calc_minerals[4][:tungsten][:"No Answer Provided"], calc_minerals[4][:tungsten][:"Answer not Required"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[4][:tungsten_comment][:"Provided comments"], calc_minerals[4][:tungsten_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[4][:tungsten_comment][:"Provided"], calc_minerals[4][:tungsten_comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:tantalum][:"Yes"], calc_minerals[5][:tantalum][:"No"], calc_minerals[5][:tantalum][:"No Answer Provided"], calc_minerals[5][:tantalum][:"Answer not Required"], calc_minerals[5][:tantalum][:"Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:tantalum_comment][:"Provided comments"], calc_minerals[5][:tantalum_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[5][:tantalum_comment][:"Provided"], calc_minerals[5][:tantalum_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:tin][:"Yes"], calc_minerals[5][:tin][:"No"], calc_minerals[5][:tin][:"No Answer Provided"], calc_minerals[5][:tin][:"Answer not Required"], calc_minerals[5][:tin][:"Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:tin_comment][:"Provided comments"], calc_minerals[5][:tin_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[5][:tin_comment][:"Provided"], calc_minerals[5][:tin_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:gold][:"Yes"], calc_minerals[5][:gold][:"No"], calc_minerals[5][:gold][:"No Answer Provided"], calc_minerals[5][:gold][:"Answer not Required"], calc_minerals[5][:gold][:"Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:gold_comment][:"Provided comments"], calc_minerals[5][:gold_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[5][:gold_comment][:"Provided"], calc_minerals[5][:gold_comment][:"Not Provided"]],
         "%d Yes \n%d No \n%d No Answer Provided \n%d Answer not Required \n%d Unknown" % [calc_minerals[5][:tungsten][:"Yes"], calc_minerals[5][:tungsten][:"No"], calc_minerals[5][:tungsten][:"No Answer Provided"], calc_minerals[5][:tungsten][:"Answer not Required"], calc_minerals[5][:tungsten][:"Unknown"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_minerals[5][:tungsten_comment][:"Provided comments"], calc_minerals[5][:tungsten_comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_minerals[5][:tungsten_comment][:"Provided"], calc_minerals[5][:tungsten_comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[0][:answer][:"Yes"], calc_company_level[0][:answer][:"No"], calc_company_level[0][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[0][:comment][:"Provided comments"], calc_company_level[0][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[0][:comment][:"Provided"], calc_company_level[0][:comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[1][:answer][:"Yes"], calc_company_level[1][:answer][:"No"], calc_company_level[1][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[1][:comment][:"Provided comments"], calc_company_level[1][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[1][:comment][:"Provided"], calc_company_level[1][:comment][:"Not Provided"]],
 
         "%d Yes \n%d Yes included in standard contract language \n%d No \n%d No answer provided" % [calc_company_level[2][:answer][:"Yes"], calc_company_level[2][:answer][:"Yes included in standard contract language"], calc_company_level[2][:answer][:"No"], calc_company_level[2][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[2][:comment][:"Provided comments"], calc_company_level[2][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[2][:comment][:"Provided"], calc_company_level[2][:comment][:"Not Provided"]],
 
         "%d Yes \n%d Planned once lists become available \n%d No \n%d No answer provided" % 
         [calc_company_level[3][:answer][:"Yes"], calc_company_level[3][:answer][:"Planned once lists become available"], calc_company_level[3][:answer][:"No"], calc_company_level[3][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[3][:comment][:"Provided comments"], calc_company_level[3][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[3][:comment][:"Provided"], calc_company_level[3][:comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[4][:answer][:"Yes"], calc_company_level[4][:answer][:"No"], calc_company_level[4][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[4][:comment][:"Provided comments"], calc_company_level[4][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[4][:comment][:"Provided"], calc_company_level[4][:comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[5][:answer][:"Yes"], calc_company_level[5][:answer][:"No"], calc_company_level[5][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[5][:comment][:"Provided comments"], calc_company_level[5][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[5][:comment][:"Provided"], calc_company_level[5][:comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[6][:answer][:"Yes"], calc_company_level[6][:answer][:"No"], calc_company_level[6][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[6][:comment][:"Provided comments"], calc_company_level[6][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[6][:comment][:"Provided"], calc_company_level[6][:comment][:"Not Provided"]],
 
         "%d Yes (3rd party audit) \n%d Yes (documentation review only) \n%d Yes (internal audit) \n%d Yes (all methods apply) \n%d No \n%d No answer provided" %
         [calc_company_level[7][:answer][:"Yes (3rd party audit)"],
@@ -1124,28 +1159,35 @@ class ReportsController < ApplicationController
         calc_company_level[7][:answer][:"Yes (all methods apply)"],
         calc_company_level[7][:answer][:"No"],
         calc_company_level[7][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[7][:comment][:"Provided comments"], calc_company_level[7][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[7][:comment][:"Provided"], calc_company_level[7][:comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[8][:answer][:"Yes"], calc_company_level[8][:answer][:"No"], calc_company_level[8][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[8][:comment][:"Provided comments"], calc_company_level[8][:comment][:"Did not provide comments"]],
+        "%d Provided \n%d Not Provided" % [calc_company_level[8][:comment][:"Provided"], calc_company_level[8][:comment][:"Not Provided"]],
 
         "%d Yes \n%d No \n%d No answer provided" % [calc_company_level[9][:answer][:"Yes"], calc_company_level[9][:answer][:"No"], calc_company_level[9][:answer][:"No answer provided"]],
-        "%d Provided comments \n%d Did not provide comments" % [calc_company_level[9][:comment][:"Provided comments"], calc_company_level[9][:comment][:"Did not provide comments"]]
+        "%d Provided \n%d Not Provided" % [calc_company_level[9][:comment][:"Provided"], calc_company_level[9][:comment][:"Not Provided"]]
  
         ]
 
-   
+        # get data rows sorted alphabetically by company name, declaration of scope, and description of scope, and eventually product list
+	  
     
-      
+       sorted_rows = []
+       rows_running_count = 0
+       rows.sort_by { |e| [e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s ] }.each do |r|
+	    rows_running_count += 1
+	    sorted_rows << [rows_running_count] + r
+        end	    
+          
 
-        # Create spreadsheet   [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90]
+        # Create spreadsheet  
     spreadsheet = Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "GSP Declarations List") do |sheet|
+      p.workbook.add_worksheet(:name => "Aggregated Declarations") do |sheet|
         # Style                                                      
         header_style = nil
         row_style    = nil
 	totals_style = nil
-        top_row_style = nil
+        first_row_style = nil
 	report_title_style = nil
 	report_date_time_style = nil
 	date_style = nil
@@ -1156,11 +1198,11 @@ class ReportsController < ApplicationController
           header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
           row_style    = style.add_style :b => false, :sz => 9,  :alignment => { :wrap_text => true, :horizontal => :left }
 	  totals_style = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color 
-          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
 	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
           report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
         end
         
         # GSP Logo image
@@ -1169,26 +1211,27 @@ class ReportsController < ApplicationController
           image.height = 3
           image.hyperlink.tooltip = "Green Status Pro"
           image.start_at 0, 0
-          image.end_at 1, 1
+          image.end_at 2, 1
         end
 
-	top_row = ['', '', '', "CONSOLIDATED \n DECLARATIONS \n REPORT \n for: ", "Date:", "Time:", "User:"]
-        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style], :widths => [35, 35, 30, 30, 30, 30, 30]).height = 86.0
-        
+	first_row = ['', '', '', "AGGREGATED \n DECLARATIONS \n REPORT \n for: ", "Date:", "Time:", "User:"]
+        sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style], :widths => [7, 25, 25, 25, 25, 25, 25, 25]).height = 86.0
+        sheet.merge_cells "A1:B1"
+	
         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style] , :widths => [35, 35, 30, 30, 30, 30, 30]).height = 22.0
+        sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style] , :widths => [7, 25, 25, 25, 25, 25, 25, 25]).height = 22.0
 
         # Add header row
-        sheet.add_row(header, :style => header_style, :widths => [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90]).height = 48.0
+        sheet.add_row(header, :style => header_style, :widths => [7, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 300]).height = 48.0
         
         # Append data rows
-        rows.each do |r|
-          sheet.add_row(r, :style => row_style,  :widths => [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90] )
+        sorted_rows.each do |r|
+          sheet.add_row(r, :style => row_style,  :widths => [7, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 300])
 	   #check rows can use :ignore and :auto)   row <<  ([''] * 13) + row_second_part
 	end
   
 	# Add totals row
-	sheet.add_row(totals, :style => totals_style, :widths => [35, 35, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 90]).height =  48.0
+	sheet.add_row(totals, :style => totals_style, :widths => [7, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 300]).height =  105.0
 	
         # Freeze pane over data rows
         sheet.sheet_view.pane do |pane|
@@ -1203,28 +1246,27 @@ class ReportsController < ApplicationController
       end
     end
 
-     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_report.gsp.xlsx"), :type => 'application/excel'
-    ### (old) send_data @csv, :filename => report_filename("eicc_consolidated_report.gsp.csv"), :type => 'application/csv'
+     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_aggregated_declarations_report.gsp.xlsx"), :type => 'application/excel'
+    
   end
 
 # TODO ISSUES TO DISCUSS
 # how are we getting the latest spread sheet from each extended company name/scope/product list?
 # when we ad review id will be able to have this same report work as either a batch-only report by entering a parameter of batch and the batch id or a "complete" report by entering "review" and review_id as parameters
-# not computing "answer not required" for minerals questions 2 through 6
-# not computing alternate answers such as "Uncertain or Unknown"  for minerals questions 2(sequence 1) and 3 (sequence 2), all  options for minerals question 4(sequence 3),  and unknown for minerals question 6 (sequnce 5). Minerals question 5 (sequence 4) the answer for "yes" is technically "yes all smelters have been provided" 
-
-# not computing Totals yet - can decide later where to put them 2nd row or last row? Can use the same technique I used on detailed smelter report to change row placement
 # IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS 
   
 
   def eicc_detailed_smelter_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
-    #@csv = CSV.generate do |csv|
-      header = ["Metal", 
+    
+      header = [
+	      "   #   ",
+	      "Supplier Company Name",
+              "Metal", 
 	      "Smelter Reference List", 
               "Standard Smelter Names", 
-              "Smelter Facility Location Country", 
+              "Smelter Facility Location \n Country", 
               "Smelter ID", 
               "Smelter Facility Location \n Street Address", 
               "Smelter Facility Location \n City", 
@@ -1235,7 +1277,7 @@ class ReportsController < ApplicationController
               "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
               "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
               "Comments",
-	      "Original Excel File Name",
+	      "File Name",
 	      "Date File Ingested into GSP",
               "Validation Status",
 	      "Supplier Company Name",
@@ -1299,7 +1341,9 @@ class ReportsController < ApplicationController
           row <<  ([''] * 13) + row_second_part
         else
           dec.smelter_list.each do |smelter|
-            row_first_part = [smelter.metal,
+            row_first_part = [
+                  	       dec.company_name, 
+			       smelter.metal,
                                smelter.smelter_reference_list,
                                smelter.standard_smelter_name,
                                smelter.facility_location_country,
@@ -1320,18 +1364,30 @@ class ReportsController < ApplicationController
         end
 
       end
-    ### end  # of old csv loop
+    
     
        
-       rows = rows.sort_by { |e| [ e[17].to_s, e[18].to_s, e[19].to_s, e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s ] }
+ #   rows = rows.sort_by { |e| [ e[1].to_s,  e[20].to_s, e[21].to_s, e[2].to_s, e[3].to_s, e[4].to_s, e[5].to_s, e[6].to_s ] }
+    
+    sorted_rows = []
+    rows_running_count = 0
+    rows.sort_by { |e| [ e[0].to_s, e[19].to_s, e[20].to_s, e[21].to_s, e[1].to_s, e[2].to_s, e[3].to_s, e[4].to_s ] }.each do |r|
+            rows_running_count += 1
+	    sorted_rows << [rows_running_count] + r
+      end	    
+
+
+
+
+
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "GSP Detailed Smelters List") do |sheet|
+      p.workbook.add_worksheet(:name => "GSP Smelter by Supplier List") do |sheet|
         # Style
         header_style = nil
         row_style    = nil
-        top_row_style = nil
+        first_row_style = nil
 	report_title_style = nil
 	report_date_time_style = nil
 	date_style = nil
@@ -1340,11 +1396,11 @@ class ReportsController < ApplicationController
         p.workbook.styles do |style|
           header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
           row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
-          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
 	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
           report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
         end
         
         # GSP Logo image
@@ -1356,20 +1412,20 @@ class ReportsController < ApplicationController
           image.end_at 2, 1
         end
  	
-	top_row = ['', '', '', "DETAILED \n SMELTER \n LISTING \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style, nil, nil, nil] , :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20]).height = 86.0
+	first_row = ['', '', '', "SMELTER \n by SUPPLIER \n LIST \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20]).height = 86.0
         sheet.merge_cells "A1:B1"
         
 	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style, nil, nil, nil] , :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20]).height = 22.0
+        sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20]).height = 22.0
 
         
         # Add header row
-        sheet.add_row(header, :style => header_style, :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20]).height = 48.0
+        sheet.add_row(header, :style => header_style, :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20]).height = 48.0
         
         # Append data rows
-        rows.each do |r|
-          sheet.add_row(r, :style => row_style, :widths => [8,30,30,30,15,30,30,30,30,30,30,30,30,30,30,20,20,20,20,20,20,30,30,30,30,30,30,20,20,20,20,20,20,20,20])
+        sorted_rows.each do |r|
+          sheet.add_row(r, :style => row_style, :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20])
         end
         
         # Freeze pane over data rows
@@ -1385,15 +1441,16 @@ class ReportsController < ApplicationController
       end
     end
 
-     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_detailed_smelter_list_report.gsp.xlsx"), :type => 'application/excel'
+     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_smelter_by_supplier_list.gsp.xlsx"), :type => 'application/excel'
      
   end
   
   
   #============================================================
-  # EICC Consolidated Smelter List Report
+  # EICC Consolidated Smelter Report
   #    
-  require 'axlsx'
+  
+ 
   def eicc_consolidated_smelter_list
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
     
@@ -1422,7 +1479,8 @@ class ReportsController < ApplicationController
     end
     
     # Gather all the required data and sort
-    header = ["Row Count", "Metal",
+    header = ["   #   ", 
+               "Metal",
               "Smelter Reference List",
               "Standard Smelter Names",
               "Smelter Facility Location Country",
@@ -1445,22 +1503,93 @@ class ReportsController < ApplicationController
             rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  # rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
     end
     
+    total_gold_smelters = 0
+    total_gold_smelters_not_yet_identified = 0
+    total_gold_smelters_not_listed = 0
+    
+    total_tantalum_smelters = 0
+    total_tantalum_smelters_not_yet_identified = 0
+    total_tantalum_smelters_not_listed = 0
+    
+    total_tin_smelters = 0
+    total_tin_smelters_not_yet_identified = 0
+    total_tin_smelters_not_listed = 0
+    
+    total_tungsten_smelters = 0
+    total_tungsten_smelters_not_yet_identified = 0
+    total_tungsten_smelters_not_listed = 0
+ 
+    total_unknown_metal_smelters = 0
+    total_unknown_metal_smelters_not_yet_identified = 0
+    total_unknown_metal_smelters_not_listed = 0
+
+    total_smelters_not_identified = 0
+    total_smelters_not_listed = 0
+    
+    highlight_red     = false
+    highlight_yellow = false
+    highlight_green  = false
+    
+    prev_smelter_row = [
+       			       "0 - metal", 
+                               "1 - smelter_reference_list", 
+                               "2 - standard_smelter_name", 
+                               "3 - facility_location_country", 
+                               "4 - smelter_id", 
+                               "5 - facility_location_street_address", 
+                               "6 - facility_location_city", 
+                               "7 - facility_location_province", 
+                               "8 - facility_contact_name", 
+                               "9 - facility_contact_email", 
+                               "10 - proposed_next_steps", 
+                               "11 - mineral_source", 
+                               "12 - mineral_source_location", 
+                               "13 - comment"]
+
+    this_smelter_row = []
+    
+        
     rows = []
     rows_running_count = 0
     rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] } 
     rows_second_part.each do |r2|
+	    
 	    rows_running_count += 1
+	    this_smelter_row = r2
+	      case r2[0].to_s.strip.downcase
+		      when "gold"
+		          total_gold_smelters += 1
+			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_gold_smelters_not_listed += 1 end
+			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_gold_smelters_not_yet_identified += 1 end
+		       when "tantalum"
+		          total_tantalum_smelters += 1
+			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_tantalum_smelters_not_listed += 1 end
+			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tantalum_smelters_not_yet_identified += 1 end
+		       when "tin"
+			  total_tin_smelters += 1
+			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_tin_smelters_not_listed += 1 end
+			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tin_smelters_not_yet_identified += 1 end
+		       when "tungsten"
+			  total_tungsten_smelters +=1
+			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_tungsten_smelters_not_listed += 1 end
+			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tungsten_smelters_not_yet_identified += 1 end
+		       else
+			  total_unknown_metal_smelters +=1
+			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_unknown_metal_smelters_not_listed += 1 end
+			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_unknown_metal_smelters_not_yet_identified += 1 end	  
+	      end
 	    rows << [rows_running_count] + r2
+	    prev_smelter_row = r2
     end	    
    
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "GSP Consolidated Smelters List") do |sheet|
+      p.workbook.add_worksheet(:name => "Consolidated Smelters") do |sheet|
         # Style
         header_style = nil
         row_style    = nil
-        top_row_style = nil
+        first_row_style = nil
 	report_title_style = nil
 	report_date_time_style = nil
 	date_style = nil
@@ -1468,13 +1597,13 @@ class ReportsController < ApplicationController
 	
 	
         p.workbook.styles do |style|
-          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
 	  header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
           row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
 	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
           report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
         end
         
         # GSP Logo image
@@ -1486,19 +1615,19 @@ class ReportsController < ApplicationController
           image.end_at 2, 1
 	end
 	
-	top_row = ['', '', '', "CONSOLIDATED \n SMELTER \n LISTING \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
+	first_row = ['', '', '', "CONSOLIDATED \n SMELTER \n REPORT \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
         sheet.merge_cells "A1:B1"
         
 	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
+        sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
 
         # Add header row
-        sheet.add_row(header, :style => header_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
+        sheet.add_row(header, :style => header_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
            
         # Append data rows
         rows.each do |r|
-           sheet.add_row(r, :style => row_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
+           sheet.add_row(r, :style => row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
 	  # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
 	  # here is where we would have to do cell formatting for red or yellow warning backgrounds
         end
@@ -1518,21 +1647,25 @@ class ReportsController < ApplicationController
       p.workbook.add_worksheet(:name => "Consolidated Smelter Analytics") do |sheet|
         header_style = nil
         row_style    = nil
-        top_row_style = nil
+        first_row_style = nil
 	report_title_style = nil
 	report_date_time_style = nil
 	date_style = nil
 	time_style = nil
+	align_right_cell_style = nil
+	align_left_cell_style  = nil
 	
 	
         p.workbook.styles do |style|
-          top_row_style             = style.add_style :b => true, :sz => 16, :alignment => { :wrap_text => true, :horizontal => :center } 
+          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
 	  header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
-          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
+          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
 	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
           report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 12, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+          align_right_cell_style    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :right }  
+          align_left_cell_style      = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
         end
         
         # GSP Logo image
@@ -1541,32 +1674,59 @@ class ReportsController < ApplicationController
           image.height = 3
           image.hyperlink.tooltip = "Green Status Pro"
           image.start_at 0, 0
-          image.end_at 2, 1
+          image.end_at 1, 1
 	end
 	
-	top_row = ['', '', '', "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( top_row, :style => [nil, nil, nil, top_row_style, top_row_style, top_row_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
-        sheet.merge_cells "A1:B1"
+	first_row = ['', '',  "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( first_row, :style => [nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
+        # sheet.merge_cells "A1:B1"
         
-	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, top_row_style, date_style, time_style, top_row_style, nil, nil, nil] , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
+	second_row = ['', '',  current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '', ''] 
+        sheet.add_row( second_row, :style => [nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
 
         # Add header row
-	header2 = ["Item", "Value"]
-        sheet.add_row(header2, :style => header_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
+	sheet.add_row(["Item", "Value"], :style => header_style , :widths => [30, 10] ).height = 48.0
         
-        # Append data rows
-        #rows.each do |r|
-	   r1 =[]
-	   r1 = ["Total Number of Entries",  'TBD - in process']
-           sheet.add_row(r1, :style => row_style , :widths => [15, 10, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
-	  # r2 = ["Total Smelters - Gold", 
+        # Append analytic data rows
+           
+ 	  
+           sheet.add_row( ["Total entries - Gold",  total_gold_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+	  
+           sheet.add_row( ["Total entries - Tin",  total_tin_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+	  
+           sheet.add_row( ["Total entries - Tantalum", total_tantalum_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+	  
+	   sheet.add_row( ["Total entries - Tungsten",  total_tungsten_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
 	   
-	   
-	  # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
-	  # here is where we would have to do cell formatting for red or yellow warning backgrounds
-        #end
-        
+	   if total_unknown_metal_smelters == 0 then
+		               sheet.add_row( ["   " , "________" ], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+			       else
+			       sheet.add_row( ["Total entries - Unknown Metals",  total_unknown_metal_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 22.0	       
+		               end 
+		       
+           
+	   total_all_smelters = total_gold_smelters + total_tantalum_smelters + total_tin_smelters + total_tungsten_smelters + total_unknown_metal_smelters
+	   # check that total_all_smelters is equal to rows_running_count
+	   sheet.add_row( ["Total entries - all metals",  total_all_smelters ], :style => [align_left_cell_style, align_right_cell_style] , :widths => [30, 10] ).height = 15.0
+
+           sheet.add_row( ["   " , " " ], :style => row_style , :widths =>  [30, 10] ).height = 15.0
+
+           total_smelters_not_listed = total_gold_smelters_not_listed + total_tantalum_smelters_not_listed + total_tin_smelters_not_listed + total_tungsten_smelters_not_listed + total_unknown_metal_smelters_not_listed
+	   sheet.add_row( ["Total entries - Smelter Not Listed",  total_smelters_not_listed], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+	  
+           total_smelters_not_yet_identified = total_gold_smelters_not_yet_identified + total_tantalum_smelters_not_yet_identified + total_tin_smelters_not_yet_identified + total_tungsten_smelters_not_yet_identified + total_unknown_metal_smelters_not_yet_identified
+           sheet.add_row( ["Total entries - Smelter not yet Identifed",  total_smelters_not_yet_identified], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+	  
+	  # r8 = [Top 10 Smelters Listings: (from Smelter ID column F on Smelter list worksheet", 
+           sheet.add_row( ["Top 10 Smelter Listings",  'TBD - in process'], :style => row_style , :widths =>  [30, 10] ).height = 50.0
+	  
+	  # r9 = Top 10 Countries: (from Column E)
+           sheet.add_row( ["Total 10 Countries",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 50.0
+	  
+	  # r10 = [x.	Top 10 Suppliers Reporting Smelters (Supplier Name, Declaration Worksheet, D8): # (Count of Entries on Smelter List Worksheet, Column B, sorted by highest number)
+           sheet.add_row( ["Top 10 Suppliers reporting Smelters",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 50.0
+	  
+          
         # Freeze pane over data rows
         sheet.sheet_view.pane do |pane|
           pane.top_left_cell = "A4"
@@ -1580,61 +1740,10 @@ class ReportsController < ApplicationController
  
     end
     
-    send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_list_report.gsp.xlsx"), :type => 'application/excel'
+    send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_report.gsp.xlsx"), :type => 'application/excel'
   end
   
   
-  def eicc_consolidated_smelter_list_old
-    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
-    
-    smelters = {}
-    
-    @batch.individual_validation_statuses.each do |ivs|
-      next if ivs.declaration.nil?
-      dec = ivs.declaration
-      
-      case dec.declaration_scope
-        when /^A./
-          ext_supplier_name = dec.company_name
-        when /^B./
-          ext_supplier_name = "#{dec.company_name} (division level for #{dec.description_of_scope})"
-        when /^C./
-          ext_supplier_name = "#{dec.company_name} (product category level for #{dec.description_of_scope})"
-        when /^D./
-          ext_supplier_name = "%s (for following products %s)" % [dec.company_name, ""]
-      end
-      
-      
-      dec.smelter_list.each do |smelter|
-        smelter_key = [smelter.metal.to_s.strip, smelter.smelter_reference_list.to_s.strip, smelter.standard_smelter_name.to_s.strip, smelter.facility_location_country.to_s.strip, smelter.smelter_id.to_s.strip].join('=;=')
-        smelters[smelter_key] = [] if smelters[smelter_key].nil?
-        smelters[smelter_key] << ext_supplier_name
-      end
-    end
-    
-    @csv = CSV.generate do |csv|
-      csv << ["Metal",
-              "Smelter Reference List",
-              "Standard Smelter Names",
-              "Smelter Facility Location Country",
-              "Smelter ID",
-              "Number of Suppliers",
-              "Supplier Names"]
-# later on do a sort such that it comes out with all tantalum smelters alphabeticcally first, then all tin, gold, and tungsten smelters each alpha             
-      smelters.each do |key, value|
-        smelter_info = key.split('=;=')
-        csv << [smelter_info[0],
-                smelter_info[1],
-                smelter_info[2],
-                smelter_info[3],
-                smelter_info[4],
-                value.uniq.size,
-                value.uniq.join(', ')]
-      end
-    end
-    
-   send_data @csv, :filename => report_filename("eicc_consolidated_smelter_list_report.gsp.csv"), :type => 'application/csv'
-  end
   
   
   # Dashboard graphs
