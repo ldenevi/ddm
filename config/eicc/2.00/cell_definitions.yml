@@ -54,10 +54,11 @@
   :comment: 6
 :smelter_list:
   :start_row: 3
-  :metal: 0
-  :smelter_reference_list: 1
-  :standard_smelter_name: 2
-  :facility_location_country: 3
+  :smelter_id: 0
+  :metal: 1
+  :smelter_reference_list: 2
+  :standard_smelter_name: 3
+  :facility_location_country: 4
   :facility_location_street_address: 5
   :facility_location_city: 6
   :facility_location_province: 7
