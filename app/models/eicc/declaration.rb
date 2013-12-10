@@ -167,6 +167,30 @@ private
     rows  = csv.read
     i     = smelter_list_definition[:start_row]
     sequence = 0
+    smelter_list_fields = structure_fields[:smelter_list].to_a
+
+    # Version 2.00 has diverse column positioning
+    columns = smelter_list_definition.clone
+
+    if self.template_version == "2.00"
+      header_sample = self.csv_worksheets[4].data[0..2000]
+
+      if header_sample.match("\nGold,") || header_sample.match("\nTungsten,") || header_sample.match("\nTin,") || header_sample.match("\nTantalum,")
+        columns[:metal] = 0
+        columns[:smelter_reference_list] = 1
+        columns[:standard_smelter_name]  = 2
+        columns[:facility_location_country] = 3
+        columns[:facility_location_street_address] = 4
+        columns[:facility_location_city] = 5
+        columns[:facility_location_province] = 6
+        columns[:facility_contact_name] = 7
+        columns[:facility_contact_email] = 8
+        columns[:proposed_next_steps] = 9
+        columns[:mineral_source] = 10
+        columns[:mineral_source_location] = 11
+        columns[:comment] = 12
+      end
+    end
 
     while !rows[i].nil?
       rows_test = rows[i].uniq
@@ -179,8 +203,8 @@ private
       end
 
       smelter_list_item = Eicc::SmelterList.new
-      structure_fields[:smelter_list].to_a.each do |field|
-        smelter_list_item.send("#{field.to_s}=", rows[i][smelter_list_definition[field]])
+      smelter_list_fields.each do |field|
+        smelter_list_item.send("#{field.to_s}=", rows[i][columns[field]])
       end
       smelter_list_item.line_number = sequence
       sequence += 1
