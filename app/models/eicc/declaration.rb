@@ -45,12 +45,13 @@ class Eicc::Declaration < ActiveRecord::Base
     @@validation_messages = YAML::load_file(File.join('config', 'eicc', obj.template_version, 'messages.en.yml'))["en"]
 
     # Set validation messages
-    validates_with Eicc::DeclarationValidator
     validates :company_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:company_name] }
     validates :declaration_scope, :presence => { :message =>  @@validation_messages[:declaration][:no_presence][:declaration_scope] }
     validates :authorized_company_representative_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:authorized_company_representative_name] }
     validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
     validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
+    validates :language, :inclusion => { :in => %w{English}, :message => "(%{value}): " + @@validation_messages[:declaration][:no_presence][:language] }
+    validates_with Eicc::DeclarationValidator
 
     obj.strip_worksheets
     obj
