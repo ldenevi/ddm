@@ -186,6 +186,7 @@
     - :smelter_reference_list
     - :standard_smelter_name
     - :facility_location_country
+    - :smelter_id
     - :facility_location_street_address
     - :facility_location_city
     - :facility_location_province
