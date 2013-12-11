@@ -1341,14 +1341,17 @@ class ReportsController < ApplicationController
           row <<  ([''] * 13) + row_second_part
         else
           dec.smelter_list.each do |smelter|
+	    if smelter.smelter_id.to_s.strip.empty? then temp_smelter_id = "Not Supplied" 
+	    else temp_smelter_id = smelter.smelter_id
+	    end
             row_first_part = [
                   	       dec.company_name, 
 			       smelter.metal,
                                smelter.smelter_reference_list,
                                smelter.standard_smelter_name,
                                smelter.facility_location_country,
-                               smelter.smelter_id,
-                               smelter.facility_location_street_address,
+			       temp_smelter_id,
+                 	       smelter.facility_location_street_address,
                                smelter.facility_location_city,
                                smelter.facility_location_province,
                                smelter.facility_contact_name,
@@ -1470,15 +1473,22 @@ class ReportsController < ApplicationController
     
     @latest_declarations.each do |declaration|
       declaration.smelter_list.each do |smelter|
-        smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id,
+	    if smelter.smelter_id.to_s.strip.empty? then temp_smelter_id = "Not Supplied" 
+	    else temp_smelter_id = smelter.smelter_id
+	    end
+             
+            smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, temp_smelter_id, 
                        smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province, smelter.facility_contact_name,
                        smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source, smelter.mineral_source_location, smelter.comment]
+	
         declarations_by_smelter[smelter_key] = [] if declarations_by_smelter[smelter_key].nil?
         declarations_by_smelter[smelter_key] << declaration
       end
     end
     
     # Gather all the required data and sort
+    
+    # logic for first sheet
     header = ["   #   ", 
                "Metal",
               "Smelter Reference List",
@@ -1499,9 +1509,11 @@ class ReportsController < ApplicationController
 
     rows_second_part = []
     
-    declarations_by_smelter.each do |smelter_key, declarations|
-            rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  # rows << [rows_running_count] + smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count] 
-    end
+      declarations_by_smelter.each do |smelter_key, declarations|
+            rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  
+      end
+    
+    # logic for second sheet
     
     total_gold_smelters = 0
     total_gold_smelters_not_yet_identified = 0
@@ -1546,16 +1558,14 @@ class ReportsController < ApplicationController
                                "12 - mineral_source_location", 
                                "13 - comment"]
 
-    this_smelter_row = []
-    
-        
+    # this_smelter_row = []
     rows = []
     rows_running_count = 0
     rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] } 
-    rows_second_part.each do |r2|
-	    
+
+       rows_second_part.each do |r2|  
 	    rows_running_count += 1
-	    this_smelter_row = r2
+	    # this_smelter_row = r2
 	      case r2[0].to_s.strip.downcase
 		      when "gold"
 		          total_gold_smelters += 1
@@ -1579,9 +1589,14 @@ class ReportsController < ApplicationController
 			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_unknown_metal_smelters_not_yet_identified += 1 end	  
 	      end
 	    rows << [rows_running_count] + r2
-	    prev_smelter_row = r2
-    end	    
-   
+	    # prev_smelter_row = r2
+      end	    
+  
+    
+    
+    
+    
+    #### more here
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
@@ -1737,6 +1752,9 @@ class ReportsController < ApplicationController
         end
 
       end
+ 
+ 
+ 
  
     end
     
