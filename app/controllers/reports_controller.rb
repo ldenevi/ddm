@@ -1448,6 +1448,205 @@ class ReportsController < ApplicationController
      
   end
   
+ 
+# TODO ISSUES TO DISCUSS
+# how are we getting the latest spread sheet from each extended company name/scope/product list?
+# when we ad review id will be able to have this same report work as either a batch-only report by entering a parameter of batch and the batch id or a "complete" report by entering "review" and review_id as parameters
+# IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS 
+  
+  
+  
+  
+  
+  def eicc_detailed_smelter_report
+    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
+
+    
+    header = [
+         "   #   ",
+         "Supplier Company Name",
+         "Metal", 
+         "Smelter Reference List", 
+         "Standard Smelter Names", 
+         "Smelter Facility Location \n Country", 
+         "Smelter ID", 
+         "Smelter Facility Location \n Street Address", 
+         "Smelter Facility Location \n City", 
+         "Smelter Facility Location \n State Province", 
+         "Smelter Facility \n Contact Name", 
+         "Smelter Facility \n Contact Email", 
+         "Proposed next steps, if applicable", 
+         "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
+         "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
+         "Comments",
+         "CM Report\nFile Name",
+         "EICC-GeSI\nTemplate Version", 
+         "Uploaded At",
+	 "Status",
+         "Supplier Company Name",
+         "Declaration of Scope",
+         "Description of Scope",
+         # "Product List",
+         "Company Unique Identifier",
+         "Address",
+         "Authorized Company Representative Name",
+         "Representative Title",
+         "Representative E-Mail",
+         "Representative Phone",
+         "Date of Completion",
+         "Question 1\n   Tantalum",
+         "Question 1 Comments\n   Tantalum",
+         "Question 1\n   Tin",
+         "Question 1 Comments\n   Tin",
+         "Question 1\n   Gold",
+         "Question 1 Comments\n   Gold",
+         "Question 1\n   Tungsten",
+         "Question 1 Comments\n   Tungsten"
+         ]
+        
+    rows = []     
+    @batch.individual_validation_statuses.each do |ivs|
+
+          dec = ivs.declaration
+          question_1 = dec.mineral_questions.sort_by(&:sequence).first
+          if dec.completion_at.nil? then 
+	      completed_at_date = "No Date Given" 
+	  else 
+	       completed_at_date = dec.completion_at.strftime('%B %d, %Y')     # check locL dec.completion_at.strftime('%d, %B, %Y')(:local)]
+	  end
+
+
+          row_second_part = [
+                          dec.uploaded_excel.filename,
+                          dec.template_version, 
+                          dec.created_at.to_formatted_s(:local),
+			  ivs.status,
+                          dec.company_name,
+                          dec.declaration_scope,
+                          dec.description_of_scope,
+                          dec.company_unique_identifier,
+                          dec.address,
+                          dec.authorized_company_representative_name,
+                          dec.representative_title,
+                          dec.representative_email,
+                          dec.representative_phone,
+                          completed_at_date,
+                          question_1.tantalum,
+                          question_1.tantalum_comment,
+                          question_1.tin,
+                          question_1.tin_comment,
+                          question_1.gold,
+                          question_1.gold_comment,
+                          question_1.tungsten,
+                          question_1.tungsten_comment
+                          ]
+
+          if dec.smelter_list.nil?
+            row <<  ([''] * 13) + row_second_part
+          else
+             dec.smelter_list.each do |smelter|
+                if smelter.smelter_id.to_s.strip.empty? then 
+		  temp_smelter_id = "Not Supplied" 
+               else 
+		   temp_smelter_id = smelter.smelter_id
+               end
+               row_first_part = [
+                          dec.company_name, 
+                          smelter.metal,
+                          smelter.smelter_reference_list,
+                          smelter.standard_smelter_name,
+                          smelter.facility_location_country,
+                          temp_smelter_id,
+			  smelter.facility_location_street_address,
+                          smelter.facility_location_city,
+                          smelter.facility_location_province,
+                          smelter.facility_contact_name,
+                          smelter.facility_contact_email,
+                          smelter.proposed_next_steps,
+                          smelter.mineral_source,
+                          smelter.mineral_source_location,
+                          smelter.comment]
+
+               row = row_first_part + row_second_part    
+               rows << row       
+             end                                                                      
+          end    
+    end 
+
+  
+    sorted_rows = []
+    rows_running_count = 0
+    rows.sort_by { |e| [ e[0].to_s, e[19].to_s, e[20].to_s, e[21].to_s, e[1].to_s, e[2].to_s, e[3].to_s, e[4].to_s ] }.each do |r|
+         rows_running_count += 1
+	 sorted_rows << [rows_running_count] + r
+    end      
+
+   
+    # Create spreadsheet
+    spreadsheet = Axlsx::Package.new do |p|
+       p.workbook.add_worksheet(:name => "GSP Smelter by Supplier List") do |sheet|
+        
+         header_style = nil
+         row_style    = nil
+         first_row_style = nil
+	 report_title_style = nil
+         report_date_time_style = nil
+         date_style = nil
+         time_style = nil
+        
+         p.workbook.styles do |style|
+            header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+            row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
+            first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+	    report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+            report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+            date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+            time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+         end 
+        
+         # GSP Logo image
+         sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+           image.width  = 4
+           image.height = 3
+           image.hyperlink.tooltip = "Green Status Pro"
+           image.start_at 0, 0
+           image.end_at 2, 1
+         end
+   
+         first_row = ['', '', '', "SMELTER \n by SUPPLIER \n LIST \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+         sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20]).height = 86.0
+         sheet.merge_cells "A1:B1"
+        
+         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+         sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20]).height = 33.0
+
+        
+         # Add header row
+         sheet.add_row(header, :style => header_style, :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20]).height = 48.0
+                                                                                         
+         # Append data rows
+         sorted_rows.each do |r|
+            sheet.add_row(r, :style => row_style, :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20])
+         end  # of sorted_rows.each do
+        
+         # Freeze pane over data rows
+         sheet.sheet_view.pane do |pane|
+           pane.top_left_cell = "A4"
+           pane.state = :frozen_split
+           pane.y_split = 3
+           pane.x_split = 0
+           pane.active_pane = :bottom_right
+         end # sheet.sheet_view.pane do |pane|
+       
+      end     
+    end     
+
+     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_smelter_by_supplier_list.gsp.xlsx"), :type => 'application/excel'
+     
+  end   
+  
+
+
   
   #============================================================
   # EICC Consolidated Smelter Report
@@ -1473,23 +1672,26 @@ class ReportsController < ApplicationController
     
     @latest_declarations.each do |declaration|
       declaration.smelter_list.each do |smelter|
-	    if smelter.smelter_id.to_s.strip.empty? then temp_smelter_id = "Not Supplied" 
-	    else temp_smelter_id = smelter.smelter_id
-	    end
+         if smelter.smelter_id.to_s.strip.empty? then 
+	   temp_smelter_id = "Not Supplied" 
+         else 
+	   temp_smelter_id = smelter.smelter_id
+         end
              
-            smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, temp_smelter_id, 
+         smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, temp_smelter_id, 
                        smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province, smelter.facility_contact_name,
                        smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source, smelter.mineral_source_location, smelter.comment]
-	
-        declarations_by_smelter[smelter_key] = [] if declarations_by_smelter[smelter_key].nil?
-        declarations_by_smelter[smelter_key] << declaration
+  
+         declarations_by_smelter[smelter_key] = [] if declarations_by_smelter[smelter_key].nil?
+         declarations_by_smelter[smelter_key] << declaration
       end
     end
     
     # Gather all the required data and sort
     
     # logic for first sheet
-    header = ["   #   ", 
+    header = [
+               "   #   ", 
                "Metal",
               "Smelter Reference List",
               "Standard Smelter Names",
@@ -1504,46 +1706,47 @@ class ReportsController < ApplicationController
               "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
               "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
               "Comments",
-              "Source EICC Report(s)",
-	      "Number of Source EICC Reports"]
+        "Number of\nSource EICC-GeSI\nCM Report Files",
+              "Source EICC EICC-GeSI\nReport File Names)"
+        ]
 
-    rows_second_part = []
+      rows_second_part = []
     
       declarations_by_smelter.each do |smelter_key, declarations|
-            rows_second_part <<  smelter_key + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(', ')]  + [declarations.uniq.count]  
+         rows_second_part <<  smelter_key + [declarations.uniq.count] + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(',    ')] 
       end
-    
-    # logic for second sheet
-    
-    total_gold_smelters = 0
-    total_gold_smelters_not_yet_identified = 0
-    total_gold_smelters_not_listed = 0
-    
-    total_tantalum_smelters = 0
-    total_tantalum_smelters_not_yet_identified = 0
-    total_tantalum_smelters_not_listed = 0
-    
-    total_tin_smelters = 0
-    total_tin_smelters_not_yet_identified = 0
-    total_tin_smelters_not_listed = 0
-    
-    total_tungsten_smelters = 0
-    total_tungsten_smelters_not_yet_identified = 0
-    total_tungsten_smelters_not_listed = 0
+      
+      # logic for second sheet
+      
+      total_gold_smelters = 0
+      total_gold_smelters_not_yet_identified = 0
+      total_gold_smelters_not_listed = 0
+      
+      total_tantalum_smelters = 0
+      total_tantalum_smelters_not_yet_identified = 0
+      total_tantalum_smelters_not_listed = 0
+      
+      total_tin_smelters = 0
+      total_tin_smelters_not_yet_identified = 0
+      total_tin_smelters_not_listed = 0
+      
+      total_tungsten_smelters = 0
+      total_tungsten_smelters_not_yet_identified = 0
+      total_tungsten_smelters_not_listed = 0
  
-    total_unknown_metal_smelters = 0
-    total_unknown_metal_smelters_not_yet_identified = 0
-    total_unknown_metal_smelters_not_listed = 0
+      total_unknown_metal_smelters = 0
+      total_unknown_metal_smelters_not_yet_identified = 0
+      total_unknown_metal_smelters_not_listed = 0
 
-    total_smelters_not_identified = 0
-    total_smelters_not_listed = 0
+      total_smelters_not_identified = 0
+      total_smelters_not_listed = 0
     
-    highlight_red     = false
-    highlight_yellow = false
-    highlight_green  = false
+      highlight_red     = false
+      highlight_yellow = false
+      highlight_green  = false
     
-    prev_smelter_row = [
-       			       "0 - metal", 
+      prev_smelter_row = [
+                               "0 - metal", 
                                "1 - smelter_reference_list", 
                                "2 - standard_smelter_name", 
                                "3 - facility_location_country", 
@@ -1558,40 +1761,55 @@ class ReportsController < ApplicationController
                                "12 - mineral_source_location", 
                                "13 - comment"]
 
-    # this_smelter_row = []
-    rows = []
-    rows_running_count = 0
-    rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] } 
+    
+      rows = []
+      rows_running_count = 0
+      rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] } 
 
-       rows_second_part.each do |r2|  
-	    rows_running_count += 1
-	    # this_smelter_row = r2
-	      case r2[0].to_s.strip.downcase
-		      when "gold"
-		          total_gold_smelters += 1
-			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_gold_smelters_not_listed += 1 end
-			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_gold_smelters_not_yet_identified += 1 end
-		       when "tantalum"
-		          total_tantalum_smelters += 1
-			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_tantalum_smelters_not_listed += 1 end
-			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tantalum_smelters_not_yet_identified += 1 end
-		       when "tin"
-			  total_tin_smelters += 1
-			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_tin_smelters_not_listed += 1 end
-			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tin_smelters_not_yet_identified += 1 end
-		       when "tungsten"
-			  total_tungsten_smelters +=1
-			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_tungsten_smelters_not_listed += 1 end
-			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tungsten_smelters_not_yet_identified += 1 end
-		       else
-			  total_unknown_metal_smelters +=1
-			  if r2[1].to_s.strip.downcase == "smelter not listed" then total_unknown_metal_smelters_not_listed += 1 end
-			  if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_unknown_metal_smelters_not_yet_identified += 1 end	  
-	      end
-	    rows << [rows_running_count] + r2
-	    # prev_smelter_row = r2
-      end	    
+      rows_second_part.each do |r2|  
+        rows_running_count += 1
+        case r2[0].to_s.strip.downcase
+        when "gold"
+           total_gold_smelters += 1
+           if r2[1].to_s.strip.downcase == "smelter not listed" then total_gold_smelters_not_listed += 1 end
+           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_gold_smelters_not_yet_identified += 1 end
+        when "tantalum"
+           total_tantalum_smelters += 1
+           if r2[1].to_s.strip.downcase == "smelter not listed" then total_tantalum_smelters_not_listed += 1 end
+           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tantalum_smelters_not_yet_identified += 1 end
+        when "tin"
+	   total_tin_smelters += 1
+           if r2[1].to_s.strip.downcase == "smelter not listed" then total_tin_smelters_not_listed += 1 end
+           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tin_smelters_not_yet_identified += 1 end
+        when "tungsten"
+           total_tungsten_smelters +=1
+           if r2[1].to_s.strip.downcase == "smelter not listed" then total_tungsten_smelters_not_listed += 1 end
+           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_tungsten_smelters_not_yet_identified += 1 end
+        else
+           total_unknown_metal_smelters +=1
+           if r2[1].to_s.strip.downcase == "smelter not listed" then total_unknown_metal_smelters_not_listed += 1 end
+           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_unknown_metal_smelters_not_yet_identified += 1 end    
+        end
+         rows << [rows_running_count] + r2
+      end      
   
+    # logic for third sheet
+    
+    smelters = {}
+    
+    
+    # Group declarations by smelter
+    declarations_by_smelter2 = {}
+    
+    @latest_declarations.each do |declaration|
+       ext_supplier_name = [declaration.company_name, declaration.declaration_scope, declaration.description_of_scope].join("*")
+       declaration.smelter_list.each do |smelter|
+          smelter_short_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country]
+          declarations_by_smelter2[smelter_short_key] = [] if declarations_by_smelter2[smelter_short_key].nil?
+          declarations_by_smelter2[smelter_short_key] << declaration
+       end
+    end
+    
     
     
     
@@ -1600,162 +1818,163 @@ class ReportsController < ApplicationController
     
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "Consolidated Smelters") do |sheet|
-        # Style
-        header_style = nil
-        row_style    = nil
-        first_row_style = nil
-	report_title_style = nil
-	report_date_time_style = nil
-	date_style = nil
-	time_style = nil
-	
-	
-        p.workbook.styles do |style|
-          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-	  header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
-          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
-	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
-          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-        end
+       p.workbook.add_worksheet(:name => "Consolidated Smelters") do |sheet|
+      
+       
+           header_style = nil
+	   row_style    = nil
+           first_row_style = nil
+	   report_title_style = nil
+           report_date_time_style = nil
+	   date_style = nil
+           time_style = nil
+  
+  
+          p.workbook.styles do |style|
+             first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+             header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
+             row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
+             report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+	     report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+             date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+             time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+          end
         
-        # GSP Logo image
-        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
-          image.width  = 4
-          image.height = 3
-          image.hyperlink.tooltip = "Green Status Pro"
-          image.start_at 0, 0
-          image.end_at 2, 1
-	end
-	
-	first_row = ['', '', '', "CONSOLIDATED \n SMELTER \n REPORT \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
-        sheet.merge_cells "A1:B1"
+          # GSP Logo image
+          sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+            image.width  = 4
+            image.height = 3
+            image.hyperlink.tooltip = "Green Status Pro"
+            image.start_at 0, 0
+            image.end_at 2, 1
+	  end
+  
+          first_row = ['', '', '', "CONSOLIDATED \n SMELTER \n REPORT \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+          sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 86.0
+          sheet.merge_cells "A1:B1"
         
-	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
+	  second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+          sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
 
-        # Add header row
-        sheet.add_row(header, :style => header_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 48.0
+          # Add header row
+	  sheet.add_row(header, :style => header_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] ).height = 48.0
            
-        # Append data rows
-        rows.each do |r|
-           sheet.add_row(r, :style => row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] )
-	  # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
-	  # here is where we would have to do cell formatting for red or yellow warning backgrounds
-        end
+          # Append data rows
+          rows.each do |r|
+             sheet.add_row(r, :style => row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
+             # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
+             # here is where we would have to do cell formatting for red or yellow warning backgrounds
+          end
         
-        # Freeze pane over data rows
-        sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A4"
-          pane.state = :frozen_split
-          pane.y_split = 3
-          pane.x_split = 0
-          pane.active_pane = :bottom_right
-        end
+          # Freeze pane over data rows
+          sheet.sheet_view.pane do |pane|
+            pane.top_left_cell = "A4"
+            pane.state = :frozen_split
+            pane.y_split = 3
+            pane.x_split = 0
+            pane.active_pane = :bottom_right
+         end
         
       end
  
-# add second worksheet
+      # add second worksheet
       p.workbook.add_worksheet(:name => "Consolidated Smelter Analytics") do |sheet|
-        header_style = nil
-        row_style    = nil
-        first_row_style = nil
-	report_title_style = nil
-	report_date_time_style = nil
-	date_style = nil
-	time_style = nil
-	align_right_cell_style = nil
-	align_left_cell_style  = nil
-	
-	
-        p.workbook.styles do |style|
-          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-	  header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
-          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
-	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
-          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-          align_right_cell_style    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :right }  
-          align_left_cell_style      = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
-        end
+           header_style = nil
+           row_style    = nil
+           first_row_style = nil
+           report_title_style = nil
+           report_date_time_style = nil
+           date_style = nil
+           time_style = nil
+           align_right_cell_style = nil
+           align_left_cell_style  = nil
+  
+  
+            p.workbook.styles do |style|
+              first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+              header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
+	      row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
+              report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+              report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+              date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+              time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+              align_right_cell_style    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :right }  
+              align_left_cell_style      = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
+	    end
         
-        # GSP Logo image
-        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
-          image.width  = 4
-          image.height = 3
-          image.hyperlink.tooltip = "Green Status Pro"
-          image.start_at 0, 0
-          image.end_at 1, 1
-	end
-	
-	first_row = ['', '',  "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( first_row, :style => [nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 86.0
-        # sheet.merge_cells "A1:B1"
+	    # GSP Logo image
+	    sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+              image.width  = 4
+              image.height = 3
+              image.hyperlink.tooltip = "Green Status Pro"
+              image.start_at 0, 0
+              image.end_at 1, 1
+            end
+  
+            first_row = ['', '',  "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '', ''] 
+            sheet.add_row( first_row, :style => [nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 86.0
+            # sheet.merge_cells "A1:B1"
         
-	second_row = ['', '',  current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( second_row, :style => [nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35]).height = 22.0
+            second_row = ['', '',  current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '', ''] 
+            sheet.add_row( second_row, :style => [nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
 
-        # Add header row
-	sheet.add_row(["Item", "Value"], :style => header_style , :widths => [30, 10] ).height = 48.0
+            # Add header row
+	    sheet.add_row(["Item", "Value"], :style => header_style , :widths => [30, 10] ).height = 48.0
         
-        # Append analytic data rows
+            # Append analytic data rows
            
- 	  
-           sheet.add_row( ["Total entries - Gold",  total_gold_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-	  
-           sheet.add_row( ["Total entries - Tin",  total_tin_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-	  
-           sheet.add_row( ["Total entries - Tantalum", total_tantalum_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-	  
-	   sheet.add_row( ["Total entries - Tungsten",  total_tungsten_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-	   
-	   if total_unknown_metal_smelters == 0 then
-		               sheet.add_row( ["   " , "________" ], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-			       else
-			       sheet.add_row( ["Total entries - Unknown Metals",  total_unknown_metal_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 22.0	       
-		               end 
-		       
+            sheet.add_row( ["Total entries - Gold",  total_gold_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+    
+            sheet.add_row( ["Total entries - Tin",  total_tin_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+    
+            sheet.add_row( ["Total entries - Tantalum", total_tantalum_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+    
+            sheet.add_row( ["Total entries - Tungsten",  total_tungsten_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+     
+            if total_unknown_metal_smelters == 0 then
+              sheet.add_row( ["   " , "________" ], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+            else
+              sheet.add_row( ["Total entries - Unknown Metals",  total_unknown_metal_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 22.0         
+	    end 
            
-	   total_all_smelters = total_gold_smelters + total_tantalum_smelters + total_tin_smelters + total_tungsten_smelters + total_unknown_metal_smelters
-	   # check that total_all_smelters is equal to rows_running_count
-	   sheet.add_row( ["Total entries - all metals",  total_all_smelters ], :style => [align_left_cell_style, align_right_cell_style] , :widths => [30, 10] ).height = 15.0
+           
+           total_all_smelters = total_gold_smelters + total_tantalum_smelters + total_tin_smelters + total_tungsten_smelters + total_unknown_metal_smelters
+           # check that total_all_smelters is equal to rows_running_count
+           sheet.add_row( ["Total entries - all metals",  total_all_smelters ], :style => [align_left_cell_style, align_right_cell_style] , :widths => [30, 10] ).height = 15.0
 
            sheet.add_row( ["   " , " " ], :style => row_style , :widths =>  [30, 10] ).height = 15.0
 
            total_smelters_not_listed = total_gold_smelters_not_listed + total_tantalum_smelters_not_listed + total_tin_smelters_not_listed + total_tungsten_smelters_not_listed + total_unknown_metal_smelters_not_listed
-	   sheet.add_row( ["Total entries - Smelter Not Listed",  total_smelters_not_listed], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-	  
+           sheet.add_row( ["Total entries - Smelter Not Listed",  total_smelters_not_listed], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
+    
            total_smelters_not_yet_identified = total_gold_smelters_not_yet_identified + total_tantalum_smelters_not_yet_identified + total_tin_smelters_not_yet_identified + total_tungsten_smelters_not_yet_identified + total_unknown_metal_smelters_not_yet_identified
            sheet.add_row( ["Total entries - Smelter not yet Identifed",  total_smelters_not_yet_identified], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-	  
-	  # r8 = [Top 10 Smelters Listings: (from Smelter ID column F on Smelter list worksheet", 
-           #sheet.add_row( ["Top 10 Smelter Listings",  'TBD - in process'], :style => row_style , :widths =>  [30, 10] ).height = 50.0
-	  
-	  # r9 = Top 10 Countries: (from Column E)
-           #sheet.add_row( ["Total 10 Countries",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 50.0
-	  
-	  # r10 = [x.	Top 10 Suppliers Reporting Smelters (Supplier Name, Declaration Worksheet, D8): # (Count of Entries on Smelter List Worksheet, Column B, sorted by highest number)
-           #sheet.add_row( ["Top 10 Suppliers reporting Smelters",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35] ).height = 50.0
-	  
+    
+          # r8 = [Top 10 Smelters Listings: (from Smelter ID column F on Smelter list worksheet", 
+          #sheet.add_row( ["Top 10 Smelter Listings",  'TBD - in process'], :style => row_style , :widths =>  [30, 10] ).height = 50.0
+    
+          # r9 = Top 10 Countries: (from Column E)
+          #sheet.add_row( ["Total 10 Countries",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] ).height = 50.0
+    
+          # r10 = [x.  Top 10 Suppliers Reporting Smelters (Supplier Name, Declaration Worksheet, D8): # (Count of Entries on Smelter List Worksheet, Column B, sorted by highest number)
+          #sheet.add_row( ["Top 10 Suppliers reporting Smelters",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] ).height = 50.0
+    
           
         # Freeze pane over data rows
-        sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A4"
-          pane.state = :frozen_split
-          pane.y_split = 3
-          pane.x_split = 0
-          pane.active_pane = :bottom_right
-        end
+          sheet.sheet_view.pane do |pane|
+            pane.top_left_cell = "A4"
+            pane.state = :frozen_split
+            pane.y_split = 3
+            pane.x_split = 0
+            pane.active_pane = :bottom_right
+          end
 
       end
- 
- 
- 
- 
+
+       # add third worksheet here
+       
+
+  
     end
     
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_report.gsp.xlsx"), :type => 'application/excel'
