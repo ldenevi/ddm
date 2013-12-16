@@ -359,11 +359,11 @@ class ReportsController < ApplicationController
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
           case mq.tantalum.to_s.strip.downcase
-            when "yes"
+          when "yes"
              calc_minerals[sequence][:tantalum][:"Yes"] += 1
-            when "no"
+          when "no"
              calc_minerals[sequence][:tantalum][:"No"] += 1
-            else
+          else
              calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
           end
           
@@ -374,11 +374,11 @@ class ReportsController < ApplicationController
           end
           
           case mq.tin.to_s.strip.downcase
-            when "yes"
+          when "yes"
              calc_minerals[sequence][:tin][:"Yes"] += 1
-            when "no"
+          when "no"
              calc_minerals[sequence][:tin][:"No"] += 1
-            else
+          else
              calc_minerals[sequence][:tin][:"Not Provided"] += 1
           end
           
@@ -389,11 +389,11 @@ class ReportsController < ApplicationController
           end
           
           case mq.gold.to_s.strip.downcase
-            when "yes"
+          when "yes"
               calc_minerals[sequence][:gold][:"Yes"] += 1
-            when "no"
+          when "no"
               calc_minerals[sequence][:gold][:"No"] += 1
-            else
+          else
               calc_minerals[sequence][:gold][:"Not Provided"] += 1
           end
           
@@ -404,18 +404,18 @@ class ReportsController < ApplicationController
           end
           
           case mq.tungsten.to_s.strip.downcase
-            when "yes"
+          when "yes"
               calc_minerals[sequence][:tungsten][:"Yes"] += 1
-            when "no"
+          when "no"
               calc_minerals[sequence][:tungsten][:"No"] += 1
-            else
+          else
               calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
           end
           
           if mq.tungsten_comment.to_s.strip.empty?
-           calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
+              calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
-           calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
+             calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
           
         end
@@ -425,94 +425,94 @@ class ReportsController < ApplicationController
 
       (1..1).to_a.each do |sequence|         
          if minerals[sequence]
-           mq = minerals[sequence]
+	   mq = minerals[sequence]
            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-          if minerals[0].tantalum.to_s.strip.downcase == "no" 
-            calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
-          else  
-            case mq.tantalum.to_s.strip.downcase
+            if minerals[0].tantalum.to_s.strip.downcase == "no" 
+              calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
+            else  
+              case mq.tantalum.to_s.strip.downcase
               when "yes"
-               calc_minerals[sequence][:tantalum][:"Yes"] += 1
+                calc_minerals[sequence][:tantalum][:"Yes"] += 1
               when "no"
-                calc_minerals[sequence][:tantalum][:"No"] += 1
+                 calc_minerals[sequence][:tantalum][:"No"] += 1
               when "uncertain or unknown"
-                calc_minerals[sequence][:tantalum][:"Uncertain or Unknown"] += 1
+                 calc_minerals[sequence][:tantalum][:"Uncertain or Unknown"] += 1
               else
-                calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
+                 calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
+              end
             end
-          end
           
-          if mq.tantalum_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
-          else
-            calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
-          end
+            if mq.tantalum_comment.to_s.strip.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
+            else
+              calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
+            end
           
-          if minerals[0].tin.to_s.strip.downcase == "no" 
-           calc_minerals[sequence][:tin][:"Answer not Required"] += 1
-          else 
-            case mq.tin.to_s.strip.downcase
+            if minerals[0].tin.to_s.strip.downcase == "no" 
+              calc_minerals[sequence][:tin][:"Answer not Required"] += 1
+            else 
+              case mq.tin.to_s.strip.downcase
               when "yes"
-               calc_minerals[sequence][:tin][:"Yes"] += 1
+                calc_minerals[sequence][:tin][:"Yes"] += 1
               when "no"
-                calc_minerals[sequence][:tin][:"No"] += 1
+                 calc_minerals[sequence][:tin][:"No"] += 1
               when "uncertain or unknown"
-                calc_minerals[sequence][:tin][:"Uncertain or Unknown"] += 1
+                 calc_minerals[sequence][:tin][:"Uncertain or Unknown"] += 1
               else
-               calc_minerals[sequence][:tin][:"Not Provided"] += 1
+                calc_minerals[sequence][:tin][:"Not Provided"] += 1
+              end
             end
-          end
           
-          if mq.tin_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
-          else
-            calc_minerals[sequence][:tin_comment][:"Provided"] += 1
-          end
+            if mq.tin_comment.to_s.strip.empty?
+               calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
+            else
+              calc_minerals[sequence][:tin_comment][:"Provided"] += 1
+            end
           
-          if minerals[0].gold.to_s.strip.downcase == "no" 
-            calc_minerals[sequence][:gold][:"Answer not Required"] += 1
-          else
-            case mq.gold.to_s.strip.downcase
+            if minerals[0].gold.to_s.strip.downcase == "no" 
+              calc_minerals[sequence][:gold][:"Answer not Required"] += 1
+            else
+              case mq.gold.to_s.strip.downcase
               when "yes"
-               calc_minerals[sequence][:gold][:"Yes"] += 1
+                calc_minerals[sequence][:gold][:"Yes"] += 1
               when "no"
-                calc_minerals[sequence][:gold][:"No"] += 1
+                 calc_minerals[sequence][:gold][:"No"] += 1
               when "uncertain or unknown"
-               calc_minerals[sequence][:gold][:"Uncertain or Unknown"] += 1
+                calc_minerals[sequence][:gold][:"Uncertain or Unknown"] += 1
               else
-                calc_minerals[sequence][:gold][:"Not Provided"] += 1
+                 calc_minerals[sequence][:gold][:"Not Provided"] += 1
+              end
             end
-          end
           
-          if mq.gold_comment.to_s.strip.empty?
-            calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
-          else
-            calc_minerals[sequence][:gold_comment][:"Provided"] += 1
-          end
+            if mq.gold_comment.to_s.strip.empty?
+             calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
+	    else
+             calc_minerals[sequence][:gold_comment][:"Provided"] += 1
+            end
           
-          if minerals[0].tungsten.to_s.strip.downcase == "no" 
-            calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
-          else
-            case mq.tungsten.to_s.strip.downcase
+            if minerals[0].tungsten.to_s.strip.downcase == "no" 
+             calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
+            else
+              case mq.tungsten.to_s.strip.downcase
               when "yes"
-                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+                 calc_minerals[sequence][:tungsten][:"Yes"] += 1
               when "no"
-                calc_minerals[sequence][:tungsten][:"No"] += 1
+                 calc_minerals[sequence][:tungsten][:"No"] += 1
               when "uncertain or unknown"
-                calc_minerals[sequence][:tungsten][:"Uncertain or Unknown"] += 1
+                 calc_minerals[sequence][:tungsten][:"Uncertain or Unknown"] += 1
               else
-                calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
+                 calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
+              end
             end
-          end
           
-          if mq.tungsten_comment.to_s.strip.empty?
-            calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
-          else
-            calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
-          end
-      
-	 end
+            if mq.tungsten_comment.to_s.strip.empty?
+              calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
+            else
+              calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
+            end
+
+         end
       end
 
 
@@ -805,137 +805,141 @@ class ReportsController < ApplicationController
             calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
             
-        end
+         end
       end
 
 
-     (5..5).to_a.each do |sequence|         
-        if minerals[sequence]
-          mq = minerals[sequence]
-          row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
+      (5..5).to_a.each do |sequence|         
+         if minerals[sequence]
+	   mq = minerals[sequence]
+           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-      if minerals[0].tantalum.to_s.strip.downcase == "no" 
-        calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
-      else
-        case mq.tantalum.to_s.strip.downcase
-          when "yes"
-            calc_minerals[sequence][:tantalum][:"Yes"] += 1
-          when "no"
-            calc_minerals[sequence][:tantalum][:"No"] += 1
-          when "unknown"
-            calc_minerals[sequence][:tantalum][:"Unknown"] += 1
+           if minerals[0].tantalum.to_s.strip.downcase == "no" 
+	     calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
+           else
+             case mq.tantalum.to_s.strip.downcase
+             when "yes"
+               calc_minerals[sequence][:tantalum][:"Yes"] += 1
+             when "no"
+               calc_minerals[sequence][:tantalum][:"No"] += 1
+             when "unknown"
+               calc_minerals[sequence][:tantalum][:"Unknown"] += 1
+             else
+               calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
+             end
+           end
+      
+           if mq.tantalum_comment.to_s.strip.empty?
+              calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
+           else
+              calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
+           end
+      
+           if minerals[0].tin.to_s.strip.downcase == "no" 
+             calc_minerals[sequence][:tin][:"Answer not Required"] += 1
+           else
+             case mq.tin.to_s.strip.downcase
+             when "yes"
+               calc_minerals[sequence][:tin][:"Yes"] += 1
+             when "no"
+	       calc_minerals[sequence][:tin][:"No"] += 1
+             when "unknown"
+	         calc_minerals[sequence][:tin][:"Unknown"] += 1
+	     else
+		calc_minerals[sequence][:tin][:"Not Provided"] += 1
+             end
+          end
+      
+          if mq.tin_comment.to_s.strip.empty?
+             calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
-        end
-      end
-      
-      if mq.tantalum_comment.to_s.strip.empty?
-        calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
-      else
-        calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
-      end
-      
-      if minerals[0].tin.to_s.strip.downcase == "no" 
-        calc_minerals[sequence][:tin][:"Answer not Required"] += 1
-      else
-        case mq.tin.to_s.strip.downcase
-          when "yes"
-            calc_minerals[sequence][:tin][:"Yes"] += 1
-          when "no"
-            calc_minerals[sequence][:tin][:"No"] += 1
-          when "unknown"
-            calc_minerals[sequence][:tin][:"Unknown"] += 1
+             calc_minerals[sequence][:tin_comment][:"Provided"] += 1
+	  end
+
+	  if minerals[0].gold.to_s.strip.downcase == "no" 
+            calc_minerals[sequence][:gold][:"Answer not Required"] += 1
+	   else
+              case mq.gold.to_s.strip.downcase
+                 when "yes"
+                    calc_minerals[sequence][:gold][:"Yes"] += 1
+                 when "no"
+                    calc_minerals[sequence][:gold][:"No"] += 1
+                 when "unknown"
+                    calc_minerals[sequence][:gold][:"Unknown"] += 1
+		 else
+		    calc_minerals[sequence][:gold][:"Not Provided"] += 1
+		 end
+          end
+
+          if mq.gold_comment.to_s.strip.empty?
+            calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
-            calc_minerals[sequence][:tin][:"Not Provided"] += 1
+            calc_minerals[sequence][:gold_comment][:"Provided"] += 1
+	  end
+    
+    
+          if minerals[0].tungsten.to_s.strip.downcase == "no" 
+            calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
+          else
+             case mq.tungsten.to_s.strip.downcase
+             when "yes"
+                calc_minerals[sequence][:tungsten][:"Yes"] += 1
+	     when "no"
+                 calc_minerals[sequence][:tungsten][:"No"] += 1
+             when "unknown"
+                 calc_minerals[sequence][:tungsten][:"Unknown"] += 1
+	     else
+                 calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
+              end
+          end
+      
+          if mq.tungsten_comment.to_s.strip.empty?
+             calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
+          else
+             calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
+          end
         end
       end
-      
-      if mq.tin_comment.to_s.strip.empty?
-      calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
-      else
-      calc_minerals[sequence][:tin_comment][:"Provided"] += 1
-      end
-      if minerals[0].gold.to_s.strip.downcase == "no" 
-      calc_minerals[sequence][:gold][:"Answer not Required"] += 1
-      else
-      case mq.gold.to_s.strip.downcase
-      when "yes"
-      calc_minerals[sequence][:gold][:"Yes"] += 1
-      when "no"
-      calc_minerals[sequence][:gold][:"No"] += 1
-      when "unknown"
-      calc_minerals[sequence][:gold][:"Unknown"] += 1
-      else
-      calc_minerals[sequence][:gold][:"Not Provided"] += 1
-      end
-      end
-      if mq.gold_comment.to_s.strip.empty?
-      calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
-      else
-      calc_minerals[sequence][:gold_comment][:"Provided"] += 1
-      end
-      if minerals[0].tungsten.to_s.strip.downcase == "no" 
-      calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
-      else
-      case mq.tungsten.to_s.strip.downcase
-      when "yes"
-      calc_minerals[sequence][:tungsten][:"Yes"] += 1
-      when "no"
-      calc_minerals[sequence][:tungsten][:"No"] += 1
-      when "unknown"
-      calc_minerals[sequence][:tungsten][:"Unknown"] += 1
-      else
-      calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
-      end
-      end
-      if mq.tungsten_comment.to_s.strip.empty?
-      calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
-      else
-      calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
-      end
-      
-    end
-  end
-# end of minerals questions
+      # end of minerals questions
 
 
-  (0..9).to_a.each do |sequence|
-    if company_level[sequence]
-      clq = company_level[sequence]
-      row += [clq.answer, clq.comment]
+      (0..9).to_a.each do |sequence|
+        if company_level[sequence]
+          clq = company_level[sequence]
+          row += [clq.answer, clq.comment]
 
-      case sequence
-        when 0
-          case clq.answer.to_s.strip.downcase
-            when "yes"
-              calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "no"
-              calc_company_level[sequence][:answer][:"No"] += 1
-            else
-              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 1
-          case clq.answer.to_s.strip.downcase
-            when "yes"
-              calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "no"
-              calc_company_level[sequence][:answer][:"No"] += 1
-            else
-              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 2
-          case clq.answer.to_s.strip.downcase
-            when "yes"
-              calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "yes included in standard contract language"
-              calc_company_level[sequence][:answer][:"Yes included in standard contract language"] += 1
-            when "no"
-              calc_company_level[sequence][:answer][:"No"] += 1
-            else
-              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 3
-          case clq.answer.to_s.strip.downcase
+          case sequence
+          when 0
+             case clq.answer.to_s.strip.downcase
+	     when "yes"
+                calc_company_level[sequence][:answer][:"Yes"] += 1
+             when "no"
+                calc_company_level[sequence][:answer][:"No"] += 1
+             else
+                calc_company_level[sequence][:answer][:"Not Provided"] += 1
+             end
+          when 1
+             case clq.answer.to_s.strip.downcase
+             when "yes"
+                calc_company_level[sequence][:answer][:"Yes"] += 1
+             when "no"
+                calc_company_level[sequence][:answer][:"No"] += 1
+              else
+                calc_company_level[sequence][:answer][:"Not Provided"] += 1
+              end
+          when 2
+             case clq.answer.to_s.strip.downcase
+	     when "yes"
+                calc_company_level[sequence][:answer][:"Yes"] += 1
+	     when "yes included in standard contract language"
+                calc_company_level[sequence][:answer][:"Yes included in standard contract language"] += 1
+              when "no"
+                calc_company_level[sequence][:answer][:"No"] += 1
+             else
+                calc_company_level[sequence][:answer][:"Not Provided"] += 1
+             end
+          when 3
+            case clq.answer.to_s.strip.downcase
             when "yes"
               calc_company_level[sequence][:answer][:"Yes"] += 1
             when "planned once lists become available"
@@ -944,137 +948,326 @@ class ReportsController < ApplicationController
               calc_company_level[sequence][:answer][:"No"] += 1
             else
               calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 4
-          case clq.answer.to_s.strip.downcase
+            end
+          when 4
+            case clq.answer.to_s.strip.downcase
             when "yes"
               calc_company_level[sequence][:answer][:"Yes"] += 1
             when "no"
               calc_company_level[sequence][:answer][:"No"] += 1
             else
               calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 5
-          case clq.answer.to_s.strip.downcase
+            end
+          when 5
+            case clq.answer.to_s.strip.downcase
             when "yes"
+               calc_company_level[sequence][:answer][:"Yes"] += 1
+            when "no"
+              calc_company_level[sequence][:answer][:"No"] += 1
+            else
+               calc_company_level[sequence][:answer][:"Not Provided"] += 1
+            end
+          when 6
+           case clq.answer.to_s.strip.downcase
+           when "yes"
               calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "no"
+           when "no"
               calc_company_level[sequence][:answer][:"No"] += 1
-            else
-              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 6
-          case clq.answer.to_s.strip.downcase
-            when "yes"
-              calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "no"
-              calc_company_level[sequence][:answer][:"No"] += 1
-            else
-              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 7
-          case clq.answer.to_s.strip.downcase
-            when "yes (3rd party audit)"
-              calc_company_level[sequence][:answer][:"Yes (3rd party audit)"] += 1
-            when "yes (documentation review only)"
-              calc_company_level[sequence][:answer][:"Yes (documentation review only)"] += 1
-            when "yes (internal audit)"
-              calc_company_level[sequence][:answer][:"Yes (internal audit)"] += 1
-            when "yes (all methods apply)"
-             calc_company_level[sequence][:answer][:"Yes (all methods apply)"] += 1
-            when "no"
-              calc_company_level[sequence][:answer][:"No"] += 1
-            else
+           else
              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 8
-          case clq.answer.to_s.strip.downcase
-            when "yes"
-              calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "no"
+           end
+          when 7
+           case clq.answer.to_s.strip.downcase
+           when "yes (3rd party audit)"
+              calc_company_level[sequence][:answer][:"Yes (3rd party audit)"] += 1
+           when "yes (documentation review only)"
+              calc_company_level[sequence][:answer][:"Yes (documentation review only)"] += 1
+           when "yes (internal audit)"
+              calc_company_level[sequence][:answer][:"Yes (internal audit)"] += 1
+           when "yes (all methods apply)"
+             calc_company_level[sequence][:answer][:"Yes (all methods apply)"] += 1
+           when "no"
               calc_company_level[sequence][:answer][:"No"] += 1
-            else
-              calc_company_level[sequence][:answer][:"Not Provided"] += 1
-          end
-        when 9
-          case clq.answer.to_s.strip.downcase
-            when "yes"
+           else
+             calc_company_level[sequence][:answer][:"Not Provided"] += 1
+           end
+          when 8
+           case clq.answer.to_s.strip.downcase
+           when "yes"
               calc_company_level[sequence][:answer][:"Yes"] += 1
-            when "no"
+           when "no"
               calc_company_level[sequence][:answer][:"No"] += 1
-            else
+           else
               calc_company_level[sequence][:answer][:"Not Provided"] += 1
            end
+          when 9
+           case clq.answer.to_s.strip.downcase
+           when "yes"
+              calc_company_level[sequence][:answer][:"Yes"] += 1
+           when "no"
+              calc_company_level[sequence][:answer][:"No"] += 1
+           else
+              calc_company_level[sequence][:answer][:"Not Provided"] += 1
+           end
+          end
+
+          if clq.comment.to_s.strip.empty?
+           calc_company_level[sequence][:comment][:"Not Provided"] += 1
+          else
+            calc_company_level[sequence][:comment][:"Provided"] += 1
+	  end
+  
+        else
+          row += ["", ""]
+        end
       end
 
-      if clq.comment.to_s.strip.empty?
-        calc_company_level[sequence][:comment][:"Not Provided"] += 1
+      # did have end here with 4 spaces idented but I  think it may end the ivs declaration loop too early before smelters have been calculated
+
+      # Smelter list
+      smelter_group_tantalum            = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
+      smelter_group_tin                    = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
+      smelter_group_gold                  = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
+      smelter_group_tungsten            = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
+      smelter_group_unknown_metal    = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
+  
+      smelter_group_entries_for_this_supplier =  {:tantalum => 0, :tin => 0, :gold => 0, :tungsten => 0, :unknown_metal =>0}
+   
+ 
+
+      dec.smelter_list.sort_by(&:line_number).each do |smelter|
+         case smelter.metal.to_s.strip.downcase
+         when 'tantalum'
+            smelter_group_entries_for_this_supplier[:tantalum] += 1
+            case smelter.smelter_reference_list.to_s.strip.downcase
+            when 'smelter not yet identified'
+              smelter_group_tantalum[:not_yet_identified] << smelter
+            when 'smelter not Listed'
+              smelter_group_tantalum[:not_listed] << smelter
+            when ''
+              smelter_group_tantalum[:empty] << smelter
+            else
+              smelter_group_tantalum[:identified] << smelter
+            end
+         when 'tin'
+	    smelter_group_entries_for_this_supplier[:tin] += 1
+            case smelter.smelter_reference_list.to_s.strip.downcase
+            when 'smelter not yet identified'
+              smelter_group_tin[:not_yet_identified] << smelter
+            when 'smelter not listed'
+              smelter_group_tin[:not_listed] << smelter
+            when ''
+              smelter_group_tin[:empty] << smelter
+	    else
+              smelter_group_tin[:identified] << smelter
+            end
+	 when 'gold'
+            smelter_group_entries_for_this_supplier[:gold] += 1
+            case smelter.smelter_reference_list.to_s.strip.downcase
+            when 'smelter not yet identified'
+               smelter_group_gold[:not_yet_identified] << smelter
+	    when 'smelter not Listed'
+               smelter_group_gold[:not_listed] << smelter
+            when ''
+               smelter_group_gold[:empty] << smelter
+            else
+               smelter_group_gold[:identified] << smelter
+            end
+         when 'tungsten'
+            smelter_group_entries_for_this_supplier[:tungsten] += 1
+            case smelter.smelter_reference_list.to_s.strip.downcase
+            when 'smelter not yet identified'
+              smelter_group_tungsten[:not_yet_identified] << smelter
+            when 'smelter not Listed'
+              smelter_group_tungsten[:not_listed] << smelter
+            when ''
+              smelter_group_tungsten[:empty] << smelter
+            else
+              smelter_group_tungsten[:identified] << smelter
+            end
+         else
+           smelter_group_entries_for_this_supplier[:unknown_metal] += 1
+           case smelter.smelter_reference_list.to_s.strip.downcase
+           when 'smelter not yet identified'
+	      smelter_group_unknown_metal[:not_yet_identified] << smelter
+           when 'smelter not Listed'
+              smelter_group_unknown_metal[:not_listed] << smelter
+           when ''
+              smelter_group_unknown_metal[:empty] << smelter
+           else
+             smelter_group_unknown_metal[:identified] << smelter
+           end  
+         end
+      end
+ 
+       # Increase  overall  smelter group summary totals by 1 for the supplier in this loop that has AT LEAST one entry in the corresponding metal/identified or metal/not yet identified or metal/not listed columns  
+
+      if smelter_group_tantalum[:identified].size > 0 then
+        calc_supplier_tantalum_identified[:"Provided"] += 1
       else
-        calc_company_level[sequence][:comment][:"Provided"] += 1
+        calc_supplier_tantalum_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_tantalum[:not_listed].size > 0 then
+        calc_supplier_tantalum_not_listed[:"Provided"] += 1
+      else
+       calc_supplier_tantalum_not_listed[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_tantalum[:not_yet_identified].size > 0 then
+        calc_supplier_tantalum_not_yet_identified[:"Provided"] += 1
+      else
+        calc_supplier_tantalum_not_yet_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_tin[:identified].size > 0 then
+        calc_supplier_tin_identified[:"Provided"] += 1
+     else
+        calc_supplier_tin_identified[:"Not Provided"] += 1
+     end         
+
+     if smelter_group_tin[:not_listed].size > 0 then
+        calc_supplier_tin_not_listed[:"Provided"] += 1
+     else
+        calc_supplier_tin_not_listed[:"Not Provided"] += 1
+     end         
+
+      if smelter_group_tin[:not_yet_identified].size > 0 then
+        calc_supplier_tin_not_yet_identified[:"Provided"] += 1
+      else
+        calc_supplier_tin_not_yet_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_gold[:identified].size > 0 then
+         calc_supplier_gold_identified[:"Provided"] += 1
+      else
+        calc_supplier_gold_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_gold[:not_listed].size > 0 then
+        calc_supplier_gold_not_listed[:"Provided"] += 1
+      else
+        calc_supplier_gold_not_listed[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_gold[:not_yet_identified].size > 0 then
+        calc_supplier_gold_not_yet_identified[:"Provided"] += 1
+      else
+        calc_supplier_gold_not_yet_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_tungsten[:identified].size > 0 then
+        calc_supplier_tungsten_identified[:"Provided"] += 1
+      else
+        calc_supplier_tungsten_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_tungsten[:not_listed].size > 0 then
+         calc_supplier_tungsten_not_listed[:"Provided"] += 1
+      else
+        calc_supplier_tungsten_not_listed[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_tungsten[:not_yet_identified].size > 0 then
+        calc_supplier_tungsten_not_yet_identified[:"Provided"] += 1
+      else
+        calc_supplier_tungsten_not_yet_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_unknown_metal[:identified].size > 0 then
+        calc_supplier_unknown_metal_identified[:"Provided"] += 1
+      else
+        calc_supplier_unknown_metal_identified[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_unknown_metal[:not_listed].size > 0 then
+        calc_supplier_unknown_metal_not_listed[:"Provided"] += 1
+      else
+        calc_supplier_unknown_metal_not_listed[:"Not Provided"] += 1
+      end         
+
+      if smelter_group_unknown_metal[:not_yet_identified].size > 0 then
+         calc_supplier_unknown_metal_not_yet_identified[:"Provided"] += 1
+      else
+        calc_supplier_unknown_metal_not_yet_identified[:"Not Provided"] += 1
+      end         
+
+      # Check that the supplier in this loop should have provided smelters for a given metal if the supplier answer "yes" for that metal in Question 1
+
+      case dec.mineral_questions[0].tantalum.to_s.strip.downcase 
+      when "yes"
+         if smelter_group_entries_for_this_supplier[:tantalum] = 0 then
+           suppliers_not_providing_smelters_that_should[:tantalum] += 1
+         end   
+      when "no"
+         if smelter_group_entries_for_this_supplier[:tantalum] > 0 then
+           suppliers_providing_smelters_that_should_not[:tantalum] += 1
+         end
+      else
+         if smelter_group_entries_for_this_supplier[:tantalum] > 0 then
+             suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:tantalum] += 1
+         end
       end
-
-    else
-     row += ["", ""]
-    end
-  end
-
-  # Smelter list
-  smelter_group_tantalum = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
-  smelter_group_tin      = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
-  smelter_group_gold     = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
-  smelter_group_tungsten = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
-
-  dec.smelter_list.sort_by(&:line_number).each do |smelter|
-    case smelter.metal.to_s.downcase
-      when 'tantalum'
-        case smelter.smelter_reference_list.to_s.downcase
-          when 'smelter not yet identified'
-            smelter_group_tantalum[:not_yet_identified] << smelter
-          when 'smelter not listed'
-            smelter_group_tantalum[:not_listed] << smelter
-          when ''
-            smelter_group_tantalum[:empty] << smelter
-          else
-            smelter_group_tantalum[:identified] << smelter
-        end
-
-      when 'tin'
-        case smelter.smelter_reference_list.to_s.downcase
-          when 'smelter not yet identified'
-            smelter_group_tin[:not_yet_identified] << smelter
-          when 'smelter not listed'
-            smelter_group_tin[:not_listed] << smelter
-          when ''
-            smelter_group_tin[:empty] << smelter
-          else
-            smelter_group_tin[:identified] << smelter
-        end
-
-      when 'gold'
-        case smelter.smelter_reference_list.to_s.downcase
-          when 'smelter not yet identified'
-            smelter_group_gold[:not_yet_identified] << smelter
-          when 'smelter not listed'
-            smelter_group_gold[:not_listed] << smelter
-          when ''
-            smelter_group_gold[:empty] << smelter
-          else
-            smelter_group_gold[:identified] << smelter
-        end
-
-      when 'tungsten'
-        case smelter.smelter_reference_list.to_s.downcase
-          when 'smelter not yet identified'
-            smelter_group_tungsten[:not_yet_identified] << smelter
-          when 'smelter not listed'
-            smelter_group_tungsten[:not_listed] << smelter
-          when ''
-            smelter_group_tungsten[:empty] << smelter
-          else
-            smelter_group_tungsten[:identified] << smelter
-        end
+  
+      case dec.mineral_questions[0].tin.to_s.strip.downcase 
+      when "yes"
+          if smelter_group_entries_for_this_supplier[:tin] = 0 then
+            suppliers_not_providing_smelters_that_should[:tin] += 1
+          end   
+      when "no"
+	  if smelter_group_entries_for_this_supplier[:tin] > 0 then
+            suppliers_providing_smelters_that_should_not[:tin] += 1
+          end
+      else
+          if smelter_group_entries_for_this_supplier[:tin] > 0 then
+            suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:tin] += 1
+	  end
       end
-    end
+  
+      case dec.mineral_questions[0].gold.to_s.strip.downcase 
+      when "yes"
+          if smelter_group_entries_for_this_supplier[:gold] = 0 then
+            suppliers_not_providing_smelters_that_should[:gold] += 1
+          end   
+      when "no"
+          if smelter_group_entries_for_this_supplier[:gold] > 0 then
+            suppliers_providing_smelters_that_should_not[:gold] += 1
+	  end
+      else
+          if smelter_group_entries_for_this_supplier[:gold] > 0 then
+            suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:gold] += 1
+          end
+      end
+  
+      case dec.mineral_questions[0].tungsten.to_s.strip.downcase 
+      when "yes"
+         if smelter_group_entries_for_this_supplier[:tungsten] = 0 then
+           suppliers_not_providing_smelters_that_should[:tungsten] += 1
+         end   
+      when "no"
+         if smelter_group_entries_for_this_supplier[:tungsten] > 0 then
+           suppliers_providing_smelters_that_should_not[:tungsten] += 1
+          end
+      else
+         if smelter_group_entries_for_this_supplier[:tungsten] > 0 then
+          suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:tungsten] += 1
+         end
+      end
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     row += [smelter_group_tantalum[:identified].size, smelter_group_tantalum[:not_listed].size, smelter_group_tantalum[:not_yet_identified].size]
     row += [smelter_group_tin[:identified].size, smelter_group_tin[:not_listed].size, smelter_group_tin[:not_yet_identified].size]
@@ -1085,21 +1278,22 @@ class ReportsController < ApplicationController
     row += [dec.created_at.to_formatted_s(:local), dec.uploaded_excel.filename,  dec.template_version, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
 
     rows << row
-  end
+  end  # of ivs declaration loop
 
- # get data rows sorted alphabetically by company name, declaration of scope, and description of scope, and eventually product list
+  # get data rows sorted alphabetically by company name, declaration of scope, and description of scope, and eventually product list
 	  
     
-       sorted_rows = []
-       rows_running_count = 0
-       rows.sort_by { |e| [e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s ] }.each do |r|
-	    rows_running_count += 1
-	    sorted_rows << [rows_running_count] + r   
-       end
+    sorted_rows = []
+    rows_running_count = 0
+    rows.sort_by { |e| [e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s ] }.each do |r|
+      rows_running_count += 1
+      sorted_rows << [rows_running_count] + r
+    end
 
-    # Counts
-    totals_row =  ["TOTALS",
-         "COLUMN\nTOTALS\nfor ALL\n%d\nSUPPLIERS" % [rows_running_count],
+    # get totals row 
+
+    totals_row =  [
+        "COLUMN\nTOTALS\nfor ALL\n%d\nSUPPLIERS" % [rows_running_count],
         "%d Provided\n%d Not Provided" % [calc_company_name[:"Provided"], calc_company_name[:"Not Provided"]],
         "%d Company level\n%d Division level\n%d Product category level\n%d Product level\n%d Empty" % [calc_declaration_scope[:"Company level"], calc_declaration_scope[:"Division level"], calc_declaration_scope[:"Product category level"], calc_declaration_scope[:"Product level"], calc_declaration_scope[:"Not Provided"]],
         "%d Provided\n%d Not Provided" % [calc_description_of_scope[:"Provided"], calc_description_of_scope[:"Not Provided"]],
@@ -1184,81 +1378,90 @@ class ReportsController < ApplicationController
         "%d Yes\n%d No\n%d Not Provided" % [calc_company_level[8][:answer][:"Yes"], calc_company_level[8][:answer][:"No"], calc_company_level[8][:answer][:"Not Provided"]],
         "%d Provided\n%d Not Provided" % [calc_company_level[8][:comment][:"Provided"], calc_company_level[8][:comment][:"Not Provided"]],
         "%d Yes\n%d No\n%d Not Provided" % [calc_company_level[9][:answer][:"Yes"], calc_company_level[9][:answer][:"No"], calc_company_level[9][:answer][:"Not Provided"]],
-        "%d Provided\n%d Not Provided" % [calc_company_level[9][:comment][:"Provided"], calc_company_level[9][:comment][:"Not Provided"]]
-
+        "%d Provided\n%d Not Provided" % [calc_company_level[9][:comment][:"Provided"], calc_company_level[9][:comment][:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tantalum_identified[:"Provided"], calc_supplier_tantalum_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tantalum_not_listed[:"Provided"], calc_supplier_tantalum_not_listed[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tantalum_not_yet_identified[:"Provided"], calc_supplier_tantalum_not_yet_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tin_identified[:"Provided"], calc_supplier_tin_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tin_not_listed[:"Provided"], calc_supplier_tin_not_listed[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tin_not_yet_identified[:"Provided"], calc_supplier_tin_not_yet_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_gold_identified[:"Provided"], calc_supplier_gold_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_gold_not_listed[:"Provided"], calc_supplier_gold_not_listed[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_gold_not_yet_identified[:"Provided"], calc_supplier_gold_not_yet_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tungsten_identified[:"Provided"], calc_supplier_tungsten_identified[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tungsten_not_listed[:"Provided"], calc_supplier_tungsten_not_listed[:"Not Provided"]],
+        "%d Provided > 0\n%d Not Provided" % [calc_supplier_tungsten_not_yet_identified[:"Provided"], calc_supplier_tungsten_not_yet_identified[:"Not Provided"]]
+#        "%d Provided > 0\n%d Not Provided" % [calc_supplier_unknown_metal_identified[:"Provided"], calc_supplier_unknown_metal_identified[:"Not Provided"]],
+#        "%d Provided > 0\n%d Not Provided" % [calc_supplier_unknown_metal_not_listed[:"Provided"], calc_supplier_unknown_metal_not_listed[:"Not Provided"]],
+#        "%d Provided > 0\n%d Not Provided" % [calc_supplier_unknown_metal_not_yet_identified[:"Provided"], calc_supplier_unknown_metal_not_yet_identified[:"Not Provided"]]
         ]
-
-       
-          
           
 
-        # Create spreadsheet  
+
+    # Create spreadsheet  
     spreadsheet = Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "Aggregated Declarations") do |sheet|
-        # Style                                                      
-        header_style = nil
-        row_style    = nil
-	totals_style = nil
-        first_row_style = nil
-	report_title_style = nil
-	report_date_time_style = nil
-	date_style = nil
-	time_style = nil
-	
+       p.workbook.add_worksheet(:name => "Aggregated Declarations") do |sheet|
+                                                               
+         header_style = nil
+         row_style    = nil
+         totals_style = nil
+         first_row_style = nil
+         report_title_style = nil
+         report_date_time_style = nil
+         date_style = nil
+         time_style = nil
+          
+         p.workbook.styles do |style|
+            header_style                = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+            row_style                    = style.add_style :b => false, :sz => 9,  :alignment => { :wrap_text => true, :horizontal => :left }
+            totals_style                 = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color 
+            first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+            report_title_style          = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+            report_date_time_style  = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
+            date_style                   = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
+            time_style                   = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+         end
         
-        p.workbook.styles do |style|
-          header_style = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
-          row_style    = style.add_style :b => false, :sz => 9,  :alignment => { :wrap_text => true, :horizontal => :left }
-	  totals_style = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color 
-          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
-          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-        end
-        
-        # GSP Logo image
-        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
-          image.width  = 4
-          image.height = 3
-          image.hyperlink.tooltip = "Green Status Pro"
-          image.start_at 0, 0
-          image.end_at 2, 1
-        end
+         # GSP Logo image
+         sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+           image.width  = 4
+           image.height = 3
+           image.hyperlink.tooltip = "Green Status Pro"
+           image.start_at 0, 0
+           image.end_at 2, 1
+         end
 
-	first_row = ['', '', '', "AGGREGATED \n DECLARATIONS \n REPORT \n for: ", "Date:", "Time:", "User:"]
-        sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style], :widths => [9, 25, 25, 25, 25, 25, 25, 25]).height = 86.0
-        sheet.merge_cells "A1:B1"
-	
-        second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style] , :widths => [9, 25, 25, 25, 25, 25, 25, 25]).height = 33.0
-
-        # Add header row
-        sheet.add_row(header, :style => header_style, :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300]).height = 48.0
-        
-        # Append data rows
-        sorted_rows.each do |r|
-          sheet.add_row(r, :style => row_style,  :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300])
-	   #check rows can use :ignore and :auto)   row <<  ([''] * 13) + row_second_part
-	end
+         first_row = ['', '', '', "AGGREGATED \n DECLARATIONS \n REPORT \n for: ", "Date:", "Time:", "User:"]
+         sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style], :widths => [9, 25, 25, 25, 25, 25, 25, 25]).height = 86.0
+         sheet.merge_cells "A1:B1"
   
-	# Add totals row
-	sheet.add_row(totals_row, :style => totals_style, :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300]).height =  120.0
-	
-        # Freeze pane over data rows
-        sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A4"
-          pane.state = :frozen_split
-          pane.y_split = 3
-          pane.x_split = 0
-          pane.active_pane = :bottom_right
-        end
+         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym] 
+         sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style] , :widths => [9, 25, 25, 25, 25, 25, 25, 25]).height = 33.0
 
+         # Add header row
+         sheet.add_row(header, :style => header_style, :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300]).height = 48.0
         
+         # Append data rows
+         sorted_rows.each do |r|
+           sheet.add_row(r, :style => row_style,  :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300])
+           #check rows can use :ignore and :auto)   row <<  ([''] * 13) + row_second_part
+         end
+  
+         # Add totals row
+         sheet.add_row(totals_row, :style => totals_style, :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300]).height =  120.0
+  
+         # Freeze pane over data rows
+         sheet.sheet_view.pane do |pane|
+            pane.top_left_cell = "A4"
+            pane.state = :frozen_split
+            pane.y_split = 3
+            pane.x_split = 0
+            pane.active_pane = :bottom_right
+         end
       end
     end
 
-     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_aggregated_declarations_report.gsp.xlsx"), :type => 'application/excel'
+    send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_aggregated_declarations_report.gsp.xlsx"), :type => 'application/excel'
     
   end
 
