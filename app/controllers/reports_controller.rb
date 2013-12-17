@@ -1,7 +1,7 @@
 class ReportsController < ApplicationController
   include ReportsHelper
   layout 'print', :only => 'generate_comprehensive'
-
+ 
   require 'axlsx'
   
   def list
