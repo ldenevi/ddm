@@ -7,7 +7,7 @@
     background-color:cadetblue;
     color: white;
   }
-  
+
     #new_button a,
     #new_button a:visited,
     #new_button a:link {
@@ -15,21 +15,21 @@
       text-decoration:none;
       font-weight: bold;
     }
-    
+
     #new_button a:hover {
       text-decoration:underline;
     }
-  
-  
+
+
   #processed-declarations table {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
     #processed-declarations table td {
       text-align: center;
     }
-  
+
   #processed-declarations table, td, th {
     border: 1px solid black;
     padding: 5px;
@@ -67,9 +67,10 @@
           <td><%= vs.high_risk_individual_validation_statuses.size + vs.invalid_individual_validation_statuses.size %></td>
           <td>
             <ul>
-              <li><%= link_to "Consolidated", eicc_consolidated_report_path(vs) %></li>
-              <li><%= link_to "Detailed Smelter List", eicc_detailed_smelter_report_path(vs) %></li>
-              <li><%= link_to "Consolidated Smelter List", eicc_consolidated_smelter_list_report_path(vs) %></li>
+              <li><%= link_to "Aggregated Declarations", eicc_consolidated_report_path(vs) %></li>
+              <li><%= link_to "Smelters by Supplier List", eicc_detailed_smelter_report_path(vs) %></li>
+              <li><%= link_to "Consolidated Smelters List", eicc_consolidated_smelter_list_report_path(vs) %></li>
+              <li><%= (vs.review.nil?) ? "Comprehensive Suppliers Validation" : link_to("Comprehensive Suppliers Validation", comprehensive_report_path(vs.review_id), :target => '_new') %></li>
             <ul>
           </td>
         </tr>
@@ -77,7 +78,7 @@
       </tbody>
     </table>
   </div>
-  
+
   <div id="tabs-2">
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris auctor posuere hendrerit. Suspendisse aliquet augue quis lacus vehicula, suscipit pharetra nulla fringilla. Cras quis blandit velit. Maecenas sit amet ipsum eros. Maecenas vel venenatis ligula. Vestibulum porttitor aliquet ante quis fringilla. Phasellus hendrerit faucibus dolor quis ornare. Sed rutrum metus eget dolor ornare auctor. Praesent ac leo non eros vulputate tempus a id nisi.</p>
 
