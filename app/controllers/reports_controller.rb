@@ -1440,19 +1440,19 @@ class ReportsController < ApplicationController
         "%5d  Provided\n%5d  Not Provided" % [calc_company_level[8][:comment][:"Provided"], calc_company_level[8][:comment][:"Not Provided"]],
         "%5d  Yes\n%5d  No\n%5d  Not Provided" % [calc_company_level[9][:answer][:"Yes"], calc_company_level[9][:answer][:"No"], calc_company_level[9][:answer][:"Not Provided"]],
         "%5d  Provided\n%5d  Not Provided" % [calc_company_level[9][:comment][:"Provided"], calc_company_level[9][:comment][:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tantalum_identified[:"Provided"], calc_supplier_tantalum_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tantalum_not_listed[:"Provided"], calc_supplier_tantalum_not_listed[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tantalum_not_yet_identified[:"Provided"], calc_supplier_tantalum_not_yet_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tin_identified[:"Provided"], calc_supplier_tin_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tin_not_listed[:"Provided"], calc_supplier_tin_not_listed[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tin_not_yet_identified[:"Provided"], calc_supplier_tin_not_yet_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_gold_identified[:"Provided"], calc_supplier_gold_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_gold_not_listed[:"Provided"], calc_supplier_gold_not_listed[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_gold_not_yet_identified[:"Provided"], calc_supplier_gold_not_yet_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tungsten_identified[:"Provided"], calc_supplier_tungsten_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tungsten_not_listed[:"Provided"], calc_supplier_tungsten_not_listed[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_tungsten_not_yet_identified[:"Provided"], calc_supplier_tungsten_not_yet_identified[:"Not Provided"]],
-        "%5d  Provided > 0\n%5d  Not Provided" % [calc_uploaded_at_counter[:"Provided"], calc_uploaded_at_counter[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tantalum_identified[:"Provided"], calc_supplier_tantalum_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tantalum_not_listed[:"Provided"], calc_supplier_tantalum_not_listed[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tantalum_not_yet_identified[:"Provided"], calc_supplier_tantalum_not_yet_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tin_identified[:"Provided"], calc_supplier_tin_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tin_not_listed[:"Provided"], calc_supplier_tin_not_listed[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tin_not_yet_identified[:"Provided"], calc_supplier_tin_not_yet_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_gold_identified[:"Provided"], calc_supplier_gold_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_gold_not_listed[:"Provided"], calc_supplier_gold_not_listed[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_gold_not_yet_identified[:"Provided"], calc_supplier_gold_not_yet_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tungsten_identified[:"Provided"], calc_supplier_tungsten_identified[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tungsten_not_listed[:"Provided"], calc_supplier_tungsten_not_listed[:"Not Provided"]],
+        "%5d  Listed at least 1\n%5d  Listed None" % [calc_supplier_tungsten_not_yet_identified[:"Provided"], calc_supplier_tungsten_not_yet_identified[:"Not Provided"]],
+        "%5d  Provided\n%5d  Not Provided" % [calc_uploaded_at_counter[:"Provided"], calc_uploaded_at_counter[:"Not Provided"]],
         "%6d  Provided\n%6d  Not Provided" % [calc_report_file_name_counter[:"Provided"], calc_report_file_name_counter[:"Not Provided"]],
         "%5d  Version 1.00\n%5d  Version 2.00\n%5d  Version 2.01\n%5d  Version 2.02\n%5d  Version 2.03\n%5d  Version 2.03a\n%5d  Unknown Version\n%5d  Not Provided" % [calc_report_version_counter[:"1.00"], calc_report_version_counter[:"2.00"], calc_report_version_counter[:"2.01"], calc_report_version_counter[:"2.02"], calc_report_version_counter[:"2.03"], calc_report_version_counter[:"2.03a"], calc_report_version_counter[:"Unknown Version"], calc_report_version_counter[:"Not Provided"]],
         "%5d  Green\n%5d  High Risk\n%5d  Validation Needed\n%5d  New\n%5d  Completed\n%5d  Unknown Version\n%5d  Not Provided" % [calc_validation_statuses[:"Green"], calc_validation_statuses[:"High Risk"], calc_validation_statuses[:"Validation Needed"], calc_validation_statuses[:"New"], calc_validation_statuses[:"Completed"], calc_validation_statuses[:"Unknown Status"], calc_validation_statuses[:"Not Provided"]],
@@ -1488,10 +1488,10 @@ class ReportsController < ApplicationController
          end
         
          # GSP Logo image
-         sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+         sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true) do |image|
            image.width  = 4
            image.height = 3
-           image.hyperlink.tooltip = "Green Status Pro"
+           
            image.start_at 0, 0
            image.end_at 2, 1
          end
@@ -1530,218 +1530,12 @@ class ReportsController < ApplicationController
     
   end
 
-
-
-
-
-
 # TODO ISSUES TO DISCUSS
 # how are we getting the latest spread sheet from each extended company name/scope/product list?
 # when we ad review id will be able to have this same report work as either a batch-only report by entering a parameter of batch and the batch id or a "complete" report by entering "review" and review_id as parameters
 # IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS 
   
 
-  def eicc_detailed_smelter_report
-    @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
-
-    
-      header = [
-	      "   #   ",
-	      "Supplier Company Name",
-              "Metal", 
-	      "Smelter Reference List", 
-              "Standard Smelter Names", 
-              "Smelter Facility Location \n Country", 
-              "Smelter ID", 
-              "Smelter Facility Location \n Street Address", 
-              "Smelter Facility Location \n City", 
-              "Smelter Facility Location \n State Province", 
-              "Smelter Facility \n Contact Name", 
-              "Smelter Facility \n Contact Email", 
-              "Proposed next steps, if applicable", 
-              "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
-              "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
-              "Comments",
-	      "File Name",
-	      "Date File Ingested into GSP",
-              "Validation Status",
-	      "Supplier Company Name",
-              "Declaration of Scope",
-              "Description of Scope",
-              # "Product List",
-              "Company Unique Identifier",
-              "Address",
-              "Authorized Company Representative Name",
-              "Representative Title",
-              "Representative E-Mail",
-              "Representative Phone",
-              "Date of Completion",
-              "Question 1 - Tantalum",
-              "Question 1 Comments - Tantalum",
-              "Question 1 - Tin",
-              "Question 1 Comments - Tin",
-              "Question 1 - Gold",
-              "Question 1 Comments - Gold",
-              "Question 1 - Tungsten",
-              "Question 1 Comments - Tungsten"
-              ]
-	      
-	 rows = []     
-      @batch.individual_validation_statuses.each do |ivs|
-        next if ivs.declaration.nil?
-
-        dec = ivs.declaration
-        question_1 = dec.mineral_questions.sort_by(&:sequence).first
-
-        row_middle_part = [
-	                  dec.uploaded_excel.filename,
-			  dec.created_at.to_formatted_s(:local),
-                          ivs.status,
-			  dec.company_name,
-                          dec.declaration_scope,
-                          dec.description_of_scope,
-                          dec.company_unique_identifier,
-                          dec.address,
-                          dec.authorized_company_representative_name,
-                          dec.representative_title,
-                          dec.representative_email,
-                          dec.representative_phone]
-			  
-			   completed_at_date = 0
-                           if dec.completion_at.nil? then completed_at_date = "No Date Given" else completed_at_date = dec.completion_at.strftime('%B %d, %Y') end    # dec.completion_at.strftime('%d, %B, %Y')(:local)]
-        
-	row_second_part  = row_middle_part + [completed_at_date, 
-                          
-                          question_1.tantalum,
-                          question_1.tantalum_comment,
-                          question_1.tin,
-                          question_1.tin_comment,
-                          question_1.gold,
-                          question_1.gold_comment,
-                          question_1.tungsten,
-                          question_1.tungsten_comment
-                          ]
-
-        if dec.smelter_list.nil?
-          row <<  ([''] * 13) + row_second_part
-        else
-          dec.smelter_list.each do |smelter|
-	    if smelter.smelter_id.to_s.strip.empty? then temp_smelter_id = "Not Supplied" 
-	    else temp_smelter_id = smelter.smelter_id
-	    end
-            row_first_part = [
-                  	       dec.company_name, 
-			       smelter.metal,
-                               smelter.smelter_reference_list,
-                               smelter.standard_smelter_name,
-                               smelter.facility_location_country,
-			       temp_smelter_id,
-                 	       smelter.facility_location_street_address,
-                               smelter.facility_location_city,
-                               smelter.facility_location_province,
-                               smelter.facility_contact_name,
-                               smelter.facility_contact_email,
-                               smelter.proposed_next_steps,
-                               smelter.mineral_source,
-                               smelter.mineral_source_location,
-                               smelter.comment]
-
-            row = row_first_part + row_second_part    
-            rows << row       
-          end
-        end
-
-      end
-    
-    
-       
- #   rows = rows.sort_by { |e| [ e[1].to_s,  e[20].to_s, e[21].to_s, e[2].to_s, e[3].to_s, e[4].to_s, e[5].to_s, e[6].to_s ] }
-    
-    sorted_rows = []
-    rows_running_count = 0
-    rows.sort_by { |e| [ e[0].to_s, e[19].to_s, e[20].to_s, e[21].to_s, e[1].to_s, e[2].to_s, e[3].to_s, e[4].to_s ] }.each do |r|
-            rows_running_count += 1
-	    sorted_rows << [rows_running_count] + r
-      end	    
-
-
-
-
-
-    
-    # Create spreadsheet
-    spreadsheet = Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(:name => "GSP Smelter by Supplier List") do |sheet|
-        # Style
-        header_style = nil
-        row_style    = nil
-        first_row_style = nil
-	report_title_style = nil
-	report_date_time_style = nil
-	date_style = nil
-	time_style = nil
-        
-        p.workbook.styles do |style|
-          header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
-          row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
-          first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-	  report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
-          report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-	  date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-	  time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-        end
-        
-        # GSP Logo image
-        sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
-          image.width  = 4
-          image.height = 3
-          image.hyperlink.tooltip = "Green Status Pro"
-          image.start_at 0, 0
-          image.end_at 2, 1
-        end
- 	
-	first_row = ['', '', '', "SMELTER \n by SUPPLIER \n LIST \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20]).height = 86.0
-        sheet.merge_cells "A1:B1"
-        
-	second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
-        sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20]).height = 22.0
-
-        
-        # Add header row
-        sheet.add_row(header, :style => header_style, :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20]).height = 48.0
-        
-        # Append data rows
-        sorted_rows.each do |r|
-          sheet.add_row(r, :style => row_style, :widths => [7, 25, 8, 30, 20, 25, 15, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 30, 30, 30, 30, 30, 30, 20, 20, 20, 20, 20, 20, 20, 20])
-        end
-        
-        # Freeze pane over data rows
-        sheet.sheet_view.pane do |pane|
-          pane.top_left_cell = "A4"
-          pane.state = :frozen_split
-          pane.y_split = 3
-          pane.x_split = 0
-          pane.active_pane = :bottom_right
-        end
-
-        
-      end
-    end
-
-     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_smelter_by_supplier_list.gsp.xlsx"), :type => 'application/excel'
-     
-  end
-  
- 
-# TODO ISSUES TO DISCUSS
-# how are we getting the latest spread sheet from each extended company name/scope/product list?
-# when we ad review id will be able to have this same report work as either a batch-only report by entering a parameter of batch and the batch id or a "complete" report by entering "review" and review_id as parameters
-# IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS 
-  
-  
-  
-  
   
   def eicc_detailed_smelter_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
@@ -1767,7 +1561,7 @@ class ReportsController < ApplicationController
          "CM Report\nFile Name",
          "EICC-GeSI\nTemplate Version", 
          "Uploaded At",
-	 "Status",
+         "Status",
          "Supplier Company Name",
          "Declaration of Scope",
          "Description of Scope",
@@ -1795,17 +1589,17 @@ class ReportsController < ApplicationController
           dec = ivs.declaration
           question_1 = dec.mineral_questions.sort_by(&:sequence).first
           if dec.completion_at.nil? then 
-	      completed_at_date = "No Date Given" 
-	  else 
-	       completed_at_date = dec.completion_at.strftime('%B %d, %Y')     # check locL dec.completion_at.strftime('%d, %B, %Y')(:local)]
-	  end
+             completed_at_date = "No Date Given" 
+           else 
+             completed_at_date = dec.completion_at.strftime('%B %d, %Y')     # check locL dec.completion_at.strftime('%d, %B, %Y')(:local)]
+           end
 
 
           row_second_part = [
                           dec.uploaded_excel.filename,
                           dec.template_version, 
                           dec.created_at.to_formatted_s(:local),
-			  ivs.status,
+                          ivs.status,
                           dec.company_name,
                           dec.declaration_scope,
                           dec.description_of_scope,
@@ -1831,9 +1625,9 @@ class ReportsController < ApplicationController
           else
              dec.smelter_list.each do |smelter|
                 if smelter.smelter_id.to_s.strip.empty? then 
-		  temp_smelter_id = "Not Supplied" 
+      temp_smelter_id = "Not Supplied" 
                else 
-		   temp_smelter_id = smelter.smelter_id
+       temp_smelter_id = smelter.smelter_id
                end
                row_first_part = [
                           dec.company_name, 
@@ -1842,7 +1636,7 @@ class ReportsController < ApplicationController
                           smelter.standard_smelter_name,
                           smelter.facility_location_country,
                           temp_smelter_id,
-			  smelter.facility_location_street_address,
+                         smelter.facility_location_street_address,
                           smelter.facility_location_city,
                           smelter.facility_location_province,
                           smelter.facility_contact_name,
@@ -1863,7 +1657,7 @@ class ReportsController < ApplicationController
     rows_running_count = 0
     rows.sort_by { |e| [ e[0].to_s, e[19].to_s, e[20].to_s, e[21].to_s, e[1].to_s, e[2].to_s, e[3].to_s, e[4].to_s ] }.each do |r|
          rows_running_count += 1
-	 sorted_rows << [rows_running_count] + r
+   sorted_rows << [rows_running_count] + r
     end      
 
    
@@ -1874,7 +1668,7 @@ class ReportsController < ApplicationController
          header_style = nil
          row_style    = nil
          first_row_style = nil
-	 report_title_style = nil
+         report_title_style = nil
          report_date_time_style = nil
          date_style = nil
          time_style = nil
@@ -1883,17 +1677,17 @@ class ReportsController < ApplicationController
             header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
             row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
             first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-	    report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+      report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
             report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
             date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
             time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
          end 
         
          # GSP Logo image
-         sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+         sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true) do |image|
            image.width  = 4
            image.height = 3
-           image.hyperlink.tooltip = "Green Status Pro"
+           
            image.start_at 0, 0
            image.end_at 2, 1
          end
@@ -1929,6 +1723,11 @@ class ReportsController < ApplicationController
      send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_smelter_by_supplier_list.gsp.xlsx"), :type => 'application/excel'
      
   end   
+  
+
+  
+  
+
   
 
 
@@ -2106,13 +1905,15 @@ class ReportsController < ApplicationController
        p.workbook.add_worksheet(:name => "Consolidated Smelters") do |sheet|
       
        
-           header_style = nil
-	   row_style    = nil
-           first_row_style = nil
-	   report_title_style = nil
-           report_date_time_style = nil
-	   date_style = nil
-           time_style = nil
+           header_style               = nil
+	   row_style                    = nil
+           first_row_style             = nil
+	   report_title_style          = nil
+           report_date_time_style  = nil
+	   date_style                   = nil
+           time_style                    = nil
+	   hilite_style                   = nil 
+
   
   
           p.workbook.styles do |style|
@@ -2123,13 +1924,14 @@ class ReportsController < ApplicationController
 	     report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
              date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
              time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+	     hilite_style                 = style.add_style(:bg_color => "FF428751", :fg_color=>"#FF000000", :type => :dxf)
           end
         
           # GSP Logo image
-          sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+          sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true ) do |image|
             image.width  = 4
             image.height = 3
-            image.hyperlink.tooltip = "Green Status Pro"
+
             image.start_at 0, 0
             image.end_at 2, 1
 	  end
@@ -2137,7 +1939,7 @@ class ReportsController < ApplicationController
           first_row = ['', '', '', "CONSOLIDATED \n SMELTER \n REPORT \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
           sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 86.0
           sheet.merge_cells "A1:B1"
-        
+       
 	  second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
           sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
 
@@ -2188,10 +1990,10 @@ class ReportsController < ApplicationController
 	    end
         
 	    # GSP Logo image
-	    sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true, :hyperlink => "http://www.greenstatuspro.com") do |image|
+	    sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true ) do |image|
               image.width  = 4
               image.height = 3
-              image.hyperlink.tooltip = "Green Status Pro"
+
               image.start_at 0, 0
               image.end_at 1, 1
             end
