@@ -204,7 +204,9 @@ private
 
       smelter_list_item = Eicc::SmelterList.new
       smelter_list_fields.each do |field|
-        smelter_list_item.send("#{field.to_s}=", rows[i][columns[field]])
+        value = rows[i][columns[field]]
+        value = value.split(' ').first if field == :metal  # value could be in the form 'Gold' or 'Gold (Au)', only take the first word
+        smelter_list_item.send("#{field.to_s}=", value)
       end
       smelter_list_item.line_number = sequence
       sequence += 1
