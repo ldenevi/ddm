@@ -255,7 +255,7 @@ class ReportsController < ApplicationController
     calc_latest_uploaded_at_date =  0  # date can we do this as a query??
     calc_report_file_name_counter = {:"Provided" => 0, :"Not Provided" => 0}
     calc_report_version_counter = {:"1.00" => 0, :"2.00" => 0, :"2.01" => 0, :"2.02" => 0, :"2.03" => 0, :"2.03a" => 0, :"Unknown Version" => 0, :"Not Provided" => 0}
-    calc_validation_statuses = {:"Green" => 0, :"High Risk" => 0, :"Validation Needed" => 0, :"New" => 0,  :"Completed" => 0, :"Unknown Status" => 0, :"Not Provided" => 0}
+    calc_validation_statuses = {:"Green" => 0, :"High Risk" => 0, :"Validation Needed" => 0,  :"File not readable" => 0, :"Unknown Status" => 0, :"Not Provided" => 0}
     calc_suppliers_issue_counter = {:"Have no issues" => 0,  :"Have at least 1 issue" => 0}
  
     ### BEGINNING OF DECLARATIONS LOOP
@@ -1306,10 +1306,8 @@ class ReportsController < ApplicationController
           calc_validation_statuses[:"High Risk"] += 1
         when "validation needed" 
           calc_validation_statuses[:"Validation Needed"] += 1
-        when "new" 
-          calc_validation_statuses[:"New"] += 1
-        when "completed" 
-          calc_validation_statuses[:"Completed"] += 1
+        when "file not readable" 
+          calc_validation_statuses[:"File not readable"] += 1
         else  
           calc_validation_statuses[:"Unknown Status"] += 1
         end
@@ -1455,7 +1453,7 @@ class ReportsController < ApplicationController
         "%5d  Provided\n%5d  Not Provided" % [calc_uploaded_at_counter[:"Provided"], calc_uploaded_at_counter[:"Not Provided"]],
         "%6d  Provided\n%6d  Not Provided" % [calc_report_file_name_counter[:"Provided"], calc_report_file_name_counter[:"Not Provided"]],
         "%5d  Version 1.00\n%5d  Version 2.00\n%5d  Version 2.01\n%5d  Version 2.02\n%5d  Version 2.03\n%5d  Version 2.03a\n%5d  Unknown Version\n%5d  Not Provided" % [calc_report_version_counter[:"1.00"], calc_report_version_counter[:"2.00"], calc_report_version_counter[:"2.01"], calc_report_version_counter[:"2.02"], calc_report_version_counter[:"2.03"], calc_report_version_counter[:"2.03a"], calc_report_version_counter[:"Unknown Version"], calc_report_version_counter[:"Not Provided"]],
-        "%5d  Green\n%5d  High Risk\n%5d  Validation Needed\n%5d  New\n%5d  Completed\n%5d  Unknown Version\n%5d  Not Provided" % [calc_validation_statuses[:"Green"], calc_validation_statuses[:"High Risk"], calc_validation_statuses[:"Validation Needed"], calc_validation_statuses[:"New"], calc_validation_statuses[:"Completed"], calc_validation_statuses[:"Unknown Status"], calc_validation_statuses[:"Not Provided"]],
+        "%5d  Green\n%5d  High Risk\n%5d  Validation Needed\n%5d  File not readable\n%5d  Unknown Status\n%5d  Not Provided" % [calc_validation_statuses[:"Green"], calc_validation_statuses[:"High Risk"], calc_validation_statuses[:"Validation Needed"], calc_validation_statuses[:"File not readable"], calc_validation_statuses[:"Unknown Status"], calc_validation_statuses[:"Not Provided"]],
 	"%5d  suppliers have NO issues\n%5d  suppliers have at least 1 issue"  % [calc_suppliers_issue_counter[:"Have no issues"], calc_suppliers_issue_counter[:"Have at least 1 issue"] ]
 #        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_unknown_metal_identified[:"Provided"], calc_supplier_unknown_metal_identified[:"Not Provided"]],
 #        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_unknown_metal_not_listed[:"Provided"], calc_supplier_unknown_metal_not_listed[:"Not Provided"]],
