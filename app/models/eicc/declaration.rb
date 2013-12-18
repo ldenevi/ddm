@@ -169,10 +169,10 @@ private
     sequence = 0
     smelter_list_fields = structure_fields[:smelter_list].to_a
 
-    # Version 2.00 has diverse column positioning
+    # Version 2.00, 2.01 has diverse column positioning
     columns = smelter_list_definition.clone
 
-    if self.template_version == "2.00"
+    if ["2.00", "2.01"].include?(self.template_version)
       header_sample = self.csv_worksheets[4].data[0..2000]
 
       if header_sample.match("\nGold,") || header_sample.match("\nTungsten,") || header_sample.match("\nTin,") || header_sample.match("\nTantalum,")
