@@ -1825,10 +1825,7 @@ class ReportsController < ApplicationController
       total_smelters_not_identified = 0
       total_smelters_not_listed = 0
     
-      highlight_red     = false
-      highlight_yellow = false
-      highlight_green  = false
-    
+         #  used for reference purposes only - not printed 
       prev_smelter_row = [
                                "0 - metal", 
                                "1 - smelter_reference_list", 
@@ -1905,26 +1902,44 @@ class ReportsController < ApplicationController
        p.workbook.add_worksheet(:name => "Consolidated Smelters") do |sheet|
       
        
-           header_style               = nil
-	   row_style                    = nil
-           first_row_style             = nil
-	   report_title_style          = nil
+           header_style                 = nil
+	   row_style                      = nil
+	   yellow_row_style          = nil
+	   blue_row_style             = nil
+           first_row_style              = nil
+	   report_title_style           = nil
            report_date_time_style  = nil
-	   date_style                   = nil
-           time_style                    = nil
-	   hilite_style                   = nil 
+	   date_style                      = nil
+           time_style                      = nil
+	   hilite1_style                   = nil 
+	   hilite2_style                   = nil 
+	   hilite3_style                   = nil 
+	   hilite4_style                  = nil
+	   hilite5_style                  = nil
+
+
+
 
   
   
           p.workbook.styles do |style|
-             first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+             first_row_style            = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
              header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
-             row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  # added alignment = left
-             report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
+             row_style                    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FFFFFFFF" 
+	     yellow_row_style        = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FFFFFF00" 
+             blue_row_style           = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FF00FFFF" 
+            report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
 	     report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
              date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
              time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-	     hilite_style                 = style.add_style(:bg_color => "FF428751", :fg_color=>"#FF000000", :type => :dxf)
+#	     hilite1_style                 = style.add_style(:bg_color => "FF63BE7B", :fg_color=>"#FF000000", :type => :dxf)
+#	     hilite2_style                 = style.add_style(:bg_color => "FFFFEB84", :fg_color=>"#FF000000", :type => :dxf)
+#	     hilite3_style                 = style.add_style(:bg_color => "FFF8696B", :fg_color=>"#FF000000", :type => :dxf)
+	     hilite1_style                 = style.add_style(:bg_color => "FF63BE7B", :fg_color=>"#FF000000")
+	     hilite2_style                 = style.add_style(:bg_color => "FFFFEB84", :fg_color=>"#FF000000")
+	     hilite3_style                 = style.add_style(:bg_color => "FFF8696B", :fg_color=>"#FF000000")
+	     hilite4_style                 = style.add_style(:bg_color => "0000FF00", :fg_color=>"#FF000000")	     
+	     hilite5_style                 = style.add_style(:bg_color => "FFCCFF66", :fg_color=>"#FF000000")	     
           end
         
           # GSP Logo image
@@ -1941,18 +1956,131 @@ class ReportsController < ApplicationController
           sheet.merge_cells "A1:B1"
        
 	  second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
-          sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
+	  sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
+ #         sheet.add_row( second_row, :style => [nil, nil, nil, hilite1_style,  hilite2_style,  hilite3_style,  hilite4_style, hilite5_style, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
 
           # Add header row
 	  sheet.add_row(header, :style => header_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] ).height = 48.0
-           
-          # Append data rows
+
+        same_smelter_id_as_previous_row = "no"
+	same_smelter_id_as_next_row       = "no"
+	
+	current_row_background_color = "white"
+	next_row_background_color = "yellow"
+	
+	row_counter = 0
+	previous_row = []
+	
+         # Append data rows
           rows.each do |r|
-             sheet.add_row(r, :style => row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
-             # sheet.add_row( r, :style => [report_title_style, row_style, row_style, row_style,  row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, row_style, report_title_style])
-             # here is where we would have to do cell formatting for red or yellow warning backgrounds
-          end
-        
+	      row_counter = r[0]
+	           if row_counter ==  1 then 
+			 same_smelter_id_as_previous_row  = "no"
+		   else
+    		          if r[5] == "Not Supplied" then 
+				  if previous_row[5] == "Not Supplied" then
+                                        if previous_row[1] == r[1] and  previous_row[2] == r[2] and previous_row[3] == r[3] and previous_row[4] == r[4] then
+                                             same_smelter_id_as_previous_row  = "yes"
+					else    
+                                             same_smelter_id_as_previous_row  = "no"
+					end                                   
+			          else
+                                        if previous_row[1] == r[1] and  previous_row[2] == r[2] and previous_row[3] == r[3] and previous_row[4] == r[4] then
+                                             same_smelter_id_as_previous_row  = "yes"
+					else    
+                                             same_smelter_id_as_previous_row  = "no"
+					end                                   
+                                   end
+				
+			   else  # a smelter_id was supplied on the current row
+
+				  if previous_row[5] == "Not Supplied" then
+                                        if previous_row[1] == r[1] and  previous_row[2] == r[2] and previous_row[3] == r[3] and previous_row[4] == r[4] then
+                                             same_smelter_id_as_previous_row  = "yes"
+					else    
+                                             same_smelter_id_as_previous_row  = "no"
+					end                                   
+			          else
+                                        if previous_row[5] == r[5] then
+						same_smelter_id_as_previous_row  = "yes"
+					else
+						same_smelter_id_as_previous_row  = "no"
+                                        end					      
+				  end
+		           end 		   
+		  end
+		  
+	          rows.each do |s|
+                      next if s[0] <= row_counter
+		      next if s[0] > row_counter + 1
+		      if s[5] == "Not Supplied"  then 
+                            if r[5] == "Not Supplied" then
+				 if r[1] == s[1] and    r[2] == s[2] and r[3] == s[3] and r[4] == s[4] then
+					 same_smelter_id_as_next_row = "yes"
+				 else
+                                         same_smelter_id_as_next_row = "no"
+                                 end
+			    else  # r[5] is a valid smelter id and s[5] is not supplied
+				 if r[1] == s[1] and    r[2] == s[2] and r[3] == s[3] and r[4] == s[4] then
+					 same_smelter_id_as_next_row = "yes"
+				 else
+                                         same_smelter_id_as_next_row = "no"
+                                 end			    
+                            end
+			 
+                       else # s[5] is a smelter id
+			       
+                            if r[5] == "Not Supplied" then
+				 if r[1] == s[1] and    r[2] == s[2] and r[3] == s[3] and r[4] == s[4] then
+					 same_smelter_id_as_next_row = "yes"
+				 else
+                                         same_smelter_id_as_next_row = "no"
+                                 end			    
+			    else # both r[5] and s[5] are valid smelter ids
+				 if r[5] == s[5] then
+					 same_smelter_id_as_next_row = "yes"
+				 else
+                                         same_smelter_id_as_next_row = "no"
+                                 end			    
+				    
+			    end	    
+		       end
+                   end
+
+	            if same_smelter_id_as_previous_row  == "no" then
+                      if same_smelter_id_as_next_row == "yes" then
+			  current_row_background_color =  next_row_background_color
+                      else
+                          current_row_background_color = "white"
+		      end  
+                   else
+                      if same_smelter_id_as_next_row == "yes" then
+			  current_row_background_color =  current_row_background_color
+                     else
+                          current_row_background_color =  current_row_background_color
+			    if  current_row_background_color == "yellow"
+				next_row_background_color = "blue"  
+			    else
+                                next_row_background_color = "yellow"
+			    end			
+		     end  
+	       end
+
+               case current_row_background_color
+	          when  "yellow"
+	              sheet.add_row(r, :style => yellow_row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
+	          when  "blue"
+	              sheet.add_row(r, :style => blue_row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
+	          else 
+	              sheet.add_row(r, :style => row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
+		end
+
+ 	      previous_row = r
+	     
+            end
+
+
+
           # Freeze pane over data rows
           sheet.sheet_view.pane do |pane|
             pane.top_left_cell = "A4"
@@ -2057,9 +2185,6 @@ class ReportsController < ApplicationController
           end
 
       end
-
-       # add third worksheet here
-       
 
   
     end
