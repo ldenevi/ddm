@@ -1,19 +1,19 @@
 class ReportsController < ApplicationController
   include ReportsHelper
   layout 'print', :only => 'generate_comprehensive'
- 
+
   require 'axlsx'
-  
+
   def list
   end
 
   def view
   end
-  
+
   def comprehensive
     @reviews = (current_user) ? current_user.organization.reviews.sort_by(&:targeted_completion_at) : []
   end
-  
+
   def generate_comprehensive
     @review = Review.includes({:tasks => :comments}).where(:id => params[:id], :organization_id => current_user.organization.id).first
   end
@@ -125,10 +125,10 @@ class ReportsController < ApplicationController
               "Number of standard smelter entries provided - Tungsten",
               "Number of 'Smelter not Listed' entries provided - Tungsten",
               "Number of 'Smelter not yet identified' entries provided - Tungsten",
-              # Extra data                 
+              # Extra data
               "Uploaded At",
               "CM Report\nFile Name",
-              "EICC-GeSI\nTemplate Version", 
+              "EICC-GeSI\nTemplate Version",
               "Status",
               "Issues"]     #finished writing header row - will add to next rows in ivs declaration loop  and then write final total row unless we move totals higher
 
@@ -165,7 +165,7 @@ class ReportsController < ApplicationController
                  :tungsten => {:"Yes" => 0, :"No" => 0, :"Not Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
                  :tungsten_comment => {:"Provided" => 0, :"Not Provided" => 0}
             }
-            #sequence 1 - minerals question 2 above 
+            #sequence 1 - minerals question 2 above
             ]  + [
             {:tantalum => {:"Yes" => 0, :"No" => 0, :"Not Provided" => 0,  :"Answer not Required" => 0,  :"Uncertain or Unknown" => 0},
                  :tantalum_comment => {:"Provided" => 0, :"Not Provided" => 0},
@@ -225,8 +225,8 @@ class ReportsController < ApplicationController
               {:answer => {:"Yes" => 0, :"No" => 0, :"Not Provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}},
               {:answer => {:"Yes" => 0, :"No" => 0, :"Not Provided" => 0}, :comment => {:"Provided" => 0, :"Not Provided" => 0}}
              ]
-    
-    #  overall  smelter group summary totals by SUPPLIER - these get increased by 1 for each supplier that has AT LEAST one entry in the corresponding metal/identified or metal/not yet identified or metal/not listed columns  
+
+    #  overall  smelter group summary totals by SUPPLIER - these get increased by 1 for each supplier that has AT LEAST one entry in the corresponding metal/identified or metal/not yet identified or metal/not listed columns
     calc_supplier_tantalum_identified                       = {:"Provided" => 0, :"Not Provided" => 0}
     calc_supplier_tantalum_not_listed                      = {:"Provided" => 0, :"Not Provided" => 0}
     calc_supplier_tantalum_not_yet_identified           = {:"Provided" => 0, :"Not Provided" => 0}
@@ -242,13 +242,13 @@ class ReportsController < ApplicationController
     calc_supplier_unknown_metal_identified             = {:"Provided" => 0, :"Not Provided" => 0}
     calc_supplier_unknown_metal_not_listed            = {:"Provided" => 0, :"Not Provided" => 0}
     calc_supplier_unknown_metal_not_yet_identified = {:"Provided" => 0, :"Not Provided" => 0}
-    
+
     suppliers_not_providing_smelters_that_should    = {:tantalum => 0, :tin => 0, :gold => 0, :tungsten => 0, :unknown_metal => 0}
 
     suppliers_providing_smelters_that_should_not     = {:tantalum => 0, :tin => 0, :gold => 0, :tungsten => 0, :unknown_metal => 0}
 
     suppliers_providing_smelters_that_did_not_respond_yes_to_question_1 = {:tantalum => 0, :tin => 0, :gold => 0, :tungsten => 0, :unknown_metal => 0}
-    
+
     # initialize counters for last items in totals row
     calc_uploaded_at_counter = {:"Provided" => 0, :"Not Provided" => 0}
     calc_earliest_uploaded_at_date = 0 #time.now()  # date
@@ -257,7 +257,7 @@ class ReportsController < ApplicationController
     calc_report_version_counter = {:"1.00" => 0, :"2.00" => 0, :"2.01" => 0, :"2.02" => 0, :"2.03" => 0, :"2.03a" => 0, :"Unknown Version" => 0, :"Not Provided" => 0}
     calc_validation_statuses = {:"Green" => 0, :"High Risk" => 0, :"Validation Needed" => 0,  :"File not readable" => 0, :"Unknown Status" => 0, :"Not Provided" => 0}
     calc_suppliers_issue_counter = {:"Have no issues" => 0,  :"Have at least 1 issue" => 0}
- 
+
     ### BEGINNING OF DECLARATIONS LOOP
     @batch.individual_validation_statuses.each do |ivs|    # beginning of declaration loop
       next if ivs.declaration.nil?
@@ -265,9 +265,9 @@ class ReportsController < ApplicationController
       dec = ivs.declaration
       minerals = dec.mineral_questions.sort_by(&:sequence)
       company_level = dec.company_level_questions.sort_by(&:sequence)
-      if dec.completion_at.nil? then 
-        completed_at_date = "No Date Given" 
-      else 
+      if dec.completion_at.nil? then
+        completed_at_date = "No Date Given"
+      else
 	completed_at_date = dec.completion_at.strftime('%B %d, %Y')
       end
 
@@ -281,7 +281,7 @@ class ReportsController < ApplicationController
       dec.representative_email,
       dec.representative_phone,
       completed_at_date]
-	
+
       # add calc totals for this loop
 
 	if dec.company_name.to_s.strip.empty?
@@ -290,7 +290,7 @@ class ReportsController < ApplicationController
 		calc_company_name[:"Provided"] += 1
 	end
 
-	case dec.declaration_scope	
+	case dec.declaration_scope
 	  when /^A./
 	    calc_declaration_scope[:"Company level"] += 1
 	  when /^B./
@@ -302,20 +302,20 @@ class ReportsController < ApplicationController
           else
 	    calc_declaration_scope[:"Not Provided"] += 1
         end
-      
-	       
+
+
 	if dec.description_of_scope.to_s.strip.empty?
 		calc_description_of_scope[:"Not Provided"] += 1
 	else
 		calc_description_of_scope[:"Provided"] += 1
 	end
-	
+
 	if dec.company_unique_identifier.to_s.strip.empty?
 		calc_company_unique_identifier[:"Not Provided"] += 1
 	else
 		calc_company_unique_identifier[:"Provided"] += 1
 	end
-	
+
 	if dec.address.to_s.strip.empty?
 		calc_address[:"Not Provided"] += 1
 	else
@@ -354,7 +354,7 @@ class ReportsController < ApplicationController
 
       # now build totals for minerals questions
 
-      (0..0).to_a.each do |sequence|         
+      (0..0).to_a.each do |sequence|
         if minerals[sequence]
           mq = minerals[sequence]
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
@@ -367,13 +367,13 @@ class ReportsController < ApplicationController
           else
              calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
           end
-          
+
           if mq.tantalum_comment.to_s.strip.empty?
            calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
            calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
-          
+
           case mq.tin.to_s.strip.downcase
           when "yes"
              calc_minerals[sequence][:tin][:"Yes"] += 1
@@ -382,13 +382,13 @@ class ReportsController < ApplicationController
           else
              calc_minerals[sequence][:tin][:"Not Provided"] += 1
           end
-          
+
           if mq.tin_comment.to_s.strip.empty?
            calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
            calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
-          
+
           case mq.gold.to_s.strip.downcase
           when "yes"
               calc_minerals[sequence][:gold][:"Yes"] += 1
@@ -397,13 +397,13 @@ class ReportsController < ApplicationController
           else
               calc_minerals[sequence][:gold][:"Not Provided"] += 1
           end
-          
+
           if mq.gold_comment.to_s.strip.empty?
             calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
-          
+
           case mq.tungsten.to_s.strip.downcase
           when "yes"
               calc_minerals[sequence][:tungsten][:"Yes"] += 1
@@ -412,26 +412,26 @@ class ReportsController < ApplicationController
           else
               calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
           end
-          
+
           if mq.tungsten_comment.to_s.strip.empty?
               calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
              calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
-          
+
         end
       end
 
 
 
-      (1..1).to_a.each do |sequence|         
+      (1..1).to_a.each do |sequence|
          if minerals[sequence]
 	   mq = minerals[sequence]
            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-            if minerals[0].tantalum.to_s.strip.downcase == "no" 
+            if minerals[0].tantalum.to_s.strip.downcase == "no"
               calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
-            else  
+            else
               case mq.tantalum.to_s.strip.downcase
               when "yes"
                 calc_minerals[sequence][:tantalum][:"Yes"] += 1
@@ -443,16 +443,16 @@ class ReportsController < ApplicationController
                  calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
               end
             end
-          
+
             if mq.tantalum_comment.to_s.strip.empty?
               calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
             else
               calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
             end
-          
-            if minerals[0].tin.to_s.strip.downcase == "no" 
+
+            if minerals[0].tin.to_s.strip.downcase == "no"
               calc_minerals[sequence][:tin][:"Answer not Required"] += 1
-            else 
+            else
               case mq.tin.to_s.strip.downcase
               when "yes"
                 calc_minerals[sequence][:tin][:"Yes"] += 1
@@ -464,14 +464,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tin][:"Not Provided"] += 1
               end
             end
-          
+
             if mq.tin_comment.to_s.strip.empty?
                calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
             else
               calc_minerals[sequence][:tin_comment][:"Provided"] += 1
             end
-          
-            if minerals[0].gold.to_s.strip.downcase == "no" 
+
+            if minerals[0].gold.to_s.strip.downcase == "no"
               calc_minerals[sequence][:gold][:"Answer not Required"] += 1
             else
               case mq.gold.to_s.strip.downcase
@@ -485,14 +485,14 @@ class ReportsController < ApplicationController
                  calc_minerals[sequence][:gold][:"Not Provided"] += 1
               end
             end
-          
+
             if mq.gold_comment.to_s.strip.empty?
              calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
 	    else
              calc_minerals[sequence][:gold_comment][:"Provided"] += 1
             end
-          
-            if minerals[0].tungsten.to_s.strip.downcase == "no" 
+
+            if minerals[0].tungsten.to_s.strip.downcase == "no"
              calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
             else
               case mq.tungsten.to_s.strip.downcase
@@ -506,7 +506,7 @@ class ReportsController < ApplicationController
                  calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
               end
             end
-          
+
             if mq.tungsten_comment.to_s.strip.empty?
               calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
             else
@@ -517,12 +517,12 @@ class ReportsController < ApplicationController
       end
 
 
-      (2..2).to_a.each do |sequence|         
+      (2..2).to_a.each do |sequence|
         if minerals[sequence]
           mq = minerals[sequence]
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-          if minerals[0].tantalum.to_s.strip.downcase == "no" 
+          if minerals[0].tantalum.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
           else
             case mq.tantalum.to_s.strip.downcase
@@ -536,14 +536,14 @@ class ReportsController < ApplicationController
                calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tantalum_comment.to_s.strip.empty?
             calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].tin.to_s.strip.downcase == "no" 
+
+          if minerals[0].tin.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tin][:"Answer not Required"] += 1
           else
             case mq.tin.to_s.strip.downcase
@@ -557,14 +557,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tin][:"Not Provided"] += 1
             end
           end
-            
+
           if mq.tin_comment.to_s.strip.empty?
             calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].gold.to_s.strip.downcase == "no" 
+
+          if minerals[0].gold.to_s.strip.downcase == "no"
             calc_minerals[sequence][:gold][:"Answer not Required"] += 1
           else
             case mq.gold.to_s.strip.downcase
@@ -577,15 +577,15 @@ class ReportsController < ApplicationController
               else
                 calc_minerals[sequence][:gold][:"Not Provided"] += 1
             end
-          end  
-          
+          end
+
           if mq.gold_comment.to_s.strip.empty?
             calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].tungsten.to_s.strip.downcase == "no" 
+
+          if minerals[0].tungsten.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
             case mq.tungsten.to_s.strip.downcase
@@ -599,7 +599,7 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tungsten_comment.to_s.strip.empty?
             calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
@@ -609,12 +609,12 @@ class ReportsController < ApplicationController
       end
 
 
-      (3..3).to_a.each do |sequence|        
+      (3..3).to_a.each do |sequence|
         if minerals[sequence]
           mq = minerals[sequence]
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-          if minerals[0].tantalum.to_s.strip.downcase == "no" 
+          if minerals[0].tantalum.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
           else
             case mq.tantalum.to_s.strip.downcase
@@ -634,14 +634,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tantalum_comment.to_s.strip.empty?
             calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].tin.to_s.strip.downcase == "no" 
+
+          if minerals[0].tin.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tin][:"Answer not Required"] += 1
           else
             case mq.tin.to_s.strip.downcase
@@ -661,14 +661,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tin][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tin_comment.to_s.strip.empty?
             calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].gold.to_s.strip.downcase == "no" 
+
+          if minerals[0].gold.to_s.strip.downcase == "no"
             calc_minerals[sequence][:gold][:"Answer not Required"] += 1
           else
             case mq.gold.to_s.strip.downcase
@@ -688,14 +688,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:gold][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.gold_comment.to_s.strip.empty?
             calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].tungsten.to_s.strip.downcase == "no" 
+
+          if minerals[0].tungsten.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
             case mq.tungsten.to_s.strip.downcase
@@ -715,22 +715,22 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tungsten_comment.to_s.strip.empty?
             calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
-          
+
         end
       end
 
-      (4..4).to_a.each do |sequence|         
+      (4..4).to_a.each do |sequence|
         if minerals[sequence]
           mq = minerals[sequence]
           row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-          if minerals[0].tantalum.to_s.strip.downcase == "no"  
+          if minerals[0].tantalum.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
           else
             case mq.tantalum.to_s.strip.downcase
@@ -742,14 +742,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tantalum_comment.to_s.strip.empty?
            calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].tin.to_s.strip.downcase == "no" 
+
+          if minerals[0].tin.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tin][:"Answer not Required"] += 1
           else
             case mq.tin.to_s.strip.downcase
@@ -761,14 +761,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tin][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tin_comment.to_s.strip.empty?
             calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tin_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].gold.to_s.strip.downcase == "no" 
+
+          if minerals[0].gold.to_s.strip.downcase == "no"
             calc_minerals[sequence][:gold][:"Answer not Required"] += 1
           else
             case mq.gold.to_s.strip.downcase
@@ -780,14 +780,14 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:gold][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.gold_comment.to_s.strip.empty?
             calc_minerals[sequence][:gold_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:gold_comment][:"Provided"] += 1
           end
-          
-          if minerals[0].tungsten.to_s.strip.downcase == "no" 
+
+          if minerals[0].tungsten.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
             case mq.tungsten.to_s.strip.downcase
@@ -799,23 +799,23 @@ class ReportsController < ApplicationController
                 calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
             end
           end
-          
+
           if mq.tungsten_comment.to_s.strip.empty?
             calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
             calc_minerals[sequence][:tungsten_comment][:"Provided"] += 1
           end
-            
+
          end
       end
 
 
-      (5..5).to_a.each do |sequence|         
+      (5..5).to_a.each do |sequence|
          if minerals[sequence]
 	   mq = minerals[sequence]
            row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
 
-           if minerals[0].tantalum.to_s.strip.downcase == "no" 
+           if minerals[0].tantalum.to_s.strip.downcase == "no"
 	     calc_minerals[sequence][:tantalum][:"Answer not Required"] += 1
            else
              case mq.tantalum.to_s.strip.downcase
@@ -829,14 +829,14 @@ class ReportsController < ApplicationController
                calc_minerals[sequence][:tantalum][:"Not Provided"] += 1
              end
            end
-      
+
            if mq.tantalum_comment.to_s.strip.empty?
               calc_minerals[sequence][:tantalum_comment][:"Not Provided"] += 1
            else
               calc_minerals[sequence][:tantalum_comment][:"Provided"] += 1
            end
-      
-           if minerals[0].tin.to_s.strip.downcase == "no" 
+
+           if minerals[0].tin.to_s.strip.downcase == "no"
              calc_minerals[sequence][:tin][:"Answer not Required"] += 1
            else
              case mq.tin.to_s.strip.downcase
@@ -850,14 +850,14 @@ class ReportsController < ApplicationController
 		calc_minerals[sequence][:tin][:"Not Provided"] += 1
              end
           end
-      
+
           if mq.tin_comment.to_s.strip.empty?
              calc_minerals[sequence][:tin_comment][:"Not Provided"] += 1
           else
              calc_minerals[sequence][:tin_comment][:"Provided"] += 1
 	  end
 
-	  if minerals[0].gold.to_s.strip.downcase == "no" 
+	  if minerals[0].gold.to_s.strip.downcase == "no"
             calc_minerals[sequence][:gold][:"Answer not Required"] += 1
 	   else
               case mq.gold.to_s.strip.downcase
@@ -877,9 +877,9 @@ class ReportsController < ApplicationController
           else
             calc_minerals[sequence][:gold_comment][:"Provided"] += 1
 	  end
-    
-    
-          if minerals[0].tungsten.to_s.strip.downcase == "no" 
+
+
+          if minerals[0].tungsten.to_s.strip.downcase == "no"
             calc_minerals[sequence][:tungsten][:"Answer not Required"] += 1
           else
              case mq.tungsten.to_s.strip.downcase
@@ -893,7 +893,7 @@ class ReportsController < ApplicationController
                  calc_minerals[sequence][:tungsten][:"Not Provided"] += 1
               end
           end
-      
+
           if mq.tungsten_comment.to_s.strip.empty?
              calc_minerals[sequence][:tungsten_comment][:"Not Provided"] += 1
           else
@@ -1017,7 +1017,7 @@ class ReportsController < ApplicationController
           else
             calc_company_level[sequence][:comment][:"Provided"] += 1
 	  end
-  
+
         else
           row += ["", ""]
         end
@@ -1031,10 +1031,10 @@ class ReportsController < ApplicationController
       smelter_group_gold                  = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
       smelter_group_tungsten            = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
       smelter_group_unknown_metal    = {:identified => [], :not_yet_identified => [], :not_listed => [], :empty => []}
-  
+
       smelter_group_entries_for_this_supplier =  {:tantalum => 0, :tin => 0, :gold => 0, :tungsten => 0, :unknown_metal =>0}
-   
- 
+
+
 
       dec.smelter_list.sort_by(&:line_number).each do |smelter|
          case smelter.metal.to_s.strip.downcase
@@ -1097,109 +1097,109 @@ class ReportsController < ApplicationController
               smelter_group_unknown_metal[:empty] << smelter
            else
              smelter_group_unknown_metal[:identified] << smelter
-           end  
+           end
          end
       end
- 
-       # Increase  overall  smelter group summary totals by 1 for the supplier in this loop that has AT LEAST one entry in the corresponding metal/identified or metal/not yet identified or metal/not listed columns  
+
+       # Increase  overall  smelter group summary totals by 1 for the supplier in this loop that has AT LEAST one entry in the corresponding metal/identified or metal/not yet identified or metal/not listed columns
 
       if smelter_group_tantalum[:identified].size > 0 then
         calc_supplier_tantalum_identified[:"Provided"] += 1
       else
         calc_supplier_tantalum_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_tantalum[:not_listed].size > 0 then
         calc_supplier_tantalum_not_listed[:"Provided"] += 1
       else
        calc_supplier_tantalum_not_listed[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_tantalum[:not_yet_identified].size > 0 then
         calc_supplier_tantalum_not_yet_identified[:"Provided"] += 1
       else
         calc_supplier_tantalum_not_yet_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_tin[:identified].size > 0 then
         calc_supplier_tin_identified[:"Provided"] += 1
      else
         calc_supplier_tin_identified[:"Not Provided"] += 1
-     end         
+     end
 
      if smelter_group_tin[:not_listed].size > 0 then
         calc_supplier_tin_not_listed[:"Provided"] += 1
      else
         calc_supplier_tin_not_listed[:"Not Provided"] += 1
-     end         
+     end
 
       if smelter_group_tin[:not_yet_identified].size > 0 then
         calc_supplier_tin_not_yet_identified[:"Provided"] += 1
       else
         calc_supplier_tin_not_yet_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_gold[:identified].size > 0 then
          calc_supplier_gold_identified[:"Provided"] += 1
       else
         calc_supplier_gold_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_gold[:not_listed].size > 0 then
         calc_supplier_gold_not_listed[:"Provided"] += 1
       else
         calc_supplier_gold_not_listed[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_gold[:not_yet_identified].size > 0 then
         calc_supplier_gold_not_yet_identified[:"Provided"] += 1
       else
         calc_supplier_gold_not_yet_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_tungsten[:identified].size > 0 then
         calc_supplier_tungsten_identified[:"Provided"] += 1
       else
         calc_supplier_tungsten_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_tungsten[:not_listed].size > 0 then
          calc_supplier_tungsten_not_listed[:"Provided"] += 1
       else
         calc_supplier_tungsten_not_listed[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_tungsten[:not_yet_identified].size > 0 then
         calc_supplier_tungsten_not_yet_identified[:"Provided"] += 1
       else
         calc_supplier_tungsten_not_yet_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_unknown_metal[:identified].size > 0 then
         calc_supplier_unknown_metal_identified[:"Provided"] += 1
       else
         calc_supplier_unknown_metal_identified[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_unknown_metal[:not_listed].size > 0 then
         calc_supplier_unknown_metal_not_listed[:"Provided"] += 1
       else
         calc_supplier_unknown_metal_not_listed[:"Not Provided"] += 1
-      end         
+      end
 
       if smelter_group_unknown_metal[:not_yet_identified].size > 0 then
          calc_supplier_unknown_metal_not_yet_identified[:"Provided"] += 1
       else
         calc_supplier_unknown_metal_not_yet_identified[:"Not Provided"] += 1
-      end         
+      end
 
       # Check that the supplier in this loop should have provided smelters for a given metal if the supplier answer "yes" for that metal in Question 1
 
-      case dec.mineral_questions[0].tantalum.to_s.strip.downcase 
+      case dec.mineral_questions[0].tantalum.to_s.strip.downcase
       when "yes"
          if smelter_group_entries_for_this_supplier[:tantalum] = 0 then
            suppliers_not_providing_smelters_that_should[:tantalum] += 1
-         end   
+         end
       when "no"
          if smelter_group_entries_for_this_supplier[:tantalum] > 0 then
            suppliers_providing_smelters_that_should_not[:tantalum] += 1
@@ -1209,12 +1209,12 @@ class ReportsController < ApplicationController
              suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:tantalum] += 1
          end
       end
-  
-      case dec.mineral_questions[0].tin.to_s.strip.downcase 
+
+      case dec.mineral_questions[0].tin.to_s.strip.downcase
       when "yes"
           if smelter_group_entries_for_this_supplier[:tin] = 0 then
             suppliers_not_providing_smelters_that_should[:tin] += 1
-          end   
+          end
       when "no"
 	  if smelter_group_entries_for_this_supplier[:tin] > 0 then
             suppliers_providing_smelters_that_should_not[:tin] += 1
@@ -1224,12 +1224,12 @@ class ReportsController < ApplicationController
             suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:tin] += 1
 	  end
       end
-  
-      case dec.mineral_questions[0].gold.to_s.strip.downcase 
+
+      case dec.mineral_questions[0].gold.to_s.strip.downcase
       when "yes"
           if smelter_group_entries_for_this_supplier[:gold] = 0 then
             suppliers_not_providing_smelters_that_should[:gold] += 1
-          end   
+          end
       when "no"
           if smelter_group_entries_for_this_supplier[:gold] > 0 then
             suppliers_providing_smelters_that_should_not[:gold] += 1
@@ -1239,12 +1239,12 @@ class ReportsController < ApplicationController
             suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:gold] += 1
           end
       end
-  
-      case dec.mineral_questions[0].tungsten.to_s.strip.downcase 
+
+      case dec.mineral_questions[0].tungsten.to_s.strip.downcase
       when "yes"
          if smelter_group_entries_for_this_supplier[:tungsten] = 0 then
            suppliers_not_providing_smelters_that_should[:tungsten] += 1
-         end   
+         end
       when "no"
          if smelter_group_entries_for_this_supplier[:tungsten] > 0 then
            suppliers_providing_smelters_that_should_not[:tungsten] += 1
@@ -1254,11 +1254,11 @@ class ReportsController < ApplicationController
           suppliers_providing_smelters_that_did_not_respond_yes_to_question_1[:tungsten] += 1
          end
       end
-  
+
 
 #    calc_earliest_uploaded_at_date = 0 #time.now()  # date
 #    calc_latest_uploaded_at_date =  0  # date can we do this as a query??
-  
+
        if  dec.created_at.to_formatted_s.strip.empty?
 	    calc_uploaded_at_counter[:"Not Provided"] += 1
        else
@@ -1266,61 +1266,61 @@ class ReportsController < ApplicationController
        end
 #        "%5d  Provided > 0\n%5d  Not Provided" % [calc_uploaded_at_counter[:"Provided"], calc_uploaded_at_counter[:"Not Provided"]],
 
-  
-  
+
+
        if  dec.uploaded_excel.filename.to_s.strip.empty?
 	    calc_report_file_name_counter[:"Not Provided"] += 1
        else
 	    calc_report_file_name_counter[:"Provided"] += 1
        end
 
-      if dec.template_version.strip.downcase.empty? then 
-	 calc_report_version_counter[:"Not Provided"]     
-      else 
+      if dec.template_version.strip.downcase.empty? then
+	 calc_report_version_counter[:"Not Provided"]
+      else
         case dec.template_version.strip.downcase
-	when "1.00" 
+	when "1.00"
           calc_report_version_counter[:"1.00"] += 1
-        when "2.00" 
+        when "2.00"
           calc_report_version_counter[:"2.00"] += 1
-        when "2.01" 
+        when "2.01"
           calc_report_version_counter[:"2.01"] += 1
-        when "2.02" 
+        when "2.02"
           calc_report_version_counter[:"2.02"] += 1
-        when "2.03" 
+        when "2.03"
           calc_report_version_counter[:"2.03"] += 1
-        when "2.03a" 
+        when "2.03a"
           calc_report_version_counter[:"2.03a"] += 1
-        else  
+        else
           calc_report_version_counter[:"Unknown Version"] += 1
         end
-      end  
-  
-        
-      if ivs.status.strip.downcase.empty? then 
-	 calc_validation_statuses[:"Not Provided"]     
-      else 
+      end
+
+
+      if ivs.status.strip.downcase.empty? then
+	 calc_validation_statuses[:"Not Provided"]
+      else
         case ivs.status.strip.downcase
-	when "green" 
+	when "green"
           calc_validation_statuses[:"Green"] += 1
-        when "high risk" 
+        when "high risk"
           calc_validation_statuses[:"High Risk"] += 1
-        when "validation needed" 
+        when "validation needed"
           calc_validation_statuses[:"Validation Needed"] += 1
-        when "file not readable" 
+        when "file not readable"
           calc_validation_statuses[:"File not readable"] += 1
-        else  
+        else
           calc_validation_statuses[:"Unknown Status"] += 1
         end
-      end  
+      end
 
- 
+
 
        if ivs.message.empty? then
              calc_suppliers_issue_counter[:"Have no issues"] += 1
-      else 
+      else
 	     calc_suppliers_issue_counter[:"Have at least 1 issue"] += 1
       end
-      
+
 
 
 
@@ -1340,8 +1340,8 @@ class ReportsController < ApplicationController
   end  # of ivs declaration loop
 
   # get data rows sorted alphabetically by company name, declaration of scope, and description of scope, and eventually product list
-	  
-    
+
+
     sorted_rows = []
     rows_running_count = 0
     rows.sort_by { |e| [e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s ] }.each do |r|
@@ -1349,7 +1349,7 @@ class ReportsController < ApplicationController
       sorted_rows << [rows_running_count] + r
     end
 
-    # get totals row 
+    # get totals row
 
     totals_row =  [
         "COLUMN\nTOTALS\nfor ALL\n%d\nSUPPLIERS" % [rows_running_count],
@@ -1417,7 +1417,7 @@ class ReportsController < ApplicationController
         "%5d  Provided\n%5d  Not Provided" % [calc_company_level[1][:comment][:"Provided"], calc_company_level[1][:comment][:"Not Provided"]],
         "%5d  Yes\n%5d  Yes included in standard contract language\n%5d  No\n%5d  Not Provided" % [calc_company_level[2][:answer][:"Yes"], calc_company_level[2][:answer][:"Yes included in standard contract language"], calc_company_level[2][:answer][:"No"], calc_company_level[2][:answer][:"Not Provided"]],
         "%5d  Provided\n%5d  Not Provided" % [calc_company_level[2][:comment][:"Provided"], calc_company_level[2][:comment][:"Not Provided"]],
-        "%5d  Yes\n%5d  Planned once lists become available\n%5d  No\n%5d  Not Provided" % 
+        "%5d  Yes\n%5d  Planned once lists become available\n%5d  No\n%5d  Not Provided" %
         [calc_company_level[3][:answer][:"Yes"], calc_company_level[3][:answer][:"Planned once lists become available"], calc_company_level[3][:answer][:"No"], calc_company_level[3][:answer][:"Not Provided"]],
         "%5d  Provided\n%5d  Not Provided" % [calc_company_level[3][:comment][:"Provided"], calc_company_level[3][:comment][:"Not Provided"]],
         "%5d  Yes\n%5d  No\n%5d  Not Provided" % [calc_company_level[4][:answer][:"Yes"], calc_company_level[4][:answer][:"No"], calc_company_level[4][:answer][:"Not Provided"]],
@@ -1459,12 +1459,12 @@ class ReportsController < ApplicationController
 #        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_unknown_metal_not_listed[:"Provided"], calc_supplier_unknown_metal_not_listed[:"Not Provided"]],
 #        "%5d  Provided > 0\n%5d  Not Provided" % [calc_supplier_unknown_metal_not_yet_identified[:"Provided"], calc_supplier_unknown_metal_not_yet_identified[:"Not Provided"]]
         ]
-   
 
-    # Create spreadsheet  
+
+    # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
        p.workbook.add_worksheet(:name => "Aggregated Declarations") do |sheet|
-                                                               
+
          header_style = nil
          row_style    = nil
          totals_style = nil
@@ -1473,23 +1473,23 @@ class ReportsController < ApplicationController
          report_date_time_style = nil
          date_style = nil
          time_style = nil
-          
+
          p.workbook.styles do |style|
             header_style                = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
             row_style                    = style.add_style :b => false, :sz => 9,  :alignment => { :wrap_text => true, :horizontal => :left }
-            totals_style                 = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color 
-            first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+            totals_style                 = style.add_style :b => true, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } ## fadd color
+            first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
             report_title_style          = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
             report_date_time_style  = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-            date_style                   = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-            time_style                   = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+            date_style                   = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center }
+            time_style                   = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center }
          end
-        
+
          # GSP Logo image
          sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true) do |image|
            image.width  = 4
            image.height = 3
-           
+
            image.start_at 0, 0
            image.end_at 2, 1
          end
@@ -1497,22 +1497,22 @@ class ReportsController < ApplicationController
          first_row = ['', '', '', "AGGREGATED \n DECLARATIONS \n REPORT \n for: ", "Date:", "Time:", "User:"]
          sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style], :widths => [9, 25, 25, 25, 25, 25, 25, 25]).height = 86.0
          sheet.merge_cells "A1:B1"
-  
-         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym] 
+
+         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym]
          sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style] , :widths => [9, 25, 25, 25, 25, 25, 25, 25]).height = 33.0
 
          # Add header row
          sheet.add_row(header, :style => header_style, :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300]).height = 48.0
-        
+
          # Append data rows
          sorted_rows.each do |r|
            sheet.add_row(r, :style => row_style,  :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300])
            #check rows can use :ignore and :auto)   row <<  ([''] * 13) + row_second_part
          end
-  
+
          # Add totals row
          sheet.add_row(totals_row, :style => totals_style, :widths => [9, 25, 25, 25, 25, 25, 25, 25, 25, 20, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300]).height =  120.0
-  
+
          # Freeze pane over data rows
          sheet.sheet_view.pane do |pane|
             pane.top_left_cell = "A4"
@@ -1525,39 +1525,39 @@ class ReportsController < ApplicationController
     end
 
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_aggregated_declarations_report.gsp.xlsx"), :type => 'application/excel'
-    
+
   end
 
 # TODO ISSUES TO DISCUSS
 # how are we getting the latest spread sheet from each extended company name/scope/product list?
 # when we ad review id will be able to have this same report work as either a batch-only report by entering a parameter of batch and the batch id or a "complete" report by entering "review" and review_id as parameters
-# IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS 
-  
+# IN DECLARATION PROCESSING LOGIC need to check for comments in company-level questions B-1-YES-THEN URL, F-5-NO-THEN SOME COMMENT,I-8_YES-THEN SOME COMMENTS
 
-  
+
+
   def eicc_detailed_smelter_report
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
-    
+
     header = [
          "   #   ",
          "Supplier Company Name",
-         "Metal", 
-         "Smelter Reference List", 
-         "Standard Smelter Names", 
-         "Smelter Facility Location \n Country", 
-         "Smelter ID", 
-         "Smelter Facility Location \n Street Address", 
-         "Smelter Facility Location \n City", 
-         "Smelter Facility Location \n State Province", 
-         "Smelter Facility \n Contact Name", 
-         "Smelter Facility \n Contact Email", 
-         "Proposed next steps, if applicable", 
-         "Name of Mines or if recycled or scrap sourced, state recycled or scrap", 
-         "Location of Mines or if recycled or scrap sourced, state recycled or scrap", 
+         "Metal",
+         "Smelter Reference List",
+         "Standard Smelter Names",
+         "Smelter Facility Location \n Country",
+         "Smelter ID",
+         "Smelter Facility Location \n Street Address",
+         "Smelter Facility Location \n City",
+         "Smelter Facility Location \n State Province",
+         "Smelter Facility \n Contact Name",
+         "Smelter Facility \n Contact Email",
+         "Proposed next steps, if applicable",
+         "Name of Mines or if recycled or scrap sourced, state recycled or scrap",
+         "Location of Mines or if recycled or scrap sourced, state recycled or scrap",
          "Comments",
          "CM Report\nFile Name",
-         "EICC-GeSI\nTemplate Version", 
+         "EICC-GeSI\nTemplate Version",
          "Uploaded At",
          "Status",
          "Supplier Company Name",
@@ -1580,22 +1580,23 @@ class ReportsController < ApplicationController
          "Question 1\n   Tungsten",
          "Question 1 Comments\n   Tungsten"
          ]
-        
-    rows = []     
+
+    rows = []
     @batch.individual_validation_statuses.each do |ivs|
+      next if ivs.declaration.nil?
 
           dec = ivs.declaration
           question_1 = dec.mineral_questions.sort_by(&:sequence).first
-          if dec.completion_at.nil? then 
-             completed_at_date = "No Date Given" 
-           else 
+          if dec.completion_at.nil? then
+             completed_at_date = "No Date Given"
+           else
              completed_at_date = dec.completion_at.strftime('%B %d, %Y')     # check locL dec.completion_at.strftime('%d, %B, %Y')(:local)]
            end
 
 
           row_second_part = [
                           dec.uploaded_excel.filename,
-                          dec.template_version, 
+                          dec.template_version,
                           dec.created_at.to_formatted_s(:local),
                           ivs.status,
                           dec.company_name,
@@ -1622,13 +1623,13 @@ class ReportsController < ApplicationController
             row <<  ([''] * 13) + row_second_part
           else
              dec.smelter_list.each do |smelter|
-                if smelter.smelter_id.to_s.strip.empty? then 
-      temp_smelter_id = "Not Supplied" 
-               else 
+                if smelter.smelter_id.to_s.strip.empty? then
+      temp_smelter_id = "Not Supplied"
+               else
        temp_smelter_id = smelter.smelter_id
                end
                row_first_part = [
-                          dec.company_name, 
+                          dec.company_name,
                           smelter.metal,
                           smelter.smelter_reference_list,
                           smelter.standard_smelter_name,
@@ -1644,25 +1645,25 @@ class ReportsController < ApplicationController
                           smelter.mineral_source_location,
                           smelter.comment]
 
-               row = row_first_part + row_second_part    
-               rows << row       
-             end                                                                      
-          end    
-    end 
+               row = row_first_part + row_second_part
+               rows << row
+             end
+          end
+    end
 
-  
+
     sorted_rows = []
     rows_running_count = 0
     rows.sort_by { |e| [ e[0].to_s, e[19].to_s, e[20].to_s, e[21].to_s, e[1].to_s, e[2].to_s, e[3].to_s, e[4].to_s ] }.each do |r|
          rows_running_count += 1
    sorted_rows << [rows_running_count] + r
-    end      
+    end
 
-   
+
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
        p.workbook.add_worksheet(:name => "GSP Smelter by Supplier List") do |sheet|
-        
+
          header_style = nil
          row_style    = nil
          first_row_style = nil
@@ -1670,42 +1671,42 @@ class ReportsController < ApplicationController
          report_date_time_style = nil
          date_style = nil
          time_style = nil
-        
+
          p.workbook.styles do |style|
             header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
             row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
-            first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
+            first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
       report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
             report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-            date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-            time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-         end 
-        
+            date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center }
+            time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center }
+         end
+
          # GSP Logo image
          sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true) do |image|
            image.width  = 4
            image.height = 3
-           
+
            image.start_at 0, 0
            image.end_at 2, 1
          end
-   
-         first_row = ['', '', '', "SMELTER \n by SUPPLIER \n LIST \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+
+         first_row = ['', '', '', "SMELTER \n by SUPPLIER \n LIST \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '']
          sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20]).height = 86.0
          sheet.merge_cells "A1:B1"
-        
-         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+
+         second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '']
          sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20]).height = 33.0
 
-        
+
          # Add header row
          sheet.add_row(header, :style => header_style, :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20]).height = 48.0
-                                                                                         
+
          # Append data rows
          sorted_rows.each do |r|
             sheet.add_row(r, :style => row_style, :widths => [7, 25, 8, 30, 30, 25, 15, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 15, 15, 15, 20, 20, 20, 20, 25, 25, 25, 25, 25, 15, 15, 20, 15, 20, 15, 20, 15, 20])
          end  # of sorted_rows.each do
-        
+
          # Freeze pane over data rows
          sheet.sheet_view.pane do |pane|
            pane.top_left_cell = "A4"
@@ -1714,32 +1715,32 @@ class ReportsController < ApplicationController
            pane.x_split = 0
            pane.active_pane = :bottom_right
          end # sheet.sheet_view.pane do |pane|
-       
-      end     
-    end     
+
+      end
+    end
 
      send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_smelter_by_supplier_list.gsp.xlsx"), :type => 'application/excel'
-     
-  end   
-  
 
-  
-  
-
-  
+  end
 
 
-  
+
+
+
+
+
+
+
   #============================================================
   # EICC Consolidated Smelter Report
-  #    
-  
- 
+  #
+
+
   def eicc_consolidated_smelter_list
     @batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
-    
+
     @latest_declarations = []
-    
+
     # Only select the latest declaration submitted by "company_name" ### FIX!!!  sort and prev_company need to be expressed as EXTENDED COMPANY NAME (company_name,declaration_of_scope,description_of_scope,product_list)
     prev_company = nil
     Eicc::IndividualValidationStatus.where(:parent_id => @batch.id).order("company_name ASC, created_at DESC").each do |ivs|
@@ -1748,32 +1749,32 @@ class ReportsController < ApplicationController
       @latest_declarations << ivs.declaration
       prev_company = ivs.company_name
     end
-    
+
     # Group declarations by smelter
     declarations_by_smelter = {}
-    
+
     @latest_declarations.each do |declaration|
       declaration.smelter_list.each do |smelter|
-         if smelter.smelter_id.to_s.strip.empty? then 
-	   temp_smelter_id = "Not Supplied" 
-         else 
+         if smelter.smelter_id.to_s.strip.empty? then
+	   temp_smelter_id = "Not Supplied"
+         else
 	   temp_smelter_id = smelter.smelter_id
          end
-             
-         smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, temp_smelter_id, 
+
+         smelter_key = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, temp_smelter_id,
                        smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province, smelter.facility_contact_name,
                        smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source, smelter.mineral_source_location, smelter.comment]
-  
+
          declarations_by_smelter[smelter_key] = [] if declarations_by_smelter[smelter_key].nil?
          declarations_by_smelter[smelter_key] << declaration
       end
     end
-    
+
     # Gather all the required data and sort
-    
+
     # logic for first sheet
     header = [
-               "   #   ", 
+               "   #   ",
                "Metal",
               "Smelter Reference List",
               "Standard Smelter Names",
@@ -1793,59 +1794,59 @@ class ReportsController < ApplicationController
         ]
 
       rows_second_part = []
-    
+
       declarations_by_smelter.each do |smelter_key, declarations|
-         rows_second_part <<  smelter_key + [declarations.uniq.count] + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(',    ')] 
+         rows_second_part <<  smelter_key + [declarations.uniq.count] + [declarations.collect { |dec| dec.uploaded_excel.filename }.uniq.join(',    ')]
       end
-      
+
       # logic for second sheet
-      
+
       total_gold_smelters = 0
       total_gold_smelters_not_yet_identified = 0
       total_gold_smelters_not_listed = 0
-      
+
       total_tantalum_smelters = 0
       total_tantalum_smelters_not_yet_identified = 0
       total_tantalum_smelters_not_listed = 0
-      
+
       total_tin_smelters = 0
       total_tin_smelters_not_yet_identified = 0
       total_tin_smelters_not_listed = 0
-      
+
       total_tungsten_smelters = 0
       total_tungsten_smelters_not_yet_identified = 0
       total_tungsten_smelters_not_listed = 0
- 
+
       total_unknown_metal_smelters = 0
       total_unknown_metal_smelters_not_yet_identified = 0
       total_unknown_metal_smelters_not_listed = 0
 
       total_smelters_not_identified = 0
       total_smelters_not_listed = 0
-    
-         #  used for reference purposes only - not printed 
+
+         #  used for reference purposes only - not printed
       prev_smelter_row = [
-                               "0 - metal", 
-                               "1 - smelter_reference_list", 
-                               "2 - standard_smelter_name", 
-                               "3 - facility_location_country", 
-                               "4 - smelter_id", 
-                               "5 - facility_location_street_address", 
-                               "6 - facility_location_city", 
-                               "7 - facility_location_province", 
-                               "8 - facility_contact_name", 
-                               "9 - facility_contact_email", 
-                               "10 - proposed_next_steps", 
-                               "11 - mineral_source", 
-                               "12 - mineral_source_location", 
+                               "0 - metal",
+                               "1 - smelter_reference_list",
+                               "2 - standard_smelter_name",
+                               "3 - facility_location_country",
+                               "4 - smelter_id",
+                               "5 - facility_location_street_address",
+                               "6 - facility_location_city",
+                               "7 - facility_location_province",
+                               "8 - facility_contact_name",
+                               "9 - facility_contact_email",
+                               "10 - proposed_next_steps",
+                               "11 - mineral_source",
+                               "12 - mineral_source_location",
                                "13 - comment"]
 
-    
+
       rows = []
       rows_running_count = 0
-      rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] } 
+      rows_second_part = rows_second_part.sort_by { |e| [ e[0].to_s, e[1].to_s, e[2].to_s, e[3].to_s] }
 
-      rows_second_part.each do |r2|  
+      rows_second_part.each do |r2|
         rows_running_count += 1
         case r2[0].to_s.strip.downcase
         when "gold"
@@ -1867,19 +1868,19 @@ class ReportsController < ApplicationController
         else
            total_unknown_metal_smelters +=1
            if r2[1].to_s.strip.downcase == "smelter not listed" then total_unknown_metal_smelters_not_listed += 1 end
-           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_unknown_metal_smelters_not_yet_identified += 1 end    
+           if r2[1].to_s.strip.downcase == "smelter not yet identified" then total_unknown_metal_smelters_not_yet_identified += 1 end
         end
          rows << [rows_running_count] + r2
-      end      
-  
+      end
+
     # logic for third sheet
-    
+
     smelters = {}
-    
-    
+
+
     # Group declarations by smelter
     declarations_by_smelter2 = {}
-    
+
     @latest_declarations.each do |declaration|
        ext_supplier_name = [declaration.company_name, declaration.declaration_scope, declaration.description_of_scope].join("*")
        declaration.smelter_list.each do |smelter|
@@ -1888,18 +1889,18 @@ class ReportsController < ApplicationController
           declarations_by_smelter2[smelter_short_key] << declaration
        end
     end
-    
-    
-    
-    
-    
+
+
+
+
+
     #### more here
-    
+
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
        p.workbook.add_worksheet(:name => "Consolidated Smelters") do |sheet|
-      
-       
+
+
            header_style                 = nil
 	   row_style                      = nil
 	   yellow_row_style          = nil
@@ -1909,37 +1910,37 @@ class ReportsController < ApplicationController
            report_date_time_style  = nil
 	   date_style                      = nil
            time_style                      = nil
-	   hilite1_style                   = nil 
-	   hilite2_style                   = nil 
-	   hilite3_style                   = nil 
+	   hilite1_style                   = nil
+	   hilite2_style                   = nil
+	   hilite3_style                   = nil
 	   hilite4_style                  = nil
 	   hilite5_style                  = nil
 
 
 
 
-  
-  
+
+
           p.workbook.styles do |style|
-             first_row_style            = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-             header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
-             row_style                    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FFFFFFFF" 
-	     yellow_row_style        = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FFFFFF00" 
-             blue_row_style           = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FF00FFFF" 
+             first_row_style            = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
+             header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+             row_style                    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FFFFFFFF"
+	     yellow_row_style        = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FFFFFF00"
+             blue_row_style           = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left } , :bg_color => "FF00FFFF"
             report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
 	     report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-             date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-             time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
+             date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center }
+             time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center }
 #	     hilite1_style                 = style.add_style(:bg_color => "FF63BE7B", :fg_color=>"#FF000000", :type => :dxf)
 #	     hilite2_style                 = style.add_style(:bg_color => "FFFFEB84", :fg_color=>"#FF000000", :type => :dxf)
 #	     hilite3_style                 = style.add_style(:bg_color => "FFF8696B", :fg_color=>"#FF000000", :type => :dxf)
 	     hilite1_style                 = style.add_style(:bg_color => "FF63BE7B", :fg_color=>"#FF000000")
 	     hilite2_style                 = style.add_style(:bg_color => "FFFFEB84", :fg_color=>"#FF000000")
 	     hilite3_style                 = style.add_style(:bg_color => "FFF8696B", :fg_color=>"#FF000000")
-	     hilite4_style                 = style.add_style(:bg_color => "0000FF00", :fg_color=>"#FF000000")	     
-	     hilite5_style                 = style.add_style(:bg_color => "FFCCFF66", :fg_color=>"#FF000000")	     
+	     hilite4_style                 = style.add_style(:bg_color => "0000FF00", :fg_color=>"#FF000000")
+	     hilite5_style                 = style.add_style(:bg_color => "FFCCFF66", :fg_color=>"#FF000000")
           end
-        
+
           # GSP Logo image
           sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true ) do |image|
             image.width  = 4
@@ -1948,12 +1949,12 @@ class ReportsController < ApplicationController
             image.start_at 0, 0
             image.end_at 2, 1
 	  end
-  
-          first_row = ['', '', '', "CONSOLIDATED \n SMELTER \n REPORT \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', ''] 
+
+          first_row = ['', '', '', "CONSOLIDATED \n SMELTER \n REPORT \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '']
           sheet.add_row( first_row, :style => [nil, nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 86.0
           sheet.merge_cells "A1:B1"
-       
-	  second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', ''] 
+
+	  second_row = ['', '', '', current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '']
 	  sheet.add_row( second_row, :style => [nil, nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
  #         sheet.add_row( second_row, :style => [nil, nil, nil, hilite1_style,  hilite2_style,  hilite3_style,  hilite4_style, hilite5_style, nil, nil] , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
 
@@ -1962,56 +1963,56 @@ class ReportsController < ApplicationController
 
         same_smelter_id_as_previous_row = "no"
 	same_smelter_id_as_next_row       = "no"
-	
+
 	current_row_background_color = "white"
 	next_row_background_color = "yellow"
-	
+
 	row_counter = 0
 	previous_row = []
-	
+
          # Append data rows
           rows.each do |r|
 	      row_counter = r[0]
-	           if row_counter ==  1 then 
+	           if row_counter ==  1 then
 			 same_smelter_id_as_previous_row  = "no"
 		   else
-    		          if r[5] == "Not Supplied" then 
+    		          if r[5] == "Not Supplied" then
 				  if previous_row[5] == "Not Supplied" then
                                         if previous_row[1] == r[1] and  previous_row[2] == r[2] and previous_row[3] == r[3] and previous_row[4] == r[4] then
                                              same_smelter_id_as_previous_row  = "yes"
-					else    
+					else
                                              same_smelter_id_as_previous_row  = "no"
-					end                                   
+					end
 			          else
                                         if previous_row[1] == r[1] and  previous_row[2] == r[2] and previous_row[3] == r[3] and previous_row[4] == r[4] then
                                              same_smelter_id_as_previous_row  = "yes"
-					else    
+					else
                                              same_smelter_id_as_previous_row  = "no"
-					end                                   
+					end
                                    end
-				
+
 			   else  # a smelter_id was supplied on the current row
 
 				  if previous_row[5] == "Not Supplied" then
                                         if previous_row[1] == r[1] and  previous_row[2] == r[2] and previous_row[3] == r[3] and previous_row[4] == r[4] then
                                              same_smelter_id_as_previous_row  = "yes"
-					else    
+					else
                                              same_smelter_id_as_previous_row  = "no"
-					end                                   
+					end
 			          else
                                         if previous_row[5] == r[5] then
 						same_smelter_id_as_previous_row  = "yes"
 					else
 						same_smelter_id_as_previous_row  = "no"
-                                        end					      
+                                        end
 				  end
-		           end 		   
+		           end
 		  end
-		  
+
 	          rows.each do |s|
                       next if s[0] <= row_counter
 		      next if s[0] > row_counter + 1
-		      if s[5] == "Not Supplied"  then 
+		      if s[5] == "Not Supplied"  then
                             if r[5] == "Not Supplied" then
 				 if r[1] == s[1] and    r[2] == s[2] and r[3] == s[3] and r[4] == s[4] then
 					 same_smelter_id_as_next_row = "yes"
@@ -2023,25 +2024,25 @@ class ReportsController < ApplicationController
 					 same_smelter_id_as_next_row = "yes"
 				 else
                                          same_smelter_id_as_next_row = "no"
-                                 end			    
+                                 end
                             end
-			 
+
                        else # s[5] is a smelter id
-			       
+
                             if r[5] == "Not Supplied" then
 				 if r[1] == s[1] and    r[2] == s[2] and r[3] == s[3] and r[4] == s[4] then
 					 same_smelter_id_as_next_row = "yes"
 				 else
                                          same_smelter_id_as_next_row = "no"
-                                 end			    
+                                 end
 			    else # both r[5] and s[5] are valid smelter ids
 				 if r[5] == s[5] then
 					 same_smelter_id_as_next_row = "yes"
 				 else
                                          same_smelter_id_as_next_row = "no"
-                                 end			    
-				    
-			    end	    
+                                 end
+
+			    end
 		       end
                    end
 
@@ -2050,18 +2051,18 @@ class ReportsController < ApplicationController
 			  current_row_background_color =  next_row_background_color
                       else
                           current_row_background_color = "white"
-		      end  
+		      end
                    else
                       if same_smelter_id_as_next_row == "yes" then
 			  current_row_background_color =  current_row_background_color
                      else
                           current_row_background_color =  current_row_background_color
 			    if  current_row_background_color == "yellow"
-				next_row_background_color = "blue"  
+				next_row_background_color = "blue"
 			    else
                                 next_row_background_color = "yellow"
-			    end			
-		     end  
+			    end
+		     end
 	       end
 
                case current_row_background_color
@@ -2069,12 +2070,12 @@ class ReportsController < ApplicationController
 	              sheet.add_row(r, :style => yellow_row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
 	          when  "blue"
 	              sheet.add_row(r, :style => blue_row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
-	          else 
+	          else
 	              sheet.add_row(r, :style => row_style , :widths => [7, 18, 40, 40, 20, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] )
 		end
 
  	      previous_row = r
-	     
+
             end
 
 
@@ -2087,9 +2088,9 @@ class ReportsController < ApplicationController
             pane.x_split = 0
             pane.active_pane = :bottom_right
          end
-        
+
       end
- 
+
       # add second worksheet
       p.workbook.add_worksheet(:name => "Consolidated Smelter Analytics") do |sheet|
            header_style = nil
@@ -2101,20 +2102,20 @@ class ReportsController < ApplicationController
            time_style = nil
            align_right_cell_style = nil
            align_left_cell_style  = nil
-  
-  
+
+
             p.workbook.styles do |style|
-              first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center } 
-              header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left } 
-	      row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
+              first_row_style             = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :center }
+              header_style               = style.add_style :b => true, :sz => 10, :alignment => { :wrap_text => true, :horizontal => :left }
+	      row_style                   = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
               report_title_style         = style.add_style :bg_color => "FFFF0000",  :fg_color=>"#FF000000", :border=>Axlsx::STYLE_THIN_BORDER, :alignment=>{:horizontal => :center}
               report_date_time_style = style.add_style :num_fmt => Axlsx::NUM_FMT_YYYYMMDDHHMMSS,  :border=>Axlsx::STYLE_THIN_BORDER
-              date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center } 
-              time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center } 
-              align_right_cell_style    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :right }  
-              align_left_cell_style      = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }  
+              date_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'YYYY-MM-DD', :alignment => { :wrap_text => true, :horizontal => :center }
+              time_style                  = style.add_style :b => true,  :sz => 10, :format_code => 'hh:mm:ss', :alignment => { :wrap_text => true, :horizontal => :center }
+              align_right_cell_style    = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :right }
+              align_left_cell_style      = style.add_style :b => false, :sz => 9, :alignment => { :wrap_text => true, :horizontal => :left }
 	    end
-        
+
 	    # GSP Logo image
 	    sheet.add_image(:image_src => File.expand_path("../../public/images/logo.jpg", File.dirname(__FILE__)), :noSelect => true, :noMove => true ) do |image|
               image.width  = 4
@@ -2123,34 +2124,34 @@ class ReportsController < ApplicationController
               image.start_at 0, 0
               image.end_at 1, 1
             end
-  
-            first_row = ['', '',  "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '', ''] 
+
+            first_row = ['', '',  "CONSOLIDATED \n SMELTER \n ANALYTICS \n for: ", "Date:", "Time:", 'User:', '', '', '', '', '', '', '', '', '', '', '']
             sheet.add_row( first_row, :style => [nil, nil, first_row_style, first_row_style, first_row_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 86.0
             # sheet.merge_cells "A1:B1"
-        
-            second_row = ['', '',  current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '', ''] 
+
+            second_row = ['', '',  current_user.organization.full_name, Date.today, Time.now, current_user.eponym, '', '', '', '', '', '', '', '', '', '', '']
             sheet.add_row( second_row, :style => [nil, nil, first_row_style, date_style, time_style, first_row_style, nil, nil, nil, nil] , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100]).height = 33.0
 
             # Add header row
 	    sheet.add_row(["Item", "Value"], :style => header_style , :widths => [30, 10] ).height = 48.0
-        
+
             # Append analytic data rows
-           
+
             sheet.add_row( ["Total entries - Gold",  total_gold_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-    
+
             sheet.add_row( ["Total entries - Tin",  total_tin_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-    
+
             sheet.add_row( ["Total entries - Tantalum", total_tantalum_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-    
+
             sheet.add_row( ["Total entries - Tungsten",  total_tungsten_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-     
+
             if total_unknown_metal_smelters == 0 then
               sheet.add_row( ["   " , "________" ], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
             else
-              sheet.add_row( ["Total entries - Unknown Metals",  total_unknown_metal_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 22.0         
-	    end 
-           
-           
+              sheet.add_row( ["Total entries - Unknown Metals",  total_unknown_metal_smelters], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 22.0
+	    end
+
+
            total_all_smelters = total_gold_smelters + total_tantalum_smelters + total_tin_smelters + total_tungsten_smelters + total_unknown_metal_smelters
            # check that total_all_smelters is equal to rows_running_count
            sheet.add_row( ["Total entries - all metals",  total_all_smelters ], :style => [align_left_cell_style, align_right_cell_style] , :widths => [30, 10] ).height = 15.0
@@ -2159,20 +2160,20 @@ class ReportsController < ApplicationController
 
            total_smelters_not_listed = total_gold_smelters_not_listed + total_tantalum_smelters_not_listed + total_tin_smelters_not_listed + total_tungsten_smelters_not_listed + total_unknown_metal_smelters_not_listed
            sheet.add_row( ["Total entries - Smelter Not Listed",  total_smelters_not_listed], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-    
+
            total_smelters_not_yet_identified = total_gold_smelters_not_yet_identified + total_tantalum_smelters_not_yet_identified + total_tin_smelters_not_yet_identified + total_tungsten_smelters_not_yet_identified + total_unknown_metal_smelters_not_yet_identified
            sheet.add_row( ["Total entries - Smelter not yet Identifed",  total_smelters_not_yet_identified], :style => [align_left_cell_style, align_right_cell_style] , :widths =>  [30, 10] ).height = 15.0
-    
-          # r8 = [Top 10 Smelters Listings: (from Smelter ID column F on Smelter list worksheet", 
+
+          # r8 = [Top 10 Smelters Listings: (from Smelter ID column F on Smelter list worksheet",
           #sheet.add_row( ["Top 10 Smelter Listings",  'TBD - in process'], :style => row_style , :widths =>  [30, 10] ).height = 50.0
-    
+
           # r9 = Top 10 Countries: (from Column E)
           #sheet.add_row( ["Total 10 Countries",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] ).height = 50.0
-    
+
           # r10 = [x.  Top 10 Suppliers Reporting Smelters (Supplier Name, Declaration Worksheet, D8): # (Count of Entries on Smelter List Worksheet, Column B, sorted by highest number)
           #sheet.add_row( ["Top 10 Suppliers reporting Smelters",  'TBD - in process'], :style => row_style , :widths => [30, 10, 25, 15, 15, 10, 35, 35, 35, 35, 35, 35, 35, 35, 35, 20, 100] ).height = 50.0
-    
-          
+
+
         # Freeze pane over data rows
           sheet.sheet_view.pane do |pane|
             pane.top_left_cell = "A4"
@@ -2184,27 +2185,27 @@ class ReportsController < ApplicationController
 
       end
 
-  
+
     end
-    
+
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_report.gsp.xlsx"), :type => 'application/excel'
   end
-  
-  
-  
-  
+
+
+
+
   # Dashboard graphs
   def review_status
-    @graph_image_url = Gchart.pie(:size => '400x400', 
+    @graph_image_url = Gchart.pie(:size => '400x400',
                                   :title => "Reviews",
                                   :bg => 'efefef',
                                   :legend => ['Completed', 'Not Completed'],
                                   :data => [4, 6])
   end
-  
+
   def task_status
   end
-  
+
   def task_findings
   end
 end
