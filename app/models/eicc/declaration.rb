@@ -29,8 +29,8 @@ class Eicc::Declaration < ActiveRecord::Base
   require 'digest/md5'
   require 'csv'
 
-  def self.generate(excel_filepath)
-    obj = new :uploaded_excel => Spreadsheet.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
+  def self.generate(excel_filepath, user = nil)
+    obj = new :uploaded_excel => Spreadsheet.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath), :user => user})
     gnumeric_csv = GSP::Eicc::Excel::Converters::Gnumeric::Gnumeric.new(excel_filepath)
     obj.template_version = get_version(gnumeric_csv.worksheets.first.data)
 

@@ -69,7 +69,7 @@ class Eicc::DeclarationController < ApplicationController
       begin
 
         # Attempt to read and validate declaration without raising any expectations
-        @declaration = Eicc::Declaration.generate File.join(@temporary_filepath)
+        @declaration = Eicc::Declaration.generate File.join(@temporary_filepath), current_user
         @declaration.save!(:validate => false)
 
         @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet", :declaration => @declaration, :template_version => @declaration.template_version)
