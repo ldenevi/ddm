@@ -79,7 +79,7 @@ class ReviewController < ApplicationController
   end
 
   def show_comment
-    @comment = Comment.where(:id => params[:id], :author_id => current_user)
+    @comment = Comment.where(:id => params[:id], :author_id => current_user).first
     render :partial => 'task_comment', :content_type => 'text/html'
   end
 
