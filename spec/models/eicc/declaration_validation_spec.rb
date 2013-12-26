@@ -99,5 +99,19 @@ describe Eicc::Declaration do
     end
   end
 
+  context "during invalid EICC/GeSI version 2.02 w/column shift submission" do
+    let (:declaration) { Eicc::Declaration.generate File.join(EICC_XLS_PATH, '2.02', "2.02_-_invalid_column_shift.xls") }
+
+    it "should not be valid" do
+      declaration.should_not be_valid
+      declaration.errors.full_messages.uniq.should include "Company level Validation Needed: Respondent reported its verification process includes corrective action management to Question I but it did not provide a description of the corrective actions in the comments box"
+    end
+
+    it "should only have Gold and Tin in smelter list's Metal field" do
+      declaration.smelter_list.should_not be_empty
+      declaration.smelter_list.map(&:metal).uniq.sort.should eq ['Gold', 'Tin']
+    end
+  end
+
 
 end
