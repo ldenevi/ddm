@@ -169,7 +169,7 @@ private
     sequence = 0
     smelter_list_fields = structure_fields[:smelter_list].to_a
 
-    # Version 2.00, 2.01 has diverse column positioning
+    # Versions have diverse column positioning
     columns = smelter_list_definition.clone
 
     header_sample = self.csv_worksheets[4].data[0..2000]
@@ -191,23 +191,23 @@ private
         columns[:comment] = 12
       end
 
-    elsif %w(2.03a).include?(self.template_version)
-      # Shift right
-      if header_sample.match(",Gold,") || header_sample.match(",Tungsten,") || header_sample.match(",Tin,") || header_sample.match(",Tantalum,")
-        columns[:metal] = 1
-        columns[:smelter_reference_list] = 2
-        columns[:standard_smelter_name] = 3
-        columns[:facility_location_country] = 4
-        columns[:smelter_id] = 5
-        columns[:facility_location_street_address] = 6
-        columns[:facility_location_city] = 7
-        columns[:facility_location_province] = 8
-        columns[:facility_contact_name] = 9
-        columns[:facility_contact_email] = 10
-        columns[:proposed_next_steps] = 11
-        columns[:mineral_source] = 12
-        columns[:mineral_source_location] = 13
-        columns[:comment] = 14
+    elsif %w(2.02 2.03a).include?(self.template_version)
+      # Shift left
+      if header_sample.match("\nGold,") || header_sample.match("\nTungsten,") || header_sample.match("\nTin,") || header_sample.match("\nTantalum,")
+        columns[:metal] = 0
+        columns[:smelter_reference_list] = 1
+        columns[:standard_smelter_name] = 2
+        columns[:facility_location_country] = 3
+        columns[:smelter_id] = 4
+        columns[:facility_location_street_address] = 5
+        columns[:facility_location_city] = 6
+        columns[:facility_location_province] = 7
+        columns[:facility_contact_name] = 8
+        columns[:facility_contact_email] = 9
+        columns[:proposed_next_steps] = 10
+        columns[:mineral_source] = 11
+        columns[:mineral_source_location] = 12
+        columns[:comment] = 13
       end
     end
 
