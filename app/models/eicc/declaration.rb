@@ -196,7 +196,8 @@ private
       row_test = rows[i].compact
 
       # Skip empty row
-      if row_test.empty?
+      if row_test.empty? ||
+         row_test.first.to_s == '#N/A'
         i += 1
         next
       end
