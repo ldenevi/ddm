@@ -271,7 +271,7 @@ ActiveRecord::Schema.define(:version => 20131204182728) do
     t.string   "status",                 :default => "Inactive",            :null => false
     t.datetime "actual_completion_at"
     t.datetime "assigned_at"
-    t.datetime "expected_completion_at", :default => '2013-12-18 18:06:55', :null => false
+    t.datetime "expected_completion_at", :default => '2014-01-08 22:53:13', :null => false
     t.datetime "start_at"
     t.datetime "created_at",                                                :null => false
     t.datetime "updated_at",                                                :null => false
