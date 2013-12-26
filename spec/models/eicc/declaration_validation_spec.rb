@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 EICC_XLS_PATH     = File.join(File.dirname(__FILE__), "declaration_spec_data")
-VERSIONS = %w(2.00)
+VERSIONS = %w(2.00 2.01 2.02 2.03 2.03a)
 
 describe Eicc::Declaration do
 
