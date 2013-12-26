@@ -2185,7 +2185,44 @@ class ReportsController < ApplicationController
 
       end
 
+      # add third worksheet
+        p.workbook.add_worksheet(:name => "Interpreting This Report") do |sheet|
+ 
+           align_left_text_row_style  = nil
+   
+	    p.workbook.styles do |style|
+               align_left_text_row_style      = style.add_style :b => false, :sz => 11, :locked => true, :alignment => { :wrap_text => false, :horizontal => :left }  
+	    end
+             # can we lock rows?
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0 
+            sheet.add_row(["This report contains 2 worksheets in addition to this Instructions Worksheet."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0 ;   sheet.show_gridlines = false
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0 ;   sheet.show_gridlines = false
+            sheet.add_row(["The first worksheet, Consolidated Smelters, lists the all unique occurrences of all the smelters listed on all the EICC-GeSI declarations reports ingested by the GSP appplication."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["By a unique occurrence of a smelter, we mean the situation where all of the 14+ columns on the EICC-Gesi Smelter List tab are exactly the same, from Metal and Standard Smelter Name "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["and Smelter ID down the location and contact and comments columns. The unique occurences are sorted alphanumerically in the same order as displayed on the Smelter List tab, "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["beginning with Metal, then Standard Smelter Reference List, then Standard Smelter Name...and so on down to the last comment column."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["This sort sequence causes unique occurences for the same smelters to be grouped together, so you can more easily spot the differences where different suppliers have provided  "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["slightly different information about the smelter. To assist you in more easily spotting these differences (and thus synthesizing what you want for your own Form SD filing for each smelter),"], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["all the occurences where the first 5 columns from Metal down to Smelter ID are the same are highlighted in either yellow or blue. We have used two colors so you can easily differentiate "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["groups of smelter occurrences but otherwise there is no significance as to which color is used to indicate similar smelter groups. "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["Unique occurences which do not fit with adjoing sorted rows because of differences in the first 5 columns are not highlighted and have a white background. These unique occurences may "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["be outliers which really do not fit with any other smelter entriers. But sometimes these are just miscoded or misspelled entries which  belong with other non-adjoining entries."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["Other than the 14+ columns from EICC-Gesi Smelter list, this report adds one initial column  and two other columns at the far right. The initial column is just  running row count, which you  "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["may find helpful if you ever need to print this report, as Excel's built-in row numbers do not show on a printed report. The last two columns show (1) the number of suppliers mentioning this "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["unique occurrence of a smelter row, and (2) the EICC-Gesi report file name(s) for each supplier."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["The second worksheet, Consolidated Smelter Analytics, contains summary statistics and graphs to help you quickly understand the makeup of the smelters by items such as number of "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["mentiones by suppliers, or by category (Listed, Not Listed, Not yet identified).  We are constantly expanding the makeup of this analytics sheet. If you have any suggestions for analytics"], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
+            sheet.add_row(["that would be useful for your organization, please email your suggestions to info@greenstatuspro.com."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
 
+
+
+        end
+  
     end
 
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_report.gsp.xlsx"), :type => 'application/excel'
