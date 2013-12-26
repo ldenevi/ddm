@@ -30,8 +30,8 @@ class Eicc::Declaration < ActiveRecord::Base
   require 'csv'
 
   def self.generate(excel_filepath, user = nil)
-    obj = new :uploaded_excel => Spreadsheet.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath), :user => user})
     gnumeric_csv = GSP::Eicc::Excel::Converters::Gnumeric::Gnumeric.new(excel_filepath)
+    obj = new :uploaded_excel => Spreadsheet.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath), :user => user})
     obj.template_version = get_version(gnumeric_csv.worksheets.first.data)
 
     raise StandardError, "Old template version" if obj.template_version == "1.00"
@@ -193,13 +193,18 @@ private
     end
 
     while !rows[i].nil?
-      rows_test = rows[i].uniq
-      if rows_test.size < 4
-        if rows_test.size == 2 && rows_test[1].to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/)
-          break
-        end
+      row_test = rows[i].compact
+
+      # Skip empty row
+      if row_test.empty?
         i += 1
         next
+      end
+
+      # End loop if row includes the terminal character series
+      if row_test.first.to_s.match('Electronic Industry Citizenship Coalition, Incorporated and Global e-Sustainability Initiative. All rights reserved.') ||
+         row_test.first.to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/)
+        break
       end
 
       smelter_list_item = Eicc::SmelterList.new
