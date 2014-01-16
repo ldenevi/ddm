@@ -15,6 +15,13 @@ GSP::Application.routes.draw do
     post "upload_zip", :to => "declaration#upload_zip", :as => "upload_eicc_declarations_zip"
   end
 
+  scope :module => 'reports' do
+    # EICC/GeSI Ingestor
+    get "ingestor/:id/consolidated_smelters", :to => "ingestor#consolidated_smelters", :as => "consolidated_smelters"
+    get "ingestor/:id/aggregated_declarations", :to => "ingestor#aggregated_declarations", :as => "aggregated_declarations"
+    get "ingestor/:id/smelters_by_suppliers", :to => "ingestor#smelters_by_suppliers", :as => "smelters_by_suppliers"
+  end
+
   get "reviews/list"
 
   get "reviews/show"
