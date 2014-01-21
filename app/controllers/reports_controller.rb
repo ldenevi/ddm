@@ -1774,23 +1774,23 @@ class ReportsController < ApplicationController
 
     # logic for first sheet
     header = [
-               "   #   ",
-               "Metal",
-              "Smelter Reference List",
-              "Standard Smelter Names",
-              "Smelter Facility Location Country",
-              "Smelter ID",
-              "Smelter Facility Location Street Address",
-              "Smelter Facility Location City",
-              "Smelter Facility Location State / Province",
-              "Smelter Facility Contact Name",
-              "Smelter Facility Contact Email",
-              "Proposed next steps, if applicable",
-              "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-              "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-              "Comments",
-        "Number of\nSource EICC-GeSI\nCM Report Files",
-              "Source EICC EICC-GeSI\nReport File Names)"
+"   #   ",
+"Metal",
+"Smelter Reference List",
+"Standard Smelter Names",
+"Smelter Facility Location Country",
+"Smelter ID",
+"Smelter Facility Location Street Address",
+"Smelter Facility Location City",
+"Smelter Facility Location State / Province",
+"Smelter Facility Contact Name",
+"Smelter Facility Contact Email",
+"Proposed next steps, if applicable",
+"Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+"Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+"Comments",
+"Number of\nSource EICC-GeSI\nCM Report Files",
+"Source EICC EICC-GeSI\nReport File Names)"
         ]
 
       rows_second_part = []
@@ -2187,14 +2187,14 @@ class ReportsController < ApplicationController
 
       # add third worksheet
         p.workbook.add_worksheet(:name => "Interpreting This Report") do |sheet|
- 
+
            align_left_text_row_style  = nil
-   
+
 	    p.workbook.styles do |style|
-               align_left_text_row_style      = style.add_style :b => false, :sz => 11, :locked => true, :alignment => { :wrap_text => false, :horizontal => :left }  
+               align_left_text_row_style      = style.add_style :b => false, :sz => 11, :locked => true, :alignment => { :wrap_text => false, :horizontal => :left }
 	    end
              # can we lock rows?
-            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0 
+            sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
             sheet.add_row(["This report contains 2 worksheets in addition to this Instructions Worksheet."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0 ;   sheet.show_gridlines = false
             sheet.add_row([" "], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0 ;   sheet.show_gridlines = false
             sheet.add_row(["The first worksheet, Consolidated Smelters, lists the all unique occurrences of all the smelters listed on all the EICC-GeSI declarations reports ingested by the GSP appplication."], :style => [align_left_text_row_style] , :widths =>  [152] ).height = 15.0
@@ -2222,7 +2222,7 @@ class ReportsController < ApplicationController
 
 
         end
-  
+
     end
 
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelter_report.gsp.xlsx"), :type => 'application/excel'

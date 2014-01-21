@@ -17,9 +17,9 @@ GSP::Application.routes.draw do
 
   scope :module => 'reports' do
     # EICC/GeSI Ingestor
-    get "ingestor/:id/consolidated_smelters", :to => "ingestor#consolidated_smelters", :as => "consolidated_smelters"
-    get "ingestor/:id/aggregated_declarations", :to => "ingestor#aggregated_declarations", :as => "aggregated_declarations"
-    get "ingestor/:id/smelters_by_suppliers", :to => "ingestor#smelters_by_suppliers", :as => "smelters_by_suppliers"
+    get "reports/ingestor/:id/consolidated_smelters", :to => "ingestor#consolidated_smelters", :as => "consolidated_smelters"
+    get "reports/ingestor/:id/aggregated_declarations", :to => "ingestor#aggregated_declarations", :as => "aggregated_declarations"
+    get "reports/ingestor/:id/smelters_by_suppliers", :to => "ingestor#smelters_by_suppliers", :as => "smelters_by_suppliers"
   end
 
   get "reviews/list"
