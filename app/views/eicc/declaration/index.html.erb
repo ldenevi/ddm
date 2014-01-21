@@ -69,7 +69,7 @@
             <ul>
               <li><%= link_to "Aggregated Declarations", eicc_consolidated_report_path(vs) %></li>
               <li><%= link_to "Smelters by Supplier List", eicc_detailed_smelter_report_path(vs) %></li>
-              <li><%= link_to "Consolidated Smelters List", eicc_consolidated_smelter_list_report_path(vs) %></li>
+              <li><%= link_to "Consolidated Smelters List", consolidated_smelters_path(vs) %></li>
               <li><%= (vs.review.nil?) ? "Comprehensive Suppliers Validation" : link_to("Comprehensive Suppliers Validation", comprehensive_report_path(vs.review_id), :target => '_new') %></li>
             <ul>
           </td>
