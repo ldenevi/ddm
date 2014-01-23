@@ -69,11 +69,12 @@ class Reports::IngestorController < ApplicationController
 
       # Add valid rows to Consolidated worksheet
       if smelter.smelter_id.match(valid_smelter_id) || (valid_no_smelter_id.include?(smelter.smelter_id.downcase) && smelter.standard_smelter_name.downcase.to_s.strip.size > 3 && smelter.facility_location_country.strip.match(/[a-zA-Z]/) )
-        smelter_key = [smelter.metal, smelter.smelter_reference_list[0...12].downcase, smelter.facility_location_country, smelter.smelter_id]
-        # smelter_key = [smelter.metal, smelter.smelter_reference_list[0...12].downcase]
+        smelter_key = smelter.smelter_id.match(valid_smelter_id) ?
+                        [smelter.metal, smelter.facility_location_country, smelter.smelter_id] :
+                        [smelter.metal, smelter.smelter_reference_list[0...12].downcase]
         consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0} if consolidated_smelters[smelter_key].nil?
         consolidated_smelters[smelter_key][:declaration_filenames] << data[:filename]
-        row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
+        row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
 
         # Only update declaration information of same smelter (based on smelter_key), if there is more provided data
         if row[0...-2].join('').size > consolidated_smelters[smelter_key][:data_length]
