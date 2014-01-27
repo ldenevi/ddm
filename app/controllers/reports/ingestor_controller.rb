@@ -124,7 +124,7 @@ class Reports::IngestorController < ApplicationController
           "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Comments",
           "Template Version",
-          "Source EICC EICC-GeSI\nReport File Name)"]}
+          "Source EICC EICC-GeSI Report File Names"]}
 
       worksheets << {:name => "Consolidated Smelters",
         :header => [
@@ -144,7 +144,7 @@ class Reports::IngestorController < ApplicationController
           "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Comments",
           "Number of\nSource EICC-GeSI\nCM Report Files",
-          "Source EICC EICC-GeSI\nReport File Names)"]}
+          "Source EICC EICC-GeSI Report File Names"]}
 
       worksheets << {:name => "Rejected Entries",
         :header => [
