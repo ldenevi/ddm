@@ -42,7 +42,7 @@ class Reports::IngestorController < ApplicationController
       next if ivs.declaration.nil?
       ivs.declaration.smelter_list.each do |smelter|
         smelter.attributes.keys.each { |attr| smelter.send("#{attr}=", smelter.send(attr).to_s) }
-        smelter.smelter_id = "Not Supplied" if smelter.smelter_id.to_s.empty?
+        smelter.smelter_id = "Not Supplied" if smelter.smelter_id.to_s.empty? || smelter.smelter_id.to_s.strip.downcase == '#n/a'
         sorted_smelters << {:smelter => smelter, :template_version => ivs.template_version, :filename => ivs.filename}
       end
     end
