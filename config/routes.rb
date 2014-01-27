@@ -20,6 +20,9 @@ GSP::Application.routes.draw do
     get "reports/ingestor/:id/consolidated_smelters", :to => "ingestor#consolidated_smelters", :as => "consolidated_smelters"
     get "reports/ingestor/:id/aggregated_declarations", :to => "ingestor#aggregated_declarations", :as => "aggregated_declarations"
     get "reports/ingestor/:id/smelters_by_suppliers", :to => "ingestor#smelters_by_suppliers", :as => "smelters_by_suppliers"
+
+    # Roadmap
+    get "reports/roadmap/:id/comprehensive_due_diligence", :to => "roadmap#comprehensive_due_diligence", :as => "comprehensive_due_diligence"
   end
 
   get "reviews/list"
