@@ -1,7 +1,8 @@
 class Eicc::BatchValidationStatus < Eicc::ValidationStatus
-  attr_accessible :status, :user, :representative_email
+  attr_accessible :status, :user, :representative_email, :individual_validation_statuses_attributes, :company_name, :created_at, :declaration_id, :filename, :id, :is_spreadsheet_return_email_sent, :message, :parent_id, :review_id, :template_version, :updated_at, :uploaded_file_path, :user_id
 
-  has_many :individual_validation_statuses, :foreign_key => "parent_id", :order => "created_at DESC"
+  has_many :individual_validation_statuses, :class_name => "Eicc::IndividualValidationStatus", :foreign_key => "parent_id", :order => "created_at DESC"
+  accepts_nested_attributes_for :individual_validation_statuses
 
   has_many :completed,  :class_name => "Eicc::IndividualValidationStatus", :conditions => ["status <> '?'", "Validating"]
   has_many :validating, :class_name => "Eicc::IndividualValidationStatus", :conditions => { :status => "Validating" }
@@ -13,6 +14,7 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
 
   belongs_to :review, :class_name => "EiccReview"
   belongs_to :declaration, :class_name => "Eicc::Declaration"
+
 
   # TODO:
   # For the first version, the review is generated AFTER the declaration processing is run.
@@ -64,6 +66,14 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
       end
     end
     temporary_zip_filepath
+  end
+
+  def individual_validation_statuses_attributes
+    individual_validation_statuses
+  end
+
+  def individual_validation_statuses_attributes=(val)
+    individual_validation_statuses = val
   end
 
 
