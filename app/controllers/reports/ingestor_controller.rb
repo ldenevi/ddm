@@ -1,6 +1,11 @@
 class Reports::IngestorController < ApplicationController
   include ReportsHelper
 
+
+  #################################################
+  # Consolidated Smelters
+  #
+  #
   def consolidated_smelters
     batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
@@ -203,6 +208,10 @@ class Reports::IngestorController < ApplicationController
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelters_report.gsp.xlsx"), :type => 'application/excel'
   end
 
+  #################################################
+  # Aggregated Declarations
+  #
+  #
   def aggregated_declarations
     batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
