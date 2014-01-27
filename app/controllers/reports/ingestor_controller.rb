@@ -204,7 +204,154 @@ class Reports::IngestorController < ApplicationController
   end
 
   def aggregated_declarations
-    render :nothing => true, :status => 200, :content_type => 'text/html'
+    batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
+
+    worksheets_data = {:"Aggregated Declarations" => []}
+    batch.individual_validation_statuses.each do |ivs|
+      next if ivs.declaration.nil?
+      row = [ivs.declaration.company_name,
+             ivs.declaration.declaration_scope,
+             ivs.declaration.description_of_scope,
+             ivs.declaration.company_unique_identifier,
+             ivs.declaration.address,
+             ivs.declaration.authorized_company_representative_name,
+             ivs.declaration.representative_title,
+             ivs.declaration.representative_email,
+             ivs.declaration.representative_phone,
+             ivs.declaration.completion_at.nil? ? "" : ivs.declaration.completion_at.strftime('%B %d, %Y')]
+      ivs.declaration.mineral_questions[0..5].each do |mq|
+        row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
+      end
+      10.times do |i|
+        clq = ivs.declaration.company_level_questions[i]
+        row += clq.nil? ? ["",""] : [clq.answer, clq.comment]
+      end
+      row += [ivs.declaration.created_at.to_formatted_s(:local), ivs.declaration.uploaded_excel.filename,  ivs.declaration.template_version, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
+      worksheets_data[:"Aggregated Declarations"] <<  row
+    end
+
+    # Create spreadsheet
+    spreadsheet = Axlsx::Package.new do |p|
+      worksheets = []
+
+      worksheets << {:name => "Aggregated Declarations",
+        :header => ["   #   ",
+          "Supplier Company Name",
+          "Declaration Scope",
+          "Description of Scope",
+          "Company Unique Identifier",
+          "Address",
+          "Authorized Company Representative Name",
+          "Representative Title",
+          "Representative E-Mail",
+          "Representative Phone",
+          "Date of Completion",
+
+          # Minerals questions
+          "Question 1 \n Tantalum",
+          "Question 1 Comments \n Tantalum",
+          "Question 1 \n Tin",
+          "Question 1 Comments \n Tin",
+          "Question 1 \n Gold",
+          "Question 1 Comments \n Gold",
+          "Question 1 \n Tungsten",
+          "Question 1 Comments \n Tungsten",
+
+          "Question 2 \n Tantalum",
+          "Question 2 Comments \n Tantalum",
+          "Question 2 \n Tin",
+          "Question 2 Comments \n Tin",
+          "Question 2 \n Gold",
+          "Question 2 Comments \n Gold",
+          "Question 2 \n Tungsten",
+          "Question 2 Comments \n Tungsten",
+
+          "Question 3 \n Tantalum",
+          "Question 3 Comments \n Tantalum",
+          "Question 3 \n Tin",
+          "Question 3 Comments \n Tin",
+          "Question 3 \n Gold",
+          "Question 3 Comments \n Gold",
+          "Question 3 \n Tungsten",
+          "Question 3 Comments \n Tungsten",
+
+          "Question 4 \n Tantalum",
+          "Question 4 Comments \n Tantalum",
+          "Question 4 \n Tin",
+          "Question 4 Comments \n Tin",
+          "Question 4 \n Gold",
+          "Question 4 Comments \n Gold",
+          "Question 4 \n Tungsten",
+          "Question 4 Comments \n Tungsten",
+
+          "Question 5 \n Tantalum",
+          "Question 5 Comments \n Tantalum",
+          "Question 5 \n Tin",
+          "Question 5 Comments \n Tin",
+          "Question 5 \n Gold",
+          "Question 5 Comements \n Gold",
+          "Question 5 \n Tungsten",
+          "Question 5 Comments \n Tungsten",
+
+          "Question 6 \n Tantalum",
+          "Question 6 Comments \n Tantalum",
+          "Question 6 \n Tin",
+          "Question 6 Comments \n Tin",
+          "Question 6 \n Gold",
+          "Question 6 Comments \n Gold",
+          "Question 6 \n Tungsten",
+          "Question 6 Comments \n Tungsten",
+
+          # Company Level Questions
+          "Question A",
+          "Question A Comments",
+          "Question B",
+          "Question B Comments",
+          "Question C",
+          "Question C Comments",
+          "Question D",
+          "Question D Comments",
+          "Question E",
+          "Question E Comments",
+          "Question F",
+          "Question F Comments",
+          "Question G",
+          "Question G Comments",
+          "Question H",
+          "Question H Comments",
+          "Question I",
+          "Question I Comments",
+          "Question J",
+          "Question J Comments",
+
+          # Extra data
+          "Uploaded At",
+          "CM Report\nFile Name",
+          "EICC-GeSI\nTemplate Version",
+          "Status",
+          "Issues"]}
+
+      header_style = nil
+      data_style   = nil
+      p.workbook.styles do |styles|
+        header_style = styles.add_style(:b => true, :sz => 10, :alignment => {:horizontal => :center, :vertical => :center , :wrap_text => true})
+        data_style   = styles.add_style(:sz => 9, :alignment => {:horizontal => :left, :vertical => :top , :wrap_text => true})
+      end
+
+      worksheets.each do |worksheet_meta|
+        p.workbook.add_worksheet(:name => worksheet_meta[:name]) do |sheet|
+          worksheet_header(sheet)
+          sheet.add_row(worksheet_meta[:header], :style => header_style).height = 35.0
+          friendly_index = 1
+          worksheets_data[worksheet_meta[:name].to_sym].each do |row|
+            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => [4, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300])
+            friendly_index += 1
+          end
+        end
+      end
+    end
+
+    send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_aggregated_declarations_report.gsp.xlsx"), :type => 'application/excel'
   end
 
   def smelters_by_suppliers

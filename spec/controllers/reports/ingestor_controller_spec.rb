@@ -25,14 +25,16 @@ describe Reports::IngestorController do
 
   describe "Aggregated Declarations" do
     it "should exists" do
-      get 'aggregated_declarations', :id => 1
+      get 'aggregated_declarations', :id => batch.id
       response.should be_success
+      response.header['Content-Type'].should eq "application/excel"
     end
   end
   describe "Smelters by Suppliers" do
     it "should exists" do
-      get 'smelters_by_suppliers', :id => 1
+      get 'smelters_by_suppliers', :id => batch.id
       response.should be_success
+      response.header['Content-Type'].should eq "application/excel"
     end
   end
 

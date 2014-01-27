@@ -67,7 +67,7 @@
           <td><%= vs.high_risk_individual_validation_statuses.size + vs.invalid_individual_validation_statuses.size %></td>
           <td>
             <ul>
-              <li><%= link_to "Aggregated Declarations", eicc_consolidated_report_path(vs) %></li>
+              <li><%= link_to "Aggregated Declarations", aggregated_declarations_path(vs) %></li>
               <li><%= link_to "Smelters by Supplier List", eicc_detailed_smelter_report_path(vs) %></li>
               <li><%= link_to "Consolidated Smelters List", consolidated_smelters_path(vs) %></li>
               <li><%= (vs.review.nil?) ? "Comprehensive Suppliers Validation" : link_to("Comprehensive Suppliers Validation", comprehensive_report_path(vs.review_id), :target => '_new') %></li>
