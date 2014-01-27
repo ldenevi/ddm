@@ -183,7 +183,7 @@ class Reports::IngestorController < ApplicationController
       data_style   = nil
       p.workbook.styles do |styles|
         header_style = styles.add_style(:b => true, :sz => 10, :alignment => {:horizontal => :center, :vertical => :center , :wrap_text => true})
-        data_style   = styles.add_style(:sz => 9)
+        data_style   = styles.add_style(:sz => 9, :alignment => {:horizontal => :left, :vertical => :top , :wrap_text => true})
       end
 
       worksheets.each do |worksheet_meta|
