@@ -68,7 +68,7 @@ group :development, :test do
 end
 
 # = Features =
-# gem 'prawn'
+gem 'prawn', '0.14.0'
 gem 'googlecharts', '1.6.8'
 gem 'axlsx', '2.0.1'
 # gem 'even_calendar'

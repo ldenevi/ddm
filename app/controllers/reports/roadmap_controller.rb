@@ -1,3 +1,5 @@
+require 'prawn'
+
 class Reports::RoadmapController < ApplicationController
   include ReportsHelper
 
