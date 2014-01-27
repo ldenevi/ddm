@@ -1,16 +1,16 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :eicc_user, :class => 'User' do
+  factory :admin, :class => 'User' do
+    first_name "Test"
+    last_name "User"
+    email "test@user.com"
+    password "password"
+    association :organization, :factory => :test_co
   end
 
-  factory :batch_run, :class => 'Eicc::BatchValidationStatus' do
-    status "Completed"
-    is_spreadsheet_return_email_sent false
-    user_id 1
+  factory :test_co, :class => 'Organization' do
+    full_name "ACME Test"
   end
 
-  factory :individual_validation_status, :class => 'Eicc::IndividualValidationStatus' do
-    sequence 2
-  end
 end
