@@ -235,7 +235,7 @@ class Reports::IngestorController < ApplicationController
         clq = ivs.declaration.company_level_questions[i]
         row += clq.nil? ? ["",""] : [clq.answer, clq.comment]
       end
-      row += [ivs.declaration.created_at.to_formatted_s(:local), ivs.declaration.uploaded_excel.filename,  ivs.declaration.template_version, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
+      row += [ivs.declaration.created_at.to_formatted_s(:local), ivs.filename,  ivs.declaration.template_version, ivs.status, ivs.message.gsub(/(<li>|<\/li>)/, "")]
       worksheets_data[:"Aggregated Declarations"] <<  row
     end
 
@@ -353,7 +353,7 @@ class Reports::IngestorController < ApplicationController
           sheet.add_row(worksheet_meta[:header], :style => header_style).height = 35.0
           friendly_index = 1
           worksheets_data[worksheet_meta[:name].to_sym].each do |row|
-            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => [4, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300])
+            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => [6, 20, 35, 35, 20, 25, 25, 25, 25, 30, 20, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 15, 40, 30, 40, 20, 20, 20, 20, 200]).height = 40.0
             friendly_index += 1
           end
         end
