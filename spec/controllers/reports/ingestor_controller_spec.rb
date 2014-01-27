@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Reports::IngestorController do
   before(:each) do
-    sign_in FactoryGirl.create(:admin) # Using factory girl as an example
+    sign_in FactoryGirl.create(:admin)
   end
 
   let(:batch) do
