@@ -64,6 +64,6 @@ class User < ActiveRecord::Base
   end
 
   def storage_path
-    File.join(Rails.root, [id, last_name, first_name].join("_").gsub(/\W/, '_'))
+    File.join(Rails.root, 'tmp', 'user_storage', [id, last_name, first_name].join("_").gsub(/\W/, '_'))
   end
 end
