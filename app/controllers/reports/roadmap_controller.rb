@@ -73,7 +73,7 @@ class Reports::RoadmapController < ApplicationController
       stroke_axis :step_length => 50
     end
 
-    send_data File.read(storage_path), :filename => report_filename(storage_path), :type => 'application/pdf'
+    send_data File.read(storage_path), :filename => report_filename(File.basename(storage_path)), :type => 'application/pdf'
   end
 
 end
