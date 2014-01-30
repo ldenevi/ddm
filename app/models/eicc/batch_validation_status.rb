@@ -35,7 +35,7 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
                             :start_at => Time.now,
                             :expected_completion_at => Time.now.end_of_year)
       comment = Comment.new :title => ivs.filename, :body => "", :author => user
-      comment.attachments << BinaryFile.generate(:filename => ivs.filename, :data => File.read(ivs.uploaded_file_path))
+      comment.attachments << BinaryFile.generate(:filename => ivs.filename, :data => (File.exists?(ivs.uploaded_file_path) ? File.read(ivs.uploaded_file_path) : nil))
       task.comments << comment
       review.tasks << task
     end
