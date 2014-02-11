@@ -201,7 +201,7 @@ class Reports::IngestorController < ApplicationController
           sheet.add_row(worksheet_meta[:header], :style => header_style).height = 35.0
           friendly_index = 1
           worksheets_data[worksheet_meta[:name].to_sym].each do |row|
-            sheet.add_row([friendly_index] + row, :style => data_style, :widths => worksheet_meta[:column_widths])
+            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => worksheet_meta[:column_widths])
             friendly_index += 1
           end
         end
