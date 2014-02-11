@@ -124,7 +124,8 @@ class Reports::IngestorController < ApplicationController
           "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Comments",
           "Template Version",
-          "Source EICC EICC-GeSI Report File Names"]}
+          "Source EICC EICC-GeSI Report File Names"],
+        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
 
       worksheets << {:name => "Consolidated Smelters",
         :header => [
@@ -144,7 +145,8 @@ class Reports::IngestorController < ApplicationController
           "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Comments",
           "Number of\nSource EICC-GeSI\nCM Report Files",
-          "Source EICC EICC-GeSI Report File Names"]}
+          "Source EICC EICC-GeSI Report File Names"],
+        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
 
       worksheets << {:name => "Rejected Entries",
         :header => [
@@ -163,7 +165,8 @@ class Reports::IngestorController < ApplicationController
           "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Comments",
-          "Source EICC EICC-GeSI Report File Names"]}
+          "Source EICC EICC-GeSI Report File Names"],
+        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 60]}
 
       worksheets << {:name => "Invalid Entries",
         :header => [
@@ -182,7 +185,8 @@ class Reports::IngestorController < ApplicationController
           "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
           "Comments",
-          "Source EICC EICC-GeSI Report File Names"]}
+          "Source EICC EICC-GeSI Report File Names"],
+        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 60]}
 
       header_style = nil
       data_style   = nil
@@ -197,7 +201,7 @@ class Reports::IngestorController < ApplicationController
           sheet.add_row(worksheet_meta[:header], :style => header_style).height = 35.0
           friendly_index = 1
           worksheets_data[worksheet_meta[:name].to_sym].each do |row|
-            sheet.add_row([friendly_index] + row, :style => data_style, :widths => [4, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 17, 20, 300])
+            sheet.add_row([friendly_index] + row, :style => data_style, :widths => worksheet_meta[:column_widths])
             friendly_index += 1
           end
         end
