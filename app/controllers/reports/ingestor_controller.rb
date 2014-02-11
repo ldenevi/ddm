@@ -17,7 +17,7 @@ class Reports::IngestorController < ApplicationController
     # Custom sort order
     mineral_sort_order  = ["gold", "tin", "tantalum", "tungsten", ""]
     valid_smelter_id    = /^[1-4][A-Z]{3}[0-9]{3}$/
-    valid_no_smelter_id = ["not listed", "not supplied"]  # Also used as a sort order for "All Rejected Entries" worksheet
+    valid_no_smelter_id = ["not listed", "not supplied", "unknown"]  # Also used as a sort order for "All Rejected Entries" worksheet
 
     # Report's default sort:
     #
