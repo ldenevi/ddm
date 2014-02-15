@@ -48,7 +48,7 @@ class Reports::IngestorController < ApplicationController
       ivs.declaration.smelter_list.each do |smelter|
         smelter.attributes.keys.each { |attr| smelter.send("#{attr}=", smelter.send(attr).to_s) }
         smelter.smelter_id = "Not Supplied" if smelter.smelter_id.to_s.empty? || smelter.smelter_id.to_s.strip.downcase == '#n/a'
-        sorted_smelters << {:smelter => smelter, :template_version => ivs.template_version, :filename => ivs.filename}
+        sorted_smelters << {:smelter => smelter, :template_version => ivs.template_version, :filename => ivs.filename, :declaration => ivs.declaration}
       end
     end
     sorted_smelters = sorted_smelters.sort_by { |data| standard_sort.call(data[:smelter]) }
@@ -88,7 +88,10 @@ class Reports::IngestorController < ApplicationController
         end
       # Otherwise add valid SMELTER ID rows to Rejected Enteries worksheet
       elsif smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)
-        worksheets_data[:"Rejected Entries"] << row + [data[:filename], smelter]
+        worksheets_data[:"Rejected Entries"] << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
+                                                 smelter.facility_location_country, smelter.smelter_id, data[:filename],
+                                                 data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].representative_email, data[:declaration].representative_phone,
+                                                 smelter] # Add the smelter object to the last for sorting. It will be later removed
       else
         worksheets_data[:"Invalid Entries"] << row + [data[:filename]]
       end
@@ -97,7 +100,7 @@ class Reports::IngestorController < ApplicationController
     consolidated_smelters.each { |key, val| rows << val[:data] }
     worksheets_data[:"Consolidated Smelters"] = rows
     worksheets_data[:"Rejected Entries"] = worksheets_data[:"Rejected Entries"].sort_by { |row| rejected_entries_sort.call(row.last) }
-    worksheets_data[:"Rejected Entries"] = worksheets_data[:"Rejected Entries"].collect { |row| row[0...-1] }
+    worksheets_data[:"Rejected Entries"] = worksheets_data[:"Rejected Entries"].collect { |row| row[0...-1] } # Remove smelter object
     rows = nil
     consolidated_smelters = nil
 
@@ -156,17 +159,12 @@ class Reports::IngestorController < ApplicationController
           "Standard Smelter Names",
           "Smelter Facility Location Country",
           "Smelter ID",
-          "Smelter Facility Location Street Address",
-          "Smelter Facility Location City",
-          "Smelter Facility Location State / Province",
-          "Smelter Facility Contact Name",
-          "Smelter Facility Contact Email",
-          "Proposed next steps, if applicable",
-          "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-          "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-          "Comments",
-          "Source EICC EICC-GeSI Report File Names"],
-        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 60]}
+          "Source EICC EICC-GeSI Report File Names",
+          "Company Name",
+          "Representative Name",
+          "Representative E-Mail",
+          "Representative Phone"],
+        :column_widths => [7, 15, 35, 35, 25, 15, 35, 25, 25, 25, 25]}
 
       worksheets << {:name => "Invalid Entries",
         :header => [
