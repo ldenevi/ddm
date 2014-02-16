@@ -13,7 +13,8 @@ class Reports::IngestorController < ApplicationController
                        :"Consolidated Smelters" => [],
                        :"Rejected Entries"      => [],
                        :"Corrective Action Report" => [],
-                       :"Invalid Entries"       => []}
+                       :"Condensed Consolidated Smelter Report" => []
+                       }
 
     # Custom sort order
     mineral_sort_order  = ["gold", "tin", "tantalum", "tungsten", ""]
@@ -93,8 +94,6 @@ class Reports::IngestorController < ApplicationController
                                                  smelter.facility_location_country, smelter.smelter_id, data[:filename],
                                                  data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].representative_email, data[:declaration].representative_phone,
                                                  smelter] # Add the smelter object to the last for sorting. It will be later removed
-      else
-        worksheets_data[:"Invalid Entries"] << row + [data[:filename]]
       end
     end
     rows = []
@@ -191,26 +190,6 @@ class Reports::IngestorController < ApplicationController
           "Number of\nSource EICC-GeSI\nCM Report Files",
           "Source EICC EICC-GeSI Report File Names"],
         :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
-
-      worksheets << {:name => "Invalid Entries",
-        :header => [
-          "   #   ",
-          "Metal",
-          "Smelter Reference List",
-          "Standard Smelter Names",
-          "Smelter Facility Location Country",
-          "Smelter ID",
-          "Smelter Facility Location Street Address",
-          "Smelter Facility Location City",
-          "Smelter Facility Location State / Province",
-          "Smelter Facility Contact Name",
-          "Smelter Facility Contact Email",
-          "Proposed next steps, if applicable",
-          "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-          "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-          "Comments",
-          "Source EICC EICC-GeSI Report File Names"],
-        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 60]}
 
       header_style = nil
       data_style   = nil
