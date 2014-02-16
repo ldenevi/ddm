@@ -12,6 +12,7 @@ class Reports::IngestorController < ApplicationController
     worksheets_data = {:"All Reported Smelters" => [],
                        :"Consolidated Smelters" => [],
                        :"Rejected Entries"      => [],
+                       :"Corrective Action Report" => [],
                        :"Invalid Entries"       => []}
 
     # Custom sort order
@@ -104,6 +105,10 @@ class Reports::IngestorController < ApplicationController
     rows = nil
     consolidated_smelters = nil
 
+    # Corrective Action Report
+    # Sort by columns
+    worksheets_data[:"Corrective Action Report"] = worksheets_data[:"Consolidated Smelters"].sort_by { |row| [row[1], row[3], row[2], row[4]] }
+
 
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
@@ -165,6 +170,27 @@ class Reports::IngestorController < ApplicationController
           "Representative E-Mail",
           "Representative Phone"],
         :column_widths => [7, 15, 35, 35, 25, 15, 35, 25, 25, 25, 25]}
+
+      worksheets << {:name => "Corrective Action Report",
+        :header => [
+          "   #   ",
+          "Metal",
+          "Smelter Reference List",
+          "Standard Smelter Names",
+          "Smelter Facility Location Country",
+          "Smelter ID",
+          "Smelter Facility Location Street Address",
+          "Smelter Facility Location City",
+          "Smelter Facility Location State / Province",
+          "Smelter Facility Contact Name",
+          "Smelter Facility Contact Email",
+          "Proposed next steps, if applicable",
+          "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+          "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+          "Comments",
+          "Number of\nSource EICC-GeSI\nCM Report Files",
+          "Source EICC EICC-GeSI Report File Names"],
+        :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
 
       worksheets << {:name => "Invalid Entries",
         :header => [
