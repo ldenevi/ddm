@@ -17,7 +17,7 @@ module ReportsHelper
                               "%s: %s" % ["Date".rjust(6, ' '), Date.today],
                               "%s: %s" % ["Time".rjust(6, ' '), Time.now],
                               "%s: %s" % ["User".rjust(6, ' '), current_user.eponym]
-                              ].join("\n")]).height = 65.0
+                              ].join("\r\n")]).height = 65.0
     worksheet.merge_cells "A1:B1"
 
     # Freeze pane over data rows
