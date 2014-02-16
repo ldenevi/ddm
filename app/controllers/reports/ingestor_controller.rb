@@ -105,9 +105,8 @@ class Reports::IngestorController < ApplicationController
     consolidated_smelters = nil
 
     # Corrective Action Report
-    # Sort by columns
+    # Rerort by columns: Metal, Standard Smelter Names, Smelter Reference List, then Country
     worksheets_data[:"Corrective Action Report"] = worksheets_data[:"Consolidated Smelters"].sort_by { |row| [row[1], row[3], row[2], row[4]] }
-
 
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
