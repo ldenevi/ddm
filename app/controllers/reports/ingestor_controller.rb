@@ -13,8 +13,7 @@ class Reports::IngestorController < ApplicationController
                        :"Consolidated Smelters" => [],
                        :"Rejected Entries"      => [],
                        :"Corrective Action Report" => [],
-                       :"Condensed Consolidated Smelter Report" => []
-                       }
+                       :"Condensed Consolidated Smelter Report" => []}
 
     # Custom sort order
     mineral_sort_order  = ["gold", "tin", "tantalum", "tungsten", ""]
@@ -105,8 +104,12 @@ class Reports::IngestorController < ApplicationController
     consolidated_smelters = nil
 
     # Corrective Action Report
-    # Rerort by columns: Metal, Standard Smelter Names, Smelter Reference List, then Country
+    # Resort by columns: Metal, Standard Smelter Names, Smelter Reference List, then Country
     worksheets_data[:"Corrective Action Report"] = worksheets_data[:"Consolidated Smelters"].sort_by { |row| [row[1], row[3], row[2], row[4]] }
+
+    # Condensed Consolidated Smelters
+    worksheets_data[:"Condensed Consolidated Smelter Report"] = [] # worksheets_data[:"Consolidated Smelters"].collect { |row| }
+
 
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
