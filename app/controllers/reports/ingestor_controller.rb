@@ -14,6 +14,7 @@ class Reports::IngestorController < ApplicationController
                        :"Rejected Entries"      => [],
                        :"Corrective Action Report" => [],
                        :"Condensed Consolidated Smelter Report" => [],
+                       :"Smelter Compliance Status" => [],
                        :"CFSI-Compliant Smelter Listing" => []}
 
     # Custom sort order
@@ -111,8 +112,11 @@ class Reports::IngestorController < ApplicationController
     # Condensed Consolidated Smelters
     worksheets_data[:"Condensed Consolidated Smelter Report"] = [] # worksheets_data[:"Consolidated Smelters"].collect { |row| }
 
+    # Smelter Compliance Status
+    worksheets_data[:"Smelter Compliance Status"] = []
+
     # CFSI-Compliant Smelter Listing
-    worksheets_data[:"CFSI-Compliant Smelter Listing"] = Eicc::ConfirmedSmelter.all.each { |s| [s.metal, c.standard_smelter_id, c.smelter_name. c.locations, c.conflict_minerals_policy_url, c.invalid_at, c.created_at] }
+    worksheets_data[:"CFSI-Compliant Smelter Listing"] = Eicc::ConfirmedSmelter.all.collect { |s| [s.metal, s.standard_smelter_id, s.smelter_name, s.locations, s.conflict_mineral_policy_url, s.invalid_at, s.created_at] }
 
 
     # Create spreadsheet
@@ -197,8 +201,31 @@ class Reports::IngestorController < ApplicationController
           "Source EICC EICC-GeSI Report File Names"],
         :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
 
+      worksheets << {:name => "Smelter Compliance Status",
+        :header => [
+          "   #   ",
+          "Status",
+          "Metal",
+          "Smelter Reference List",
+          "Standard Smelter Names",
+          "Smelter Facility Location Country",
+          "Smelter ID",
+          "Smelter Facility Location Street Address",
+          "Smelter Facility Location City",
+          "Smelter Facility Location State / Province",
+          "Smelter Facility Contact Name",
+          "Smelter Facility Contact Email",
+          "Proposed next steps, if applicable",
+          "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+          "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+          "Comments",
+          "Number of\nSource EICC-GeSI\nCM Report Files",
+          "Source EICC EICC-GeSI Report File Names"],
+        :column_widths => [11, 11, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
+
       worksheets << {:name => "CFSI-Compliant Smelter Listing",
         :header => [
+          "   #   ",
           "Metal",
           "Standard Smelter ID",
           "Smelter Name",
@@ -206,7 +233,7 @@ class Reports::IngestorController < ApplicationController
           "Conflict Minerals Policy URL",
           "Valid Until",
           "Last Updated"],
-        :column_widths => [7, 15, 35, 40, 40, 15, 15]}
+        :column_widths => [7, 15, 35, 40, 40, 35, 20, 20]}
 
       header_style = nil
       data_style   = nil
