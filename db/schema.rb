@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131204182728) do
+ActiveRecord::Schema.define(:version => 20140216213258) do
 
   create_table "agencies", :force => true do |t|
     t.string   "name"
@@ -66,6 +66,21 @@ ActiveRecord::Schema.define(:version => 20131204182728) do
     t.datetime "created_at",                     :null => false
     t.datetime "updated_at",                     :null => false
   end
+
+  create_table "eicc_confirmed_smelters", :force => true do |t|
+    t.string   "type"
+    t.string   "metal"
+    t.string   "standard_smelter_id"
+    t.string   "smelter_name"
+    t.string   "locations"
+    t.datetime "invalid_at"
+    t.string   "conflict_mineral_policy_url"
+    t.integer  "user_id"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "eicc_confirmed_smelters", ["user_id"], :name => "index_eicc_confirmed_smelters_on_user_id"
 
   create_table "eicc_declarations", :force => true do |t|
     t.integer  "client_id"
