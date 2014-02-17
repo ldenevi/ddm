@@ -13,7 +13,8 @@ class Reports::IngestorController < ApplicationController
                        :"Consolidated Smelters" => [],
                        :"Rejected Entries"      => [],
                        :"Corrective Action Report" => [],
-                       :"Condensed Consolidated Smelter Report" => []}
+                       :"Condensed Consolidated Smelter Report" => [],
+                       :"CFSI-Compliant Smelter Listing" => []}
 
     # Custom sort order
     mineral_sort_order  = ["gold", "tin", "tantalum", "tungsten", ""]
@@ -110,6 +111,9 @@ class Reports::IngestorController < ApplicationController
     # Condensed Consolidated Smelters
     worksheets_data[:"Condensed Consolidated Smelter Report"] = [] # worksheets_data[:"Consolidated Smelters"].collect { |row| }
 
+    # CFSI-Compliant Smelter Listing
+    worksheets_data[:"CFSI-Compliant Smelter Listing"] = Eicc::ConfirmedSmelter.all.each { |s| [s.metal, c.standard_smelter_id, c.smelter_name. c.locations, c.conflict_minerals_policy_url, c.invalid_at, c.created_at] }
+
 
     # Create spreadsheet
     spreadsheet = Axlsx::Package.new do |p|
@@ -192,6 +196,17 @@ class Reports::IngestorController < ApplicationController
           "Number of\nSource EICC-GeSI\nCM Report Files",
           "Source EICC EICC-GeSI Report File Names"],
         :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
+
+      worksheets << {:name => "CFSI-Compliant Smelter Listing",
+        :header => [
+          "Metal",
+          "Standard Smelter ID",
+          "Smelter Name",
+          "Locations",
+          "Conflict Minerals Policy URL",
+          "Valid Until",
+          "Last Updated"],
+        :column_widths => [7, 15, 35, 40, 40, 15, 15]}
 
       header_style = nil
       data_style   = nil
