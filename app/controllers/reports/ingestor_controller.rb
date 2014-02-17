@@ -6,6 +6,7 @@ class Reports::IngestorController < ApplicationController
   # Consolidated Smelters
   #
   #
+  # TODO Consolidated smelters report needs to be optimized for speed
   def consolidated_smelters
     batch = Eicc::BatchValidationStatus.where(:id => params[:id], :user_id => current_user.id).first
 
@@ -112,11 +113,19 @@ class Reports::IngestorController < ApplicationController
     # Condensed Consolidated Smelters
     worksheets_data[:"Condensed Consolidated Smelter Report"] = [] # worksheets_data[:"Consolidated Smelters"].collect { |row| }
 
-    # Smelter Compliance Status
-    worksheets_data[:"Smelter Compliance Status"] = []
-
     # CFSI-Compliant Smelter Listing
     worksheets_data[:"CFSI-Compliant Smelter Listing"] = Eicc::ConfirmedSmelter.all.collect { |s| [s.metal, s.standard_smelter_id, s.smelter_name, s.locations, s.conflict_mineral_policy_url, s.invalid_at, s.created_at] }
+
+    # Smelter Compliance Status
+    added_smelter_ids = []
+    compliant_smelter_ids = worksheets_data[:"CFSI-Compliant Smelter Listing"].collect { |row| row[1] }
+    worksheets_data[:"Consolidated Smelters"].each do |row|
+      next unless row[4].to_s.strip.match(valid_smelter_id)
+      next if added_smelter_ids.include?(row[4])
+      is_confirmed = compliant_smelter_ids.include?(row[4]) ? "\u2714" : ""
+      worksheets_data[:"Smelter Compliance Status"] << [is_confirmed] + row[0..4]
+      added_smelter_ids << row[4]
+    end
 
 
     # Create spreadsheet
@@ -209,19 +218,8 @@ class Reports::IngestorController < ApplicationController
           "Smelter Reference List",
           "Standard Smelter Names",
           "Smelter Facility Location Country",
-          "Smelter ID",
-          "Smelter Facility Location Street Address",
-          "Smelter Facility Location City",
-          "Smelter Facility Location State / Province",
-          "Smelter Facility Contact Name",
-          "Smelter Facility Contact Email",
-          "Proposed next steps, if applicable",
-          "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-          "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-          "Comments",
-          "Number of\nSource EICC-GeSI\nCM Report Files",
-          "Source EICC EICC-GeSI Report File Names"],
-        :column_widths => [11, 11, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60]}
+          "Smelter ID"],
+        :column_widths => [11, 11, 15, 35, 35, 25, 15]}
 
       worksheets << {:name => "CFSI-Compliant Smelter Listing",
         :header => [
