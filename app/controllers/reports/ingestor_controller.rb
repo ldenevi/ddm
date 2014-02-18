@@ -233,16 +233,18 @@ class Reports::IngestorController < ApplicationController
           "Last Updated"],
         :column_widths => [7, 15, 35, 40, 40, 35, 20, 20]}
 
-      header_style = nil
-      data_style   = nil
+      branding_style = nil
+      header_style   = nil
+      data_style     = nil
       p.workbook.styles do |styles|
-        header_style = styles.add_style(:b => true, :sz => 10, :alignment => {:horizontal => :center, :vertical => :center , :wrap_text => true})
-        data_style   = styles.add_style(:sz => 9, :alignment => {:horizontal => :left, :vertical => :top , :wrap_text => true})
+        branding_style = styles.add_style(:sz => 9, :font_name => "Lucida Console", :alignment => {:horizontal => :left, :vertical => :top, :wrap_text => true})
+        header_style   = styles.add_style(:b => true, :sz => 10, :alignment => {:horizontal => :center, :vertical => :center , :wrap_text => true})
+        data_style     = styles.add_style(:sz => 9, :alignment => {:horizontal => :left, :vertical => :top , :wrap_text => true})
       end
 
       worksheets.each do |worksheet_meta|
         p.workbook.add_worksheet(:name => worksheet_meta[:name]) do |sheet|
-          worksheet_header(sheet)
+          worksheet_header(sheet, branding_style)
           sheet.add_row(worksheet_meta[:header], :style => header_style).height = 35.0
           friendly_index = 1
           worksheets_data[worksheet_meta[:name].to_sym].each do |row|
