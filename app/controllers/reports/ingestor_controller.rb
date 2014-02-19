@@ -233,6 +233,35 @@ class Reports::IngestorController < ApplicationController
           "Last Updated"],
         :column_widths => [7, 15, 35, 40, 40, 35, 20, 20]}
 
+      worksheet_definitions = <<-EOT
+-- All Reported Smelters --
+All unfiltered smelters listed within every ingested declaration spreadsheets.
+
+-- Consolidated Smelters --
+Attempts to remove redundant smelters by
+  1) grouping entries which have the same valid Smelter ID (or Smelter ID field is "Not
+     Listed", "Not Supplied" or "Unknown"), same Standard Smelter Name includes text
+     greater than 3 characters, and Country has valid data;
+  2) match entries by comparing Metal, Country and valid Smelter ID, if no Smelter ID
+     provided, match by Metal and first 12 characters of Smelter Reference List.
+  3) Display the entry that contains the most data from all fields
+
+-- Rejected Entries --
+Entries have either a valid Smelter ID, or Smelter ID field is "Not Listed", "Not Supplied", or
+"Unknown", but no valid Country and/or Standard Smelter Name.
+Sorted by 1. Metal (Gold, Tin, Tantalum, Tungsten), 2. Country, 3. Smelter ID
+
+-- Corrective Action Report --
+The Consolidated Smelters worksheet, but sorted by 1. Metal, 2. Standard Smelter Name, 3.
+Smelter Reference List, 4. Country
+
+-- Smelter Compliance Status --
+The Consolidated Smelters only grouped by Smelter ID and columns are truncated to only
+Metal, Standard Smelter Name, Smelter Reference List, Country and Smelter ID.
+The Status field is marked with check (%s) for entries whose Smelter ID is listed in the CFSI-
+Compliant Smelter Listing.
+      EOT
+
       branding_style = nil
       header_style   = nil
       data_style     = nil
@@ -254,6 +283,10 @@ class Reports::IngestorController < ApplicationController
         end
       end
 
+      p.workbook.add_worksheet(:name => "Definitions") do |sheet|
+        sheet.add_row([worksheet_definitions % "\u2714"])
+        sheet.merge_cells "A1:H20"
+      end
     end
 
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("eicc_consolidated_smelters_report.gsp.xlsx"), :type => 'application/excel'
