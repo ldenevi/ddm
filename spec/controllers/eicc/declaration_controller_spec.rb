@@ -5,6 +5,7 @@ describe Eicc::DeclarationController do
     ZIP_FILEPATH = File.join(Rails.root, 'spec/controllers/eicc/zipped_declarations.zip')
 
     it "should not have any Eicc::ValidationStatus for testing" do
+      Eicc::ValidationStatus.destroy_all
       expect(Eicc::ValidationStatus.count).to eq 0
     end
 
@@ -15,9 +16,9 @@ describe Eicc::DeclarationController do
     end
 
     it "should accept and unpack zip file containing EICC/GeSI reports" do
-      expect { post("upload_zip", :zip => uploaded_file) }.to change{Eicc::ValidationStatus.count}.from(0).to(18)
-
-      # expect(response).to eq 200
+      Eicc::ValidationStatus.destroy_all
+      request.env["HTTP_REFERER"] = "/"
+      expect { post("upload_zip", :zip => uploaded_file) }.to change{Eicc::ValidationStatus.count}.from(0).to(34)
     end
 
   end
