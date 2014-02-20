@@ -234,10 +234,10 @@ class Reports::IngestorController < ApplicationController
         :column_widths => [7, 15, 35, 40, 40, 35, 20, 20]}
 
       worksheet_definitions = <<-EOT
--- All Reported Smelters --
+ALL REPORTED SMELTERS
 All unfiltered smelters listed within every ingested declaration spreadsheets.
 
--- Consolidated Smelters --
+CONSOLIDATED SMELTERS
 Attempts to remove redundant smelters by
   1) grouping entries which have the same valid Smelter ID (or Smelter ID field is "Not
      Listed", "Not Supplied" or "Unknown"), same Standard Smelter Name includes text
@@ -246,16 +246,16 @@ Attempts to remove redundant smelters by
      provided, match by Metal and first 12 characters of Smelter Reference List.
   3) Display the entry that contains the most data from all fields
 
--- Rejected Entries --
+REJECTED ENTRIES
 Entries have either a valid Smelter ID, or Smelter ID field is "Not Listed", "Not Supplied", or
 "Unknown", but no valid Country and/or Standard Smelter Name.
 Sorted by 1. Metal (Gold, Tin, Tantalum, Tungsten), 2. Country, 3. Smelter ID
 
--- Corrective Action Report --
+CORRECTIVE ACTION REPORT
 The Consolidated Smelters worksheet, but sorted by 1. Metal, 2. Standard Smelter Name, 3.
 Smelter Reference List, 4. Country
 
--- Smelter Compliance Status --
+SMELTER COMPLIANCE STATUS
 The Consolidated Smelters only grouped by Smelter ID and columns are truncated to only
 Metal, Standard Smelter Name, Smelter Reference List, Country and Smelter ID.
 The Status field is marked with check (%s) for entries whose Smelter ID is listed in the CFSI-
