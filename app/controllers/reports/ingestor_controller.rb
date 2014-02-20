@@ -33,8 +33,8 @@ class Reports::IngestorController < ApplicationController
                                           (smelter.smelter_id.match(valid_smelter_id) ? smelter.smelter_id :
                                             (valid_no_smelter_id.include?(smelter.smelter_id.downcase) ? "YYYYYYY" + smelter.smelter_id : "ZZZZZZZ" + smelter.smelter_id)
                                           ),
-                                          (smelter.facility_location_country.empty? ? "ZZZZZZZ" : smelter.facility_location_country.downcase),
-                                          (smelter.smelter_reference_list.empty? ? "ZZZZZZZ" : smelter.smelter_reference_list.downcase)]  }
+                                          (smelter.facility_location_country.empty? ? "ZZZZZZZ" + smelter.facility_location_country.downcase : smelter.facility_location_country.downcase),
+                                          (smelter.smelter_reference_list.empty? ? "ZZZZZZZ" + smelter.smelter_reference_list.downcase : smelter.smelter_reference_list.downcase)]  }
 
     # Rejected entries sort:
     #
@@ -42,7 +42,7 @@ class Reports::IngestorController < ApplicationController
     # 2. Alphanumerically sort COUNTRY, all empty fields last
     # 3. Sort first by "Not Listed", then "Not Supplied", finally everything else
     rejected_entries_sort = Proc.new { |smelter| [(mineral_sort_order.index(smelter.metal.downcase) || 5),
-                                                  (smelter.facility_location_country.empty? ? "ZZZZZZZ" : smelter.facility_location_country.downcase),
+                                                  (smelter.facility_location_country.empty? ? "ZZZZZZZ" + smelter.facility_location_country.downcase : smelter.facility_location_country.downcase),
                                                   (valid_no_smelter_id.index(smelter.smelter_id.downcase) || 2)] }
 
     # Compile sorted source data
