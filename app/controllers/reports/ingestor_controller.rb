@@ -284,7 +284,7 @@ Compliant Smelter Listing.
       end
 
       p.workbook.add_worksheet(:name => "Definitions") do |sheet|
-        sheet.add_row([worksheet_definitions % "\u2714"])
+        sheet.add_row([worksheet_definitions % "\u2714"], :style => branding_style, :types => :string)
         sheet.merge_cells "A1:H20"
       end
     end
