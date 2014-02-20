@@ -108,7 +108,7 @@ class Reports::IngestorController < ApplicationController
 
     # Corrective Action Report
     # Resort by columns: Metal, Standard Smelter Names, Smelter Reference List, then Country
-    worksheets_data[:"Corrective Action Report"] = worksheets_data[:"Consolidated Smelters"].sort_by { |row| [row[1], row[3], row[2], row[4]] }
+    worksheets_data[:"Corrective Action Report"] = worksheets_data[:"Consolidated Smelters"].sort_by { |row| [(mineral_sort_order.index(row[0].downcase) || 5), row[2], row[1], row[3]] }
 
     # Condensed Consolidated Smelters
     worksheets_data[:"Condensed Consolidated Smelter Report"] = [] # worksheets_data[:"Consolidated Smelters"].collect { |row| }
