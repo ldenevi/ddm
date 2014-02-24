@@ -88,8 +88,8 @@ class Reports::IngestorController < ApplicationController
         # Only update declaration information of same smelter (based on smelter_key), if there is more provided data
         if row[0...-2].join('').size > consolidated_smelters[smelter_key][:data_length]
           consolidated_smelters[smelter_key][:data] = row
-          consolidated_smelters[smelter_key][:data_length] = row[0...-2].join('').size
         end
+        consolidated_smelters[smelter_key][:data_length] = row[0...-2].join('').size
       # Otherwise add valid SMELTER ID rows to Rejected Enteries worksheet
       elsif smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)
         worksheets_data[:"Rejected Entries"] << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
