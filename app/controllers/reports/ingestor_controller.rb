@@ -77,7 +77,10 @@ class Reports::IngestorController < ApplicationController
              smelter.mineral_source_location, smelter.comment]
 
       # Add valid rows to Consolidated worksheet
-      if smelter.smelter_id.match(valid_smelter_id) || (valid_no_smelter_id.include?(smelter.smelter_id.downcase) && smelter.standard_smelter_name.downcase.to_s.strip.size > 2 && smelter.facility_location_country.strip.match(/[a-zA-Z]/) )
+      if ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.standard_smelter_name.downcase.to_s.strip.size > 2 && smelter.facility_location_country.strip.match(/[a-zA-Z]/) ) ||
+         ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.smelter_reference_list.downcase.to_s.strip.size > 2 && smelter.facility_location_country.strip.match(/[a-zA-Z]/) ) ||
+         ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.smelter_reference_list.downcase.to_s.strip.size > 2 && smelter.standard_smelter_name.downcase.to_s.strip.size > 2 )
+
         smelter_key = smelter.smelter_id.match(valid_smelter_id) ?
                         [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id] :
                         [smelter.metal, smelter.smelter_reference_list[0...12].downcase]
