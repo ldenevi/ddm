@@ -119,7 +119,16 @@ class Reports::IngestorController < ApplicationController
     # Smelter Compliance Status
     added_smelter_ids = []
     compliant_smelter_ids = worksheets_data[:"CFSI-Compliant Smelter Listing"].collect { |row| row[1] }
-    worksheets_data[:"Consolidated Smelters"].each do |row|
+    consolidated_smelters_by_popularity = worksheets_data[:"Consolidated Smelters"].sort_by { |r| [(mineral_sort_order.index(r[0].downcase) || 5),
+                                                                                                   (r[4].match(valid_smelter_id) ? r[4] :
+                                                                                                      (valid_no_smelter_id.include?(r[4].downcase) ? "YYYYYYY" + r[4] : "ZZZZZZZ" + r[4])
+                                                                                                    ),
+                                                                                                    (r[3].empty? ? "ZZZZZZZ" + r[3].downcase : r[3].downcase),
+                                                                                                    (r[2].empty? ? "ZZZZZZZ" + r[2].downcase : r[2].downcase),
+                                                                                                    r[14]
+                                                                                                  ] }
+
+    consolidated_smelters_by_popularity.each do |row|
       next unless row[4].to_s.strip.match(valid_smelter_id)
       next if added_smelter_ids.include?(row[4])
       is_confirmed = compliant_smelter_ids.include?(row[4]) ? "\u2714" : ""
