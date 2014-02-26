@@ -246,33 +246,67 @@ class Reports::IngestorController < ApplicationController
         :column_widths => [7, 15, 35, 40, 40, 35, 20, 20]}
 
       worksheet_definitions = <<-EOT
-ALL REPORTED SMELTERS
-All unfiltered smelters listed within every ingested declaration spreadsheets.
+INGESTOR REPORTS
+Green Status Pro Ingestor generated the following RCOI reports after processing your company's supplier's EICC-GeSI Conflict Minerals Template Reports:
+  1. All Reported Smelters
+  2. Consolidated Smelter Report
+  3. Corrective Action Report
+  4. Smelter Compliance Status Report
+  5. Rejected Entries Report
+  6. Aggregated Declarations Report
+  7. Smelters by Supplier Report
+  8. Comprehensive Suppliers Validation Report
 
-CONSOLIDATED SMELTERS
-Attempts to remove redundant smelters by
-  1) grouping entries which have the same valid Smelter ID (or Smelter ID field is "Not
-     Listed", "Not Supplied" or "Unknown"), same Standard Smelter Name includes text
-     greater than 2 characters, and Country has valid data;
-  2) match entries by comparing Metal, Country and valid Smelter ID, if no Smelter ID
-     provided, match by Metal and first 12 characters of Smelter Reference List.
-  3) Display the entry that contains the most data from all fields
+Companies rely on these reports to document their compliance with Dodd-Frank Section 1502 and to support their Form SD Conflict Minerals Report disclosures.  This suite of reports supports audits by independent private auditors, SEC Examiners, customers and NGO special interest groups.
 
-REJECTED ENTRIES
-Entries have either a valid Smelter ID, or Smelter ID field is "Not Listed", "Not Supplied", or
-"Unknown", but no valid Country and/or Standard Smelter Name.
-Sorted by 1. Metal (Gold, Tin, Tantalum, Tungsten), 2. Country, 3. Smelter ID
 
-CORRECTIVE ACTION REPORT
-The Consolidated Smelters worksheet, but sorted by 1. Metal, 2. Standard Smelter Name, 3.
-Smelter Reference List, 4. Country
+1) ALL REPORTED SMELTERS
+Lists all smelter entries reported by all suppliers sorted by Smelter ID, Metal, Smelter Reference List, Standard Smelter Name and Country.  Includes responses for all columns in the EICC-GeSI Smelter list as reported; template version; and source EICC-GeSI Report File Name.
 
-SMELTER COMPLIANCE STATUS
-The Consolidated Smelters only grouped by Smelter ID and columns are truncated to only
-Metal, Standard Smelter Name, Smelter Reference List, Country and Smelter ID.
-The Status field is marked with check (%s) for entries whose Smelter ID is listed in the CFSI-
-Compliant Smelter Listing.
-      EOT
+The All Reported Smelters Report is the central repository for all smelter-related RCOI data delivered to the user. It is generated in Excel format to allow the user to easily create custom reports.
+
+
+2) CONSOLIDATED SMELTER REPORT
+Consolidates and sorts smelters by Smelter ID.  Checks that Metal, Standard Smelter Name and Country are the same. For smelter entries without a valid Smelter ID, consolidates entries with matches, in sequential order, of Metal, Country and first 12 characters entered in the Smelter Reference List. The consolidated smelter entry row displayed is the one that a supplier submits that contains the most data in all fields.
+
+Includes responses for all columns in the EICC-GeSI Smelter list as reported; number of suppliers reporting the use of the smelter; and source EICC-GeSI Report File Names.  This report consolidates smelter listings and eliminates unsupportable entries, significantly reducing the row count of the All Reported Smelter report.
+
+
+3) CORRECTIVE ACTION REPORT
+Groups non-duplicative supplier smelter listings reported in the Consolidated Smelters worksheet to guide supplier validation efforts and support judgment-based consolidation.  Required due to the large number of errors and omissions (especially Smelter IDs) found in suppliers' EICC-GeSI Conflict Minerals Reports.  Sorts smelter rows in sequence by: 1) Metal, 2) Standard Smelter Name, 3) Smelter Reference List, 4) Country.
+
+Green Status Pro recommends reviewers read down the Standard Smelter Name column to identify supplier reporting errors.
+
+This report facilitates communications with suppliers who should be providing more accurate information; supports the responsibility to not report inaccurate information downstream; and documents the reasonableness of consolidating smelters reported without CFSI-issued Smelter IDs.
+
+
+4) SMELTER COMPLIANCE STATUS REPORT
+Identifies which smelters listed in the Consolidated Smelter report have been designated as conflict-free.  Matches the smelter IDs reported in the Consolidated Smelter report against the current CFSI-published listing of smelters that have passed its conflict-free audit requirements.  The Status field is marked with check (%s) for entries whose Smelter ID is listed in the then current CFSI-Compliant Smelter Listing.  The then current CFSI-Compliant Smelter Listing is included as a separate worksheet.
+
+The objective of Dodd-Frank Section 1502 is to encourage and assist companies in using 3TG only from smelters that are committed to acquiring their mineral stocks from legitimate sources.  The Smelter Compliance Status report acts as a year-over-year scorecard on how well the company is accomplishing this goal.
+
+
+5) REJECTED ENTRIES
+A smelter entry must have valid data in 3 of the following 5 columns to be accepted: Metal, Smelter Reference List, Standard Smelter Names, Smelter Facility Location Country and Smelter ID.  It lists supplier entries that are not included in the Consolidated Smelter Report. Suppliers who are flagged on the Rejected Entries listing should be contacted immediately.
+
+
+6) AGGREGATED DECLARATIONS
+Lists each supplier and its answer to each question, including comments, on the Declaration worksheet; template version; source EICC-GeSI Report File Name; and Ingestor-generated validation status and messages based on the declarations.
+
+The Aggregated Declarations Report is the central repository for all supplier contact information, compliance policies, and use of 3TGs.  Additional reports can be created from this overarching report.
+
+
+7) SMELTERS BY SUPPLIER LIST
+Lists suppliers alphabetically for each supplier. Smelters are sorted by metal, smelter reference list, standard smelter name, and country.  Includes responses for all columns in the EICC-GeSI Smelter list as reported; template version; source EICC-GeSI Report File Name; company contact information; date EICC-GeSI CRMT was completed; and the answers to Question 1, "Are any of the following metals necessary to the functionality or production of your company's products that it manufactures or contracts to manufacture? Tantalum? Tin? Gold? Tungsten?"
+
+This report has the same number of rows as the All Reported Smelters Report and contains similar data.  It is a powerful tool for quickly determining which smelters are critical to a company's operations and which companies are providing incorrect and incomplete smelter information.
+
+
+8) COMPREHENSIVE SUPPLIERS VALIDATION
+Ingestor creates a virtual due diligence worksheet for each supplier that includes all the Validation Needed messages based on the company's rules; the manager responsible for conducting due diligence on the supplier; and a link to the supplier's EICC-GeSI CMRT.  The reviewer adds comments and files to the virtual worksheet to document the due diligence effort.  These comments are time stamped to provide a comprehensive audit trail and due diligence record.
+
+The Comprehensive Suppliers Validation report is run on an interim during the RCOI process to provide managers with the current status of their SEC-mandated due diligence efforts and at the end of the process to provide an auditable record of the company's supplier due diligence.  This report is published as a PDF.
+EOT
 
       branding_style = nil
       header_style   = nil
@@ -297,7 +331,7 @@ Compliant Smelter Listing.
 
       p.workbook.add_worksheet(:name => "Definitions") do |sheet|
         sheet.add_row([worksheet_definitions % "\u2714"], :style => branding_style, :types => :string)
-        sheet.merge_cells "A1:H20"
+        sheet.merge_cells "A1:H40"
       end
     end
 
