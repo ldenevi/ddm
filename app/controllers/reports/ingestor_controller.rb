@@ -132,9 +132,17 @@ class Reports::IngestorController < ApplicationController
                                                                                                   ] }
 
     consolidated_smelters_by_popularity.each do |row|
-      next unless row[4].to_s.strip.match(valid_smelter_id)
+      next unless row[4].strip.match(valid_smelter_id)
       next if added_smelter_ids.include?(row[4])
-      is_confirmed = compliant_smelter_ids.include?(row[4]) ? "\u2714" : ""
+      is_confirmed = begin
+                       if compliant_smelter_ids.include?(row[4]) && Rails.configuration.cfsi.countries.include?(row[3].strip.upcase)
+                        "\u2714"
+                       elsif compliant_smelter_ids.include?(row[4]) && !Rails.configuration.cfsi.countries.include?(row[3].strip.upcase)
+                        "?"
+                       else
+                        ""
+                       end
+                     end
       worksheets_data[:"Smelter Compliance Status"] << [is_confirmed] + row[0..4]
       added_smelter_ids << row[4]
     end
