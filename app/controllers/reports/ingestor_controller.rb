@@ -77,8 +77,8 @@ class Reports::IngestorController < ApplicationController
              smelter.mineral_source_location, smelter.comment]
 
       # Add valid rows to Consolidated worksheet
-      if ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.standard_smelter_name.downcase.strip.size > 2 && Rails.configuration.countries.include?(smelter.facility_location_country.strip.upcase) ) ||
-         ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.smelter_reference_list.downcase.strip.size > 2 && Rails.configuration.countries.include?(smelter.facility_location_country.strip.upcase) ) ||
+      if ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.standard_smelter_name.downcase.strip.size > 2 && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.strip.upcase) ) ||
+         ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.smelter_reference_list.downcase.strip.size > 2 && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.strip.upcase) ) ||
          ((smelter.smelter_id.match(valid_smelter_id) || valid_no_smelter_id.include?(smelter.smelter_id.downcase)) && smelter.smelter_reference_list.downcase.strip.size > 2 && smelter.standard_smelter_name.downcase.strip.size > 2 )
 
         smelter_key = smelter.smelter_id.match(valid_smelter_id) ?

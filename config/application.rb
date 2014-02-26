@@ -18,11 +18,6 @@ end
 module GSP
   class Application < Rails::Application
     require 'gsp'
-    require 'csv'
-    include GSP::STATUS
-
-    # This is to verify the country data entered in the EICC/GeSI Conflit-Free Smelters Initiative template
-    config.countries = CSV.open("config/gsp/countries.en.csv").to_a.flatten.uniq
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
