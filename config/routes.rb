@@ -1,5 +1,14 @@
 GSP::Application.routes.draw do
 
+  scope :module => 'trial' do
+    get "sign_up/form"
+    post "sign_up/register_new_user"
+    get "sign_up/already_registered"
+    get "sign_up/welcome"
+    get "sign_up/setup_organizations"
+    get "sign_up/setup_users"
+  end
+
   # EICC Declaration
   get "eicc/declaration/index"
   get "eicc/declaration/list"

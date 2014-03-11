@@ -1,0 +1,2 @@
+module Trial::SignUpHelper
+end
