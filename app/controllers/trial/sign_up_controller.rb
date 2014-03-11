@@ -1,4 +1,4 @@
-class Trial::SignUpController < ApplicationController
+class Trial::SignUpController < Trial::PublicController
   def form
   end
 
