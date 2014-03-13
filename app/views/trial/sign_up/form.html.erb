@@ -1,2 +1,14 @@
-<h1>Trial::SignUp#form</h1>
-<p>Find me in app/views/trial/sign_up/form.html.erb</p>
+<div>
+  <%= form_for(@user, :url => trial_register_new_user_path) do |f| %>
+    <%= f.label :email %>
+    <%= f.text_field :email %>
+
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
+
+    <%= f.submit "Create Account" %>
+  <% end %>
+</div>
