@@ -6,14 +6,20 @@ describe Trial::SignUpController do
     it "returns http success" do
       get 'form'
       response.should be_success
-
     end
   end
 
-  describe "GET 'register_new_user'" do
-    it "returns http success" do
-      get 'register_new_user'
-      response.should be_success
+  describe "POST 'register_new_user'" do
+    let(:temp_organization) { Organization.new :full_name => "Test" }
+    it "should proceed to 'Welcome' page on new user with unique domain" do
+      post 'register_new_user', {:user => {:email => "new_user@sub.test.com", :password => "password1", :organization => temp_organization}}
+      expect(response).to redirect_to :action => 'welcome'
+    end
+
+    it "should redirect to 'already_registered' if e-mail contains existing domain" do
+      User.create({:email => "user@sub.test.com", :password => "password1", :organization => temp_organization})
+      post 'register_new_user', {:user => {:email => "new_user@sub.test.com", :password => "password1", :organization => temp_organization}}
+      expect(response).to redirect_to :action => 'already_registered'
     end
   end
 
@@ -25,9 +31,9 @@ describe Trial::SignUpController do
   end
 
   describe "GET 'welcome'" do
-    it "returns http success" do
+    it "should redirect to sign up form if requested directly" do
       get 'welcome'
-      response.should be_success
+      expect(response).to redirect_to :action => 'form'
     end
   end
 
