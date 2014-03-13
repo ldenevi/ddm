@@ -35,7 +35,7 @@ class User < ActiveRecord::Base
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
   class << self
-    def new_trial(*attrs)
+    def new_trial(attrs = {})
       trial = new(attrs)
       trial.trial_created_at = Time.now
       trial
