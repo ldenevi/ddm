@@ -3,8 +3,6 @@ class User < ActiveRecord::Base
   attr_accessible :organization, :display_name, :first_name, :last_name,
                   :phone, :profile_image
 
-  attr_accessor :trial_created_at
-
   belongs_to :organization
   belongs_to :profile_image, :class_name => 'BinaryFile'
 
@@ -33,14 +31,6 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
-
-  class << self
-    def new_trial(attrs = {})
-      trial = new(attrs)
-      trial.trial_created_at = Time.now
-      trial
-    end
-  end
 
   def eponym
     if display_name.to_s.empty? && first_name.to_s.empty? && last_name.to_s.empty?
