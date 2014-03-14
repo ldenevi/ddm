@@ -3,7 +3,7 @@ class DeviseCreateUsers < ActiveRecord::Migration
     create_table(:users) do |t|
       #== GSP ==
       # Display information
-      t.references :organization, :null => false
+      t.references :organization
       t.string     :display_name
       t.string     :first_name
       t.string     :last_name
