@@ -1,5 +1,5 @@
 class Trial::TrialUser < User
-  validate :email_cannot_contain_a_forbidden_domain
+  validate :email_cannot_contain_a_forbidden_domain, :email_domain_cannot_exist
   after_initialize do |trial_user|
     trial_user.trial_created_at = Time.now
   end
@@ -19,6 +19,12 @@ class Trial::TrialUser < User
         errors.add(:email, "is invalid")
         break
       end
+    end
+  end
+
+  def email_domain_cannot_exist
+    unless Trial::TrialUser.where("email LIKE ?", "%@#{email.split('@').last}").empty?
+      errors.add(:email, "has been previously registered")
     end
   end
 end
