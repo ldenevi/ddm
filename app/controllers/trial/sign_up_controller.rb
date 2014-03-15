@@ -1,19 +1,29 @@
 class Trial::SignUpController < Trial::PublicController
   def form
-    @user = User.new_trial
+    @user = Trial::TrialUser.new
   end
 
   def register_new_user
-    redirect_to :action => 'already_registered' if is_domain_already_registered(params[:user][:email])
-    user = User.new_trial(params[:user])
-    user.save
-    render :text => user.errors.inspect
+    if is_domain_already_registered(params[:user][:email])
+      redirect_to :action => 'already_registered'
+    else
+      @user = Trial::TrialUser.new(params[:user])
+
+      if @user.save
+        redirect_to :action => :welcome
+      else
+        render :text => @user.errors.inspect
+      end
+    end
   end
 
   def already_registered
   end
 
   def welcome
+    unless request.referer.to_s.match("register_new_user")
+      redirect_to :action => :form
+    end
   end
 
   def setup_organizations
