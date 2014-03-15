@@ -7,6 +7,7 @@ FactoryGirl.define do
     email "test@user.com"
     password "password"
     association :organization, :factory => :test_co
+    confirmed_at Time.now
   end
 
   factory :test_co, :class => 'Organization' do
