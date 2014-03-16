@@ -7,6 +7,9 @@ GSP::Application.routes.draw do
     get "sign_up/welcome"
     get "sign_up/setup_organizations"
     get "sign_up/setup_users"
+
+    get "organization/new"
+    post "organization/create", :as => "create_new_organization"
   end
 
   # EICC Declaration
