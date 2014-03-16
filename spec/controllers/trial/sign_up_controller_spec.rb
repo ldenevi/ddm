@@ -11,13 +11,13 @@ describe Trial::SignUpController do
 
   describe "POST 'register_new_user'" do
     it "should proceed to 'Welcome' page on new user with unique domain" do
-      post 'register_new_user', {:user => {:email => "new_user@sub.test.com", :password => "password1"}}
+      post 'register_new_user', {:trial_trial_user => {:email => "new_user@sub.test.com", :password => "password1"}}
       expect(response).to redirect_to :action => 'welcome'
     end
 
     it "should redirect to 'already_registered' if e-mail contains existing domain" do
       User.create({:email => "user@sub.test.com", :password => "password1"})
-      post 'register_new_user', {:user => {:email => "new_user@sub.test.com", :password => "password1"}}
+      post 'register_new_user', {:trial_trial_user => {:email => "new_user@sub.test.com", :password => "password1"}}
       expect(response).to redirect_to :action => 'already_registered'
     end
   end
