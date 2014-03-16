@@ -23,7 +23,7 @@ class Trial::TrialUser < User
   end
 
   def email_domain_cannot_exist
-    unless Trial::TrialUser.where("email LIKE ?", "%@#{email.split('@').last}").empty?
+    unless Trial::TrialUser.where("email LIKE ?", "%@#{email.split('@').last}").where("id <> ?", self.id).empty?
       errors.add(:email, "has been previously registered")
     end
   end
