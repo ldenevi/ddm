@@ -1,7 +1,15 @@
+<% if flash[:errors] %>
+    <ul>
+    <% flash[:errors].messages.each do |k, v| %>
+      <li><%= k.to_s.humanize %> <%= v.to_sentence %></li>
+     <% end %>
+    </ul>
+<% end %>
+
 <div>
   <%= form_for(@user, :url => trial_register_new_user_path) do |f| %>
     <%= f.label :email %>
-    <%= f.text_field :email %>
+    <%= f.text_field :email, :value => @user.email %>
 
     <%= f.label :password %>
     <%= f.password_field :password %>
