@@ -1,0 +1,29 @@
+<p>New Trial Organization</p>
+
+<div><%= flash.inspect %></div>
+
+<% unless flash.empty? %>
+    <% flash.each do |type, errors| %>
+      <% if errors.respond_to?(:each) %>
+        <ul>
+          <% errors.each do |field, messages| %>
+          <li><%= field.to_s.humanize %> <%= messages.to_sentence %></li>
+         <% end %>
+        </ul>
+      <% else %>
+        <div><%= errors %></div>
+      <% end %>
+  <% end %>
+<% end %>
+
+<div>
+  <%= form_for(@organization, :url => trial_create_new_organization_path) do |f| %>
+    <%= f.label :full_name %>
+    <%= f.text_field :full_name %>
+
+    <%= f.label :display_name %>
+    <%= f.text_field :display_name %>
+
+    <%= f.submit "Create Your Organization" %>
+  <% end %>
+</div>
