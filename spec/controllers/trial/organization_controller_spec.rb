@@ -8,17 +8,17 @@ describe Trial::OrganizationController do
       get 'new'
     end
 
-    before(:each) { sign_in Trial::TrialUser.create :email => "test@org.com", :password => "password1" }
+    before(:each) { sign_in FactoryGirl.create(:trial_user) }
 
     it "should be able to create an organization" do
       request.env["HTTP_REFERER"] = "/trial/organization/new"
-      post 'create', :full_name => "Test Organization, Inc.", :display_name => "Test"
+      post 'create', :organization => {:full_name => "Test Organization, Inc.", :display_name => "Test"}
       response.should be_success
     end
 
     it "should redirect back to form if Organization is not valid" do
       request.env["HTTP_REFERER"] = "/trial/organization/new"
-      post 'create', :full_name => '', :display_name => ''
+      post 'create', :organization => {:full_name => "", :display_name => ""}
       expect(response).to redirect_to :action => :new
     end
   end
