@@ -42,6 +42,7 @@ describe Trial::TrialUser do
     Trial::TrialUser.new :email => "second.user@already.registered.com", :password => "password1"
   }
   it "should prevent registering an email from a previously registered domain" do
+    already_registered_domain_email.save
     expect(already_registered_domain_email).to be_invalid
     expect(already_registered_domain_email.errors.messages).to include({:email => ["has been previously registered"]})
   end
