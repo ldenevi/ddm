@@ -1,4 +1,6 @@
 class Trial::SignUpController < Trial::PublicController
+  layout "application"
+
   def form
     @user = Trial::TrialUser.new
   end
@@ -10,7 +12,8 @@ class Trial::SignUpController < Trial::PublicController
       @user = Trial::TrialUser.new(params[:trial_trial_user])
 
       if @user.save
-        redirect_to :action => :welcome
+        sign_in @user
+        redirect_to root_url
       else
         flash[:errors] = @user.errors
         redirect_to :back
