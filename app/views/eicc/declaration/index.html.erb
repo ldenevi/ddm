@@ -37,6 +37,16 @@
   }
 </style>
 
+<div>
+<% unless flash.empty? %>
+  <ul>
+    <% flash.each do |type, message| %>
+    <li><%= type.to_s.humanize %> <%= message %></li>
+   <% end %>
+  </ul>
+<% end %>
+</div>
+
 <div id="new_button">
   <%= link_to "> Begin new EICC-GeSI declaration check...", begin_new_eicc_declaration_check_path %>
 </div>
@@ -46,7 +56,7 @@
 <div id="tabs">
   <ul>
     <li><a href="#tabs-1">Previously processed</a></li>
-    <li><a href="#tabs-2">Help</a></li>
+    <!--li><a href="#tabs-2">Help</a></li-->
   </ul>
 
   <div id="tabs-1">
@@ -80,13 +90,13 @@
     </table>
   </div>
 
-  <div id="tabs-2">
+  <!--div id="tabs-2">
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris auctor posuere hendrerit. Suspendisse aliquet augue quis lacus vehicula, suscipit pharetra nulla fringilla. Cras quis blandit velit. Maecenas sit amet ipsum eros. Maecenas vel venenatis ligula. Vestibulum porttitor aliquet ante quis fringilla. Phasellus hendrerit faucibus dolor quis ornare. Sed rutrum metus eget dolor ornare auctor. Praesent ac leo non eros vulputate tempus a id nisi.</p>
 
     <p>Sed tincidunt, velit sed accumsan congue, mi lectus malesuada turpis, vel egestas neque magna id est. Cras mollis tellus sit amet purus elementum, a lobortis sapien pulvinar. Sed in tempus libero. Quisque eu diam luctus, mollis tellus vel, volutpat eros. Duis iaculis, turpis eget dictum varius, velit tellus consectetur dolor, eget condimentum felis nisl sit amet purus. Pellentesque aliquet tempor lacus, sed aliquet lectus hendrerit eu. Etiam in sollicitudin diam. Proin quis erat ut sapien convallis congue ac quis tellus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam lacinia dapibus placerat. In consequat, est eget tincidunt ornare, sem leo dignissim ligula, id rutrum odio enim eget neque.</p>
 
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ut rhoncus erat. Maecenas ac semper nisi. Suspendisse aliquam varius urna a bibendum. Vivamus nec congue arcu. Nam sagittis libero in suscipit luctus. Vestibulum bibendum, nulla vel hendrerit egestas, risus ante pharetra leo, quis consectetur eros quam eget ante.</p>
-  </div>
+  </div-->
 </div>
 
 <script>
