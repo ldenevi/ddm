@@ -1,11 +1,17 @@
 class Eicc::DeclarationController < ApplicationController
   def index
-    @validation_statuses = Eicc::BatchValidationStatus.where(:user_id => current_user)
+    @validation_statuses = Eicc::BatchValidationStatus.where(:user_id => current_user) || []
   end
 
   def new
-    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
-    redirect_to :action => :show, :id => @validation_status.id
+    if Eicc::BatchValidationStatus.where(:user_id => current_user).count == 3 && current_user.class == Trial::TrialUser
+      flash[:notice] = "You have reached the maximum number of batch processes. Please contact Green Status Pro"
+      redirect_to :back
+    else
+      @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
+      redirect_to :action => :show, :id => @validation_status.id
+      return
+    end
   end
 
   def show
