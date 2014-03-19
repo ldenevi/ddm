@@ -6,15 +6,24 @@
     </ul>
 <% end %>
 
-<div>
+<script>
+$(function() {
+  $( "#sign_up_form" ).dialog({
+    height: 250,
+    modal: true
+  });
+});
+</script>
+
+<div id="sign_up_form" title="Create trial account">
   <%= form_for(@user, :url => trial_register_new_user_path) do |f| %>
-    <%= f.label :email %>
+    <%= f.label :email %><br />
     <%= f.text_field :email, :value => @user.email %>
-
-    <%= f.label :password %>
+    <br />
+    <%= f.label :password %><br />
     <%= f.password_field :password %>
-
-    <%= f.label :password_confirmation %>
+    <br />
+    <%= f.label :password_confirmation %><br />
     <%= f.password_field :password_confirmation %>
 
     <%= f.submit "Create Account" %>
