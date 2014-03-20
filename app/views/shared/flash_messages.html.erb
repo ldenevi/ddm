@@ -1,0 +1,3 @@
+<% flash.each do |type, messages| %>
+  <%= content_tag :div, messages.to_sentence, :class => "flash #{type}" %>
+<% end %>
