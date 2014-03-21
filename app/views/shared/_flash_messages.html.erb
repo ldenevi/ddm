@@ -1,3 +1,4 @@
 <% flash.each do |type, messages| %>
+  <% messages = [messages].flatten %>
   <%= content_tag :div, messages.to_sentence, :class => "flash #{type}" %>
 <% end %>
