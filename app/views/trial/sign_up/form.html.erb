@@ -1,11 +1,3 @@
-<% if flash[:errors] %>
-    <ul>
-    <% flash[:errors].messages.each do |k, v| %>
-      <li><%= k.to_s.humanize %> <%= v.to_sentence %></li>
-     <% end %>
-    </ul>
-<% end %>
-
 <script>
 $(function() {
   $( "#sign_up_form" ).dialog({
