@@ -7,7 +7,7 @@ class Trial::OrganizationController < ApplicationController
     @organization = Organization.new params[:organization]
     current_user.organization = @organization
     if @organization.save && current_user.save
-      flash[:notice] = {:success => ["Created #{@organization.full_name}"]}
+      flash[:notice] = ["Created #{@organization.full_name}"]
       redirect_to root_url
     else
       flash[:alert] = @organization.errors.messages.merge(current_user.errors.messages)
