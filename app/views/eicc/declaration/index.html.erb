@@ -37,16 +37,6 @@
   }
 </style>
 
-<div>
-<% unless flash.empty? %>
-  <ul>
-    <% flash.each do |type, message| %>
-    <li><%= type.to_s.humanize %> <%= message %></li>
-   <% end %>
-  </ul>
-<% end %>
-</div>
-
 <div id="new_button">
   <%= link_to "> Begin new EICC-GeSI declaration check...", begin_new_eicc_declaration_check_path %>
 </div>
