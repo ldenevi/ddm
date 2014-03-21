@@ -6,18 +6,14 @@ class Trial::SignUpController < Trial::PublicController
   end
 
   def register_new_user
-    if is_domain_already_registered(params[:trial_trial_user][:email])
-      redirect_to :action => 'already_registered'
-    else
-      @user = Trial::TrialUser.new(params[:trial_trial_user])
+    @user = Trial::TrialUser.new(params[:trial_trial_user])
 
-      if @user.save
-        sign_in @user
-        redirect_to root_url
-      else
-        flash[:errors] = @user.errors
-        redirect_to :back
-      end
+    if @user.save
+      sign_in @user
+      redirect_to root_url
+    else
+      flash[:errors] = @user.errors
+      redirect_to :action => :already_registered
     end
   end
 
@@ -36,8 +32,4 @@ class Trial::SignUpController < Trial::PublicController
   def setup_users
   end
 
-private
-  def is_domain_already_registered(email)
-    !User.where("email LIKE ?", "%@#{email.split("@").last}").empty?
-  end
 end
