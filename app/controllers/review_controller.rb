@@ -72,6 +72,8 @@ class ReviewController < ApplicationController
       @task.comments << @comment
       @posted_comment = @comment
 
+      Notifications::Reviews.task_comment_posted(@comment, current_user).deliver
+
       render :layout => nil, :template => 'review/post_comment_form'
 
     rescue GSP::FileManager::BinaryFileHandler::InvalidFileFormatException

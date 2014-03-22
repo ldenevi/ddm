@@ -11,9 +11,6 @@ class Notifications::Reviews < ActionMailer::Base
     mail :to => "leo.denevi@greenstatuspro.com", :subject => "[TEST] Review #{review.name} deployed" #email
   end
 
-  def task_comment_added
-  end
-
   def deploy(review)
     coordinator = review.responsible_party
     delegates   = review.tasks.collect(&:reviewer).uniq
@@ -33,6 +30,14 @@ class Notifications::Reviews < ActionMailer::Base
     @task   = task
     emails  = [task.reviewer.email, task.review.responsible_party.email].uniq
     subject = "Task '#{task.name}' reopened by #{opener.eponym}"
+    mail :to => emails, :subject => subject
+  end
+
+  def task_comment_posted(comment, poster)
+    @task   = comment.commentable
+    @poster = poster
+    emails  = [comment.author.email, @task.reviewer.email, @task.review.responsible_party.email].uniq
+    subject = "Comment posted to '#{@task.name}' by #{poster.eponym}"
     mail :to => emails, :subject => subject
   end
 end
