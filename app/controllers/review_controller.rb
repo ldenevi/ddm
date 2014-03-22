@@ -32,12 +32,14 @@ class ReviewController < ApplicationController
       when 'not_conforming'
         @task.not_conform!
     end
+    Notifications::Reviews.task_closed(@task, current_user).deliver
     render :text => 'Done'
   end
 
   def reopen_task
     @task = Task.includes(:review).where("tasks.id = ? AND reviews.organization_id = ?", params[:id], current_user.organization).first
     @task.reopen!
+    Notifications::Reviews.task_reopened(@task, current_user).deliver
     render :text => 'Done'
   end
 

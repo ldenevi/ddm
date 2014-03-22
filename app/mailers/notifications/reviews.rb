@@ -21,4 +21,18 @@ class Notifications::Reviews < ActionMailer::Base
     @review     = review
     mail :to => [coordinator.email, delegates.collect(&:email)].flatten.uniq, :subject => subject
   end
+
+  def task_closed(task, closer)
+    @task   = task
+    emails  = [task.reviewer.email, task.review.responsible_party.email].uniq
+    subject = "[#{task.status}] Task '#{task.name}' closed by #{closer.eponym}"
+    mail :to => emails, :subject => subject
+  end
+
+  def task_reopened(task, opener)
+    @task   = task
+    emails  = [task.reviewer.email, task.review.responsible_party.email].uniq
+    subject = "Task '#{task.name}' reopened by #{opener.eponym}"
+    mail :to => emails, :subject => subject
+  end
 end
