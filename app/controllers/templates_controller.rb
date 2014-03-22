@@ -36,8 +36,15 @@ class TemplatesController < ApplicationController
   end
 
   def deploy_review
-    review = Review.create(params[:review])
-    redirect_to :controller => 'home', :action => 'reviews'
+    review = Review.new(params[:review])
+    if review.save
+      Notifications::Reviews.deploy(review).deliver
+      flash[:notice] = "'#{review.name}' has been deployed"
+      redirect_to :controller => 'home', :action => 'reviews'
+    else
+      flash[:errors] = review.errors
+      redirect_to :back
+    end
   end
 
   # TODO: DRY this up. These three methods are repeat in Admin/GSPTemplateController
