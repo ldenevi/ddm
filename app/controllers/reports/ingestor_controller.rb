@@ -318,7 +318,7 @@ Identifies which smelters listed in the Consolidated Smelter report have been de
 as conflict-free.  Matches the smelter IDs reported in the Consolidated Smelter report
 against the current CFSI-published listing of smelters that have passed its conflict-free
 audit requirements. A smelter appearing on the consolidated smelter list is dropped from
-this list if its smelter ID is invalid (listed as ‘not supplied,’ for instance) or an
+this list if its smelter ID is invalid (listed as 'not supplied,' for instance) or an
 identical smelter number has already been incorporated in this list. The Status field is
 marked with check (%s) for entries whose Smelter ID is listed in the then current
 CFSI-Compliant Smelter Listing. The Status field  is marked with a question mark (?) for
