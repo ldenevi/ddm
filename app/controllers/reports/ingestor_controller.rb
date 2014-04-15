@@ -83,7 +83,7 @@ class Reports::IngestorController < ApplicationController
 
         smelter_key = smelter.smelter_id.match(valid_smelter_id) ?
                         [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id] :
-                        [smelter.metal, smelter.smelter_reference_list[0...12].downcase]
+                        (smelter.smelter_reference_list.strip.downcase == "smelter not listed" ? [smelter.metal, smelter.smelter_reference_list[0...12].downcase] : [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id])
         consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0} if consolidated_smelters[smelter_key].nil?
         consolidated_smelters[smelter_key][:declaration_filenames] << data[:filename]
         row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
@@ -377,6 +377,7 @@ The Comprehensive Suppliers Validation report is run on an interim during the RC
 process to provide managers with the current status of their SEC-mandated due diligence
 efforts and at the end of the process to provide an auditable record of the company's
 supplier due diligence.  This report is published as a PDF.
+
 EOT
 
       branding_style = nil
