@@ -83,7 +83,7 @@ class Reports::IngestorController < ApplicationController
 
         smelter_key = smelter.smelter_id.match(valid_smelter_id) ?
                         [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id] :
-                        (smelter.smelter_reference_list.strip.downcase == "smelter not listed" ? [smelter.metal, smelter.smelter_reference_list[0...12].downcase] : [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id])
+                        (smelter.smelter_reference_list.strip.downcase == "smelter not listed" ? [smelter.metal, smelter.standard_smelter_name.downcase, smelter.facility_location_country.downcase, smelter.smelter_id] : [smelter.metal, smelter.smelter_reference_list[0...12].downcase])
         consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0} if consolidated_smelters[smelter_key].nil?
         consolidated_smelters[smelter_key][:declaration_filenames] << data[:filename]
         row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
