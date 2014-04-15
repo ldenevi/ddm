@@ -403,7 +403,7 @@ EOT
 
       p.workbook.add_worksheet(:name => "Definitions") do |sheet|
         sheet.add_row([worksheet_definitions % "\u2714"], :style => branding_style, :types => :string)
-        sheet.merge_cells "A1:H40"
+        sheet.merge_cells "A1:H80"
       end
     end
 
