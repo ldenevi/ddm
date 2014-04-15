@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe Trial::SignUpController do
+  describe "GET 'index'" do
+    it "should return HTTP success" do
+      get 'index'
+      expect(response).to be_success
+    end
+  end
+
+
+
 
   describe "GET 'form'" do
     it "returns http success" do

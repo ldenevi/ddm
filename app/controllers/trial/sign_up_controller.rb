@@ -1,5 +1,6 @@
 class Trial::SignUpController < Trial::PublicController
-  layout "application"
+  def index
+  end
 
   def form
     @user = Trial::TrialUser.new
