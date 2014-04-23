@@ -13,10 +13,10 @@
       <p>Process up to 8 CFSI templates and generate reports for your company's SEC Form SD filing.</p>
       <p>And access Roadmap™ for your due diligence requirements.</p>
       <div class="email-form-container">
-        <form>
-          <input type="email" id="email">
-          <input type="submit" value="Sign up">
-        </form>
+        <%= form_tag(trial_sign_up_new_password_path, :method => :post) do %>
+          <%= email_field_tag :email %>
+          <%= submit_tag "Sign up" %>
+        <% end %>
       </div>
     </div>
     <div class="right-column">
@@ -32,5 +32,14 @@
   </div>
 </div>
 
-
 <%= javascript_include_tag "gsp/trial/gsp.trial.signup" %>
+
+
+<div id="contact_us_form">
+<form>
+  <label>From:</label> <input type="text">
+  <label>Subject:</label> <input type="text">
+  <textarea></textarea>
+  <input type="submit" value="Send">
+</form>
+</div>

@@ -1,7 +1,9 @@
 GSP::Application.routes.draw do
 
   namespace :trial do
-    get "sign_up/index"
+    get  "sign_up/index"
+    post "sign_up/new_password"
+
     get "sign_up/form"
     post "sign_up/register_new_user", :as => "register_new_user"
     get "sign_up/already_registered"
