@@ -76,5 +76,21 @@ class Eicc::BatchValidationStatus < Eicc::ValidationStatus
     individual_validation_statuses = val
   end
 
+  def destroy_self_and_data
+    ivs = individual_validation_statuses
+    declarations = ivs.map(&:declaration).flatten.compact
+    declarations.each do |dec|
+      dec.mineral_questions.destroy_all
+      dec.company_level_questions.destroy_all
+      dec.smelter_list.destroy_all
+      dec.standard_smelter_names.destroy_all
+      FileUtils.rm(dec.uploaded_excel.storage_path)
+      dec.uploaded_excel.destroy
+    end
+    declarations.each(&:destroy)
+    individual_validation_statuses.destroy_all
+    self.destroy
+  end
+
 
 end
