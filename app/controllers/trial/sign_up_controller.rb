@@ -1,5 +1,11 @@
 class Trial::SignUpController < Trial::PublicController
-  layout "application"
+  def index
+  end
+
+  def new_password
+    @email = params[:email]
+    @user  = Trial::TrialUser.new params
+  end
 
   def form
     @user = Trial::TrialUser.new

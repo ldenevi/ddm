@@ -1,0 +1,14 @@
+.trial {
+  background-color: #18412e;
+  color: white;
+  font-family: Oxygen-Bold, Helvetica, Arial, sans-serif;
+
+}
+
+.invalid-email {
+ color: red;
+}
+
+A {
+  color: #ffb366;
+}
