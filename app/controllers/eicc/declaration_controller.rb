@@ -4,7 +4,7 @@ class Eicc::DeclarationController < ApplicationController
   end
 
   def new
-    if Eicc::BatchValidationStatus.where(:user_id => current_user).count == 2 && current_user.class == Trial::TrialUser
+    if Eicc::BatchValidationStatus.where(:user_id => current_user).count == 2 && current_user.is_a?(Trial::TrialUser)
       flash[:notice] = "You have reached the maximum number of batch processes. Please contact Green Status Pro"
       redirect_to :back
     else
