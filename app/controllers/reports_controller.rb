@@ -1584,6 +1584,7 @@ class ReportsController < ApplicationController
     rows = []
     @batch.individual_validation_statuses.each do |ivs|
       next if ivs.declaration.nil?
+      next if ivs.declaration.mineral_questions.empty?
 
           dec = ivs.declaration
           question_1 = dec.mineral_questions.sort_by(&:sequence).first
