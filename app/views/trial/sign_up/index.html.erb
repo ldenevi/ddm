@@ -13,7 +13,7 @@
       <p>Process up to 8 CFSI templates and generate reports for your company's SEC Form SD filing.</p>
       <p>And access Roadmap™ for your due diligence requirements.</p>
       <div class="email-form-container">
-        <%= form_tag(trial_sign_up_new_password_path, :method => :post) do %>
+        <%= form_tag(trial_sign_up_new_password_path, :method => :post, :id => "sign_up_form") do %>
           <%= email_field_tag :email %>
           <%= submit_tag "Sign up" %>
         <% end %>
@@ -27,19 +27,24 @@
 
   <div class="footer">
     <span><p>&copy; Green Status Pro 2013-14</p></span>
-    <span><a href="">Contact Us</a></span>
+    <span><a href="#" id="contact_us_link">Contact Us</a></span>
     <span><a href="http://www.greenstatuspro.com/#!about-us/c1bda" target="_blank">About Us</a></span>
   </div>
 </div>
 
 <%= javascript_include_tag "gsp/trial/gsp.trial.signup" %>
 
+<div id="dialog_boxes" style="display:none">
+  <div id="contact_us_form">
+  <form>
+    <label>From:</label> <input type="text">
+    <label>Subject:</label> <input type="text">
+    <textarea></textarea>
+    <input type="submit" value="Send">
+  </form>
+  </div>
 
-<div id="contact_us_form">
-<form>
-  <label>From:</label> <input type="text">
-  <label>Subject:</label> <input type="text">
-  <textarea></textarea>
-  <input type="submit" value="Send">
-</form>
+  <div id="invalid_email">
+    <p><span>Invalid email address</span></p>
+  </div>
 </div>
