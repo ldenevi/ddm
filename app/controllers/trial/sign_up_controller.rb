@@ -1,4 +1,6 @@
 class Trial::SignUpController < Trial::PublicController
+  layout "application"
+
   def index
   end
 
