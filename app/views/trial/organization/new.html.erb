@@ -1,0 +1,40 @@
+<% unless flash.empty? %>
+    <% flash.each do |type, errors| %>
+      <% if errors.respond_to?(:each) %>
+        <ul>
+          <% errors.each do |field, messages| %>
+          <li><%= field.to_s.humanize %> <%= messages.to_sentence %></li>
+         <% end %>
+        </ul>
+      <% else %>
+        <div><%= errors %></div>
+      <% end %>
+  <% end %>
+<% end %>
+
+<script>
+$(function() {
+  $( "#new_organization" ).dialog({
+    height: 230,
+    modal: true
+  });
+});
+</script>
+
+<div id="new_organization" title="Enter your organization's name">
+  <%= form_for(@organization, :url => trial_create_new_organization_path) do |f| %>
+    <div>
+    Name
+    <%= f.text_field :full_name %>
+    </div>
+
+    <div>
+    <%= f.label :display_name %> (optional)
+    <%= f.text_field :display_name %>
+    </div>
+
+    <div>
+    <%= f.submit "Create Your Organization" %>
+    </div>
+  <% end %>
+</div>

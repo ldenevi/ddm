@@ -32,6 +32,7 @@ group :assets do
 end
 
 gem 'jquery-rails', '3.0.4'
+gem 'browser', '0.3.2'
 
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
@@ -67,7 +68,7 @@ group :development, :test do
 end
 
 # = Features =
-# gem 'prawn'
+gem 'prawn', '0.14.0'
 gem 'googlecharts', '1.6.8'
 gem 'axlsx', '2.0.1'
 # gem 'even_calendar'

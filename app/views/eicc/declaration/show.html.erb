@@ -3,10 +3,21 @@
 <%= javascript_include_tag 'eicc/all.fineuploader-3.8.2.min.js' %>
 
 
+<% if browser.ie7? || browser.ie8? || browser.ie9? %>
+
+<%= form_tag({:controller => "eicc/declaration", :action => :upload_zip}, :multipart => true) do %>
+  <%= hidden_field_tag "validation_status_id", @validation_status.id %>
+  Upload a zip file: <%= file_field_tag 'zip' %>
+  <%= submit_tag "Upload" %>
+<% end %>
+
+<% else %>
+
 <!-- Use this form to generate an authenticity token-->
 <%= form_tag('validate_single_eicc_spreadsheet', :multipart => true) do |form| %>
   <%= hidden_field_tag "validation_status_id", @validation_status.id %>
 <% end %>
+
 
 <!-- Upload form -->
 
@@ -15,20 +26,20 @@
     width: 450px;
     border: 1px solid black;
   }
-  
+
     #file_uploader ul.qq-upload-list li {
       height: 10px;
       font-size: 9pt;
       border-top: 1px solid black;
       overflow: hidden;
     }
-    
+
     #file_uploader div.qq-upload-drop-area {
       border: 1px solid black;
       width: 600px;
       height: 400px;
     }
-  
+
 </style>
 
   <div id="file_uploader"></div>
@@ -45,25 +56,26 @@
         text: {
           failUpload : "File not readable"
         }
-        
+
    /*     validation: {
           allowedExtensions : ["xls", "xlsx"]
         } */
       });
     });
-    
-    
+
+
     $("#file_uploader").on("submitted", function(event, id, name) {
       var promise = new qq.Promise();
 
       console.log(name);
       promise.success();
       return promise;
-   
+
     });
   </script>
 
 
+<% end %>
 
 
 <div id="validation_statuses">
@@ -71,19 +83,15 @@
 </div>
 
 <script>
-  $(document).ready(function () {  
+  $(document).ready(function () {
     window.setInterval(function() {
       $.get("/eicc/declaration/show_validation_statuses/" + $("input[name=validation_status_id]").val()).done(function(data) {
         $("#validation_statuses").html(data);
       });
     }, 2000);
-    
+
     $.get("/eicc/declaration/show_validation_statuses/" + $("input[name=validation_status_id]").val()).done(function(data) {
       $("#validation_statuses").html(data);
     });
   });
 </script>
-
-
-
-

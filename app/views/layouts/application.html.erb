@@ -6,7 +6,7 @@
   <%= stylesheet_link_tag "application", :media => "all" %>
   <%= stylesheet_link_tag '/assets/jquery/pepper-grinder/jquery-ui.css', :media => "all" %>
   <%= stylesheet_link_tag "/assets/gsp/green/gsp.green.#{params[:controller]}.css", :media => "all" %>
-  
+
   <%= javascript_include_tag "jquery" %>
   <%= javascript_include_tag "jquery-ui" %>
   <%= javascript_include_tag "jquery.jeditable" %>
@@ -19,7 +19,7 @@
   <%= javascript_include_tag 'javascripts/gsp.js' %>
   <%= javascript_include_tag 'javascripts/gsp.ui.js' %>
   <%= csrf_meta_tags %>
-  
+
   <title><%= params[:controller].titlecase %> - Green Status Pro</title>
 </head>
 
@@ -30,22 +30,24 @@
 <div id="app">
 
   <div id="menus">
-    
+
     <div id="top-menu">
       <span id="top-menu-logo">
-        <a href="/index"><img src="/images/green/top_logo.png"></a></span>
+        <a href="#"><img src="/images/green/top_logo.png"></a></span>
       <%= render "shared/menus/top_menu" if current_user %>
     </div>
   </div>
-  
+
   <%= render "shared/menus/sub_menu" if current_user %>
-  
+
+  <%= render "shared/flash_messages" %>
+
   <div id="content">
     <%= yield %>
   </div>
 
 </div>
-  
+
 <div id="footer">
   <% if current_user %>
   <div id="footer-menu">
@@ -58,9 +60,9 @@
     <span>
   </div>
   <% end %>
-  
+
   <div id="footer-copyright">
-    <p>© Copyright 2013. Green Status Pro. All Rights Reserved.</p>
+    <p>© Copyright 2014. Green Status Pro. All Rights Reserved.</p>
   </div>
 </div>
 </body>

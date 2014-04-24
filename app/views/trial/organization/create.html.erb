@@ -1,0 +1,13 @@
+Created Organization
+
+<% unless flash.empty? %>
+    <% flash.each do |type, errors| %>
+    <ul>
+      <% errors.each do |field, messages| %>
+      <li><%= field.to_s.humanize %> <%= messages.to_sentence %></li>
+     <% end %>
+    </ul>
+    <% end %>
+<% end %>
+
+Created <%= current_user.organization.full_name %>

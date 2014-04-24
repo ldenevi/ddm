@@ -53,6 +53,17 @@ GSP::Application.configure do
 
   # Enable threaded mode
   # config.threadsafe!
+  config.action_mailer.default_url_options = {:host => "gsp-app.greenstatuspro.com"}
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address              => "smtp.sendgrid.net",
+    :port                 => 587,
+    :domain               => 'greenstatuspro.com',
+    :user_name            => 'gsp-notifier@greenstatuspro.com',
+    :password             => 'GSPB90BB@1',
+    :authentication       => 'plain',
+    :enable_starttls_auto => true
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)

@@ -27,13 +27,14 @@ GSP::Application.configure do
   # Tell Action Mailer not to deliver emails to the real world.
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
+  config.action_mailer.default_url_options = {:host => "localhost:3000"}
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address              => "smtp.mandrillapp.com",
+    :address              => "smtp.sendgrid.net",
     :port                 => 587,
     :domain               => 'greenstatuspro.com',
-    :user_name            => 'john.logan@greenstatuspro.com',
-    :password             => 'OZyacctNtHnJ8BSZLlTpLw',
+    :user_name            => 'gsp-notifier@greenstatuspro.com',
+    :password             => 'GSPB90BB@1',
     :authentication       => 'plain',
     :enable_starttls_auto => true
   }

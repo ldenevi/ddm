@@ -1,14 +1,17 @@
 class Eicc::DeclarationController < ApplicationController
   def index
-    @validation_statuses = Eicc::BatchValidationStatus.where(:user_id => current_user)
-  end
-
-  def list
+    @validation_statuses = Eicc::BatchValidationStatus.where(:user_id => current_user) || []
   end
 
   def new
-    @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
-    redirect_to :action => :show, :id => @validation_status.id
+    if Eicc::BatchValidationStatus.where(:user_id => current_user).count == 2 && current_user.is_a?(Trial::TrialUser)
+      flash[:notice] = "You have reached the maximum number of batch processes. Please contact Green Status Pro"
+      redirect_to :back
+    else
+      @validation_status = Eicc::BatchValidationStatus.create :status => "New", :user => current_user, :representative_email => (current_user.nil? ? nil : current_user.email)
+      redirect_to :action => :show, :id => @validation_status.id
+      return
+    end
   end
 
   def show
@@ -37,15 +40,37 @@ class Eicc::DeclarationController < ApplicationController
     end
   end
 
+  def upload_zip
+    safe_filename = params[:zip].original_filename.gsub(' ', '_').gsub(/[^\w\d.-]/, '')
+    @temporary_filepath = generate_temporary_filepath(safe_filename)
+    @temporary_file = File.open(@temporary_filepath, 'wb') { |f| f.write(params[:zip].read) }
+    Zip::ZipFile::open(@temporary_filepath) do |zip|
+      temppath = File.join(Rails.root, 'tmp', 'uploaded_files', 'eicc', rand(16).to_s, 'unzipped')
+      FileUtils.mkdir_p(temppath)
+      zip.each do |entry|
+        if %w(.xls .xlsx).include?(File.extname(entry.name))
+          filepath = File.join(temppath, File.basename(entry.name))
+          zip.extract(entry, filepath)
+          uploaded_simulation = ActionDispatch::Http::UploadedFile.new(:tempfile => File.new(filepath), :filename => File.basename(filepath), :content_type => 'application/vnd.ms-excel')
+          validate_spreadsheet(uploaded_simulation, params[:validation_status_id])
+        end
+      end
+    end
+    redirect_to :back
+  end
 
   def validate_single_eicc_spreadsheet
+    render :json => { :success => validate_spreadsheet(params[:spreadsheet], params[:validation_status_id]) }
+  end
+
+  def validate_spreadsheet(uploaded_file, validation_status_id)
     successully_processed = false
 
     begin
       @validation_status = begin
         begin
-          Eicc::BatchValidationStatus.find params[:validation_status_id]
-        rescue
+          Eicc::BatchValidationStatus.find validation_status_id
+        rescue $!
           Eicc::BatchValidationStatus.create :status => "Processing", :representative_email => (current_user.nil? ? nil : current_user.email)
         end
       end
@@ -53,13 +78,13 @@ class Eicc::DeclarationController < ApplicationController
       @validation_status.update_attributes(:status => "Processing")
 
       # FIXME This assumes all file storage is successful
-      safe_filename = params[:spreadsheet].original_filename.gsub(' ', '_').gsub(/[^\w\d.-]/, '')
+      safe_filename = uploaded_file.original_filename.gsub(' ', '_').gsub(/[^\w\d.-]/, '')
       @temporary_filepath = generate_temporary_filepath(safe_filename)
-      @temporary_file = File.open(@temporary_filepath, 'wb') { |f| f.write(params[:spreadsheet].read) }
+      @temporary_file = File.open(@temporary_filepath, 'wb') { |f| f.write(uploaded_file.read) }
 
        # Add details to status
       @individual_validation_status = Eicc::IndividualValidationStatus.new :status => "Opening",
-                                                                                :filename => params[:spreadsheet].original_filename,
+                                                                                :filename => uploaded_file.original_filename,
                                                                                 :uploaded_file_path => @temporary_filepath,
                                                                                 :message => "Attempting to open spreadsheet"
 
@@ -69,7 +94,7 @@ class Eicc::DeclarationController < ApplicationController
       begin
 
         # Attempt to read and validate declaration without raising any expectations
-        @declaration = Eicc::Declaration.generate File.join(@temporary_filepath)
+        @declaration = Eicc::Declaration.generate File.join(@temporary_filepath), current_user
         @declaration.save!(:validate => false)
 
         @individual_validation_status.update_attributes(:status => "Validating", :message => "Analyzing spreadsheet", :declaration => @declaration, :template_version => @declaration.template_version)
@@ -97,7 +122,7 @@ class Eicc::DeclarationController < ApplicationController
         @individual_validation_status.update_attributes(:status => "File not readable",
                                                         :representative_email => (@declaration.nil? ? "" : @declaration.representative_email),
                                                         :company_name =>(@declaration.nil? ? "" :  @declaration.company_name),
-                                                        :message => (Eicc::Declaration.unknown_file_format % params[:spreadsheet].original_filename))
+                                                        :message => (Eicc::Declaration.unknown_file_format % uploaded_file.original_filename))
         # TODO E-Mail Leo
         successully_processed = false
       end
@@ -106,7 +131,7 @@ class Eicc::DeclarationController < ApplicationController
       @validation_status.update_attributes(:status => "Completed")
     end
 
-    render :json => { :success => successully_processed }
+    successully_processed
   end
 
   # TODO Only pull validation status of current_user

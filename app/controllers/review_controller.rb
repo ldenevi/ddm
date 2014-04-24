@@ -32,12 +32,14 @@ class ReviewController < ApplicationController
       when 'not_conforming'
         @task.not_conform!
     end
+    Notifications::Reviews.task_closed(@task, current_user).deliver
     render :text => 'Done'
   end
 
   def reopen_task
     @task = Task.includes(:review).where("tasks.id = ? AND reviews.organization_id = ?", params[:id], current_user.organization).first
     @task.reopen!
+    Notifications::Reviews.task_reopened(@task, current_user).deliver
     render :text => 'Done'
   end
 
@@ -70,6 +72,8 @@ class ReviewController < ApplicationController
       @task.comments << @comment
       @posted_comment = @comment
 
+      Notifications::Reviews.task_comment_posted(@comment, current_user).deliver
+
       render :layout => nil, :template => 'review/post_comment_form'
 
     rescue GSP::FileManager::BinaryFileHandler::InvalidFileFormatException
@@ -79,12 +83,12 @@ class ReviewController < ApplicationController
   end
 
   def show_comment
-    @comment = Comment.where(:id => params[:id], :author_id => current_user)
+    @comment = Comment.where(:id => params[:id], :author_id => current_user).first
     render :partial => 'task_comment', :content_type => 'text/html'
   end
 
   def get_attachment
-    @attachment = BinaryFile.where(:id => params[:id], :user_id => current_user).first
+    @attachment = BinaryFile.where(:id => params[:id]).first
     send_data @attachment.file_data, :filename => @attachment.filename #, :type => @attachment.mime_types.first["Content-Type"]
   end
 

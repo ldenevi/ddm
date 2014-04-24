@@ -29,9 +29,9 @@ class Eicc::Declaration < ActiveRecord::Base
   require 'digest/md5'
   require 'csv'
 
-  def self.generate(excel_filepath)
-    obj = new :uploaded_excel => Spreadsheet.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath)})
+  def self.generate(excel_filepath, user = nil)
     gnumeric_csv = GSP::Eicc::Excel::Converters::Gnumeric::Gnumeric.new(excel_filepath)
+    obj = new :uploaded_excel => Spreadsheet.generate({:filename => File.basename(excel_filepath), :data => File.read(excel_filepath), :user => user})
     obj.template_version = get_version(gnumeric_csv.worksheets.first.data)
 
     raise StandardError, "Old template version" if obj.template_version == "1.00"
@@ -169,12 +169,12 @@ private
     sequence = 0
     smelter_list_fields = structure_fields[:smelter_list].to_a
 
-    # Version 2.00, 2.01 has diverse column positioning
+    # Versions have diverse column positioning
     columns = smelter_list_definition.clone
 
-    if ["2.00", "2.01"].include?(self.template_version)
-      header_sample = self.csv_worksheets[4].data[0..2000]
-
+    header_sample = self.csv_worksheets[4].data[0..2000]
+    if %w(2.00 2.01).include?(self.template_version)
+      # Shift left
       if header_sample.match("\nGold,") || header_sample.match("\nTungsten,") || header_sample.match("\nTin,") || header_sample.match("\nTantalum,")
         columns[:metal] = 0
         columns[:smelter_reference_list] = 1
@@ -190,16 +190,41 @@ private
         columns[:mineral_source_location] = 11
         columns[:comment] = 12
       end
+
+    elsif %w(2.02 2.03a).include?(self.template_version)
+      # Shift left
+      if header_sample.match("\nGold,") || header_sample.match("\nTungsten,") || header_sample.match("\nTin,") || header_sample.match("\nTantalum,")
+        columns[:metal] = 0
+        columns[:smelter_reference_list] = 1
+        columns[:standard_smelter_name] = 2
+        columns[:facility_location_country] = 3
+        columns[:smelter_id] = 4
+        columns[:facility_location_street_address] = 5
+        columns[:facility_location_city] = 6
+        columns[:facility_location_province] = 7
+        columns[:facility_contact_name] = 8
+        columns[:facility_contact_email] = 9
+        columns[:proposed_next_steps] = 10
+        columns[:mineral_source] = 11
+        columns[:mineral_source_location] = 12
+        columns[:comment] = 13
+      end
     end
 
     while !rows[i].nil?
-      rows_test = rows[i].uniq
-      if rows_test.size < 4
-        if rows_test.size == 2 && rows_test[1].to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/)
-          break
-        end
+      row_test = rows[i].compact
+
+      # Skip empty row
+      if row_test.empty? ||
+         row_test.first.to_s == '#N/A'
         i += 1
         next
+      end
+
+      # End loop if row includes the terminal character series
+      if row_test.first.to_s.match('Electronic Industry Citizenship Coalition, Incorporated and Global e-Sustainability Initiative. All rights reserved.') ||
+         row_test.first.to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/)
+        break
       end
 
       smelter_list_item = Eicc::SmelterList.new

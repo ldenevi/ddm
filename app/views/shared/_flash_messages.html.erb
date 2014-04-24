@@ -1,0 +1,13 @@
+<% flash.each do |type, messages| %>
+  <% if type == :errors %>
+      <ul>
+      <% messages.each do |k, v| %>
+        <% v = [v].flatten %>
+        <li><%= k.to_s.humanize %> <%= v.to_sentence %></li>
+       <% end %>
+      </ul>
+  <% else %>
+    <% messages = [messages].flatten %>
+    <%= content_tag :div, messages.to_sentence, :class => "flash #{type}" %>
+  <% end %>
+<% end %>
