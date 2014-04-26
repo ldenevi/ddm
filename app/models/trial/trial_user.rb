@@ -25,7 +25,7 @@ class Trial::TrialUser < User
   def email_domain_cannot_exist
     domain = email.split('@').last
     if domain != "greenstatuspro.com" &&
-      !Trial::TrialUser.where("email LIKE ?", "%@#{domain}").where("id <> ?", self.id).empty?
+      !Trial::TrialUser.where("email LIKE ?", "%@#{domain}").where("id IS NOT ?", self.id).empty?
       errors.add(:email, "has been previously registered")
       return false
     end
