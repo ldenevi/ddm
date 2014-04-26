@@ -40,11 +40,10 @@
 
   <%= render "shared/menus/sub_menu" if current_user %>
 
-  <div id="flash_messages">
-  <%= render "shared/flash_messages" %>
-  </div>
-
   <div id="content">
+    <div id="flash_messages">
+    <%= render "shared/flash_messages" %>
+    </div>
     <%= yield %>
   </div>
 
