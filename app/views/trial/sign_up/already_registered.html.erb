@@ -1,7 +1,13 @@
 <div>
-  <p>Please contact Green Status Pro or <%= link_to "sign in", new_user_session_path %></p>
+  <p>Please contact Green Status Pro</p>
 </div>
 
 <script>
-  $("#content").dialog({width:400, modal:true, title:"Attention"});
+  $("#content").dialog({
+    width:400,
+    modal:true,
+    title:"Attention",
+    buttons: [{text: "Try again", click: function() { location.href = "<%= trial_sign_up_form_path %>"; }},
+              {text: "Sign in", click: function() { location.href = "<%= new_user_session_path %>"; }}]
+  });
 </script>
