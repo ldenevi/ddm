@@ -15,7 +15,7 @@ class Trial::TrialUser < User
   def email_cannot_contain_a_forbidden_domain
     domain = email.split("@").last
     Trial::TrialUser.forbidden_domains.each do |fd|
-      if domain.include?(fd)
+      if domain.to_s.include?(fd)
         errors.add(:email, " from '#{domain}' is invalid. Please use your company's email address.")
         break
       end
