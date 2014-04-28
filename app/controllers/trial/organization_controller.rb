@@ -8,7 +8,7 @@ class Trial::OrganizationController < ApplicationController
     current_user.organization = @organization
     if @organization.save && current_user.save
       flash[:notice] = ["Created #{@organization.full_name}"]
-      redirect_to root_url
+      redirect_to eicc_declaration_index_path
     else
       flash[:alert] = @organization.errors.messages.merge(current_user.errors.messages)
       redirect_to :back
