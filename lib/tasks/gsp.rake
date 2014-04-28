@@ -108,7 +108,7 @@ EOT
     namespace :trial do
       desc "Lock expired trial users"
       task :lock_expired_users => :environment do
-        expiration_candidates = Trial::TrialUser.where("trial_created_at < ?", 2.weeks.ago).where(:locked_at => nil)
+        expiration_candidates = Trial::TrialUser.where("created_at < ?", 2.weeks.ago).where(:locked_at => nil)
         puts "Found #{expiration_candidates.size} trial users older than #{Trial::TrialUser.trial_period.inspect}"
         if expiration_candidates.size > 0
           expired_trial_users_count = expiration_candidates.update_all(:locked_at => Time.now)
