@@ -6,7 +6,7 @@ class Trial::SignUpController < Trial::PublicController
 
   def new_password
     @email = params[:email]
-    @user  = Trial::TrialUser.new params
+    @user  = Trial::TrialUser.new :email => params[:email], :password => params[:password]
   end
 
   def form

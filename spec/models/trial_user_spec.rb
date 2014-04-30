@@ -29,7 +29,7 @@ describe Trial::TrialUser do
 
     it "should prevent registration from" do
       expect(trial_user_with_forbidden_domain).not_to be_valid
-      expect(trial_user_with_forbidden_domain.errors.messages).to include({:email => ["is invalid"]})
+      expect(trial_user_with_forbidden_domain.errors.messages).to include({:email => [" from 'hotmail.com' is invalid. Please use your company's email address."]})
     end
   end
 
@@ -44,7 +44,7 @@ describe Trial::TrialUser do
   it "should prevent registering an email from a previously registered domain" do
     already_registered_domain_email.save
     expect(already_registered_domain_email).to be_invalid
-    expect(already_registered_domain_email.errors.messages).to include({:email => ["has been previously registered"]})
+    expect(already_registered_domain_email.errors.messages).to include({:email => ["domain 'already.registered.com' has been previously registered"]})
   end
 end
 
@@ -53,7 +53,7 @@ require 'rake'
 describe "gsp:app:trial:lock_expired_users" do
   let(:expired_trial_user) {
     etu = Trial::TrialUser.create :email => "expired@user.com", :password => "password1"
-    etu.update_attribute(:trial_created_at, 15.days.ago)
+    etu.update_attribute(:created_at, 15.days.ago)
     etu
   }
 
@@ -64,7 +64,7 @@ describe "gsp:app:trial:lock_expired_users" do
 
 
   it "should lock expired trial users" do
-    expect(expired_trial_user.trial_created_at).to be < Time.now - Trial::TrialUser.trial_period
+    expect(expired_trial_user.created_at).to be < Time.now - Trial::TrialUser.trial_period
     Rake::Task["gsp:app:trial:lock_expired_users"].invoke
     expect(expired_trial_user.reload.access_locked?).to be_true
   end

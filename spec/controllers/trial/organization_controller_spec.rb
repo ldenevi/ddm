@@ -13,7 +13,8 @@ describe Trial::OrganizationController do
     it "should be able to create an organization" do
       request.env["HTTP_REFERER"] = "/trial/organization/new"
       post 'create', :organization => {:full_name => "Test Organization, Inc.", :display_name => "Test"}
-      response.should be_success
+      response.should redirect_to eicc_declaration_index_path
+      expect(flash[:notice]).to include("Created Test Organization, Inc.")
     end
 
     it "should redirect back to form if Organization is not valid" do
