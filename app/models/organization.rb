@@ -6,6 +6,8 @@ class Organization < ActiveRecord::Base
   include GSP::UI::Javascript::EcoTree
   make_ecotree :class_name => 'Organization', :children => 'organizations'
 
+  attr_accessible :properties
+
   # Display information
   attr_accessible :full_name, :display_name, :governing_law, :owner
   belongs_to :owner, :class_name => 'User'
