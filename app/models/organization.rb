@@ -7,6 +7,7 @@ class Organization < ActiveRecord::Base
   make_ecotree :class_name => 'Organization', :children => 'organizations'
 
   attr_accessible :properties
+  serialize :properties, Hash
 
   # Display information
   attr_accessible :full_name, :display_name, :governing_law, :owner
