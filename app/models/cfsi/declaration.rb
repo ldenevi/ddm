@@ -1,5 +1,5 @@
 class Cfsi::Declaration < ActiveRecord::Base
-  extend GSP::Cfsi::Versions
+  extend GSP::Protocols::Regulations::CFSI::Versions
 
   attr_accessible :address, :authorized_company_representative_name,
                   :company_name, :company_unique_identifier, :completion_at,
@@ -29,10 +29,10 @@ class Cfsi::Declaration < ActiveRecord::Base
     obj.version = get_version(cmrt_csv_worksheets.first.data)
 
     logger.info "Detected version #{obj.version}"
-    raise GSP::Cfsi::CMRT::Exceptions::VersionOne if obj.version == "1.00"
+    raise GSP::Protocols::Regulations::CFSI::CMRT::Exceptions::VersionOne if obj.version == "1.00"
 
-    # Reading the reference maps from the hard drive every time a Declaration is create in RAM
-    # create a speed bottleneck. This performance cost will be tolerated in this version
+    # Reading the reference maps from the hard drive every time a Declaration is created in RAM
+    # creates a speed bottleneck. This performance cost will be tolerated in this version
     # of the Cfsi::Declaration until we observe in the field all the possible variations of the CMRT
     # for research purposes.
     #
@@ -42,6 +42,16 @@ class Cfsi::Declaration < ActiveRecord::Base
     validates_with Cfsi::DeclarationValidator
     obj.extract_data_from_all_worksheets
     obj
+  end
+
+  # Create Worksheets from a list of file paths
+  def self.generate_from_csv_file_paths(csv_file_paths = [])
+    file_paths = csv_file_paths.sort { |a,b| a.split('.').last.to_i <=> b.split('.').last.to_i }
+    worksheets = []
+    file_paths.each do |path|
+      worksheets << GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet.load_csv(path)
+    end
+    generate worksheets
   end
 
   def extract_data_from_all_worksheets
@@ -56,8 +66,9 @@ class Cfsi::Declaration < ActiveRecord::Base
   # Basic declaration questions
   #
   def extract_data_from_declaration_worksheet(worksheet_index = nil)
-    declaration_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name == "cfsi_cmrt.csv.#{self.structure[:worksheet_indices][:declaration]}" }.first
+    declaration_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:declaration]}") }.first
                                                     : self.csv_worksheets[worksheet_index]
+
     declaration_fields = self.structure[:fields][:declaration].to_a
     field_rows = {}
     declaration_fields.collect do |field_name|
@@ -77,7 +88,7 @@ class Cfsi::Declaration < ActiveRecord::Base
   # Minerals questions
   #
   def extract_data_from_minerals_questions_worksheet(worksheet_index = nil)
-    minerals_questions_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name == "cfsi_cmrt.csv.#{self.structure[:worksheet_indices][:minerals]}" }.first
+    minerals_questions_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:minerals]}") }.first
                                                           : self.csv_worksheets[worksheet_index]
 
     rows  = minerals_questions_worksheet.csv.read
@@ -103,7 +114,7 @@ class Cfsi::Declaration < ActiveRecord::Base
   # Company level questions
   #
   def extract_data_from_company_level_questions_worksheet(worksheet_index = nil)
-    company_level_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name == "cfsi_cmrt.csv.#{self.structure[:worksheet_indices][:company_level]}" }.first
+    company_level_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:company_level]}") }.first
                                                      : self.csv_worksheets[worksheet_index]
     rows  = company_level_worksheet.csv.read
     i     = cell_definitions[:company_level][:start_row]
@@ -127,7 +138,7 @@ class Cfsi::Declaration < ActiveRecord::Base
   # Mineral smelters list
   #
   def extract_data_from_mineral_smelters_worksheet(worksheet_index = nil)
-    smelter_list_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name == "cfsi_cmrt.csv.#{self.structure[:worksheet_indices][:smelter_list]}" }.first
+    smelter_list_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:smelter_list]}") }.first
                                                      : self.csv_worksheets[worksheet_index]
 
     rows  = smelter_list_worksheet.csv.read
@@ -211,7 +222,7 @@ class Cfsi::Declaration < ActiveRecord::Base
   # Standard smelter names
   #
   def extract_data_from_standard_smelter_names_worksheet(worksheet_index = nil)
-    standard_smelter_names_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name == "cfsi_cmrt.csv.#{self.structure[:worksheet_indices][:smelter_names]}" }.first
+    standard_smelter_names_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:smelter_names]}") }.first
                                                      : self.csv_worksheets[worksheet_index]
     rows  = standard_smelter_names_worksheet.csv.read
     i     = cell_definitions[:standard_smelter_name][:start_row]

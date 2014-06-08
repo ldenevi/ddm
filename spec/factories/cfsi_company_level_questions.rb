@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :cfsi_company_level_question, :class => 'Cfsi::CompanyLevelQuestion' do
-    sequence 1
+    add_attribute :sequence, 1
     question "MyString"
     answer "MyText"
     comment "MyText"
-    declaration nil
+    declaration Cfsi::Declaration.new
   end
 end

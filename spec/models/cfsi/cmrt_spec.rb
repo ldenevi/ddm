@@ -36,7 +36,9 @@ describe Cfsi::Cmrt do
 
     it "should generate a Declaration from a CMRT spreadsheet" do
       expect(Cfsi::Cmrt).to respond_to :generate
-      expect(Cfsi::Cmrt.generate("./sample_cmrts/cfsi.xls")).to be_kind_of(Cfsi::Cmrt)
+      cmrt_xls_path = File.join(File.dirname(__FILE__), "sample_cmrts", "cfsi.xls")
+      expect(File.exists?(cmrt_xls_path)).to be_true
+      expect(Cfsi::Cmrt.generate(cmrt_xls_path)).to be_kind_of(Cfsi::Cmrt)
     end
   end
 end

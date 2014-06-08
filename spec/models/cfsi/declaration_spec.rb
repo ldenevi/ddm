@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-SAMPLE_CMRTS_DIR_PATH = File.join(File.dirname(__FILE__), "sample_cmrts")
-CFSI_XLS_FILEPATH = File.join(SAMPLE_CMRTS_DIR_PATH, "cfsi.xls")
+SAMPLE_CMRT_CSV_DIR_PATH = File.join(File.dirname(__FILE__), "sample_cmrts", "csv_worksheets")
 
 describe Cfsi::Declaration do
   let (:blank_declaration) { Cfsi::Declaration.new :company_level_questions => [Cfsi::CompanyLevelQuestion.new],
@@ -10,19 +9,17 @@ describe Cfsi::Declaration do
                                                      :standard_smelter_names => [Cfsi::StandardSmelterName.new]}
   context "test" do
     it "should have a sample CMRT" do
-      expect(File.exist?(CFSI_XLS_FILEPATH)).to be_true
+      expect(File.exist?(SAMPLE_CMRT_CSV_DIR_PATH)).to be_true
     end
   end
 
   context "Exceptions" do
     it "should be able to raise exception on detecting Version 1" do
-      expect(GSP::Cfsi::CMRT::Exceptions::VersionOne).to respond_to :new
+      expect(GSP::Protocols::Regulations::CFSI::CMRT::Exceptions::VersionOne).to respond_to :new
     end
   end
 
   context "(in general)" do
-
-    let (:declaration) { Cfsi::Declaration.generate CFSI_XLS_FILEPATH }
 
     it "should contain required data" do
       [:address, :authorized_company_representative_name, :company_name,
@@ -45,13 +42,13 @@ describe Cfsi::Declaration do
     end
 
     it "should detect version" do
-      expect((class << Cfsi::Declaration; self; end)).to include GSP::Cfsi::Versions
+      expect((class << Cfsi::Declaration; self; end)).to include GSP::Protocols::Regulations::CFSI::Versions
       expect(Cfsi::Declaration).to respond_to :get_version
     end
 
     require 'csv'
     let(:csv_worksheets) do
-      file_paths = Dir.glob(File.join(SAMPLE_CMRTS_DIR_PATH, "csv_worksheets", "*.csv.*")).sort { |a,b| a.split('.').last.to_i <=> b.split('.').last.to_i }
+      file_paths = Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*")).sort { |a,b| a.split('.').last.to_i <=> b.split('.').last.to_i }
       worksheets = []
       file_paths.each do |path|
         worksheets << GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet.load_csv(path)
@@ -125,6 +122,14 @@ describe Cfsi::Declaration do
       expect(generated_declaration.standard_smelter_names.last.smelter_id).not_to be_empty
       expect(generated_declaration.standard_smelter_names.last.standard_smelter_name).not_to be_empty
     end
+
+    let(:declaration_from_csvs) { Cfsi::Declaration.generate_from_csv_file_paths(Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*"))) }
+    it "should generate a Declaration from a list of csv worksheet file paths" do
+      expect(Cfsi::Declaration).to respond_to :generate_from_csv_file_paths
+      expect(declaration_from_csvs).to be_kind_of Cfsi::Declaration
+      expect(declaration_from_csvs.csv_worksheets.first).to be_kind_of GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet
+    end
+
 
   end
 end

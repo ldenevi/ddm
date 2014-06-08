@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Cfsi::MineralsQuestion do
   context "(in general)" do
-    let(:blank_minerals_question) { Cfsi::MineralsQuestion.new :declaration => Cfsi::Declaration.new }
+    let(:blank_minerals_question) { FactoryGirl.build(:cfsi_minerals_question) }
 
     it "should contain required data" do
       [:sequence, :question, :gold, :gold_comment, :tantalum, :tantalum_comment,

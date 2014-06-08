@@ -5,7 +5,7 @@ class Cfsi::DeclarationValidator < ActiveModel::Validator
   def validate(declaration)
     raise Exception, "Report rejected: could not read file" if declaration.csv_worksheets.empty? || declaration.csv_worksheets.nil?
 
-    @message = YAML::load_file(File.join('config', 'cfsi', declaration.version, 'messages.en.yml'))["en"]
+    @messages = YAML::load_file(File.join('config', 'cfsi', declaration.version, 'messages.en.yml'))["en"]
 
     @base = declaration.errors[:base]
     @minerals = declaration.errors[:minerals]
@@ -16,10 +16,10 @@ class Cfsi::DeclarationValidator < ActiveModel::Validator
     validate_base_fields(declaration)
     validate_minerals_declaration(declaration)
 
-    unless declaration.mineral_questions.first.tantalum.to_s.strip.downcase == 'no' &&
-            declaration.mineral_questions.first.tin.to_s.strip.downcase == 'no' &&
-            declaration.mineral_questions.first.gold.to_s.strip.downcase == 'no' &&
-            declaration.mineral_questions.first.tungsten.to_s.strip.downcase == 'no'
+    unless declaration.minerals_questions.first.tantalum.to_s.strip.downcase == 'no' &&
+            declaration.minerals_questions.first.tin.to_s.strip.downcase == 'no' &&
+            declaration.minerals_questions.first.gold.to_s.strip.downcase == 'no' &&
+            declaration.minerals_questions.first.tungsten.to_s.strip.downcase == 'no'
       validate_company_level_declaration(declaration)
     end
     cross_check_minerals_and_smelter_list(declaration)
@@ -37,7 +37,7 @@ private
 
   # FIXME: This needs to be DRY'd up, once we implement the i18n
   def validate_minerals_declaration(record)
-    if record.mineral_questions.size == 0
+    if record.minerals_questions.size == 0
       @minerals << @messages[:declaration][:no_presence][:mineral_questions]
       return
     end
@@ -47,7 +47,7 @@ private
     has_gold = false
     has_tungsten = false
 
-    record.mineral_questions.sort_by(&:sequence).each_with_index do |mdec, index|
+    record.minerals_questions.sort_by(&:sequence).each_with_index do |mdec, index|
       case index
         # 1) Are any of the following metals necessary to the functionality or production of your company's products that it manufactures or contracts to manufacture?
         when 0
@@ -125,10 +125,10 @@ private
           @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
 
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tantalum.to_s.downcase != "yes"
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tin.to_s.downcase != "yes"
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:gold]     if has_gold && mdec.gold.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].gold.to_s.downcase != "yes"
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tungsten] if has_tungsten && mdec.tungsten.to_s.downcase == "yes all smelters have been provided" && record.mineral_questions[3].tungsten.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].tantalum.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].tin.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:gold]     if has_gold && mdec.gold.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].gold.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tungsten] if has_tungsten && mdec.tungsten.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].tungsten.to_s.downcase != "yes"
           next
         # 6) Have all of the smelters used by your company and its suppliers been validated as compliant in accordance with the Conflict-Free Smelter (CFS) Program and listed on the Compliant Smelter List for the following metals?
         when 5
@@ -221,8 +221,8 @@ private
 
   def cross_check_minerals_and_smelter_list(record)
     # Match mineral source if declared
-    sourced_minerals  = record.smelter_list.map { |sl| sl.metal.to_s.downcase }
-    declared_minerals = record.mineral_questions.first
+    sourced_minerals  = record.mineral_smelters.map { |sl| sl.metal.to_s.downcase }
+    declared_minerals = record.minerals_questions.first
 
     return if declared_minerals.nil? || sourced_minerals.empty?
 
@@ -233,7 +233,7 @@ private
   end
 
   def validate_smelter_list(record)
-    record.smelter_list.each do |smelter|
+    record.mineral_smelters.each do |smelter|
       @smelter_list << @messages[:smelter_list][:no_presence][:standard_smelter_name] if smelter.standard_smelter_name.to_s.empty?
     end
   end
