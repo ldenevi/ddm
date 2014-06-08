@@ -4,11 +4,11 @@ class Hash
 end
 
 module GSP
-  autoload :Cfsi, File.join('gsp', 'cfsi')
   autoload :Eicc, File.join('gsp', 'eicc')
   autoload :Client, File.join('gsp', 'client')
   autoload :Documents, File.join('gsp', 'documents')
   autoload :FileManager, File.join('gsp', 'file_manager')
+  autoload :Protocols, File.join('gsp', 'protocols')
   autoload :Reports, File.join('gsp', 'reports')
   autoload :STATUS, File.join('gsp', 'status')
   autoload :Trial, File.join('gsp', 'trial')
