@@ -1,6 +1,17 @@
 require 'csv'
 
 class GSP::Documents::MsOffice::Excel::Spreadsheet
+  attr_accessor :file_name, :file_path
+
+  def initialize(file_path)
+    self.file_name = File.basename(file_path)
+    self.file_path = file_path
+  end
+
+  def to_s
+    {:@file_name => @file_name, :@file_path => @file_path}
+  end
+
   class Worksheet
     attr_accessor :file_name, :file_path, :data, :csv
 
