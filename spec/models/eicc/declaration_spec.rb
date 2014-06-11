@@ -31,4 +31,12 @@ describe Eicc::Declaration do
       declaration.should respond_to :csv_worksheets
     end
   end
+
+  context "during v3.01 ingestion" do
+    let(:protected_301) { Eicc::Declaration.generate File.join(File.dirname(__FILE__), "declaration_spec_data", "3.01", "3.01_-_protected_97.xls") }
+    it "should process the protected Excel 97 file" do
+      expect(protected_301).not_to be_nil
+      expect(protected_301.mineral_questions).not_to be_empty
+    end
+  end
 end

@@ -4,16 +4,18 @@ class Hash
 end
 
 module GSP
-  autoload :Client, File.join('gsp', 'client')
   autoload :Eicc, File.join('gsp', 'eicc')
+  autoload :Client, File.join('gsp', 'client')
+  autoload :Documents, File.join('gsp', 'documents')
   autoload :FileManager, File.join('gsp', 'file_manager')
+  autoload :Protocols, File.join('gsp', 'protocols')
   autoload :Reports, File.join('gsp', 'reports')
   autoload :STATUS, File.join('gsp', 'status')
   autoload :Trial, File.join('gsp', 'trial')
   autoload :UI, File.join('gsp', 'ui')
   autoload :Users, File.join('gsp', 'users')
 
-  VERSION = '0.4.7'
+  VERSION = '0.5.0'
 
   class Application < Rails::Application
     include GSP::STATUS

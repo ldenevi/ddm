@@ -1,0 +1,91 @@
+# EICC-GeSI template
+# Version: 3.01
+#
+---
+:declaration:
+  :company_name:
+    :row: 6
+    :column: 3
+  :declaration_scope:
+    :row: 7
+    :column: 3
+  :description_of_scope:
+    :row: 8
+    :column: 3
+  :language:
+    :row: 1
+    :column: 3
+  :company_unique_identifier:
+    :row: 10
+    :column: 3
+  :company_unique_id_authority:
+    :row: 11
+    :column: 3
+  :address:
+    :row: 12
+    :column: 3
+  :contact_name:
+    :row: 13
+    :column: 3
+  :contact_email:
+    :row: 14
+    :column: 3
+  :contact_phone:
+    :row: 15
+    :column: 3
+  :authorizer:
+    :row: 16
+    :column: 3
+  :authorizer_title:
+    :row: 17
+    :column: 3
+  :authorizer_email:
+    :row: 18
+    :column: 3
+  :authorizer_phone:
+    :row: 19
+    :column: 3
+  :effective_date:
+    :row: 20
+    :column: 3
+:minerals:
+  :start_row: 23
+  :question: 1
+  :tantalum: 3
+  :tantalum_comment: 6
+  :tin: 3
+  :tin_comment: 6
+  :gold: 3
+  :gold_comment: 6
+  :tungsten: 3
+  :tungsten_comment: 6
+:company_level:
+  :start_row: 67
+  :question: 1
+  :answer: 3
+  :comment: 6
+:smelter_list:
+  :start_row: 3
+  :metal: 1
+  :smelter_reference_list: 2
+  :standard_smelter_name: 3
+  :facility_location_country: 4
+  :smelter_id: 5
+  :source_of_smelter_id: 6
+  :facility_location_street_address: 7
+  :facility_location_city: 8
+  :facility_location_province: 9
+  :facility_contact_name: 10
+  :facility_contact_email: 11
+  :proposed_next_steps: 12
+  :mineral_source: 13
+  :mineral_source_location: 14
+  :is_all_smelter_feedstock_from_recycled_sources: 15
+  :comment: 16
+:standard_smelter_name:
+  :start_row: 2
+  :metal: 0
+  :standard_smelter_name: 1
+  :known_alias: 2
+  :facility_location_country: 3
+  :smelter_id: 4
