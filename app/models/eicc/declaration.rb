@@ -47,9 +47,17 @@ class Eicc::Declaration < ActiveRecord::Base
     # Set validation messages
     validates :company_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:company_name] }
     validates :declaration_scope, :presence => { :message =>  @@validation_messages[:declaration][:no_presence][:declaration_scope] }
-    validates :authorized_company_representative_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:authorized_company_representative_name] }
-    validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
-    validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
+
+    if obj.template_version == "3.01"
+      validates :contact_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:contact_name] }
+      validates :contact_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:contact_email] }
+      validates :effective_date, :presence => { :message => @@validation_messages[:declaration][:no_presence][:effective_date] }
+    else
+      validates :authorized_company_representative_name, :presence => { :message => @@validation_messages[:declaration][:no_presence][:authorized_company_representative_name] }
+      validates :representative_email, :presence => { :message => @@validation_messages[:declaration][:no_presence][:representative_email] }
+      validates :completion_at, :presence => { :message => @@validation_messages[:declaration][:no_presence][:completion_at] }
+    end
+
     validates :language, :inclusion => { :in => %w{English}, :message => "(%{value}): " + @@validation_messages[:declaration][:no_presence][:language] }
     validates_with Eicc::DeclarationValidator
 
