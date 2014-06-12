@@ -1,4 +1,5 @@
 require 'zip/zip'
+require 'digest/md5'
 
 class GSP::Documents::Conversion::OfficeConvert
   class Excel
@@ -29,7 +30,7 @@ class GSP::Documents::Conversion::OfficeConvert
         GSP::Documents::Conversion::OfficeConvert.convert(file_path, args, {:ms_office_app => "excel", :save_as_format_id => OPEN_DOCUMENT_SPREADSHEET})
       end
 
-      def to_worksheets(file_path, args = {:output_dir_path => 'tmp'})
+      def to_worksheets(file_path, args = {:output_dir_path => File.join('tmp', 'gsp', 'documents', 'received_office_conversion_files', Digest::MD5.hexdigest(Time.now.to_s + file_path))})
         zip_file_path = GSP::Documents::Conversion::OfficeConvert.convert(file_path, args, {:ms_office_app => "excel"})
         worksheets = []
         Zip::ZipFile.foreach(zip_file_path) do |entry|
