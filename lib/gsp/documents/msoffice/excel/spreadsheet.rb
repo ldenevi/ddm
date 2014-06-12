@@ -30,8 +30,10 @@ class GSP::Documents::MsOffice::Excel::Spreadsheet
            :csv => CSV.new(data)
     end
 
-    def self.load_string(data)
+    def self.load_string(data, args = {:file_name => nil, :file_path => nil})
       new :data => data,
+           :file_name => args[:file_name],
+           :file_path => args[:file_path],
            :csv => CSV.new(data)
     end
 
