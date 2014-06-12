@@ -5,6 +5,7 @@ describe GSP::Documents::Conversion::OfficeConvert::Excel do
   let(:xlsx_file_path) { File.join(File.dirname(__FILE__), '..', 'sample_data', 'sample_2_worksheets.xlsx') }
   let(:output_dir_path) { File.join('tmp', 'test', 'gsp_documents_conversion_officeconvert_excel') }
 
+=begin
   let(:xlsx_to_xls97) { GSP::Documents::Conversion::OfficeConvert::Excel.to_xls_97 xlsx_file_path, :output_dir_path => File.join(output_dir_path, 'xlsx_to_xls97') }
   it "should convert spreadsheet to Excel 97-2003 (.xls)" do
     expect(GSP::Documents::Conversion::OfficeConvert::Excel).to respond_to :to_xls_97
@@ -32,6 +33,10 @@ describe GSP::Documents::Conversion::OfficeConvert::Excel do
     expect(File.exists?(xlsx_to_xls5)).to be_false
   end
 
+  it "should convert spreadsheet to Open Document spreadsheet (.ods)" do
+    expect(GSP::Documents::Conversion::OfficeConvert::Excel).to respond_to :to_open_document_spreadsheet
+  end
+
   let(:xlsx_to_csv) { GSP::Documents::Conversion::OfficeConvert::Excel.to_csv xlsx_file_path, :output_dir_path => File.join(output_dir_path, 'xlsx_to_csv') }
   it "should convert spreadsheet to CSV (.csv)" do
     expect(GSP::Documents::Conversion::OfficeConvert::Excel).to respond_to :to_csv
@@ -43,8 +48,11 @@ describe GSP::Documents::Conversion::OfficeConvert::Excel do
     FileUtils.rm_r(xlsx_to_csv)
     expect(File.exists?(xlsx_to_csv)).to be_false
   end
+=end
 
-  it "should convert spreadsheet to Open Document spreadsheet (.ods)" do
-    expect(GSP::Documents::Conversion::OfficeConvert::Excel).to respond_to :to_open_document_spreadsheet
+  let(:xlsx_to_worksheets) { GSP::Documents::Conversion::OfficeConvert::Excel.to_worksheets xlsx_file_path, :output_dir_path => File.join(output_dir_path, 'xlsx_to_worksheets') }
+  it "should convert spreadsheet to array of GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet" do
+    expect(xlsx_to_worksheets).not_to be_empty
+    expect(xlsx_to_worksheets[0]).to be_kind_of GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet
   end
 end
