@@ -10,7 +10,7 @@ describe Cfsi::CmrtValidation do
       end
     end
 
-    let(:validation_issues) { Cfsi::CmrtValidation.generate File.join(File.dirname(__FILE__), 'sample_data', '2.03a', '2.03a_-_empty.xls') }
+    let(:validation_issues) { Cfsi::CmrtValidation.generate File.join(File.dirname(__FILE__), 'sample_cmrts', '2.03a', '2.03a_-_empty.xls') }
     it "should generate a validation based on given Spreadsheet" do
       expect(validation_issues).not_to be_nil
     end
