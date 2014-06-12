@@ -30,6 +30,11 @@ class GSP::Documents::MsOffice::Excel::Spreadsheet
            :csv => CSV.new(data)
     end
 
+    def self.load_string(data)
+      new :data => data,
+           :csv => CSV.new(data)
+    end
+
     def to_s
       {:@file_name => @file_name, :@data => "#{@data[0..48]} ...", :@csv => @csv.inspect}
     end
