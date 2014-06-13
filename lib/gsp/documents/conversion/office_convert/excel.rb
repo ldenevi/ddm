@@ -35,7 +35,7 @@ class GSP::Documents::Conversion::OfficeConvert
         worksheets = []
         Zip::ZipFile.foreach(zip_file_path) do |entry|
           csv_data = entry.get_input_stream.read
-          worksheet = GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet.load_string(csv_data, :file_name => entry)
+          worksheet = GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet.load_string(csv_data, :file_name => entry.to_s)
           worksheets << worksheet
         end
         worksheets
