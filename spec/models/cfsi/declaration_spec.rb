@@ -47,15 +47,8 @@ describe Cfsi::Declaration do
     end
 
     require 'csv'
-    let(:csv_worksheets) do
-      file_paths = Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*")).sort { |a,b| a.split('.').last.to_i <=> b.split('.').last.to_i }
-      worksheets = []
-      file_paths.each do |path|
-        worksheets << GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet.load_csv(path)
-      end
-      worksheets
-    end
-    let (:generated_declaration) { Cfsi::Declaration.generate(csv_worksheets) }
+    let(:csv_worksheets) { Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*")) }
+    let (:generated_declaration) { Cfsi::Declaration.generate_from_csv_file_paths(csv_worksheets) }
 
     it "should respond to .generate(cmrt_csv_worksheets)" do
       expect(Cfsi::Declaration).to respond_to :generate
@@ -129,7 +122,14 @@ describe Cfsi::Declaration do
       expect(declaration_from_csvs).to be_kind_of Cfsi::Declaration
       expect(declaration_from_csvs.csv_worksheets.first).to be_kind_of GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet
     end
+  end
 
-
+  context "using the new OfficeConv-produced worksheets" do
+    let(:unabridged_csv_file_paths) { Dir.glob(File.join(File.dirname(__FILE__), 'sample_cmrts', '2.03', 'unabridged_worksheets', '*')) }
+    let(:declaration_from_unabriged_csvs) { Cfsi::Declaration.generate_from_csv_file_paths(unabridged_csv_file_paths) }
+    it "should process at the normal speed" do
+      expect(unabridged_csv_file_paths).not_to be_empty
+      expect(declaration_from_unabriged_csvs).to be_kind_of Cfsi::Declaration
+    end
   end
 end
