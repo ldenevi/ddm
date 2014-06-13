@@ -23,11 +23,14 @@ class GSP::Documents::MsOffice::Excel::Spreadsheet
     end
 
     def self.load_csv(file_path)
-      data = File.read(file_path)
-      new :data => data,
-           :file_name => File.basename(file_path),
-           :file_path => file_path,
-           :csv => CSV.new(data)
+      file = File.open(file_path, "r:ascii-8bit")
+      data = file.read
+      worksheet = new :data => data,
+                 :file_name => File.basename(file_path),
+                 :file_path => file_path,
+                 :csv => CSV.new(data)
+      file.close
+      worksheet
     end
 
     def self.load_string(data, args = {:file_name => nil, :file_path => nil})
