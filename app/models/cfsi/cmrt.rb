@@ -36,13 +36,7 @@ class Cfsi::Cmrt < ActiveRecord::Base
     obj = new :spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => user})
     obj.file_name = File.basename(file_path)
     obj.file_extension = File.extname(file_path)
-    worksheets = []
-    if obj.file_extension == '.xls'
-      worksheets = GSP::Documents::Converter.xls_to_csv(file_path)
-    else
-      spreadsheet = GSP::Documents::Converter.xlsx_to_xls(file_path, :output_dir_path => "")
-      worksheets  = GSP::Documents::Converter.xls_to_csv(spreadsheet.file_path)
-    end
+    worksheets = GSP::Documents::Conversion::OfficeConvert::Excel.to_worksheets(file_path)
     obj.declaration = Cfsi::Declaration.generate(worksheets)
     obj.company_name = obj.declaration.company_name
     obj.language = obj.declaration.language
