@@ -26,6 +26,9 @@ class Cfsi::Declaration < ActiveRecord::Base
 
   def self.generate(cmrt_csv_worksheets = [], user = nil)
     obj = new :csv_worksheets => cmrt_csv_worksheets
+
+    # Trim revision worksheet to speed up get_version
+    cmrt_csv_worksheets.first.data = cmrt_csv_worksheets.first.data[0..16000] # cmrt_csv_worksheets.first.data.index(". All rights reserved.\"")]
     obj.version = get_version(cmrt_csv_worksheets.first.data)
 
     logger.info "Detected version #{obj.version}"
@@ -200,14 +203,15 @@ class Cfsi::Declaration < ActiveRecord::Base
 
       # End loop if row includes the terminal character series
       if row_test.first.to_s.match('Electronic Industry Citizenship Coalition, Incorporated and Global e-Sustainability Initiative. All rights reserved.') ||
-         row_test.first.to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/)
+         row_test.first.to_s.match(/^AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/) ||
+         row_test.empty?
         break
       end
 
       mineral_smelter = Cfsi::MineralSmelter.new
       smelter_list_fields.each do |field|
         value = rows[i][columns[field]]
-        value = value.split(' ').first if field == :metal  # value could be in the form 'Gold' or 'Gold (Au)', only take the first word
+        value = value.split(' ').first if value && field == :metal  # value could be in the form 'Gold' or 'Gold (Au)', only take the first word
         mineral_smelter.send("#{field.to_s}=", value)
       end
       mineral_smelter.line_number = sequence
