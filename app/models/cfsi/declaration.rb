@@ -81,7 +81,7 @@ class Cfsi::Declaration < ActiveRecord::Base
       if field_rows.keys.include?(index)
         attribute = "#{field_rows[index].to_s}="
         value     = row[cell_definitions[:declaration][field_rows[index]][:column]]
-        self.send(attribute, (value ? value.strip : value))
+        self.send(attribute, (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
       end
     end
     declaration_worksheet.csv.rewind
@@ -103,7 +103,7 @@ class Cfsi::Declaration < ActiveRecord::Base
         row.each do |attrib|
           next if attrib.nil?
           value = rows[i][cell_definitions[:minerals][attrib]]
-          mineral.send("#{attrib}=", (value ? value.strip : value))
+          mineral.send("#{attrib}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
         end
         i += 1
       end
@@ -129,7 +129,7 @@ class Cfsi::Declaration < ActiveRecord::Base
       clq_row.each do |attrib|
         next if attrib.nil?
         value = rows[i][cell_definitions[:company_level][attrib]]
-        company_level_question.send("#{attrib}=", (value ? value.strip : value))
+        company_level_question.send("#{attrib}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
       end
       i += 2
       company_level_question.sequence = sequence
@@ -214,7 +214,7 @@ class Cfsi::Declaration < ActiveRecord::Base
       smelter_list_fields.each do |field|
         value = rows[i][columns[field]]
         value = value.split(' ').first if value && field == :metal  # value could be in the form 'Gold' or 'Gold (Au)', only take the first word
-        mineral_smelter.send("#{field.to_s}=", (value ? value.strip : value))
+        mineral_smelter.send("#{field.to_s}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
       end
       mineral_smelter.line_number = sequence
       sequence += 1
@@ -241,7 +241,7 @@ class Cfsi::Declaration < ActiveRecord::Base
       standard_smelter_name = Cfsi::StandardSmelterName.new
       structure[:fields][:smelter_names].to_a.each do |field|
         value = rows[i][cell_definitions[:standard_smelter_name][field]]
-        standard_smelter_name.send("#{field.to_s}=", (value ? value.strip : value))
+        standard_smelter_name.send("#{field.to_s}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
       end
       self.standard_smelter_names << standard_smelter_name
       i += 1
