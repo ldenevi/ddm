@@ -132,4 +132,13 @@ describe Cfsi::Declaration do
       expect(declaration_from_unabriged_csvs).to be_kind_of Cfsi::Declaration
     end
   end
+
+  context "while version 3.00+" do
+    it "should have columns for CMRT version 3.00+" do
+      [:company_unique_id_authority, :contact_name, :contact_email, :contact_phone,
+       :authorizer, :authorizer_title, :authorizer_email, :authorizer_phone, :effective_date].each do |attr|
+       expect(blank_declaration).to respond_to attr
+      end
+    end
+  end
 end

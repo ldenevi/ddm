@@ -9,7 +9,8 @@ describe Cfsi::MineralSmelter do
         :facility_location_province, :facility_location_street_address,
         :line_number, :metal, :mineral_source, :mineral_source_location,
         :proposed_next_steps, :smelter_id, :smelter_reference_list,
-        :standard_smelter_name].each do |attr|
+        :standard_smelter_name, :source_of_smelter_id,
+        :is_all_smelter_feedstock_from_recycled_sources].each do |attr|
         expect(mineral_smelter).to respond_to attr
       end
       expect(mineral_smelter).to respond_to :declaration
