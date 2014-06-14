@@ -7,6 +7,9 @@ class Cfsi::Declaration < ActiveRecord::Base
                   :declaration_scope, :description_of_scope,
                   :language, :version
 
+  belongs_to :cmrt
+  attr_accessible :cmrt
+
   has_many :company_level_questions
   attr_accessible :company_level_questions
 

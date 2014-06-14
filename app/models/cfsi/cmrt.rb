@@ -1,8 +1,12 @@
 class Cfsi::Cmrt < ActiveRecord::Base
-  belongs_to :declaration
+  has_one :declaration
   has_one :spreadsheet,  :as => :attachable, :class_name => Spreadsheet
   belongs_to :minerals_vendor
   attr_accessible :company_name, :file_extension, :file_name, :is_latest, :language, :meta_data, :representative_email, :spreadsheet, :version
+
+  # For an unknown reason, the declaration needs to be saved before and after for the association to work
+  before_save "self.declaration.save!(:validate => false)"
+  after_save "self.declaration.save!(:validate => false)"
 
   def find_minerals_vendor
     vendors = Cfsi::MineralsVendor.where("properties LIKE ?", "%:query_match_data: #{minerals_vendor_unique_identifier}%")
