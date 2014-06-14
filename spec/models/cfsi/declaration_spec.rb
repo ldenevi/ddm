@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-SAMPLE_CMRT_CSV_DIR_PATH = File.join(File.dirname(__FILE__), "sample_cmrts", "csv_worksheets")
+SAMPLE_CMRT_CSV_DIR_PATH = File.join(File.dirname(__FILE__), "sample_cmrts", "3.01", "unabridged_worksheets")
 
 describe Cfsi::Declaration do
   let (:blank_declaration) { Cfsi::Declaration.new :company_level_questions => [Cfsi::CompanyLevelQuestion.new],
@@ -60,11 +60,19 @@ describe Cfsi::Declaration do
       expect(generated_declaration.csv_worksheets.first).to be_kind_of GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet
 
       # Basic declaration data
-      expect(generated_declaration.authorized_company_representative_name).to eq "Leo de Nevi"
-      expect(generated_declaration.company_name).to eq "Green Status Pro"
-      expect(generated_declaration.contact_email).to eq "leo.denevi@greenstatuspro.com"
-      expect(generated_declaration.contact_phone).to eq "555-555-5858"
-      expect(generated_declaration.contact_title).to eq "Chief Technology Officer"
+      expect(generated_declaration.authorized_company_representative_name).to be_nil
+      expect(generated_declaration.company_name).to eq "GoerTech Inc."
+      expect(generated_declaration.contact_email).to eq "jzhong@goertech.com"
+      expect(generated_declaration.contact_phone).to eq "339-640-7833"
+      expect(generated_declaration.contact_title).to be_nil
+      # 3.0 fields
+      expect(generated_declaration.company_unique_id_authority).to be_nil
+      expect(generated_declaration.contact_name).to eq "Jennifer Zhong"
+      expect(generated_declaration.authorizer).to eq "Randy Thompson"
+      expect(generated_declaration.authorizer_title).to eq "General Counsel"
+      expect(generated_declaration.authorizer_email).to eq "rthompson@goertech.com"
+      expect(generated_declaration.authorizer_phone).to eq "339-640-8021"
+      expect(generated_declaration.effective_date).not_to be_nil
 
       # Minerals questions
       expect(generated_declaration.minerals_questions).not_to be_empty
@@ -79,7 +87,7 @@ describe Cfsi::Declaration do
       expect(generated_declaration.minerals_questions.last.gold).to be_nil
       expect(generated_declaration.minerals_questions.last.tantalum).not_to be_empty
       expect(generated_declaration.minerals_questions.last.tin).not_to be_empty
-      expect(generated_declaration.minerals_questions.last.tungsten).to be_nil
+      expect(generated_declaration.minerals_questions.last.tungsten).to eq "Yes"
 
       # Company level questions
       expect(generated_declaration.company_level_questions).not_to be_empty
@@ -105,7 +113,7 @@ describe Cfsi::Declaration do
       expect(generated_declaration.standard_smelter_names).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first).not_to be_nil
       expect(generated_declaration.standard_smelter_names.first.facility_location_country).not_to be_empty
-      expect(generated_declaration.standard_smelter_names.first.known_alias).to be_nil
+      expect(generated_declaration.standard_smelter_names.first.known_alias).to eq "JAPAN"
       expect(generated_declaration.standard_smelter_names.first.metal).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first.smelter_id).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first.standard_smelter_name).not_to be_empty
