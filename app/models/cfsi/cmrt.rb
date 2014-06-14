@@ -1,6 +1,6 @@
 class Cfsi::Cmrt < ActiveRecord::Base
   belongs_to :declaration
-  belongs_to :spreadsheet
+  has_one :spreadsheet,  :as => :attachable, :class_name => Spreadsheet
   belongs_to :minerals_vendor
   attr_accessible :company_name, :file_extension, :file_name, :is_latest, :language, :meta_data, :representative_email, :spreadsheet, :version
 
