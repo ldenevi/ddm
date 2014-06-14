@@ -81,7 +81,7 @@ class Cfsi::Declaration < ActiveRecord::Base
       if field_rows.keys.include?(index)
         attribute = "#{field_rows[index].to_s}="
         value     = row[cell_definitions[:declaration][field_rows[index]][:column]]
-        self.send(attribute, value)
+        self.send(attribute, (value ? value.strip : value))
       end
     end
     declaration_worksheet.csv.rewind
