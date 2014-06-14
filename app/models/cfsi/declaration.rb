@@ -102,7 +102,8 @@ class Cfsi::Declaration < ActiveRecord::Base
       mineral_row.each do |row|
         row.each do |attrib|
           next if attrib.nil?
-          mineral.send("#{attrib}=", rows[i][cell_definitions[:minerals][attrib]])
+          value = rows[i][cell_definitions[:minerals][attrib]]
+          mineral.send("#{attrib}=", (value ? value.strip : value))
         end
         i += 1
       end
@@ -127,7 +128,8 @@ class Cfsi::Declaration < ActiveRecord::Base
       company_level_question = Cfsi::CompanyLevelQuestion.new
       clq_row.each do |attrib|
         next if attrib.nil?
-        company_level_question.send("#{attrib}=", rows[i][cell_definitions[:company_level][attrib]])
+        value = rows[i][cell_definitions[:company_level][attrib]]
+        company_level_question.send("#{attrib}=", (value ? value.strip : value))
       end
       i += 2
       company_level_question.sequence = sequence
@@ -212,7 +214,7 @@ class Cfsi::Declaration < ActiveRecord::Base
       smelter_list_fields.each do |field|
         value = rows[i][columns[field]]
         value = value.split(' ').first if value && field == :metal  # value could be in the form 'Gold' or 'Gold (Au)', only take the first word
-        mineral_smelter.send("#{field.to_s}=", value)
+        mineral_smelter.send("#{field.to_s}=", (value ? value.strip : value))
       end
       mineral_smelter.line_number = sequence
       sequence += 1
@@ -238,7 +240,8 @@ class Cfsi::Declaration < ActiveRecord::Base
 
       standard_smelter_name = Cfsi::StandardSmelterName.new
       structure[:fields][:smelter_names].to_a.each do |field|
-        standard_smelter_name.send("#{field.to_s}=", rows[i][cell_definitions[:standard_smelter_name][field]])
+        value = rows[i][cell_definitions[:standard_smelter_name][field]]
+        standard_smelter_name.send("#{field.to_s}=", (value ? value.strip : value))
       end
       self.standard_smelter_names << standard_smelter_name
       i += 1
