@@ -125,10 +125,10 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
           @minerals << @messages[:minerals][index][:invalid_data][:gold]     unless has_gold == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.gold.to_s.strip) || mdec.gold.to_s.strip.empty?
           @minerals << @messages[:minerals][index][:invalid_data][:tungsten] unless has_tungsten == false || @messages[:minerals][index][:invalid_data][:expected].include?(mdec.tungsten.to_s.strip) || mdec.tungsten.to_s.strip.empty?
 
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].tantalum.to_s.downcase != "yes"
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].tin.to_s.downcase != "yes"
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:gold]     if has_gold && mdec.gold.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].gold.to_s.downcase != "yes"
-          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tungsten] if has_tungsten && mdec.tungsten.to_s.downcase == "yes all smelters have been provided" && record.minerals_questions[3].tungsten.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tantalum] if has_tantalum && mdec.tantalum.to_s.downcase == "yes all smelters have been provided" && @declaration.minerals_questions[3].tantalum.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tin]      if has_tin && mdec.tin.to_s.downcase == "yes all smelters have been provided" && @declaration.minerals_questions[3].tin.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:gold]     if has_gold && mdec.gold.to_s.downcase == "yes all smelters have been provided" && @declaration.minerals_questions[3].gold.to_s.downcase != "yes"
+          @minerals << @messages[:minerals][index][:flagged][:is_yes_but_q4_is_not_yes][:tungsten] if has_tungsten && mdec.tungsten.to_s.downcase == "yes all smelters have been provided" && @declaration.minerals_questions[3].tungsten.to_s.downcase != "yes"
           next
         # 6) Have all of the smelters used by your company and its suppliers been validated as compliant in accordance with the Conflict-Free Smelter (CFS) Program and listed on the Compliant Smelter List for the following metals?
         when 5
