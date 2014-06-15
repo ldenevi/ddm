@@ -8,6 +8,8 @@ describe Cfsi::CmrtController do
   end
 
   context "during HTTP requests" do
+    render_views
+
     it "should have an index list of ValidationsBatches" do
       get :index
       expect(response.status).to eq 200
@@ -24,6 +26,14 @@ describe Cfsi::CmrtController do
     it "should validate a CMRT" do
       vb = Cfsi::ValidationsBatch.create
       post :validate, :spreadsheet => uploaded_cmrt, :batch_id => vb.id
+    end
+    it "should list a Cfsi::ValidationsBatch's Cfsi::CmrtValidations" do
+      vb = Cfsi::ValidationsBatch.create
+      vb.cmrt_validations = (0...12).to_a.collect { Cfsi::CmrtValidation.create :validations_batch => vb }
+      get :list_validation_statuses, :batch_id => vb.id
+      expect(Cfsi::CmrtValidation.count).to eq 12
+      expect(response.status).to eq 200
+      expect(response.body).to match 'id="cmrt_validations_list"'
     end
   end
 
