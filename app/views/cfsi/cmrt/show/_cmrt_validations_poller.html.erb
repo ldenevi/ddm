@@ -1,0 +1,17 @@
+<div id="validation_statuses">
+  <%= image_tag "/assets/eicc/loading.gif" %>
+</div>
+
+<script>
+  $(document).ready(function () {
+    window.setInterval(function() {
+      $.get("/cfsi/cmrt/list_validation_statuses/" + $("input[name=batch_id]").val()).done(function(data) {
+        $("#validation_statuses").html(data);
+      });
+    }, 2000);
+
+    $.get("/cfsi/cmrt/list_validation_statuses/" + $("input[name=batch_id]").val()).done(function(data) {
+      $("#validation_statuses").html(data);
+    });
+  });
+</script>

@@ -1,0 +1,5 @@
+<%= form_tag({:controller => "cfsi/cmrt", :action => :validate_zip}, :multipart => true) do %>
+  <%= hidden_field_tag "batch_id", @validation_status.id %>
+  Upload a zip file: <%= file_field_tag 'zip' %>
+  <%= submit_tag "Upload" %>
+<% end %>

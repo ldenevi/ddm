@@ -1,0 +1,36 @@
+<!-- This form is to generate a Rails authenticity token -->
+<%= form_tag('validate', :multipart => true) do |form| %>
+  <%= hidden_field_tag "batch_id", @validations_batch.id %>
+<% end %>
+
+<!-- Multi-file uploader -->
+<%= stylesheet_link_tag "eicc/fineuploader-3.8.2.min.css", :media => "all" %>
+<%= javascript_include_tag 'eicc/all.fineuploader-3.8.2.min.js' %>
+
+<div id="file_uploader"></div>
+<script language="Javascript">
+  $(document).ready(function () {
+    $('#file_uploader').fineUploader({
+      maxConnections : 5,
+      request: {
+        endpoint: '/cfsi/cmrt/validate/' + $("input[name=batch_id]").val(),
+        inputName: 'spreadsheet',
+        params: {"authenticity_token" : $("input[name=authenticity_token]").val(), "batch_id" : $("input[name=batch_id]").val() }
+      },
+      text: {
+        failUpload : "File not readable"
+      }
+
+ /*     validation: {
+        allowedExtensions : ["xls", "xlsx"]
+      } */
+    });
+  });
+
+  $("#file_uploader").on("submitted", function(event, id, name) {
+    var promise = new qq.Promise();
+    console.log(name);
+    promise.success();
+    return promise;
+  });
+</script>
