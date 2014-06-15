@@ -53,5 +53,16 @@ describe Cfsi::CmrtValidation do
       green_validation.reload
       expect(green_validation.state).to eq "Green"
     end
+
+    let(:file_not_readable_validation) { Cfsi::CmrtValidation.create }
+    let(:file_not_readable_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', 'invalid_cmrts.xls') }
+    it "should transition from 'Initialized' to 'File not readable'" do
+      expect(green_validation).to respond_to :transition_to
+      expect(green_validation.state).to eq "Initialized"
+      expect(green_validation.transition_to_opened(file_not_readable_file_path)).to be_true
+      green_validation.reload
+      expect(green_validation.state).to eq "File not readable"
+    end
+
   end
 end
