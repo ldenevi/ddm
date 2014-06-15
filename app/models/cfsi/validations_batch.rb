@@ -11,6 +11,8 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   has_many :vendor_cmrts, :class_name => 'Cfsi::Cmrt', :conditions => "vendor_id IS NOT NULL"
   attr_accessible :vendor_cmrts
 
+  has_many :cmrt_validations
+
   def state
     status
   end
