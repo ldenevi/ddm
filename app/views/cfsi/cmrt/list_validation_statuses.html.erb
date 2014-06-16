@@ -21,7 +21,7 @@
     <td><%= link_to cmrt_validation.cmrt.file_name, "download_uploaded_eicc_spreadsheet_path(ivs.id)" unless cmrt.nil?  %></td>
     <td><%= mail_to cmrt_validation.cmrt.declaration.contact_email unless declaration.nil? %></td>
     <td><%= (cmrt_validation.sent_emails_count) ? "Yes" : "No" %></td>
-    <td><ul><%= cmrt_validation.issues.html_safe %></ul></td>
+    <td><ul><%= cmrt_validation.issues.to_s.html_safe %></ul></td>
     <td><%= cmrt_validation.cmrt.version unless cmrt.nil? %></td>
     <td><%= cmrt_validation.created_at.to_formatted_s(:short) %></td>
   </tr>
