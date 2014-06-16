@@ -111,7 +111,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
             @minerals << @messages[:minerals][index][:no_presence][mineral.to_sym] if mdec.send(mineral).to_s.strip.empty?
             @minerals << @messages[:minerals][index][:invalid_data][mineral.to_sym] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.send(mineral).to_s.strip) || mdec.send(mineral).to_s.strip.empty?
             if ["none", "no, but less than 25%", "no, but greater than 25%"].include?(mdec.send(mineral).to_s.downcase)
-              @minerals << @messages[:minerals][index][:less_than_50_percent][mineral.to_sym]
+              @minerals << @messages[:minerals][index][:flagged][:less_than_50_percent][mineral.to_sym]
             end
           end
           next
