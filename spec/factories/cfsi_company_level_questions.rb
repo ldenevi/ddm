@@ -6,6 +6,5 @@ FactoryGirl.define do
     question "MyString"
     answer "MyText"
     comment "MyText"
-    declaration Cfsi::Declaration.new
   end
 end

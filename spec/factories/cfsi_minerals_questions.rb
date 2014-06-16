@@ -4,7 +4,6 @@ FactoryGirl.define do
   factory :cfsi_minerals_question, :class => 'Cfsi::MineralsQuestion' do
     add_attribute :sequence, 1
     question "MyString"
-    declaration Cfsi::Declaration.new
     gold "MyString"
     gold_comment "MyString"
     tantalum "MyString"

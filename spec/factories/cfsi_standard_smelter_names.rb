@@ -2,7 +2,6 @@
 
 FactoryGirl.define do
   factory :cfsi_standard_smelter_name, :class => 'Cfsi::StandardSmelterName' do
-    declaration Cfsi::Declaration.new
     facility_location_country "MyString"
     known_alias "MyString"
     metal "MyString"

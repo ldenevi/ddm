@@ -3,7 +3,6 @@
 FactoryGirl.define do
   factory :cfsi_mineral_smelter, :class => 'Cfsi::MineralSmelter' do
     comment "MyText"
-    declaration Cfsi::Declaration.new
     facility_contact_email "MyString"
     facility_contact_name "MyString"
     facility_location_city "MyString"
