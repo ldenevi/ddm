@@ -59,7 +59,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     end
     #
     # Effective date should not be in the future
-    @basic << @messages[:declaration][:flagged][:effective_date][:is_future] if @declaration.effective_date && @declaration.effective_date > Time.now
+    @basic << @messages[:declaration][:invalid_data][:effective_date] if @declaration.effective_date && @declaration.effective_date > Time.now
   end
 
   def validate_minerals_fields
