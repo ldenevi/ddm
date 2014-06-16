@@ -7,6 +7,8 @@ class Cfsi::Declaration < ActiveRecord::Base
                   :declaration_scope, :description_of_scope,
                   :language, :version
 
+  before_save "csv_worksheets = nil"
+
   belongs_to :cmrt
   attr_accessible :cmrt
 
