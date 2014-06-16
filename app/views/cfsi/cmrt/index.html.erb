@@ -4,6 +4,6 @@
 
 <ul>
 <% @validations_batches.each do |validations_batch| %>
-  <li><%= link_to validations_batch.created_at.to_s, validations_batch_show_path(validations_batch.id) %></li>
+  <li><%= link_to validations_batch.created_at.to_s, :action => :show, :id => validations_batch.id %></li>
 <% end %>
 </ul>
