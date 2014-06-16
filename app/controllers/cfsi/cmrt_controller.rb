@@ -1,6 +1,6 @@
 class Cfsi::CmrtController < ApplicationController
   def index
-    @validations_batches = Cfsi::ValidationsBatch.where(:user_id => current_user) || []
+    @validations_batches = Cfsi::ValidationsBatch.order("created_at DESC").all #where(:user_id => current_user) || []
   end
 
   def show
