@@ -46,7 +46,7 @@ describe Cfsi::Declaration do
       expect(Cfsi::Declaration).to respond_to :get_version
     end
 
-    require 'csv'
+
     let(:csv_worksheets) { Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*")) }
     let (:generated_declaration) { Cfsi::Declaration.generate_from_csv_file_paths(csv_worksheets) }
 
@@ -61,17 +61,21 @@ describe Cfsi::Declaration do
 
       # Basic declaration data
       expect(generated_declaration.authorized_company_representative_name).to be_nil
-      expect(generated_declaration.company_name).to eq "GoerTech Inc."
-      expect(generated_declaration.contact_email).to eq "jzhong@goertech.com"
-      expect(generated_declaration.contact_phone).to eq "339-640-7833"
+      expect(generated_declaration.company_name).to eq "Green Status Pro"
+      expect(generated_declaration.declaration_scope).to eq "A. Company"
+      expect(generated_declaration.description_of_scope).to be_nil
+      expect(generated_declaration.company_unique_identifier).to eq "A999666333000"
+      expect(generated_declaration.address).to eq "100 F Street, NE, Washington, DC 20549"
+      expect(generated_declaration.contact_email).to eq "leo.denevi@greenstatuspro.com"
+      expect(generated_declaration.contact_phone).to eq "(555) 555-1234"
       expect(generated_declaration.contact_title).to be_nil
       # 3.0 fields
-      expect(generated_declaration.company_unique_id_authority).to be_nil
-      expect(generated_declaration.contact_name).to eq "Jennifer Zhong"
-      expect(generated_declaration.authorizer).to eq "Randy Thompson"
-      expect(generated_declaration.authorizer_title).to eq "General Counsel"
-      expect(generated_declaration.authorizer_email).to eq "rthompson@goertech.com"
-      expect(generated_declaration.authorizer_phone).to eq "339-640-8021"
+      expect(generated_declaration.company_unique_id_authority).to eq "Database"
+      expect(generated_declaration.contact_name).to eq "Leo de Nevi"
+      expect(generated_declaration.authorizer).to eq "Leo de Nevi"
+      expect(generated_declaration.authorizer_title).to be_nil
+      expect(generated_declaration.authorizer_email).to eq "leo.denevi@greenstatuspro.com"
+      expect(generated_declaration.authorizer_phone).to eq "(555) 555-1234"
       expect(generated_declaration.effective_date).not_to be_nil
 
       # Minerals questions
@@ -84,7 +88,7 @@ describe Cfsi::Declaration do
       expect(generated_declaration.minerals_questions.first.tungsten).not_to be_empty
       expect(generated_declaration.minerals_questions.last).not_to be_nil
       expect(generated_declaration.minerals_questions.last.question).not_to be_empty
-      expect(generated_declaration.minerals_questions.last.gold).to be_nil
+      expect(generated_declaration.minerals_questions.last.gold).to eq "Yes"
       expect(generated_declaration.minerals_questions.last.tantalum).not_to be_empty
       expect(generated_declaration.minerals_questions.last.tin).not_to be_empty
       expect(generated_declaration.minerals_questions.last.tungsten).to eq "Yes"
@@ -113,7 +117,7 @@ describe Cfsi::Declaration do
       expect(generated_declaration.standard_smelter_names).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first).not_to be_nil
       expect(generated_declaration.standard_smelter_names.first.facility_location_country).not_to be_empty
-      expect(generated_declaration.standard_smelter_names.first.known_alias).to eq "JAPAN"
+      expect(generated_declaration.standard_smelter_names.first.known_alias).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first.metal).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first.smelter_id).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first.standard_smelter_name).not_to be_empty
@@ -130,7 +134,9 @@ describe Cfsi::Declaration do
       expect(declaration_from_csvs).to be_kind_of Cfsi::Declaration
       expect(declaration_from_csvs.csv_worksheets.first).to be_kind_of GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet
     end
+
   end
+
 
   context "using the new OfficeConv-produced worksheets" do
     let(:unabridged_csv_file_paths) { Dir.glob(File.join(File.dirname(__FILE__), 'sample_cmrts', '2.03', 'unabridged_worksheets', '*')) }
@@ -149,4 +155,5 @@ describe Cfsi::Declaration do
       end
     end
   end
+
 end
