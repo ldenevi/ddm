@@ -3,11 +3,11 @@ class Cfsi::Declaration < ActiveRecord::Base
 
   attr_accessible :address, :authorized_company_representative_name,
                   :company_name, :company_unique_identifier, :completion_at,
-                  :contact_email, :contact_phone, :contact_title, :csv_worksheets,
+                  :contact_email, :contact_phone, :contact_title,
                   :declaration_scope, :description_of_scope,
                   :language, :version
 
-  before_save "csv_worksheets = nil"
+  attr_accessor :csv_worksheets
 
   belongs_to :cmrt
   attr_accessible :cmrt
