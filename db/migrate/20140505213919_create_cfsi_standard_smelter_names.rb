@@ -3,7 +3,7 @@ class CreateCfsiStandardSmelterNames < ActiveRecord::Migration
     create_table :cfsi_standard_smelter_names do |t|
       t.references :declaration
       t.string :facility_location_country
-      t.string :known_alias
+      t.text :known_alias
       t.string :metal
       t.string :smelter_id
       t.string :standard_smelter_name

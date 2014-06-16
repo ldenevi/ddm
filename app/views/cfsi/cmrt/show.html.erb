@@ -1,0 +1,10 @@
+<%= __FILE__ %>
+<%= @validations_batch.inspect %>
+
+<% if browser.ie7? || browser.ie8? || browser.ie9? %>
+  <%= render "cfsi/cmrt/show/ie9_cmrt_uploader" %>
+<% else %>
+  <%= render "cfsi/cmrt/show/cmrt_uploader" %>
+<% end %>
+
+<%= render "cfsi/cmrt/show/cmrt_validations_poller" %>

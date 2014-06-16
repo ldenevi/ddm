@@ -34,11 +34,11 @@ describe Cfsi::Cmrt do
       expect(vendor_cmrt.find_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
     end
 
+    let(:latest_version_cmrt) { Cfsi::Cmrt.generate(File.join(File.dirname(__FILE__), "sample_cmrts", "3.01", "3.01_-_green.xlsx")) }
     it "should generate a Declaration from a CMRT spreadsheet" do
-      expect(Cfsi::Cmrt).to respond_to :generate
-      cmrt_xls_path = File.join(File.dirname(__FILE__), "sample_cmrts", "cfsi.xls")
-      expect(File.exists?(cmrt_xls_path)).to be_true
-      expect(Cfsi::Cmrt.generate(cmrt_xls_path)).to be_kind_of(Cfsi::Cmrt)
+      expect(latest_version_cmrt).to be_kind_of(Cfsi::Cmrt)
+      expect(latest_version_cmrt.declaration).not_to be_nil
+      expect(latest_version_cmrt.declaration).to be_kind_of Cfsi::Declaration
     end
   end
 end

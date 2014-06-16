@@ -15,6 +15,15 @@ GSP::Application.routes.draw do
     post "organization/create", :as => "create_new_organization"
   end
 
+  namespace :cfsi do
+    get "cmrt/index"
+    get "cmrt/show/:id", :to => "cmrt#show"
+    post "cmrt/new"
+    post "cmrt/validate/:id", :to => "cmrt#validate"
+    post "cmrt/validate_zip/:id", :to => "cmrt#validate_zip"
+    get "cmrt/list_validation_statuses/:batch_id", :to => "cmrt#list_validation_statuses"
+  end
+
   # EICC Declaration
   get "eicc/declaration/index"
   get "eicc/declaration/list"
