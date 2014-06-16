@@ -19,10 +19,10 @@ en:
     :invalid_data:
       :effective_date: "Validation Needed: Reported effective date is in the future"
 
-  # Mineral questions 1-6
+  # Mineral questions 1-7
   :minerals:
     # Questions
-    # 1) Are any of the following metals necessary to the functionality or production of your company's products that it manufactures or contracts to manufacture?
+    # 1) Is the conflict intentionally added to your product? (*)
     -
       :no_presence:
         :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 1"
@@ -37,7 +37,7 @@ en:
         :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 1"
         :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 1"
         :tungsten: "Invalid Data: Respondent provided an invalid answer for TUNGSTEN in Question 1"
-    # 2) Do the following metals (necessary to the functionality or production of your company's products) originate from the DRC or an adjoining country?
+    # 2) Is the conflict metal necessary to the production of your company's products and contained in the finished product that your company manufactures or contracts to manufacture? (*)
     -
       :no_presence:
         :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 2"
@@ -59,7 +59,7 @@ en:
           :tin: "High Risk: Respondent's answer to Question 2 is that TIN originated from the DRC or an adjoining country"
           :gold: "High Risk: Respondent's answer to Question 2 is that GOLD originated from the DRC or an adjoining country"
           :tungsten: "High Risk: Respondent's answer to Question 2 is that TUNGSTEN originated from the DRC or an adjoining country"
-    # 3) Do the following metals (necessary to the functionality or production of your products) come from a recycler or scrap supplier?
+    # 3) Does any of the conflict metal originate from the covered countries? (*)
     -
       :no_presence:
         :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 3"
@@ -70,12 +70,17 @@ en:
         :expected:
           - "Yes"
           - "No"
-          - "Uncertain or Unknown"
+          - "Unknown"
         :tantalum: "Invalid Data: Respondent provided an invalid answer for TANTALUM in Question 3"
         :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 3"
         :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 3"
         :tungsten: "Invalid Data: Respondent provided an invalid answer for TUNGSTEN in Question 3"
-    # 4) Have you received completed Conflict Minerals Reporting Templates from all of your suppliers?
+      :high_risk:
+        :tantalum: "High Risk: Respondent's answer to Question 3 is that TANTALUM originated from the DRC or an adjoining country"
+        :tin: "High Risk: Respondent's answer to Question 3 is that TIN originated from the DRC or an adjoining country"
+        :gold: "High Risk: Respondent's answer to Question 3 is that GOLD originated from the DRC or an adjoining country"
+        :tungsten: "High Risk: Respondent's answer to Question 3 is that TUNGSTEN originated from the DRC or an adjoining country"
+    # 4) Does 100 percent of the conflict metal (necessary to the functionality or production of your products) originate from recycled or scrap sources? (*)
     -
       :no_presence:
         :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 4"
@@ -85,11 +90,8 @@ en:
       :invalid_data:
         :expected:
           - "Yes"
-          - "No but > 75%"
-          - "No but > 50%"
-          - "No but > 25%"
-          - "No but < 25%"
-          - "No - none"
+          - "No"
+          - "Unknown"
         :tantalum: "Invalid Data: Respondent provided an invalid answer for TANTALUM in Question 4"
         :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 4"
         :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 4"
@@ -100,7 +102,7 @@ en:
           :tin: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of TIN"
           :gold: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of GOLD"
           :tungsten: "Validation Needed: Respondent reported in Question 4 that it has received conflict minerals reports from less than 50% of its suppliers of TUNGSTEN"
-    # 5) For each of the following metals, have you identified all of the smelters your company and its suppliers use to supply the products included within the declaration scope indicated above?
+    # 5) Have you received conflict metals data/information for each metal from all relevant suppliers of 3TG? (*)
     -
       :no_presence:
         :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 5"
@@ -109,8 +111,12 @@ en:
         :tungsten: "Invalid Data: Respondent did not provide input for TUNGSTEN in Question 5"
       :invalid_data:
         :expected:
-          - "Yes all smelters have been provided"
-          - "No"
+          - "Yes, 100%"
+          - "No, but greater than 75%"
+          - "No, but greater than 50%"
+          - "No, but greater than 25%"
+          - "No, but less than 25%"
+          - "None"
         :tantalum: "Invalid Data: Respondent provided an invalid answer for TANTALUM in Question 5"
         :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 5"
         :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 5"
@@ -121,7 +127,22 @@ en:
           :tin: "Validation Needed: Respondent reported that it is has identified all the smelters for TIN in Question 5, but in Question 4 it reported that it received conflict minerals reports from less than 100% of its suppliers of TIN"
           :gold: "Validation Needed: Respondent reported that it is has identified all the smelters for GOLD in Question 5, but in Question 4 it reported that it received conflict minerals reports from less than 100% of its suppliers of GOLD"
           :tungsten: "Validation Needed: Respondent reported that it is has identified all the smelters for TUNGSTEN in Question 5, but in Question 4 it reported that it received conflict minerals reports from less than 100% of its suppliers of TUNGSTEN"
-    # 6) Have all of the smelters used by your company and its suppliers been validated as compliant in accordance with the Conflict-Free Smelter (CFS) Program and listed on the Compliant Smelter List for the following metals?
+    # 6) For each conflict metal, have you identified all of the smelters your company and its suppliers user to supply the products included within the declaration scope indicated above? (*)
+    -
+      :no_presence:
+        :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 6"
+        :tin: "Invalid Data: Respondent did not provide input for TIN in Question 6"
+        :gold: "Invalid Data: Respondent did not provide input for GOLD in Question 6"
+        :tungsten: "Invalid Data: Respondent did not provide input for TUNGSTEN in Question 6"
+      :invalid_data:
+        :expected:
+          - "Yes"
+          - "No"
+        :tantalum: "Invalid Data: Respondent provided an invalid answer for TANTALUM in Question 6"
+        :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 6"
+        :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 6"
+        :tungsten: "Invalid Data: Respondent provided an invalid answer for TUNGSTEN in Question 6"
+    # 7) Has all applicable smelter information received by your company been reported in this declaration? (*)
     -
       :no_presence:
         :tantalum: "Invalid Data: Respondent did not provide input for TANTALUM in Question 6"
@@ -137,6 +158,29 @@ en:
         :tin: "Invalid Data: Respondent provided an invalid answer for TIN in Question 6"
         :gold: "Invalid Data: Respondent provided an invalid answer for GOLD in Question 6"
         :tungsten: "Invalid Data: Respondent provided an invalid answer for TUNGSTEN in Question 6"
+      :flagged:
+        :is_no:
+          :tantalum: "Validation Needed: Respondent entered 'No' for TANTALUM in Question 7"
+          :tin: "Validation Needed: Respondent entered 'No' for TIN in Question 7"
+          :gold: "Validation Needed: Respondent entered 'No' for GOLD in Question 7"
+          :tungsten: "Validation Needed: Respondent entered 'No' for TUNGSTEN in Question 7"
+
+  :minerals_cross_check:
+    :question_3_is_not_yes_and_questions_5_or_6_not_yes:
+      :tantalum: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for TANTALUM"
+      :tin: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for TIN"
+      :gold: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for GOLD"
+      :tungsten: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for TUNGSTEN"
+    :question_4_is_not_yes_and_question_1_or_2_yes:
+      :tantalum: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 4, but entered 'Yes' in Question 1 or Question 2 for TANTALUM"
+      :tin: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 4, but entered 'Yes' in Question 1 or Question 2 for TIN"
+      :gold: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 4, but entered 'Yes' in Question 1 or Question 2 for GOLD"
+      :tungsten: "Validation Needed: Respondent declares 'No' or 'Unknown' in Question 4, but entered 'Yes' in Question 1 or Question 2 for TUNGSTEN"
+    :question_1_or_2_is_yes_and_question_7_is_empty:
+      :tantalum: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for TANTALUM"
+      :tin: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for TIN"
+      :gold: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for GOLD"
+      :tungsten: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for TUNGSTEN"
 
   # Company level questions A-J
   :company_level:
@@ -150,7 +194,7 @@ en:
           - "No"
         :message: "Invalid Data: Respondent provided an invalid answer for Question A"
       :flagged:
-        :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question A of the Company-level questions. Check the answer and comment"
+        :is_no: "Validation Needed: The Respondent answered \"NO\" to Question A of the Company-level questions. Check the answer and comment"
     # B. Is this policy publicly available on your website?
     -
       :no_presence: "Invalid Data: Respondent did not provide input for Question B"
@@ -160,7 +204,7 @@ en:
           - "No"
         :message: "Invalid Data: Respondent provided an invalid answer for Question B"
       :flagged:
-        :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question B of the Company-level questions. Check the answer and comment"
+        :is_no: "Validation Needed: The Respondent answered \"NO\" to Question B of the Company-level questions. Check the answer and comment"
         :is_yes_but_no_url: "Validation Needed: In question B, respondent reported its conflict minerals policy was posted on its website but it did not provide the URL in the comments box"
     # C. Do you require your direct suppliers to be DRC conflict-free?
     -
@@ -168,11 +212,10 @@ en:
       :invalid_data:
         :expected:
           - "Yes"
-          - "Yes included in standard contract language"
           - "No"
         :message: "Invalid Data: Respondent provided an invalid answer for Question C"
       :flagged:
-        :is_not_yes: "Validation Needed: The Respondent answered \"NO\" to Question C of the Company-level questions. Check the answer and comment"
+        :is_no: "Validation Needed: The Respondent answered \"NO\" to Question C of the Company-level questions. Check the answer and comment"
     # D. Do you require your direct suppliers to source from smelters validated as compliant to a CFS protocol using the CFS Compliant Smelter List?
     -
       :no_presence: "Invalid Data: Respondent did not provide input for Question D"
@@ -180,7 +223,6 @@ en:
         :expected:
           - "Yes"
           - "No"
-          - "Planned once lists become available"
         :message: "Invalid Data: Respondent provided an invalid answer for Question D"
       :flagged:
         :is_no: "Validation Needed: The Respondent answered \"NO\" to Question D of the Company-level questions. Check the answer and comment"
@@ -220,10 +262,7 @@ en:
       :no_presence: "Invalid Data: Respondent did not provide input for Question H"
       :invalid_data:
         :expected:
-          - "Yes (3rd party audit)"
-          - "Yes (documentation review only)"
-          - "Yes (internal audit)"
-          - "Yes (all methods apply)"
+          - "Yes"
           - "No"
         :message: "Invalid Data: Respondent provided an invalid answer for Question H"
       :flagged:
@@ -253,14 +292,21 @@ en:
     :no_presence:
       :metal: "Invalid Data: Respondent did not provide a Metal under smelter list"
       :smelter_reference_list: "Invalid Data: Respondent did not provide a smelter reference list under smelter list"
-      :standard_smelter_name: "Invalid Data: Respondent did not provide a standard smelter name under smelter list"
-      :facility_location_country: "Invalid Data: Respondent did not provide a smelter facility country under smelter list"
+    :flagged:
+      :smelter_not_identified_and_fields_have_data: "Invalid Data: Respondent entered 'Smelter not identified' and provided data for unidentified smelter"
+      :smelter_not_listed_and_fields_have_no_data: "Invalid Data: Respondent entered 'Smelter not listed' but provided no data for unlisted smelter"
 
   # Cross-check between spreadsheet tabs
   :cross_check:
-    :minerals_question_1:
+    :minerals_and_smelters:
       :flagged:
-        :tantalum: "Validation Needed: Respondent reported it uses tantalum in Question 1, but did not identify a tantalum smelter on its Conflict Minerals Report Smelter List"
-        :tin: "Validation Needed: Respondent reported it uses tin in Question 1, but did not identify a tin smelter on its Conflict Minerals Report Smelter List"
-        :gold: "Validation Needed: Respondent reported it uses gold in Question 1, but did not identify a gold refiner on its Conflict Minerals Report Smelter List"
-        :tungsten: "Validation Needed: Respondent reported it uses tungsten in Question 1, but did not identify a tungsten smelter on its Conflict Minerals Report Smelter List"
+        :declared_mineral_and_no_mineral_smelter:
+          :tantalum: "Invalid Data: Respondent declared TANTALUM but provided no TANTALUM smelter"
+          :tin: "Invalid Data: Respondent declared TIN but provided no TIN smelter"
+          :gold: "Invalid Data: Respondent declared GOLD but provided no GOLD smelter"
+          :tungsten: "Invalid Data: Respondent declared TUNGSTEN but provided no TUNGSTEN smelter"
+        :no_declared_mineral_and_has_mineral_smelter:
+          :tantalum: "Invalid Data: Respondent did not declare TANTALUM but provided a TANTALUM smelter"
+          :tin: "Invalid Data: Respondent did not declare TIN but provided a TIN smelter"
+          :gold: "Invalid Data: Respondent did not declare GOLD but provided a GOLD smelter"
+          :tungsten: "Invalid Data: Respondent did not declare TUNGSTEN but provided a TUNGSTEN smelter"
