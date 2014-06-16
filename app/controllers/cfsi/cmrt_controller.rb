@@ -15,9 +15,11 @@ class Cfsi::CmrtController < ApplicationController
   def validate_cmrt(uploaded_cmrt_file, validations_batch_id)
     @validations_batch = Cfsi::ValidationsBatch.find(validations_batch_id)
     temp_file_path = store_uploaded_file(uploaded_cmrt_file)
+    @validations_batch.transition_to_processing
     @cmrt_validation = Cfsi::CmrtValidation.create :validations_batch => @validations_batch
     @cmrt_validation.transition_to_opened temp_file_path
     @cmrt_validation.transition_to_validated
+    @validations_batch.transition_to_completed
   end
 
   def validate
