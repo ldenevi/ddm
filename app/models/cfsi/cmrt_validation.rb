@@ -29,6 +29,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   end
 
   def transition_to_validated
+    return false if state == "File not readable"
     transition_to("Validating", :message => "Analyzing CMRT spreadsheet")
     if cmrt.declaration.valid?
       transition_to("Green")
