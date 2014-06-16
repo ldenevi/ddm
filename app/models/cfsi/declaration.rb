@@ -30,7 +30,8 @@ class Cfsi::Declaration < ActiveRecord::Base
   attr_accessor :cell_definitions
 
   def self.generate(cmrt_csv_worksheets = [], user = nil)
-    obj = new :csv_worksheets => cmrt_csv_worksheets
+    obj = new
+    obj.csv_worksheets = cmrt_csv_worksheets
 
     # Trim revision worksheet to speed up get_version
     cmrt_csv_worksheets.first.data = cmrt_csv_worksheets.first.data[0..16000] # cmrt_csv_worksheets.first.data.index(". All rights reserved.\"")]
