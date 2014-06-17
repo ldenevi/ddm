@@ -152,10 +152,10 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     # Question 4 must be answered for each metal listed in Q1 or Q2 as "Yes"
     %w(tantalum tin gold tungsten).each do |mineral|
       next unless eval("@has_#{mineral}")
-      if @declaration.minerals_questions[3].send(mineral).to_s.downcase != 'yes' &&
+      if @declaration.minerals_questions[3].send(mineral).to_s.empty? &&
          (@declaration.minerals_questions[0].send(mineral).to_s.downcase == 'yes' ||
           @declaration.minerals_questions[1].send(mineral).to_s.downcase == 'yes')
-        @minerals << @messages[:minerals_cross_check][:question_4_is_not_yes_and_question_1_or_2_yes][mineral.to_sym]
+        @minerals << @messages[:minerals_cross_check][:question_4_is_empty_and_question_1_or_2_yes][mineral.to_sym]
       end
     end
     #
