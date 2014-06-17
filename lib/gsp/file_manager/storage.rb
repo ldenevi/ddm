@@ -8,22 +8,19 @@ module GSP::FileManager::Storage
     raise MissingDataFields.new(obj) unless obj.new.respond_to?(:storage_path)
     obj.send(:include, InstanceMethods)
     obj.send(:attr_accessible, :storage_path)
+    obj.send(:before_save, "self.storage_path = File.join(STORAGE_PATH, filename)")
   end
-  
+
   module InstanceMethods
-    def initialize(args = {})
-      super(args.merge({:storage_path => File.join(STORAGE_PATH, "#{rand(100000..999999999)}.gsp")}))
-    end
-    
     def save_to_filesystem!
       File.open(storage_path, 'wb') { |f| f.write(data) }
     end
-    
+
     def file_data
       File.read(storage_path)
     end
   end
-  
+
   class MissingDataFields < StandardError
     attr_accessor :object
     def initialize(object = nil)
