@@ -16,9 +16,9 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   def run_validations(declaration)
     @declaration = declaration
     load_messages
+    validate_basic_fields
+    validate_minerals_fields
     if is_in_scope?
-      validate_basic_fields
-      validate_minerals_fields
       validate_company_level_fields
       cross_validate_minerals_and_smelters
       validate_mineral_smelters
@@ -47,8 +47,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     #
     # Authorizer and Contact information must be filled in and cannot refer to each other by stating "same"
     if !(@declaration.contact_name.to_s.empty? && @declaration.authorizer.to_s.empty?) &&
-       ((!@declaration.contact_name.to_s.empty? && @declaration.authorizer.downcase == 'same') ||
-        (@declaration.contact_name.downcase == 'same' && @declaration.authorizer.to_s.empty?))
+       ((!@declaration.contact_name.to_s.empty? && @declaration.authorizer.to_s.downcase == 'same') ||
+        (@declaration.contact_name.to_s.downcase == 'same' && @declaration.authorizer.to_s.empty?))
       @basic << @messages[:declaration][:contact_and_authorizer_cannot_use_same]
     end
     #
