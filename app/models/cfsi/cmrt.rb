@@ -1,6 +1,5 @@
 class Cfsi::Cmrt < ActiveRecord::Base
   has_one :declaration
-  has_one :spreadsheet,  :as => :attachable, :class_name => Spreadsheet
   belongs_to :minerals_vendor
   attr_accessible :company_name, :file_extension, :file_name, :is_latest, :language, :meta_data, :representative_email, :spreadsheet, :version
 
@@ -37,7 +36,7 @@ class Cfsi::Cmrt < ActiveRecord::Base
   end
 
   def self.generate(file_path, user = nil)
-    obj = new :spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => user})
+    obj = new
     obj.file_name = File.basename(file_path)
     obj.file_extension = File.extname(file_path)
     worksheets = GSP::Documents::Conversion::OfficeConvert::Excel.to_worksheets(file_path)

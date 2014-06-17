@@ -1,11 +1,16 @@
 class Cfsi::CmrtValidation < ActiveRecord::Base
   before_create "self.status = 'Initialized'"
 
+  has_one :spreadsheet,  :as => :attachable, :class_name => Spreadsheet
   belongs_to :cmrt
   belongs_to :validations_batch
   belongs_to :vendor
   attr_accessible :cmrt, :validations_batch, :email_sent_at, :issues, :sent_emails_count,
-                  :status, :validation_attempt
+                  :status, :validation_attempt, :spreadsheet
+
+  def self.generate(file_path, user = nil)
+    create :spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => user})
+  end
 
   def transition_to(new_state, args = {:message => nil})
     self.status = new_state
@@ -13,7 +18,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
     save!
   end
 
-  def transition_to_opened(file_path)
+  def transition_to_opened
     transition_to("Opening", :message => "Attempting to open CMRT spreadsheet")
     begin
       self.cmrt = Cfsi::Cmrt.generate(file_path)
@@ -42,5 +47,17 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
 
   def state
     status
+  end
+
+  def file_name
+    spreadsheet ? spreadsheet.filename : ''
+  end
+
+  def file_extension
+    spreadsheet ? File.extname(file_name) : ''
+  end
+
+  def file_path
+    spreadsheet ? spreadsheet.storage_path : ''
   end
 end

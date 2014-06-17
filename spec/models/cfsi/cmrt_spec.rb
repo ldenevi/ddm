@@ -17,7 +17,6 @@ describe Cfsi::Cmrt do
 
     it "should contain relevant associations" do
       expect(blank_cmrt).to respond_to :declaration
-      expect(blank_cmrt).to respond_to :spreadsheet
       expect(blank_cmrt).to respond_to :minerals_vendor
     end
 
