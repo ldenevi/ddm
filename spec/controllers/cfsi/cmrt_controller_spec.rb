@@ -35,6 +35,10 @@ describe Cfsi::CmrtController do
       expect(response.status).to eq 200
       expect(response.body).to match 'id="cmrt_validations_list"'
     end
+    it "should download CMRT spreadsheet" do
+      val = Cfsi::CmrtValidation.generate File.join('spec/models/cfsi/sample_cmrts/3.01/3.01_-_green.xlsx')
+      get :download, :id => val.id
+    end
   end
 
   context "(in general)" do
@@ -45,7 +49,6 @@ describe Cfsi::CmrtController do
       expect(controller.validate_cmrt(uploaded_cmrt, vb.id)).to be_true
     end
   end
-
 
   context "while using Internet Explorer 9 or below" do
     ZIP_FILEPATH = File.join(Rails.root, 'spec/controllers/cfsi/zipped_declarations.zip')

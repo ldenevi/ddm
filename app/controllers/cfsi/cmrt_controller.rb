@@ -48,6 +48,10 @@ class Cfsi::CmrtController < ApplicationController
     render :layout => false
   end
 
+  def download
+    send_file Cfsi::CmrtValidation.find(params[:id]).spreadsheet.storage_path
+  end
+
 private
   def store_uploaded_file(file)
     # TODO Perhaps there is no need to save to disk. Cfsi::Cmrt.generate could simply
