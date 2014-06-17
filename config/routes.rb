@@ -19,8 +19,8 @@ GSP::Application.routes.draw do
     get "cmrt/index"
     get "cmrt/show/:id", :to => "cmrt#show"
     post "cmrt/new"
-    post "cmrt/validate/:id", :to => "cmrt#validate"
-    post "cmrt/validate_zip/:id", :to => "cmrt#validate_zip"
+    post "cmrt/validate/:batch_id", :to => "cmrt#validate"
+    post "cmrt/validate_zip/:batch_id", :to => "cmrt#validate_zip"
     get "cmrt/list_validation_statuses/:batch_id", :to => "cmrt#list_validation_statuses"
   end
 
