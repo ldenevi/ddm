@@ -20,6 +20,7 @@ class Cfsi::CmrtController < ApplicationController
     @cmrt_validation.transition_to_opened
     @cmrt_validation.transition_to_validated
     @validations_batch.transition_to_completed
+    @cmrt_validation.state != "File not readable"
   end
 
   def validate
