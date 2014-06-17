@@ -1,0 +1,39 @@
+<style>
+  #overview table {
+    border-collapse: collapse;
+    font-size: 8pt;
+    width: 450px;
+  }
+
+    #overview td {
+      padding: 5px;
+    }
+</style>
+
+<div id="overview">
+  <table border="1">
+    <tr>
+      <td>Status:</td>
+      <td><%= @validations_batch.status %></td>
+    </tr>
+    <tr>
+      <td>Processed on:</td>
+      <td><%= @validations_batch.updated_at.to_formatted_s(:review_date) %></td>
+    </tr>
+    <tr>
+      <td># processed:</td>
+      <td><%= Cfsi::CmrtValidation.where(:validations_batch_id => @validations_batch.id).count %></td>
+    </tr>
+    <tr>
+      <td>Summary:</td>
+      <td>
+        <ul>
+          <li><%= "%d Accepted - Green Status" % @validations_batch.green_status_validations.size %></li>
+          <li><%= "%d Accepted - High risk" % @validations_batch.high_risk_validations.size %></li>
+          <li><%= "%d Accepted - Validation needed" % @validations_batch.validation_needed_validations.size %></li>
+          <li><%= "%d File(s) not readable " % @validations_batch.error_validations.size %></li>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>

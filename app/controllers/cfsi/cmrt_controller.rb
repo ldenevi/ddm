@@ -44,7 +44,8 @@ class Cfsi::CmrtController < ApplicationController
   end
 
   def list_validation_statuses
-    @cmrt_validations = Cfsi::ValidationsBatch.find(params[:batch_id]).cmrt_validations
+    @validations_batch = Cfsi::ValidationsBatch.find(params[:batch_id])
+    @cmrt_validations = @validations_batch.cmrt_validations
     render :layout => false
   end
 

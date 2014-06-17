@@ -7,6 +7,10 @@ describe Cfsi::ValidationsBatch do
       [:unidentified_cmrts, :vendor_cmrts, :status, :user, :organization, :cmrt_validations].each do |attr|
         expect(batch).to respond_to attr
       end
+      # Analytics
+      [:green_status_validations, :validation_needed_validations, :high_risk_validations, :error_validations].each do |assc|
+        expect(empty_validation).to respond_to assc
+      end
     end
 
     it "should initialize with state as 'Initialized'" do

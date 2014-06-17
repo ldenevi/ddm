@@ -13,6 +13,12 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
 
   has_many :cmrt_validations
 
+  # Analytics
+  has_many :green_status_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => { :status => 'Green'}
+  has_many :validation_needed_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => { :status => 'Validation needed'}
+  has_many :high_risk_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => { :status => 'High risk'}
+  has_many :error_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => { :status => 'File not readable'}
+
   def state
     status
   end
