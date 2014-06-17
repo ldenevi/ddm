@@ -10,7 +10,6 @@ describe Cfsi::StandardSmelterName do
         expect(standard_smelter_name).to respond_to attr
       end
       expect(standard_smelter_name).to respond_to :declaration
-      expect(standard_smelter_name.declaration).to be_kind_of Cfsi::Declaration
     end
   end
 end

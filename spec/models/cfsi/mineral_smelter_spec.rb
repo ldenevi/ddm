@@ -14,7 +14,6 @@ describe Cfsi::MineralSmelter do
         expect(mineral_smelter).to respond_to attr
       end
       expect(mineral_smelter).to respond_to :declaration
-      expect(mineral_smelter.declaration).to be_kind_of Cfsi::Declaration
     end
   end
 end

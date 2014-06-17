@@ -14,7 +14,6 @@ describe Cfsi::CompanyLevelQuestion do
       expect(clq.comment).to be_kind_of String
       expect(clq.question).to be_kind_of String
       expect(clq.sequence).to be_kind_of Fixnum
-      expect(clq.declaration).to be_kind_of Cfsi::Declaration
     end
   end
 end

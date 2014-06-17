@@ -13,7 +13,6 @@ describe Cfsi::MineralsQuestion do
 
     it "should associate to a Cfsi::Declaration" do
       expect(blank_minerals_question).to respond_to :declaration
-      expect(blank_minerals_question.declaration).to be_kind_of Cfsi::Declaration
     end
 
   end
