@@ -234,7 +234,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
 
   def validate_mineral_smelters
     @declaration.mineral_smelters.each do |smelter|
-      if smelter.standard_smelter_name.to_s.empty?
+      if smelter.standard_smelter_name.to_s.empty? && smelter.smelter_reference_list.to_s.downcase == 'smelter not listed'
         @smelters_list << @messages[:smelters_list][:no_presence][:standard_smelter_name]
         break
       end
