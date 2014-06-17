@@ -1,0 +1,48 @@
+/* Validations processor */
+#file_uploader {
+  width: 450px;
+  border: 1px solid black;
+}
+
+  #file_uploader ul.qq-upload-list li {
+    height: 10px;
+    font-size: 9pt;
+    border-top: 1px solid black;
+    overflow: hidden;
+  }
+
+  #file_uploader div.qq-upload-drop-area {
+    border: 1px solid black;
+    width: 600px;
+    height: 400px;
+  }
+
+/* Analytics table */
+#overview table {
+  border-collapse: collapse;
+  font-size: 8pt;
+  width: 450px;
+}
+
+  #overview td {
+    padding: 5px;
+  }
+
+/* Validation statuses table */
+#cmrt_validations_list {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8pt;
+}
+
+  #cmrt_validations_list th,
+  #cmrt_validations_list td {
+    padding: 3px;
+    border: 1px solid grey;
+  }
+
+  #cmrt_validations_list th {
+    background-color: #3BA173;
+    color: white;
+    white-space:nowrap;
+  }
