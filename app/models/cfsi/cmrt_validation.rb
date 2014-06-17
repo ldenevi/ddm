@@ -8,8 +8,10 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   attr_accessible :cmrt, :validations_batch, :email_sent_at, :issues, :sent_emails_count,
                   :status, :validation_attempt, :spreadsheet
 
-  def self.generate(file_path, user = nil)
-    create :spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => user})
+  def self.generate(file_path, attrs = {})
+    obj = create attrs.merge({:spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => attrs[:user]})})
+    obj.spreadsheet.save_to_filesystem!
+    obj
   end
 
   def transition_to(new_state, args = {:message => nil})
