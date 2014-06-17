@@ -18,8 +18,8 @@ describe Cfsi::CmrtValidation do
 
   context "during state changes" do
     let(:validation_needed_cmrt_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_validation_needed.xlsx') }
-    let(:validation_needed_validation) { Cfsi::CmrtValidation.generate validation_needed_cmrt_file_path }
     it "should transition from 'Initialized' to 'Validation needed'" do
+      validation_needed_validation = Cfsi::CmrtValidation.generate validation_needed_cmrt_file_path
       expect(validation_needed_validation).to respond_to :transition_to
       expect(validation_needed_validation.state).to eq "Initialized"
       expect(validation_needed_validation.transition_to_opened).to be_true
@@ -31,8 +31,8 @@ describe Cfsi::CmrtValidation do
     end
 
     let(:high_risk_cmrt_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_high_risk.xlsx') }
-    let(:high_risk_validation) { Cfsi::CmrtValidation.generate high_risk_cmrt_file_path }
     it "should transition from 'Initialized' to 'High risk'" do
+      high_risk_validation = Cfsi::CmrtValidation.generate high_risk_cmrt_file_path
       expect(high_risk_validation).to respond_to :transition_to
       expect(high_risk_validation.state).to eq "Initialized"
       expect(high_risk_validation.transition_to_opened).to be_true
@@ -44,8 +44,8 @@ describe Cfsi::CmrtValidation do
     end
 
     let(:green_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_green.xlsx') }
-    let(:green_validation) { Cfsi::CmrtValidation.generate green_file_path }
     it "should transition from 'Initialized' to 'Green'" do
+      green_validation = Cfsi::CmrtValidation.generate green_file_path
       expect(green_validation).to respond_to :transition_to
       expect(green_validation.state).to eq "Initialized"
       expect(green_validation.transition_to_opened).to be_true
