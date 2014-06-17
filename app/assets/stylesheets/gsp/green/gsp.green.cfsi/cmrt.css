@@ -1,3 +1,30 @@
+/* Index */
+section#create {
+  background-color: #EEE;
+  width: 100%;
+}
+  section#create div {
+    display: table-cell;
+    vertical-align: middle;
+    height: 50px;
+    background-image: url(/images/cfsi/cfsi-logo.png);
+    background-size: 50px;
+    background-repeat: no-repeat;
+  }
+  section#create div:hover {
+    background-color: #CECECE;
+  }
+    section#create div a {
+      font-size: 24pt;
+      text-decoration: none;
+      color: cadetblue;
+      margin-left: 60px;
+    }
+    section#create div a:hover {
+      color: navy;
+    }
+/* End: Index */
+
 /* Validations processor */
 #file_uploader {
   width: 450px;

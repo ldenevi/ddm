@@ -1,9 +1,27 @@
-<%= link_to "Create new validations batch", cfsi_cmrt_new_path, :method => 'post' %>
+<section id="create">
+  <div>
+    <%= link_to "Create new validations batch", cfsi_cmrt_new_path, :method => 'post' %>
+  </div>
+</section>
 
 <hr>
 
-<ul>
-<% @validations_batches.each do |validations_batch| %>
-  <li><%= link_to validations_batch.created_at.to_s, :action => :show, :id => validations_batch.id %></li>
-<% end %>
-</ul>
+<section id="validations_batches">
+  <div id="tabs">
+    <ul>
+      <li><a href="#tabs-1">Previously processed</a></li>
+    </ul>
+    <div id="tabs-1">
+      <ul>
+      <% @validations_batches.each do |validations_batch| %>
+        <li><%= link_to "CMRTs (%s) - %s" % [validations_batch.cmrt_validations.count, validations_batch.created_at.to_formatted_s(:long)], :action => :show, :id => validations_batch.id %></li>
+      <% end %>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  $(document).ready( function() {  $( "#tabs" ).tabs(); });
+</script>
