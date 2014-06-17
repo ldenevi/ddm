@@ -138,14 +138,14 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
 
     # Cross check minerals questions
     #
-    # If Question 3 is answered not "Yes" for any metal, then Question 5 must be answered
+    # If Question 3 is answered "No" (Unknown is okay) for any metal, then Question 5 must be answered
     # "Yes, 100%" for that metal and Question 6 must be answered "Yes" for that metal.
     %w(tantalum tin gold tungsten).each do |mineral|
       next unless eval("@has_#{mineral}")
-      unless @declaration.minerals_questions[2].send(mineral).to_s.downcase != 'yes' &&
-              @declaration.minerals_questions[4].send(mineral).to_s.downcase == 'yes, 100%' &&
-              @declaration.minerals_questions[5].send(mineral).to_s.downcase == 'yes'
-        @minerals << @messages[:minerals_cross_check][:question_3_is_not_yes_and_questions_5_or_6_not_yes][mineral.to_sym]
+      if @declaration.minerals_questions[2].send(mineral).to_s.downcase == 'no' &&
+         @declaration.minerals_questions[4].send(mineral).to_s.downcase == 'yes, 100%' &&
+         @declaration.minerals_questions[5].send(mineral).to_s.downcase == 'yes'
+        @minerals << @messages[:minerals_cross_check][:question_3_is_no_and_questions_5_or_6_not_yes][mineral.to_sym]
       end
     end
     #
