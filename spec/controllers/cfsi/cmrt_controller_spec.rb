@@ -31,7 +31,7 @@ describe Cfsi::CmrtController do
       vb = Cfsi::ValidationsBatch.create
       vb.cmrt_validations = (0...12).to_a.collect { Cfsi::CmrtValidation.create :validations_batch => vb }
       get :list_validation_statuses, :batch_id => vb.id
-      expect(Cfsi::CmrtValidation.count).to eq 12
+      expect(Cfsi::CmrtValidation.count).to eq 14
       expect(response.status).to eq 200
       expect(response.body).to match 'id="cmrt_validations_list"'
     end
