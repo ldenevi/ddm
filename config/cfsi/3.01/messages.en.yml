@@ -22,6 +22,7 @@ en:
       :standard_smelter_names: "Validation Needed: Respondent did not provide any name and/or location of smelters"
     :invalid_data:
       :effective_date: "Validation Needed: Reported effective date is in the future"
+      :contact_and_authorizer_cannot_use_same: "Validation Needed: Respondent entered 'Same' for CONTACT or AUTHORIZER information"
 
   # Mineral questions 1-7
   :minerals:

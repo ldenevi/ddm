@@ -49,7 +49,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     if !(@declaration.contact_name.to_s.empty? && @declaration.authorizer.to_s.empty?) &&
        ((!@declaration.contact_name.to_s.empty? && @declaration.authorizer.to_s.downcase == 'same') ||
         (@declaration.contact_name.to_s.downcase == 'same' && @declaration.authorizer.to_s.empty?))
-      @basic << @messages[:declaration][:contact_and_authorizer_cannot_use_same]
+      @basic << @messages[:declaration][:invalid_data][:contact_and_authorizer_cannot_use_same]
     end
     #
     # If declaration of scope is User Defined, description of scope must be filled
