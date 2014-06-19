@@ -28,7 +28,6 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   def is_in_scope?
     if @declaration.minerals_questions.size < 7
       @minerals << @messages[:declaration][:no_presence][:mineral_questions]
-      return false
     end
     %w(tantalum tin gold tungsten).each do |mineral|
       has_mineral = (@declaration.minerals_questions[0].send(mineral).to_s.downcase == 'yes' || @declaration.minerals_questions[1].send(mineral).to_s.downcase == 'yes')
