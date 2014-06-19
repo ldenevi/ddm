@@ -26,6 +26,10 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   end
 
   def is_in_scope?
+    if @declaration.minerals_questions.size < 2
+      @minerals << @messages[:declaration][:no_presence][:mineral_questions]
+      return false
+    end
     %w(tantalum tin gold tungsten).each do |mineral|
       has_mineral = (@declaration.minerals_questions[0].send(mineral).to_s.downcase == 'yes' || @declaration.minerals_questions[1].send(mineral).to_s.downcase == 'yes')
       eval("@has_#{mineral} = has_mineral")
@@ -63,11 +67,6 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   end
 
   def validate_minerals_fields
-    if @declaration.minerals_questions.size == 0
-      @minerals << @messages[:declaration][:no_presence][:mineral_questions]
-      return
-    end
-
     @declaration.minerals_questions.sort_by(&:sequence).each_with_index do |mdec, index|
       case index
         # 1) Is the conflict intentionally added to your product? (*)
