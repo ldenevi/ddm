@@ -16,7 +16,7 @@ en:
       :authorizer_email: "Validation Needed: Respondent has not provided an AUTHORIZER E-MAIL"
       :authorizer_phone: "Validation Needed: Respondent has not provided a AUTHORIZER PHONE"
       :effective_date: "Validation Needed: Respondent did not provide an EFFECTIVE DATE"
-      :mineral_questions: "Validation Needed: Respondent did not provide any inputs for all required Questions 1 through 6"
+      :mineral_questions: "Validation Needed: Respondent did not provide any inputs for all required Questions 1 through 7"
       :company_level_questions: "Validation Needed: Respondent did not provide any inputs for all required Company-level Questions A through J"
       :smelter_list: "Validation Needed: Respondent did not provide any name and/or location of smelters"
       :standard_smelter_names: "Validation Needed: Respondent did not provide any name and/or location of smelters"

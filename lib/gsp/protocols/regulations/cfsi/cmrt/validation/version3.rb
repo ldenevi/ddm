@@ -26,7 +26,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   end
 
   def is_in_scope?
-    if @declaration.minerals_questions.size < 2
+    if @declaration.minerals_questions.size < 7
       @minerals << @messages[:declaration][:no_presence][:mineral_questions]
       return false
     end
