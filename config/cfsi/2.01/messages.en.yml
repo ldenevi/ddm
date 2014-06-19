@@ -15,7 +15,7 @@ en:
       :mineral_questions: "Validation Needed: Respondent did not provide any inputs for all required Questions 1 through 6"
       :company_level_questions: "Validation Needed: Respondent did not provide any inputs for all required Company-level Questions A through J"
       :smelter_list: "Validation Needed: Respondent did not provide any name and/or location of smelters"
-      :standard_smelter_names: "Validation Needed: Respondent did not provide any name and/or location of smelters"
+      :standard_smelter_name: "Validation Needed: Respondent did not provide any name and/or location of smelters"
     :invalid_data:
       :completion_at: "Validation Needed: Reported date of completion is in the future"
 

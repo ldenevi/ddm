@@ -61,8 +61,8 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
 
     it "should validate smelter list" do
       expect(version_2).to respond_to :validate_mineral_smelters
-      # List a smelter with empty standard smelter name
-      version_2.declaration.mineral_smelters << Cfsi::MineralSmelter.new
+      # List a smelter with empty standard smelter name and smelter reference list 'Smelter not listed'
+      version_2.declaration.mineral_smelters << Cfsi::MineralSmelter.new(:smelter_reference_list => "Smelter not listed")
       version_2.validate_mineral_smelters
       expect(version_2.smelters_list).to include loaded_messages[:smelters_list][:no_presence][:standard_smelter_name]
     end
