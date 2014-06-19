@@ -36,9 +36,13 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
       version_3.validate_basic_fields
       expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:company_name]
       expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:declaration_scope]
-      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:authorized_company_representative_name]
-      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:representative_email]
-      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:completion_at]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:contact_name]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:contact_email]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:contact_phone]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:authorizer]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:authorizer_email]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:authorizer_phone]
+      expect(version_3.basic).to include loaded_messages[:declaration][:no_presence][:effective_date]
       expect(version_3.basic).to include "(#{version_3.declaration.language}): " + loaded_messages[:declaration][:no_presence][:language]
     end
 
