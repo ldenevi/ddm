@@ -109,8 +109,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
             next unless eval("@has_#{mineral}")
             @minerals << @messages[:minerals][index][:no_presence][mineral.to_sym] if mdec.send(mineral).to_s.strip.empty?
             @minerals << @messages[:minerals][index][:invalid_data][mineral.to_sym] unless @messages[:minerals][index][:invalid_data][:expected].include?(mdec.send(mineral).to_s.strip) || mdec.send(mineral).to_s.strip.empty?
-            if ["none", "no, but less than 25%", "no, but greater than 25%"].include?(mdec.send(mineral).to_s.downcase)
-              @minerals << @messages[:minerals][index][:flagged][:less_than_50_percent][mineral.to_sym]
+            if ["none", "no, but less than 25%"].include?(mdec.send(mineral).to_s.downcase)
+              @minerals << @messages[:minerals][index][:flagged][:less_than_25_percent][mineral.to_sym]
             end
           end
           next
@@ -142,8 +142,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     %w(tantalum tin gold tungsten).each do |mineral|
       next unless eval("@has_#{mineral}")
       if @declaration.minerals_questions[2].send(mineral).to_s.downcase == 'no' &&
-         @declaration.minerals_questions[4].send(mineral).to_s.downcase == 'yes, 100%' &&
-         @declaration.minerals_questions[5].send(mineral).to_s.downcase == 'yes'
+         @declaration.minerals_questions[4].send(mineral).to_s.downcase != 'yes, 100%' &&
+         @declaration.minerals_questions[5].send(mineral).to_s.downcase == 'no'
         @minerals << @messages[:minerals_cross_check][:question_3_is_no_and_questions_5_or_6_not_yes][mineral.to_sym]
       end
     end
