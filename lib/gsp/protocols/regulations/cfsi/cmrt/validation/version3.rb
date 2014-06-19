@@ -17,8 +17,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     @declaration = declaration
     load_messages
     validate_basic_fields
-    validate_minerals_fields
     if is_in_scope?
+      validate_minerals_fields
       validate_company_level_fields
       cross_validate_minerals_and_smelters
       validate_mineral_smelters
