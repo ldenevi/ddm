@@ -49,7 +49,6 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
     it "should validate minerals data" do
       expect(version_3).to respond_to :validate_minerals_fields
       version_3.declaration.minerals_questions = []
-      version_3.validate_minerals_fields
       expect(version_3.minerals).to include loaded_messages[:declaration][:no_presence][:mineral_questions]
     end
 
@@ -61,6 +60,7 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
 
     it "should cross validate declared minerals and smelters" do
       expect(version_3).to respond_to :cross_validate_minerals_and_smelters
+      expect(version_3.is_in_scope?).to be_true
       # Declare a mineral without including mineral smelter
       version_3.cross_validate_minerals_and_smelters
       expect(version_3.basic).to include loaded_messages[:cross_check][:minerals_and_smelters][:flagged][:declared_mineral_and_no_mineral_smelter][:gold]

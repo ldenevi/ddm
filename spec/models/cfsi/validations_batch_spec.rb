@@ -9,7 +9,7 @@ describe Cfsi::ValidationsBatch do
       end
       # Analytics
       [:green_status_validations, :validation_needed_validations, :high_risk_validations, :error_validations].each do |assc|
-        expect(empty_validation).to respond_to assc
+        expect(batch).to respond_to assc
       end
     end
 
