@@ -239,17 +239,15 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
       @smelters_list << @messages[:smelters_list][:no_presence][:metal] % spreadsheet_row_number if smelter.metal.to_s.empty?
       #
       # If smelter reference list is "Smelter not yet identified" and other fields include data
-      other_fields = ["facility_contact_email", "facility_contact_name", "facility_location_city", "facility_location_country", "facility_location_province", "facility_location_street_address",
-                      "is_all_smelter_feedstock_from_recycled_sources", "mineral_source", "mineral_source_location", "proposed_next_steps", "smelter_id", "source_of_smelter_id", "standard_smelter_name"]
-      other_fields.collect! { |attr| smelter.send(attr) }
-      if smelter.smelter_reference_list.to_s.downcase == 'smelter not yet identified' && !other_fields.compact.empty?
-        @smelters_list << @messages[:smelters_list][:flagged][:smelter_not_identified_and_fields_have_data]
+      if smelter.smelter_reference_list.to_s.downcase == 'smelter not yet identified'
+        @smelters_list << @messages[:smelters_list][:flagged][:smelter_not_identified] % spreadsheet_row_number
+        next
       end
       #
       # If smelter referencelist is "Smelter not listed", then smelter name or smelter country must have data
       if smelter.smelter_reference_list.to_s.downcase == 'smelter not listed'
         empty_required_fields = []
-        {:standard_smelter_name => "Standard Smelter Name", :facility_location_country => "Smelter Country"}.each do |field_name, display_name|
+        {:metal => "Metal", :standard_smelter_name => "Smelter Name", :facility_location_country => "Smelter Country"}.each do |field_name, display_name|
           empty_required_fields << display_name if smelter.send(field_name).to_s.empty?
         end
         unless empty_required_fields.empty?
@@ -259,7 +257,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
       # If smelter reference list is not "Smelter not Listed", then required fields must contain data
       else
         empty_required_fields = []
-        {:smelter_reference_list => "Smelter Reference List", :standard_smelter_name => "Smelter Name", :facility_location_country => "Smelter Country"}.each do |field_name, display_name|
+        {:metal => "Metal", :smelter_reference_list => "Smelter Reference List", :standard_smelter_name => "Smelter Name", :facility_location_country => "Smelter Country"}.each do |field_name, display_name|
           empty_required_fields << display_name if smelter.send(field_name).to_s.empty?
         end
         unless empty_required_fields.empty?
