@@ -254,7 +254,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   end
 
   def validate_mineral_smelters
-    @declaration.mineral_smelters.each do |smelter|
+    @declaration.mineral_smelters.each_with_index do |smelter, index|
+      spreadsheet_row_number = index + 5
       if smelter.smelter_reference_list.to_s.empty?
         @smelters_list << @messages[:smelters_list][:no_presence][:smelter_reference_list]
         break
@@ -269,10 +270,15 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
         @smelters_list << @messages[:smelters_list][:flagged][:smelter_not_identified_and_fields_have_data]
       end
       #
-      # If smelter referencelist is "Smelter not listed", then smelter name and smelter country must have data
-      if smelter.smelter_reference_list.to_s.downcase == 'smelter not listed' &&
-         (smelter.standard_smelter_name.to_s.empty? || smelter.facility_location_country.to_s.empty?)
-        @smelters_list << @messages[:smelters_list][:flagged][:smelter_not_listed_and_fields_have_no_data]
+      # If smelter referencelist is "Smelter not listed", then smelter name or smelter country must have data
+      if smelter.smelter_reference_list.to_s.downcase == 'smelter not listed'
+        empty_required_fields = []
+        {:standard_smelter_name => "Standard Smelter Name", :facility_location_country => "Smelter Country"}.each do |field_name, display_name|
+          empty_required_fields << display_name if smelter.send(field_name).to_s.empty?
+        end
+        unless empty_required_fields.empty?
+          @smelters_list << @messages[:smelters_list][:flagged][:smelter_not_listed_and_a_required_field_is_mepty] % [spreadsheet_row_number, empty_required_fields.join(', ')]
+        end
       end
     end
   end

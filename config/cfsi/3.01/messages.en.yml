@@ -304,7 +304,7 @@ en:
       :smelter_reference_list: "Invalid Data: Respondent did not provide a smelter reference list for an entry in Smelter List worksheet"
     :flagged:
       :smelter_not_identified_and_fields_have_data: "Invalid Data: Respondent entered 'Smelter not identified' and provided data for unidentified smelter"
-      :smelter_not_listed_and_fields_have_no_data: "Invalid Data: Respondent entered 'Smelter not listed' but provided no data for unlisted smelter"
+      :smelter_not_listed_and_a_required_field_is_mepty: "is missing required data in row %d for field(s) %s"
 
   # Cross-check between spreadsheet tabs
   :cross_check:
