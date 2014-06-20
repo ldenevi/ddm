@@ -260,7 +260,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
         @smelters_list << @messages[:smelters_list][:no_presence][:smelter_reference_list]
         break
       end
-      @smelters_list << @messages[:smelters_list][:no_presence][:metal] if smelter.metal.to_s.empty?
+      @smelters_list << @messages[:smelters_list][:no_presence][:metal] % spreadsheet_row_number if smelter.metal.to_s.empty?
       #
       # If smelter reference list is "Smelter not yet identified" and other fields include data
       other_fields = ["facility_contact_email", "facility_contact_name", "facility_location_city", "facility_location_country", "facility_location_province", "facility_location_street_address",

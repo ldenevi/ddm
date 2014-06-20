@@ -300,7 +300,7 @@ en:
   # Smelters list
   :smelters_list:
     :no_presence:
-      :metal: "Invalid Data: Respondent did not provide a Metal under smelter list"
+      :metal: "Invalid Data: Respondent did not provide a Metal in row %d"
       :smelter_reference_list: "Invalid Data: Respondent did not provide a smelter reference list for an entry in Smelter List worksheet"
     :flagged:
       :smelter_not_identified_and_fields_have_data: "Invalid Data: Respondent entered 'Smelter not identified' and provided data for unidentified smelter"
