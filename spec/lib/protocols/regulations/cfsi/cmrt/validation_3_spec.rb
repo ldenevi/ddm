@@ -71,7 +71,8 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
       # List a smelter with empty standard smelter name
       version_3.declaration.mineral_smelters << Cfsi::MineralSmelter.new
       version_3.validate_mineral_smelters
-      expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:no_presence][:smelter_reference_list]
+      expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:no_presence][:metal] % 5
+      expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:flagged][:required_fields_missing] % [5, 'Smelter Reference List, Smelter Name, Smelter Country']
     end
   end
 end
