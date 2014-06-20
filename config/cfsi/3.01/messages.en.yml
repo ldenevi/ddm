@@ -293,7 +293,7 @@ en:
       :metal: "Invalid Data: Respondent did not provide a Metal in row %d"
     :flagged:
       :required_fields_missing: "lacks valid data in row %d: %s (are/is a) required field(s)"
-      :smelter_not_identified: "Validation Needed: Check with supplier on identifying smelter provided in row %d"
+      :smelter_not_identified: "Validation Needed: Check with supplier to identify smelter in row %d"
       :smelter_not_listed_and_a_required_field_is_empty: "is missing required data in row %d for field(s) %s"
 
   # Cross-check between spreadsheet tabs
