@@ -304,7 +304,7 @@ en:
     :flagged:
       :required_fields_missing: "contains invalid data in row %d: %s (are/is a) required field(s)"
       :smelter_not_identified_and_fields_have_data: "Invalid Data: Respondent entered 'Smelter not identified' and provided data for unidentified smelter"
-      :smelter_not_listed_and_a_required_field_is_mepty: "is missing required data in row %d for field(s) %s"
+      :smelter_not_listed_and_a_required_field_is_empty: "is missing required data in row %d for field(s) %s"
 
   # Cross-check between spreadsheet tabs
   :cross_check:
