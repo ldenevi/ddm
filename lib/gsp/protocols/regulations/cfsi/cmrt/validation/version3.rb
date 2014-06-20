@@ -162,8 +162,10 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   def validate_company_level_fields
     question_letters = %w(A B C D E F G H I J)
     @declaration.company_level_questions.each_with_index do |clq, index|
-      @company_level << @messages[:declaration][:no_presence][:company_level_questions] % question_letters[index]
-      return
+      if @declaration.company_level_questions.is_unanswered?
+        @company_level << @messages[:declaration][:no_presence][:company_level_questions] % question_letters[index]
+        return
+      end
     end
 
     @declaration.company_level_questions.sort_by(&:sequence).each_with_index do |clq, index|
