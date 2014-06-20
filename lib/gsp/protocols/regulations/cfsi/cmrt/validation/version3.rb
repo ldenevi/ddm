@@ -160,8 +160,9 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   end
 
   def validate_company_level_fields
-    if @declaration.company_level_questions.size == 0
-      @company_level << @messages[:declaration][:no_presence][:company_level_questions]
+    question_letters = %w(A B C D E F G H I J)
+    @declaration.company_level_questions.each_with_index do |clq, index|
+      @company_level << @messages[:declaration][:no_presence][:company_level_questions] % question_letters[index]
       return
     end
 

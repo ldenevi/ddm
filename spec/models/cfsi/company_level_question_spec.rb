@@ -9,6 +9,7 @@ describe Cfsi::CompanyLevelQuestion do
       expect(clq).to respond_to :question
       expect(clq).to respond_to :sequence
       expect(clq).to respond_to :declaration
+      expect(clq).to respond_to :is_unanswered?
 
       expect(clq.answer).to be_kind_of String
       expect(clq.comment).to be_kind_of String
