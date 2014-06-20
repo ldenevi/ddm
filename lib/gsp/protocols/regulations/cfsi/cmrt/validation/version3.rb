@@ -142,7 +142,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
       next unless eval("@has_#{mineral}")
       if @declaration.minerals_questions[2].send(mineral).to_s.downcase == 'no' &&
          @declaration.minerals_questions[4].send(mineral).to_s.downcase != 'yes, 100%' &&
-         @declaration.minerals_questions[5].send(mineral).to_s.downcase == 'no'
+         @declaration.minerals_questions[5].send(mineral).to_s.downcase != 'yes'
         @minerals << @messages[:minerals_cross_check][:question_3_is_no_and_questions_5_or_6_not_yes][mineral.to_sym]
       end
     end
