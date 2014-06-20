@@ -132,11 +132,11 @@ en:
           :tin: "Validation Needed: Respondent reported that it is has identified all the smelters for TIN in Question 5, but in Question 4 it reported that it received conflict minerals reports from less than 100% of its suppliers of TIN"
           :gold: "Validation Needed: Respondent reported that it is has identified all the smelters for GOLD in Question 5, but in Question 4 it reported that it received conflict minerals reports from less than 100% of its suppliers of GOLD"
           :tungsten: "Validation Needed: Respondent reported that it is has identified all the smelters for TUNGSTEN in Question 5, but in Question 4 it reported that it received conflict minerals reports from less than 100% of its suppliers of TUNGSTEN"
-        :less_than_25_percent:
-          :tantalum: "Validation Needed: Respondent reported 25% in Question 5 for TANTALUM"
-          :tin: "Validation Needed: Respondent reported 25% in Question 5 for TIN"
-          :gold: "Validation Needed: Respondent reported 25% in Question 5 for GOLD"
-          :tungsten: "Validation Needed: Respondent reported 25% in Question 5 for TUNGSTEN"
+        :less_than_50_percent:
+          :tantalum: "Validation Needed: Respondent reported less than 50% in Question 5 for TANTALUM"
+          :tin: "Validation Needed: Respondent reported less than 50% in Question 5 for TIN"
+          :gold: "Validation Needed: Respondent reported less than 50% in Question 5 for GOLD"
+          :tungsten: "Validation Needed: Respondent reported less than 50% in Question 5 for TUNGSTEN"
     # 6) For each conflict metal, have you identified all of the smelters your company and its suppliers user to supply the products included within the declaration scope indicated above? (*)
     -
       :no_presence:
