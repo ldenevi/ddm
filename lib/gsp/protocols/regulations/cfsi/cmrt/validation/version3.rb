@@ -147,17 +147,6 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
       end
     end
     #
-    # If the answer for any metal in Q1 or Q2 is "Yes", there must be an answer for
-    # that metal in Q7
-    %w(tantalum tin gold tungsten).each do |mineral|
-      next unless eval("@has_#{mineral}")
-      unless (@declaration.minerals_questions[0].send(mineral).to_s.downcase == 'yes' ||
-               @declaration.minerals_questions[1].send(mineral).to_s.downcase == 'yes') &&
-               !@declaration.minerals_questions[1].send(mineral).to_s.empty?
-        @minerals << @messages[:minerals_cross_check][:question_1_or_2_is_yes_and_question_7_is_empty][mineral.to_sym]
-      end
-    end
-    #
     # For each metal, has supplier identified all of the smelters used by the company
     # and its suppliers as per Q6
     %w(tantalum tin gold tungsten).each do |mineral|

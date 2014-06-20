@@ -181,11 +181,6 @@ en:
       :tin: "Validation Needed: Respondent declares 'No' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for TIN"
       :gold: "Validation Needed: Respondent declares 'No' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for GOLD"
       :tungsten: "Validation Needed: Respondent declares 'No' in Question 3, but has not received all metals information in Question 5 or has not identified all smelters in Question 6 for TUNGSTEN"
-    :question_1_or_2_is_yes_and_question_7_is_empty:
-      :tantalum: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for TANTALUM"
-      :tin: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for TIN"
-      :gold: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for GOLD"
-      :tungsten: "Validation Needed: Respondent did not provide input for Question 7, but entered 'Yes' in Question 1 or Question 2 for TUNGSTEN"
 
   # Company level questions A-J
   :company_level:
