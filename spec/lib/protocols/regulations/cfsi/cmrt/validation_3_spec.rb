@@ -54,8 +54,9 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
 
     it "should validate company level data" do
       expect(version_3).to respond_to :validate_company_level_fields
+      version_3.declaration.company_level_questions << Cfsi::CompanyLevelQuestion.new
       version_3.validate_company_level_fields
-      expect(version_3.company_level).to include loaded_messages[:declaration][:no_presence][:company_level_questions]
+      expect(version_3.company_level).to include loaded_messages[:declaration][:no_presence][:company_level_questions] % 'A'
     end
 
     it "should cross validate declared minerals and smelters" do
@@ -72,7 +73,7 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
       version_3.declaration.mineral_smelters << Cfsi::MineralSmelter.new
       version_3.validate_mineral_smelters
       expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:no_presence][:metal] % 5
-      expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:flagged][:required_fields_missing] % [5, 'Smelter Reference List, Smelter Name, Smelter Country']
+      expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:flagged][:required_fields_missing] % [5, 'Metal, Smelter Reference List, Smelter Name, Smelter Country']
     end
   end
 end
