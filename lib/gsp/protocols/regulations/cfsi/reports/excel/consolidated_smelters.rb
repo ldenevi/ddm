@@ -305,10 +305,9 @@ EOT
                  "Standard Smelter ID",
                  "Smelter Name",
                  "Locations",
-                 "Conflict Minerals Policy URL",
                  "Valid Until",
                  "Last Updated"],
-     :column_widths => [7, 15, 35, 40, 40, 35, 20, 20],
+     :column_widths => [7, 15, 35, 40, 40, 20, 20],
      :data => [[1,""]]}
   end
 
