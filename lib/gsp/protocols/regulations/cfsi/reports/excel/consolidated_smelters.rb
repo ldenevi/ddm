@@ -195,6 +195,7 @@ EOT
                  "Standard Smelter Names",
                  "Smelter Facility Location Country",
                  "Smelter ID",
+                 "Source of Smelter ID",
                  "Smelter Facility Location Street Address",
                  "Smelter Facility Location City",
                  "Smelter Facility Location State / Province",
@@ -203,16 +204,17 @@ EOT
                  "Proposed next steps, if applicable",
                  "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
                  "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+                 "Does 100% of the smelter’s feedstock originate from recycled or scrap sources?",
                  "Comments",
                  "Template Version",
-                 "Source EICC CFSI Report File Names"],
-     :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60],
+                 "Source Files"],
+     :column_widths => [7, 15, 35, 35, 25, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 15, 40, 20, 60],
      :data => self.sorted_smelters.collect do |data|
                 smelter = data[:smelter]
-                [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id,
+                [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id, smelter.source_of_smelter_id,
                  smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province,
                  smelter.facility_contact_name, smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source,
-                 smelter.mineral_source_location, smelter.comment, data[:cmrt_version], data[:file_name]]
+                 smelter.mineral_source_location, smelter.is_all_smelter_feedstock_from_recycled_sources, smelter.comment, data[:cmrt_version], data[:file_name]]
               end
     }
   end
