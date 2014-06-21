@@ -62,4 +62,12 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   def file_path
     spreadsheet ? spreadsheet.storage_path : ''
   end
+
+  def has_cmrt?
+    !cmrt.nil?
+  end
+
+  def has_declaration?
+    !(cmrt.nil? || cmrt.declaration.nil?)
+  end
 end
