@@ -204,7 +204,7 @@ EOT
                  "Proposed next steps, if applicable",
                  "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
                  "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
-                 "Does 100% of the smelter’s feedstock originate from recycled or scrap sources?",
+                 "Does 100% of the smelter's feedstock originate from recycled or scrap sources?",
                  "Comments",
                  "Template Version",
                  "Source Files"],
@@ -225,15 +225,15 @@ EOT
     self.sorted_smelters.each do |data|
       smelter = data[:smelter]
 
-      row = [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id,
+      row = [smelter.metal, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id, smelter.source_of_smelter_id,
              smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province,
              smelter.facility_contact_name, smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source,
-             smelter.mineral_source_location, smelter.comment]
+             smelter.mineral_source_location, smelter.comment, smelter.is_all_smelter_feedstock_from_recycled_sources]
 
       # Add valid rows to Consolidated worksheet
       if ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.standard_smelter_name.size > 2 && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
-         ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.smelter_reference_list.size > 2 && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
-         ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.smelter_reference_list.size > 2 && smelter.standard_smelter_name.size > 2 )
+         ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
+         ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.standard_smelter_name.size > 2 )
 
         smelter_key = self.is_valid_smelter_id?(smelter.smelter_id) ?
                         [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id] :
@@ -261,10 +261,10 @@ EOT
     {:name => "Consolidated Smelters",
      :header => ["   #   ",
                  "Metal",
-                 "Smelter Reference List",
                  "Standard Smelter Names",
                  "Smelter Facility Location Country",
                  "Smelter ID",
+                 "Source of Smelter ID",
                  "Smelter Facility Location Street Address",
                  "Smelter Facility Location City",
                  "Smelter Facility Location State / Province",
@@ -273,10 +273,11 @@ EOT
                  "Proposed next steps, if applicable",
                  "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
                  "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap",
+                 "Does 100% of the smelter's feedstock originate from recycled or scrap sources?",
                  "Comments",
-                 "Number of\nSource EICC-GeSI\nCM Report Files",
-                 "Source EICC EICC-GeSI Report File Names"],
-      :column_widths => [7, 15, 35, 35, 25, 15, 25, 25, 25, 30, 20, 30, 30, 30, 40, 20, 60],
+                 "Number of\nSource CFSI\nCM Report Files",
+                 "Source Files"],
+      :column_widths => [7, 15, 35, 25, 15, 25, 25, 25, 25, 30, 20, 30, 30, 30, 15, 40, 20, 60],
       :data => rows}
   end
 
