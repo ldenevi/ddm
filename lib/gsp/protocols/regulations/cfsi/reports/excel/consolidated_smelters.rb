@@ -169,15 +169,11 @@ EOT
     # Report's default sort:
     #
     # 1. Sort by Gold, then Tin, Tantalum, Tungsten, empty field; all else alphanumerically sorted last
-    # 2. Alphanumerically sort valid SMELTER IDs, then by valid non-SMELTER IDs, finally all other data
-    # 3. Alphanumerically sort COUNTRY, all empty fields last
-    # 4. Smelter Reference List, all empty fields last
+    # 2. Alphanumerically sort COUNTRY, all empty fields last
+    # 3. Standard Smelter Name, all empty fields last
     Proc.new { |smelter| [(mineral_sort_order.index(smelter.metal.downcase) || 5),
-                          (is_valid_smelter_id?(smelter.smelter_id) ? smelter.smelter_id :
-                            (is_valid_non_smelter_id?(smelter.smelter_id) ? "YYYYYYY" + smelter.smelter_id : "ZZZZZZZ" + smelter.smelter_id)
-                          ),
                           (smelter.facility_location_country.empty? ? "ZZZZZZZ" + smelter.facility_location_country.downcase : smelter.facility_location_country.downcase),
-                          (smelter.smelter_reference_list.empty? ? "ZZZZZZZ" + smelter.smelter_reference_list.downcase : smelter.smelter_reference_list.downcase)]  }
+                          (smelter.standard_smelter_name.empty? ? "ZZZZZZZ" + smelter.standard_smelter_name.downcase : smelter.standard_smelter_name.downcase)]  }
   end
 
   def rejected_entries_sort
