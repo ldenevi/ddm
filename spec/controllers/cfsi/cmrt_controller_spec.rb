@@ -29,9 +29,10 @@ describe Cfsi::CmrtController do
     end
     it "should list a Cfsi::ValidationsBatch's Cfsi::CmrtValidations" do
       vb = Cfsi::ValidationsBatch.create
-      vb.cmrt_validations = (0...12).to_a.collect { Cfsi::CmrtValidation.create :validations_batch => vb }
-      get :list_validation_statuses, :batch_id => vb.id
-      expect(Cfsi::CmrtValidation.count).to eq 14
+      expect {
+        vb.cmrt_validations = (0...12).to_a.collect { Cfsi::CmrtValidation.create :validations_batch => vb }
+        get :list_validation_statuses, :batch_id => vb.id
+      }.to change{Cfsi::CmrtValidation.count}.by_at_least(12)
       expect(response.status).to eq 200
       expect(response.body).to match 'id="cmrt_validations_list"'
     end
@@ -69,7 +70,7 @@ describe Cfsi::CmrtController do
       Cfsi::CmrtValidation.destroy_all
       request.env["HTTP_REFERER"] = "/"
       vb = Cfsi::ValidationsBatch.create
-      expect { post("validate_zip", :zip => uploaded_zip, :batch_id => vb.id) }.to change{Cfsi::CmrtValidation.count}.from(0).to(14)
+      expect { post("validate_zip", :zip => uploaded_zip, :batch_id => vb.id) }.to change{Cfsi::CmrtValidation.count}.by_at_least(14)
     end
   end
 end
