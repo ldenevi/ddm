@@ -96,7 +96,7 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
           sheet.add_row(["#"] + worksheet_meta[:header].collect { |h| h[:name] }, :style => header_style).height = 35.0
           friendly_index = 1
           worksheet_meta[:data].each do |row|
-            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => [6] + worksheet_meta[:header].collect { |h| h[:column_widths]})
+            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => [6] + worksheet_meta[:header].collect { |h| h[:column_width]})
             friendly_index += 1
           end
         end
