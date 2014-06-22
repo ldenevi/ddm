@@ -48,8 +48,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.all_reported_smelters[:name]).to eq "All Reported Smelters"
     expect(csi.all_reported_smelters.keys).to include :header
     expect(csi.all_reported_smelters[:header]).not_to be_empty
-    expect(csi.all_reported_smelters.keys).to include :column_widths
-    expect(csi.all_reported_smelters[:column_widths]).not_to be_empty
     expect(csi.all_reported_smelters.keys).to include :data
     expect(csi.all_reported_smelters[:data]).not_to be_empty
   end
@@ -61,8 +59,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.consolidated_smelters[:name]).to eq "Consolidated Smelters"
     expect(csi.consolidated_smelters.keys).to include :header
     expect(csi.consolidated_smelters[:header]).not_to be_empty
-    expect(csi.consolidated_smelters.keys).to include :column_widths
-    expect(csi.consolidated_smelters[:column_widths]).not_to be_empty
     expect(csi.consolidated_smelters.keys).to include :data
     expect(csi.consolidated_smelters[:data]).not_to be_empty
   end
@@ -74,8 +70,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.rejected_entries[:name]).to eq "Rejected Entries"
     expect(csi.rejected_entries.keys).to include :header
     expect(csi.rejected_entries[:header]).not_to be_empty
-    expect(csi.rejected_entries.keys).to include :column_widths
-    expect(csi.rejected_entries[:column_widths]).not_to be_empty
     expect(csi.rejected_entries.keys).to include :data
     csi.validations_batch.cmrt_validations.first.cmrt.declaration.mineral_smelters.first.standard_smelter_name = ""
     csi.validations_batch.cmrt_validations.first.cmrt.declaration.mineral_smelters.first.facility_location_country = ""
@@ -90,8 +84,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.cfsi_compliant_smelter_list[:name]).to eq "CFSI-Compliant Smelters List"
     expect(csi.cfsi_compliant_smelter_list.keys).to include :header
     expect(csi.cfsi_compliant_smelter_list[:header]).not_to be_empty
-    expect(csi.cfsi_compliant_smelter_list.keys).to include :column_widths
-    expect(csi.cfsi_compliant_smelter_list[:column_widths]).not_to be_empty
     expect(csi.cfsi_compliant_smelter_list.keys).to include :data
     expect(csi.cfsi_compliant_smelter_list[:data]).not_to be_empty
   end
@@ -103,8 +95,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.smelter_compliance_status[:name]).to eq "Smelter Compliance Status"
     expect(csi.smelter_compliance_status.keys).to include :header
     expect(csi.smelter_compliance_status[:header]).not_to be_empty
-    expect(csi.smelter_compliance_status.keys).to include :column_widths
-    expect(csi.smelter_compliance_status[:column_widths]).not_to be_empty
     expect(csi.smelter_compliance_status.keys).to include :data
   end
 

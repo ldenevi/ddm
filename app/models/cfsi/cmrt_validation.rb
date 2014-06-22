@@ -64,10 +64,10 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   end
 
   def has_cmrt?
-    !self.cmrt.nil?
+    !cmrt.nil?
   end
 
   def has_declaration?
-    !(self.cmrt.nil? || self.cmrt.declaration.nil?)
+    !(cmrt.nil? || cmrt.declaration.nil?)
   end
 end
