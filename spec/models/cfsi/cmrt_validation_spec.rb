@@ -10,6 +10,9 @@ describe Cfsi::CmrtValidation do
        :validations_batch, :vendor, :spreadsheet, :file_name, :file_extension, :file_path].each do |attr|
        expect(empty_validation).to respond_to attr
       end
+
+      expect(empty_validation).to respond_to :has_cmrt?
+      expect(empty_validation).to respond_to :has_declaration?
     end
 
     pending "email CMRT issues to vendor"
