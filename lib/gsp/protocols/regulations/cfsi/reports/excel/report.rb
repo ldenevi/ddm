@@ -93,10 +93,10 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
       worksheets.each do |worksheet_meta|
         p.workbook.add_worksheet(:name => worksheet_meta[:name]) do |sheet|
           worksheet_header(sheet, branding_style)
-          sheet.add_row(worksheet_meta[:header], :style => header_style).height = 35.0
+          sheet.add_row(["#"] + worksheet_meta[:header].collect { |h| h[:name] }, :style => header_style).height = 35.0
           friendly_index = 1
           worksheet_meta[:data].each do |row|
-            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => worksheet_meta[:column_widths])
+            sheet.add_row([friendly_index] + row, :style => data_style, :types => :string, :widths => [6] + worksheet_meta[:header].collect { |h| h[:column_widths]})
             friendly_index += 1
           end
         end
