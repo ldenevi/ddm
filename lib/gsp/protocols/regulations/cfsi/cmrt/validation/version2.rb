@@ -1,7 +1,7 @@
 module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
   attr_accessor :messages
   attr_accessor :declaration
-  attr_accessor :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names
+  attr_accessor :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
 
   def load_messages
     @messages = YAML::load_file(File.join('config', 'cfsi', @declaration.version, 'messages.en.yml'))["en"]
@@ -10,6 +10,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
     @company_level = @declaration.errors[:company_level]
     @smelters_list = @declaration.errors[:smelters_list]
     @standard_smelter_names = @declaration.errors[:standard_smelter_names]
+    @products_list = @declaration.errors[:products_list]
   end
 
   def run_validations(declaration)
@@ -25,6 +26,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
     end
     cross_validate_minerals_and_smelters
     validate_mineral_smelters
+    cross_validate_basic_and_products
   end
 
   def validate_basic_fields
@@ -239,5 +241,9 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
         break
       end
     end
+  end
+
+  def cross_validate_basic_and_products
+    @products_list << @messages[:cross_check][:products_list][:flagged][:declaration_of_scope_is_product_and_empty_product_list] if @declaration.declaration_scope == 'D. Product Level' && @declaration.products.empty?
   end
 end

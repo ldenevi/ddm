@@ -43,7 +43,7 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
   end
 
   def is_valid_smelter_id?(smelter_id)
-    smelter_id.to_s.match /^[1-4][A-Z]{3}[0-9]{3}$/
+    smelter_id.to_s.match(/^[1-4][A-Z]{3}[0-9]{3}$/) || smelter_id.to_s.match(/^CID/)
   end
 
   def is_valid_non_smelter_id?(non_smelter_id)

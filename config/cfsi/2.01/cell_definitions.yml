@@ -74,3 +74,8 @@
   :known_alias: 2
   :facility_location_country: 3
   :smelter_id: 4
+:products:
+  :start_row: 5
+  :item_number: 1
+  :item_name: 2
+  :comment: 3

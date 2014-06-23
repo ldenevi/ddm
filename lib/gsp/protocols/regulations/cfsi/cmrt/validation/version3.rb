@@ -1,7 +1,7 @@
 module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
   attr_accessor :messages
   attr_accessor :declaration
-  attr_accessor :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names
+  attr_accessor :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
   attr_accessor :has_tantalum, :has_tin, :has_gold, :has_tungsten
 
   def load_messages
@@ -11,6 +11,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     @company_level = @declaration.errors[:company_level]
     @smelters_list = @declaration.errors[:smelters_list]
     @standard_smelter_names = @declaration.errors[:standard_smelter_names]
+    @products_list = @declaration.errors[:products_list]
   end
 
   def run_validations(declaration)
@@ -22,6 +23,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
       validate_company_level_fields
       cross_validate_minerals_and_smelters
       validate_mineral_smelters
+      cross_validate_basic_and_products
     end
   end
 
@@ -275,5 +277,9 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
       @basic << @messages[:cross_check][:minerals_and_smelters][:flagged][:declared_mineral_and_no_mineral_smelter][mineral.to_sym] if eval("@has_#{mineral}") && !sourced_minerals.include?(mineral)
       @basic << @messages[:cross_check][:minerals_and_smelters][:flagged][:no_declared_mineral_and_has_mineral_smelter][mineral.to_sym] if eval("@has_#{mineral} == false") && sourced_minerals.include?(mineral)
     end
+  end
+
+  def cross_validate_basic_and_products
+    @products_list << @messages[:cross_check][:products_list][:flagged][:declaration_of_scope_is_product_and_empty_product_list] if @declaration.declaration_scope == 'B. Product (or List of Products)' && @declaration.products.empty?
   end
 end

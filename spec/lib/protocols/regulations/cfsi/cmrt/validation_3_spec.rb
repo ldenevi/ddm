@@ -75,5 +75,12 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Validation do
       expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:no_presence][:metal] % 5
       expect(version_3.smelters_list).to include loaded_messages[:smelters_list][:flagged][:required_fields_missing] % [5, 'Metal, Smelter Reference List, Smelter Name, Smelter Country']
     end
+
+    it "should validate products list" do
+      expect(version_3).to respond_to :cross_validate_basic_and_products
+      version_3.declaration.declaration_scope = "B. Product (or List of Products)"
+      version_3.cross_validate_basic_and_products
+      expect(version_3.products_list).to include loaded_messages[:cross_check][:products_list][:flagged][:declaration_of_scope_is_product_and_empty_product_list]
+    end
   end
 end
