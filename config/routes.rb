@@ -23,6 +23,9 @@ GSP::Application.routes.draw do
     post "cmrt/validate_zip/:batch_id", :to => "cmrt#validate_zip"
     get "cmrt/list_validation_statuses/:batch_id", :to => "cmrt#list_validation_statuses"
     get "cmrt/download/:id", :to => "cmrt#download"
+
+    get "reports/aggregated_smelters/:batch_id", :to => "reports#aggregated_smelters"
+    get "reports/consolidated_smelters/:batch_id", :to => "reports#consolidated_smelters"
   end
 
   # EICC Declaration
