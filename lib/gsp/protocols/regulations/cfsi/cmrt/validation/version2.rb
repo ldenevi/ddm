@@ -26,6 +26,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
     end
     cross_validate_minerals_and_smelters
     validate_mineral_smelters
+    cross_validate_basic_and_products
   end
 
   def validate_basic_fields
