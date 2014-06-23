@@ -176,7 +176,7 @@ EOT
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
 
-        row = [smelter.metal, smelter.standard_smelter_name, smelter.facility_location_country, smelter.smelter_id, smelter.source_of_smelter_id,
+        row = [smelter.metal, smelter.standard_smelter_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id, smelter.source_of_smelter_id,
                smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province,
                smelter.facility_contact_name, smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source,
                smelter.mineral_source_location, smelter.comment, smelter.is_all_smelter_feedstock_from_recycled_sources]
@@ -213,7 +213,8 @@ EOT
        :header => [{:name => "Metal", :column_width => 15},
                    {:name => "Standard Smelter Names", :column_width => 35},
                    {:name => "Smelter Facility Location Country", :column_width => 35},
-                   {:name => "Smelter ID", :column_width => 15},
+                   {:name => "Smelter ID\nVersion 2", :column_width => 15},
+                   {:name => "Smelter ID\nVersion 3", :column_width => 15},
                    {:name => "Source of Smelter ID", :column_width => 15},
                    {:name => "Smelter Facility Location Street Address", :column_width => 25},
                    {:name => "Smelter Facility Location City", :column_width => 25},
@@ -281,7 +282,7 @@ EOT
                           ""
                          end
                        end
-        rows << [is_confirmed] + row[0..4]
+        rows << [is_confirmed] + row[0..5]
         added_smelter_ids << row[4]
       end
 
