@@ -18,7 +18,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Effective Date", :column_width => 40, :question => ""},
 
                    # Minerals Questions
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q1-V3: Is the conflict metal intentionally added to your product?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q1-v3: Is the conflict metal intentionally added to your product?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -26,7 +26,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Gold Comments", :column_width => 40, :question => ""},
                    {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tungsten Comments", :column_width => 40, :question => ""},
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q1 - V2: Are any of the following metals necessary to the functionality or production of your company's products that it manufacturers or contracts to manufacture?\n\n Q2-V3: Is the conflict metal necessary to the production of your company's product and contained in the finished product that your company manufactures or contracts to manufacture?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q1 - v2: Are any of the following metals necessary to the functionality or production of your company's products that it manufacturers or contracts to manufacture?\n\n Q2-v3: Is the conflict metal necessary to the production of your company's product and contained in the finished product that your company manufactures or contracts to manufacture?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -34,7 +34,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Gold Comments", :column_width => 40, :question => ""},
                    {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tungsten Comments", :column_width => 40, :question => ""},
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q2 - V2: Do the following metals (necessary to the functionality or production of your company's products) originate from the DRC or an adjoining country?\n\nQ3 -V3: Does any of the conflict metal originate from the covered countries?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q2 - v2: Do the following metals (necessary to the functionality or production of your company's products) originate from the DRC or an adjoining country?\n\nQ3 -v3: Does any of the conflict metal originate from the covered countries?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -42,7 +42,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Gold Comments", :column_width => 40, :question => ""},
                    {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tungsten Comments", :column_width => 40, :question => ""},
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q3 - V2: Do the following metals (necessary to the functionality or production of your company's products) come from a recycler or scrap supplier? \n\nQ4 - V3: Does 100 percent of the conflict metal (necessary to the functionality or production of your products) originate from recycled or scrap sources?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q3 - v2: Do the following metals (necessary to the functionality or production of your company's products) come from a recycler or scrap supplier? \n\nQ4 - v3: Does 100 percent of the conflict metal (necessary to the functionality or production of your products) originate from recycled or scrap sources?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -50,7 +50,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Gold Comments", :column_width => 40, :question => ""},
                    {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tungsten Comments", :column_width => 40, :question => ""},
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q4 - V2: Have you received completed Conflict Minerals Reporting Templates from all of your suppliers?\n\nQ5 - V3: Have you received conflict metals data/information for each metal from all relevant suppliers of 3TG?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q4 - v2: Have you received completed Conflict Minerals Reporting Templates from all of your suppliers?\n\nQ5 - v3: Have you received conflict metals data/information for each metal from all relevant suppliers of 3TG?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -58,7 +58,15 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Gold Comments", :column_width => 40, :question => ""},
                    {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tungsten Comments", :column_width => 40, :question => ""},
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q5 - V2: For each of the following metals, have you identified all of the smelters your company and its suppliers use to supply the products included within the declaration scope?\n\nQ6 - V3: For each conflict mineral, have you identified all of the smelters your company and its suppliers use to supply the products included within the declaration scope?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q5 - v2: For each of the following metals, have you identified all of the smelters your company and its suppliers use to supply the products included within the declaration scope?\n\nQ6 - v3: For each conflict mineral, have you identified all of the smelters your company and its suppliers use to supply the products included within the declaration scope?"},
+                   {:name => "Tantalum Comments", :column_width => 40, :question => ""},
+                   {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
+                   {:name => "Tin Comments", :column_width => 40, :question => ""},
+                   {:name => "Gold (Y/N)", :column_width => 15, :question => ""},
+                   {:name => "Gold Comments", :column_width => 40, :question => ""},
+                   {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
+                   {:name => "Tungsten Comments", :column_width => 40, :question => ""},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q6 - v2: Have all of the smelters used by your company and its suppliers been validated as compliant in accordance with the Conflict-Free Smelter (CFS) Program and listed on the Compliant Smelter List for the following metals?\n\nQ7 - v3: Is the conflict metal intentionally added to your product?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -70,23 +78,23 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    # Company level questions
                    {:name => "Question A", :column_width => 15, :question => "QA - V2&3: Do you have a policy in place that includes DRC conflict-free sourcing?"},
                    {:name => "Question A Comments", :column_width => 40, :question => ""},
-                   {:name => "Question B", :column_width => 15, :question => "QB -V2: QB - V3: Is this policy publicly available on your website?\n\nQB - V3: Is your conflict minerals sourcing policy publicly available on your website? (Note: If yes, the user shall specify the URL in the comment field.)"},
+                   {:name => "Question B", :column_width => 15, :question => "QB -v2: QB - v3: Is this policy publicly available on your website?\n\nQB - v3: Is your conflict minerals sourcing policy publicly available on your website? (Note: If yes, the user shall specify the URL in the comment field.)"},
                    {:name => "Question B Comments", :column_width => 40, :question => ""},
                    {:name => "Question C", :column_width => 15, :question => "QC - V2&3: Do you require your direct suppliers to be DRC Conflict Free?"},
                    {:name => "Question C Comments", :column_width => 40, :question => ""},
-                   {:name => "Question D", :column_width => 15, :question => "QD - V2: Do you require your direct suppliers to source from smelters validated as compliant to a CFS protocol using the CFS Compliant Smelter List?\n\nQD - V3: Do you require your direct suppliers to source from smelters validated by an independent private sector audit firm?"},
+                   {:name => "Question D", :column_width => 15, :question => "QD - v2: Do you require your direct suppliers to source from smelters validated as compliant to a CFS protocol using the CFS Compliant Smelter List?\n\nQD - v3: Do you require your direct suppliers to source from smelters validated by an independent private sector audit firm?"},
                    {:name => "Question D Comments", :column_width => 40, :question => ""},
                    {:name => "Question E", :column_width => 15, :question => "QE - V2&3: Have you implemented due diligence measures for conflict-free sourcing?"},
                    {:name => "Question E Comments", :column_width => 40, :question => ""},
-                   {:name => "Question F", :column_width => 15, :question => "QF -V2 Do you request your suppliers to fill out this Conflict Minerals Reporting Template?\n\nQF - V3: Do you collect conflict minerals due diligence information from your suppliers which is in conformance with the IPC-1755 Conflict Minerals Data Exchange standard [e.g. CFSI Conflict Minerals Reporting  Template]?"},
+                   {:name => "Question F", :column_width => 15, :question => "QF -V2 Do you request your suppliers to fill out this Conflict Minerals Reporting Template?\n\nQF - v3: Do you collect conflict minerals due diligence information from your suppliers which is in conformance with the IPC-1755 Conflict Minerals Data Exchange standard [e.g. CFSI Conflict Minerals Reporting  Template]?"},
                    {:name => "Question F Comments", :column_width => 40, :question => ""},
                    {:name => "Question G", :column_width => 15, :question => "QG - V2&3: Do you request smelter names from your suppliers?"},
                    {:name => "Question G Comments", :column_width => 40, :question => ""},
-                   {:name => "Question H", :column_width => 15, :question => "QH - V2: Do you verify due diligence information received from your suppliers?\n\nQH - V3: Do you review due diligence information received from your suppliers against your company's expectations?"},
+                   {:name => "Question H", :column_width => 15, :question => "QH - v2: Do you verify due diligence information received from your suppliers?\n\nQH - v3: Do you review due diligence information received from your suppliers against your company's expectations?"},
                    {:name => "Question H Comments", :column_width => 40, :question => ""},
-                   {:name => "Question I", :column_width => 15, :question => "QI - V2: Does your verification process include corrective action management?\n\nQI - V3: Does your review process include corrective action management?"},
+                   {:name => "Question I", :column_width => 15, :question => "QI - v2: Does your verification process include corrective action management?\n\nQI - v3: Does your review process include corrective action management?"},
                    {:name => "Question I Comments", :column_width => 40, :question => ""},
-                   {:name => "Question J", :column_width => 15, :question => "QJ - V2: Are you subject to the SEC Conflict Minerals disclosure requirement rule?\n\nQJ - V3: Are you subject to the SEC Conflict Minerals rule?"},
+                   {:name => "Question J", :column_width => 15, :question => "QJ - v2: Are you subject to the SEC Conflict Minerals disclosure requirement rule?\n\nQJ - v3: Are you subject to the SEC Conflict Minerals rule?"},
                    {:name => "Question J Comments", :column_width => 40, :question => ""},
 
                    # Misc
@@ -98,6 +106,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
        :data => validations_batch.cmrt_validations.collect do |val|
                   next unless val.has_declaration?
                   dec = val.cmrt.declaration
+                  date = dec.completion_at || dec.effective_date
                   row = [dec.company_name,
                          dec.declaration_scope,
                          dec.description_of_scope,
@@ -107,8 +116,15 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                          dec.contact_title,
                          dec.contact_email,
                          dec.contact_phone,
-                         dec.completion_at.nil? ? "" : dec.completion_at.strftime('%B %d, %Y')]
-                  dec.minerals_questions.each do |mq|
+                         dec.authorizer,
+                         dec.authorizer_title,
+                         dec.authorizer_email,
+                         dec.authorizer_phone,
+                         date.nil? ? "" : date.strftime('%B %d, %Y')]
+                  dec.minerals_questions.each_with_index do |mq, index|
+                    if dec.version.match(/^2/) && [0, 6].include?(index)
+                      row += [""] * 8
+                    end
                     row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
                   end
                   dec.company_level_questions.each do |clq|
@@ -136,14 +152,10 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       worksheet.merge_cells "AN1:AU1"
       worksheet.merge_cells "AV1:BC1"
       worksheet.merge_cells "BD1:BK1"
+      worksheet.merge_cells "BL1:BS1"
 
-      worksheet.merge_cells "BL1:BM1"
-      worksheet.merge_cells "BN1:BO1"
-      worksheet.merge_cells "BP1:BQ1"
-      worksheet.merge_cells "BR1:BS1"
       worksheet.merge_cells "BT1:BU1"
       worksheet.merge_cells "BV1:BW1"
-
       worksheet.merge_cells "BX1:BY1"
       worksheet.merge_cells "BZ1:CA1"
       worksheet.merge_cells "CB1:CC1"
