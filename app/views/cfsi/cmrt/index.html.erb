@@ -12,11 +12,19 @@
       <li><a href="#tabs-1">Previously processed</a></li>
     </ul>
     <div id="tabs-1">
-      <ul>
+      <table border="1">
       <% @validations_batches.each do |validations_batch| %>
-        <li><%= link_to "CMRTs (%s) - %s" % [validations_batch.cmrt_validations.count, validations_batch.created_at.to_formatted_s(:long)], :action => :show, :id => validations_batch.id %></li>
+        <tr>
+          <td><%= link_to "CMRTs (%s) - %s" % [validations_batch.cmrt_validations.count, validations_batch.created_at.to_formatted_s(:long)], :action => :show, :id => validations_batch.id %></td>
+          <td>
+            <ul>
+              <li><%= link_to "Aggregated Smelters Report", :controller => 'reports', :action => 'aggregated_smelters', :batch_id => validations_batch.id %></li>
+              <li><%= link_to "Consolidated Smelters Report", :controller => 'reports', :action => 'consolidated_smelters', :batch_id => validations_batch.id %></li>
+            </ul>
+          </td>
+        </tr>
       <% end %>
-      </ul>
+      </table>
     </div>
   </div>
 </section>
