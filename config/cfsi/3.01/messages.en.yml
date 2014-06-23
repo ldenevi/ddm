@@ -310,3 +310,6 @@ en:
           :tin: "Invalid Data: Respondent did not declare TIN but provided a TIN smelter"
           :gold: "Invalid Data: Respondent did not declare GOLD but provided a GOLD smelter"
           :tungsten: "Invalid Data: Respondent did not declare TUNGSTEN but provided a TUNGSTEN smelter"
+    :products_list:
+      :flagged:
+        :declaration_of_scope_is_product_and_empty_product_list: "Validation Needed: Respondent reported declaration scope to be 'Product Level', but provided no products under Products List"

@@ -24,6 +24,9 @@ class Cfsi::Declaration < ActiveRecord::Base
   has_many :standard_smelter_names
   attr_accessible :standard_smelter_names
 
+  has_many :products
+  attr_accessible :products
+
   # Reference maps for seeking the data from various versions of the same file.
   # The CFSI Conflict Minerals Reporting Template has several versions being submitted.
   attr_accessor :structure
@@ -69,6 +72,7 @@ class Cfsi::Declaration < ActiveRecord::Base
     extract_data_from_company_level_questions_worksheet
     extract_data_from_mineral_smelters_worksheet
     extract_data_from_standard_smelter_names_worksheet
+    extract_data_from_products_worksheet
   end
 
   #
@@ -253,6 +257,31 @@ class Cfsi::Declaration < ActiveRecord::Base
       i += 1
     end
     standard_smelter_names_worksheet.csv.rewind
+  end
+
+  #
+  # Products
+  #
+  def extract_data_from_products_worksheet(worksheet_index = nil)
+    products_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:products]}") }.first
+                                                 : self.csv_worksheets[worksheet_index]
+    rows = products_worksheet.csv.read
+    i    = cell_definitions[:products][:start_row]
+    while !rows[i].nil?
+      if rows[i].uniq.size < 3
+        i += 1
+        next
+      end
+
+      product = Cfsi::Product.new
+      structure[:fields][:products].to_a.each do |field|
+        value = rows[i][cell_definitions[:products][field]]
+        product.send("#{field.to_s}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
+      end
+      self.products << product
+      i += 1
+    end
+    products_worksheet.csv.rewind
   end
 
 end

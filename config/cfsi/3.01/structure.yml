@@ -8,6 +8,7 @@
   :company_level: 3
   :smelter_list: 4
   :smelter_names: 5
+  :products: 7
 :fields:
   :declaration:
     - :company_name
@@ -226,3 +227,7 @@
     - :known_alias
     - :facility_location_country
     - :smelter_id
+  :products:
+    - :item_number
+    - :item_name
+    - :comment

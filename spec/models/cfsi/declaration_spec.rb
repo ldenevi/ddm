@@ -39,6 +39,7 @@ describe Cfsi::Declaration do
       expect(blank_declaration.mineral_smelters.first).to be_kind_of Cfsi::MineralSmelter
       expect(blank_declaration.standard_smelter_names.first).to be_kind_of Cfsi::StandardSmelterName
       expect(blank_declaration).to respond_to :standard_smelter_names
+      expect(blank_declaration).to respond_to :products
     end
 
     it "should detect version" do
@@ -126,6 +127,13 @@ describe Cfsi::Declaration do
       expect(generated_declaration.standard_smelter_names.last.metal).not_to be_empty
       expect(generated_declaration.standard_smelter_names.last.smelter_id).not_to be_empty
       expect(generated_declaration.standard_smelter_names.last.standard_smelter_name).not_to be_empty
+
+      # Products
+      expect(generated_declaration.products).not_to be_empty
+      expect(generated_declaration.products.first).not_to be_nil
+      expect(generated_declaration.products.first.item_number).not_to be_empty
+      expect(generated_declaration.products.first.item_name).not_to be_empty
+      expect(generated_declaration.products.first.comment).not_to be_empty
     end
 
     let(:declaration_from_csvs) { Cfsi::Declaration.generate_from_csv_file_paths(Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*"))) }

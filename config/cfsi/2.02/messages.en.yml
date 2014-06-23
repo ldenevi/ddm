@@ -264,3 +264,6 @@ en:
         :tin: "Validation Needed: Respondent reported it uses tin in Question 1, but did not identify a tin smelter on its Conflict Minerals Report Smelter List"
         :gold: "Validation Needed: Respondent reported it uses gold in Question 1, but did not identify a gold refiner on its Conflict Minerals Report Smelter List"
         :tungsten: "Validation Needed: Respondent reported it uses tungsten in Question 1, but did not identify a tungsten smelter on its Conflict Minerals Report Smelter List"
+    :products_list:
+      :flagged:
+        :declaration_of_scope_is_product_and_empty_product_list: "Validation Needed: Respondent reported declaration scope to be 'Product Level', but provided no products under Products List"
