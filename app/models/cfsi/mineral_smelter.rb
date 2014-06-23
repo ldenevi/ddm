@@ -10,17 +10,17 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   def smelter_id=(value)
     if value.to_s.match(/^CID./)
       self.v3_smelter_id = value
-      self.v2_smelter_id = nil
+      self.v2_smelter_id = ''
     elsif value.to_s.match(/^[0-9][A-Z]{3}/)
       self.v2_smelter_id = value
-      self.v3_smelter_id = nil
+      self.v3_smelter_id = ''
     else
-      self.v2_smelter_id = value
-      self.v3_smelter_id = nil
+      self.v2_smelter_id = value.to_s
+      self.v3_smelter_id = ''
     end
   end
 
   def smelter_id
-    self.v3_smelter_id || self.v2_smelter_id
+    (self.v3_smelter_id.empty?) ? self.v2_smelter_id : self.v3_smelter_id
   end
 end
