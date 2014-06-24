@@ -1,10 +1,15 @@
 require 'spec_helper'
 
 describe Cfsi::Cmrt do
-  let(:blank_cmrt) { Cfsi::Cmrt.new }
+  let(:org) { FactoryGirl.create(:organization) }
+  let(:blank_cmrt) { Cfsi::Cmrt.new :organization => org }
   let(:vendor_cmrt) { FactoryGirl.build(:vendor_cmrt) }
 
   context "(in general)" do
+    it "should save" do
+      expect(blank_cmrt.save).to be_true
+    end
+
     it "should contain blank_cmrt data that uniquely identifies the minerals vendor" do
       expect(blank_cmrt).to respond_to :company_name
       expect(blank_cmrt).to respond_to :file_extension
@@ -18,6 +23,7 @@ describe Cfsi::Cmrt do
     it "should contain relevant associations" do
       expect(blank_cmrt).to respond_to :declaration
       expect(blank_cmrt).to respond_to :minerals_vendor
+      expect(blank_cmrt).to respond_to :organization
     end
 
     it "should find MineralsVendor based on unique identifier data" do

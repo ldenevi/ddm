@@ -8,6 +8,8 @@ describe Cfsi::MineralsVendor do
       expect(blank_minerals_vendor).to respond_to :cfsi_confirmed_at
       expect(blank_minerals_vendor).to respond_to :minerals
       expect(blank_minerals_vendor).to respond_to :query_match_data
+
+      # expect(blank_minerals_vendor).to respond_to :organization
     end
   end
 end

@@ -4,6 +4,8 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   belongs_to :organization
   belongs_to :user
   attr_accessible :status, :organization, :user
+  validates :organization, :presence => true
+  validates :user, :presence => true
 
   has_many :unidentified_cmrts, :class_name => 'Cfsi::Cmrt', :conditions => "vendor_id IS NULL"
   attr_accessible :unidentified_cmrts

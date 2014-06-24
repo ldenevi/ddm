@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe Cfsi::CmrtController do
   before(:all) {  Cfsi::ValidationsBatch.destroy_all }
+  before(:each) do
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in FactoryGirl.create(:user)
+  end
+  let(:org) { FactoryGirl.create(:organization) }
   let(:uploaded_cmrt) do
     cmrt_file_path = File.join(File.dirname(__FILE__), "3.01_-_filled.xls")
     ActionDispatch::Http::UploadedFile.new(:tempfile => File.new(cmrt_file_path), :filename => File.basename(cmrt_file_path), :content_type => 'application/vnd.ms-excel')
@@ -14,30 +19,33 @@ describe Cfsi::CmrtController do
       get :index
       expect(response.status).to eq 200
     end
+
     it "should create a new ValidationsBatch" do
       post :new
       expect(response).to redirect_to :action => :show, :id => assigns(:validations_batch).id
     end
+
+
     it "should show a ValidationsBatch" do
-      vb = Cfsi::ValidationsBatch.create
+      vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       get :show, :id => vb.id
       expect(response.status).to eq 200
     end
     it "should validate a CMRT" do
-      vb = Cfsi::ValidationsBatch.create
+      vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       post :validate, :spreadsheet => uploaded_cmrt, :batch_id => vb.id
     end
     it "should list a Cfsi::ValidationsBatch's Cfsi::CmrtValidations" do
-      vb = Cfsi::ValidationsBatch.create
+      vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       expect {
-        vb.cmrt_validations = (0...12).to_a.collect { Cfsi::CmrtValidation.create :validations_batch => vb }
+        vb.cmrt_validations = (0...12).to_a.collect { Cfsi::CmrtValidation.create :validations_batch => vb, :user => subject.current_user, :organization => org }
         get :list_validation_statuses, :batch_id => vb.id
       }.to change{Cfsi::CmrtValidation.count}.by_at_least(12)
       expect(response.status).to eq 200
       expect(response.body).to match 'id="cmrt_validations_list"'
     end
     it "should download CMRT spreadsheet" do
-      val = Cfsi::CmrtValidation.generate File.join('spec/models/cfsi/sample_cmrts/3.01/3.01_-_green.xlsx')
+      val = Cfsi::CmrtValidation.generate File.join('spec/models/cfsi/sample_cmrts/3.01/3.01_-_green.xlsx'), :user => subject.current_user, :organization => org
       get :download, :id => val.id
     end
   end
@@ -45,9 +53,9 @@ describe Cfsi::CmrtController do
   context "(in general)" do
     it "should validate an uploaded CMRT spreadsheet" do
       expect(controller).to respond_to :validate_cmrt
-      vb = Cfsi::ValidationsBatch.create
+      vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       controller = Cfsi::CmrtController.new
-      expect(controller.validate_cmrt(uploaded_cmrt, vb.id)).to be_true
+      expect(controller.validate_cmrt(uploaded_cmrt, vb.id, subject.current_user)).to be_true
     end
   end
 
@@ -66,10 +74,8 @@ describe Cfsi::CmrtController do
     end
 
     it "should accept and unpack zip file containing CFSI reports" do
-      Cfsi::ValidationsBatch.destroy_all
-      Cfsi::CmrtValidation.destroy_all
       request.env["HTTP_REFERER"] = "/"
-      vb = Cfsi::ValidationsBatch.create
+      vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       expect { post("validate_zip", :zip => uploaded_zip, :batch_id => vb.id) }.to change{Cfsi::CmrtValidation.count}.by_at_least(14)
     end
   end

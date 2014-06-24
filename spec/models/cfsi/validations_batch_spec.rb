@@ -11,6 +11,8 @@ describe Cfsi::ValidationsBatch do
       [:green_status_validations, :validation_needed_validations, :high_risk_validations, :error_validations].each do |assc|
         expect(batch).to respond_to assc
       end
+      expect(batch).to respond_to :organization
+      expect(batch).to respond_to :user
     end
 
     it "should initialize with state as 'Initialized'" do

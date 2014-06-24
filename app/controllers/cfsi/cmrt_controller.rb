@@ -1,22 +1,22 @@
 class Cfsi::CmrtController < ApplicationController
   def index
-    @validations_batches = Cfsi::ValidationsBatch.order("created_at DESC").all #where(:user_id => current_user) || []
+    @validations_batches = Cfsi::ValidationsBatch.order("created_at DESC").where(:user_id => current_user).all || []
   end
 
   def show
-    @validations_batch = Cfsi::ValidationsBatch.find(params[:id])
+    @validations_batch = Cfsi::ValidationsBatch.where(:user_id => current_user.id).find(params[:id])
   end
 
   def new
-    @validations_batch = Cfsi::ValidationsBatch.create
+    @validations_batch = Cfsi::ValidationsBatch.create :user => current_user, :organization => current_user.organization
     redirect_to :action => :show, :id => @validations_batch.id
   end
 
-  def validate_cmrt(uploaded_cmrt_file, validations_batch_id)
+  def validate_cmrt(uploaded_cmrt_file, validations_batch_id, user = current_user)
     @validations_batch = Cfsi::ValidationsBatch.find(validations_batch_id)
     temp_file_path = store_uploaded_file(uploaded_cmrt_file)
     @validations_batch.transition_to_processing
-    @cmrt_validation = Cfsi::CmrtValidation.generate(temp_file_path, :validations_batch => @validations_batch)
+    @cmrt_validation = Cfsi::CmrtValidation.generate(temp_file_path, :validations_batch => @validations_batch, :user => user, :organization => user.organization)
     @cmrt_validation.transition_to_opened
     @cmrt_validation.transition_to_validated
     @validations_batch.transition_to_completed
@@ -45,13 +45,13 @@ class Cfsi::CmrtController < ApplicationController
   end
 
   def list_validation_statuses
-    @validations_batch = Cfsi::ValidationsBatch.find(params[:batch_id])
+    @validations_batch = Cfsi::ValidationsBatch.where(:user_id => current_user.id).find(params[:batch_id])
     @cmrt_validations = @validations_batch.cmrt_validations
     render :layout => false
   end
 
   def download
-    send_file Cfsi::CmrtValidation.find(params[:id]).spreadsheet.storage_path
+    send_file Cfsi::CmrtValidation.where(:user_id => current_user.id).find(params[:id]).spreadsheet.storage_path
   end
 
 private

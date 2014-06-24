@@ -131,7 +131,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                     row += [clq.answer, clq.comment]
                   end
                   row += [dec.created_at.to_formatted_s(:local), val.file_name,  dec.version, val.status, val.issues.to_s.gsub(/(<li>|<\/li>)/, "; ")]
-                end
+                end.compact
       }
     end
 

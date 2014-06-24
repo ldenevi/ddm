@@ -8,8 +8,17 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   attr_accessible :cmrt, :validations_batch, :email_sent_at, :issues, :sent_emails_count,
                   :status, :validation_attempt, :spreadsheet
 
+  belongs_to :organization
+  attr_accessible :organization
+  validates :organization, :presence => true
+  belongs_to :user
+  attr_accessible :user
+  validates :user, :presence => true
+
   def self.generate(file_path, attrs = {})
     obj = create attrs.merge({:spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => attrs[:user]})})
+    obj.user = attrs[:user]
+    obj.organization = attrs[:organization]
     obj.spreadsheet.save_to_filesystem!
     obj
   end
@@ -23,7 +32,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   def transition_to_opened
     transition_to("Opening", :message => "Attempting to open CMRT spreadsheet")
     begin
-      self.cmrt = Cfsi::Cmrt.generate(file_path)
+      self.cmrt = Cfsi::Cmrt.generate(file_path, :organization => self.organization)
       self.cmrt.save!(:validate => false)
       transition_to("Opened")
     rescue

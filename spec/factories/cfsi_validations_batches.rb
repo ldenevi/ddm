@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :cfsi_validations_batch, :class => 'Cfsi::ValidationsBatch' do
-    organization nil
-    user nil
+    organization
+    user
   end
 end

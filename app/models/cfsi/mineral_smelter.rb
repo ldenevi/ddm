@@ -7,6 +7,10 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
                   :proposed_next_steps, :smelter_reference_list,
                   :standard_smelter_name, :v2_smelter_id, :v3_smelter_id
 
+  belongs_to :organization
+  attr_accessible :organization
+  validates :organization, :presence => true
+
   def smelter_id=(value)
     if value.to_s.match(/^CID./)
       self.v3_smelter_id = value

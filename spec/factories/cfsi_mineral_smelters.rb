@@ -17,5 +17,6 @@ FactoryGirl.define do
     smelter_id "MyString"
     smelter_reference_list "MyString"
     standard_smelter_name "MyString"
+    organization
   end
 end

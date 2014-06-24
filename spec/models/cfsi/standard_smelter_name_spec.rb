@@ -10,6 +10,7 @@ describe Cfsi::StandardSmelterName do
         expect(standard_smelter_name).to respond_to attr
       end
       expect(standard_smelter_name).to respond_to :declaration
+      expect(standard_smelter_name).to respond_to :organization
     end
   end
 end
