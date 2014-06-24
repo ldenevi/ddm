@@ -1,7 +1,7 @@
 module GSP::Protocols::Regulations::CFSI::Reports::Excel
-  class AggregatedSmelters < Report
-    def aggregated_smelters
-      {:name => "Aggregated CMRTs",
+  class AggregatedDeclarations < Report
+    def aggregated_declarations
+      {:name => "Aggregated Declarations",
        :header => [{:name => "Company Name", :column_width => 20},
                    {:name => "Declaration Scope", :column_width => 35},
                    {:name => "Description of Scope", :column_width => 35, :question => ""},
@@ -180,7 +180,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
     end
 
     def to_excel
-      self.worksheets = [aggregated_smelters]
+      self.worksheets = [aggregated_declarations]
       @questions = worksheets.first[:header].collect { |h| h[:question] }.compact
       super
     end

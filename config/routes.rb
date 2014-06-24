@@ -24,7 +24,7 @@ GSP::Application.routes.draw do
     get "cmrt/list_validation_statuses/:batch_id", :to => "cmrt#list_validation_statuses"
     get "cmrt/download/:id", :to => "cmrt#download"
 
-    get "reports/aggregated_smelters/:batch_id", :to => "reports#aggregated_smelters"
+    get "reports/aggregated_declarations/:batch_id", :to => "reports#aggregated_declarations"
     get "reports/consolidated_smelters/:batch_id", :to => "reports#consolidated_smelters"
   end
 
