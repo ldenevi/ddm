@@ -121,13 +121,13 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                          dec.authorizer_email,
                          dec.authorizer_phone,
                          date.nil? ? "" : date.strftime('%B %d, %Y')]
-                  dec.minerals_questions.each_with_index do |mq, index|
+                  dec.minerals_questions.sort_by(&:sequence).each_with_index do |mq, index|
                     if dec.version.match(/^2/) && [0, 6].include?(index)
                       row += [""] * 8
                     end
                     row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
                   end
-                  dec.company_level_questions.each do |clq|
+                  dec.company_level_questions.sort_by(&:sequence).each do |clq|
                     row += [clq.answer, clq.comment]
                   end
                   row += [dec.created_at.to_formatted_s(:local), val.file_name,  dec.version, val.status, val.issues.to_s.gsub(/(<li>|<\/li>)/, "; ")]
