@@ -186,9 +186,7 @@ EOT
            ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
            ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.standard_smelter_name.size > 2 )
 
-          smelter_key = self.is_valid_smelter_id?(smelter.smelter_id) ?
-                          [smelter.metal, smelter.facility_location_country.downcase, smelter.smelter_id] :
-                          (smelter.smelter_reference_list.strip.downcase == "smelter not listed" ? [smelter.metal, smelter.standard_smelter_name.downcase, smelter.facility_location_country.downcase, smelter.smelter_id] : [smelter.metal, smelter.smelter_reference_list[0...12].downcase])
+          smelter_key = [smelter.metal, smelter.standard_smelter_name.downcase[0..6], smelter.facility_location_country.downcase]
           consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
           row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
