@@ -3,10 +3,12 @@ require 'spec_helper'
 SAMPLE_CMRT_CSV_DIR_PATH = File.join(File.dirname(__FILE__), "sample_cmrts", "3.01", "unabridged_worksheets")
 
 describe Cfsi::Declaration do
+  let(:org)  { FactoryGirl.create(:organization) }
   let (:blank_declaration) { Cfsi::Declaration.new :company_level_questions => [Cfsi::CompanyLevelQuestion.new],
                                                      :minerals_questions => [Cfsi::MineralsQuestion.new],
                                                      :mineral_smelters => [Cfsi::MineralSmelter.new],
-                                                     :standard_smelter_names => [Cfsi::StandardSmelterName.new]}
+                                                     :standard_smelter_names => [Cfsi::StandardSmelterName.new],
+                                                     :organization => org}
   context "test" do
     it "should have a sample CMRT" do
       expect(File.exist?(SAMPLE_CMRT_CSV_DIR_PATH)).to be_true
@@ -40,6 +42,8 @@ describe Cfsi::Declaration do
       expect(blank_declaration.standard_smelter_names.first).to be_kind_of Cfsi::StandardSmelterName
       expect(blank_declaration).to respond_to :standard_smelter_names
       expect(blank_declaration).to respond_to :products
+
+      expect(blank_declaration).to respond_to :organization
     end
 
     it "should detect version" do

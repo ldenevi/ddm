@@ -1,8 +1,14 @@
 require 'spec_helper'
 
 describe Cfsi::CompanyLevelQuestion do
+  let(:clq)  { FactoryGirl.build(:cfsi_company_level_question) }
+
   context "(in general)" do
-    let(:clq) { FactoryGirl.build(:cfsi_company_level_question) }
+    it "should save" do
+      expect(clq.save).to be_true
+
+    end
+
     it "should contain required data" do
       expect(clq).to respond_to :answer
       expect(clq).to respond_to :comment
@@ -15,6 +21,8 @@ describe Cfsi::CompanyLevelQuestion do
       expect(clq.comment).to be_kind_of String
       expect(clq.question).to be_kind_of String
       expect(clq.sequence).to be_kind_of Fixnum
+
+      expect(clq).to respond_to :organization
     end
   end
 end

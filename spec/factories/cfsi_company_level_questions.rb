@@ -6,5 +6,6 @@ FactoryGirl.define do
     question "MyString"
     answer "MyText"
     comment "MyText"
+    organization
   end
 end

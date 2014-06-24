@@ -12,28 +12,32 @@ class Cfsi::Declaration < ActiveRecord::Base
   belongs_to :cmrt
   attr_accessible :cmrt
 
-  has_many :company_level_questions
+  has_many :company_level_questions, :dependent => :destroy
   attr_accessible :company_level_questions
 
-  has_many :minerals_questions
+  has_many :minerals_questions, :dependent => :destroy
   attr_accessible :minerals_questions
 
-  has_many :mineral_smelters
+  has_many :mineral_smelters, :dependent => :destroy
   attr_accessible :mineral_smelters
 
-  has_many :standard_smelter_names
+  has_many :standard_smelter_names, :dependent => :destroy
   attr_accessible :standard_smelter_names
 
-  has_many :products
+  has_many :products, :dependent => :destroy
   attr_accessible :products
+
+  belongs_to :organization
+  attr_accessible :organization
+  validates :organization, :presence => true
 
   # Reference maps for seeking the data from various versions of the same file.
   # The CFSI Conflict Minerals Reporting Template has several versions being submitted.
   attr_accessor :structure
   attr_accessor :cell_definitions
 
-  def self.generate(cmrt_csv_worksheets = [], user = nil)
-    obj = new
+  def self.generate(cmrt_csv_worksheets = [], attrs = {})
+    obj = new attrs
     obj.csv_worksheets = cmrt_csv_worksheets
 
     # Trim revision worksheet to speed up get_version
@@ -108,7 +112,7 @@ class Cfsi::Declaration < ActiveRecord::Base
     i     = cell_definitions[:minerals][:start_row]
     sequence = 0
     structure[:fields][:minerals].each do |mineral_row|
-      mineral = Cfsi::MineralsQuestion.new
+      mineral = Cfsi::MineralsQuestion.new :organization => self.organization
       mineral_row.each do |row|
         row.each do |attrib|
           next if attrib.nil?
@@ -135,7 +139,7 @@ class Cfsi::Declaration < ActiveRecord::Base
     sequence = 0
 
     structure[:fields][:company_level].each do |clq_row|
-      company_level_question = Cfsi::CompanyLevelQuestion.new
+      company_level_question = Cfsi::CompanyLevelQuestion.new :organization => self.organization
       clq_row.each do |attrib|
         next if attrib.nil?
         value = rows[i][cell_definitions[:company_level][attrib]]
@@ -220,7 +224,7 @@ class Cfsi::Declaration < ActiveRecord::Base
         break
       end
 
-      mineral_smelter = Cfsi::MineralSmelter.new
+      mineral_smelter = Cfsi::MineralSmelter.new :organization => self.organization
       smelter_list_fields.each do |field|
         value = rows[i][columns[field]]
         value = value.split(' ').first if value && field == :metal  # value could be in the form 'Gold' or 'Gold (Au)', only take the first word
@@ -248,7 +252,7 @@ class Cfsi::Declaration < ActiveRecord::Base
         next
       end
 
-      standard_smelter_name = Cfsi::StandardSmelterName.new
+      standard_smelter_name = Cfsi::StandardSmelterName.new :organization => self.organization
       structure[:fields][:smelter_names].to_a.each do |field|
         value = rows[i][cell_definitions[:standard_smelter_name][field]]
         standard_smelter_name.send("#{field.to_s}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))
@@ -273,7 +277,7 @@ class Cfsi::Declaration < ActiveRecord::Base
         next
       end
 
-      product = Cfsi::Product.new
+      product = Cfsi::Product.new :organization => self.organization
       structure[:fields][:products].to_a.each do |field|
         value = rows[i][cell_definitions[:products][field]]
         product.send("#{field.to_s}=", (value ? value.strip.force_encoding("windows-1251").encode("UTF-8") : value))

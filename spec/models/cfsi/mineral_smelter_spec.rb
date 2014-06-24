@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe Cfsi::MineralSmelter do
+  let(:mineral_smelter) { FactoryGirl.build(:cfsi_mineral_smelter) }
+
   context "(in general)" do
-    let(:mineral_smelter) { FactoryGirl.build(:cfsi_mineral_smelter) }
     it "should contain all required data" do
       [:comment, :facility_contact_email, :facility_contact_name,
         :facility_location_city, :facility_location_country,
@@ -18,6 +19,8 @@ describe Cfsi::MineralSmelter do
 
       # Helper methods
       expect(mineral_smelter).to respond_to :smelter_id
+
+      expect(mineral_smelter).to respond_to :organization
     end
   end
 end

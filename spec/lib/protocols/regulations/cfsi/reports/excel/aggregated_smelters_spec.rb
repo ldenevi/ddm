@@ -1,10 +1,12 @@
 require 'spec_helper'
 
 describe GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedSmelters do
+  let(:user) { FactoryGirl.create(:user) }
+  let(:org)  { FactoryGirl.create(:organization) }
   let(:batch) do
-    b = Cfsi::ValidationsBatch.new
-    b.cmrt_validations = [Cfsi::CmrtValidation.generate(File.join(Rails.root, 'spec', 'models', 'cfsi', 'sample_cmrts', '2.03a', '2.03a_-_green.xlsx')),
-                          Cfsi::CmrtValidation.generate(File.join(Rails.root, 'spec', 'models', 'cfsi', 'sample_cmrts', '3.01', '3.01_-_validation_needed.xlsx'))]
+    b = Cfsi::ValidationsBatch.new :user => user, :organization => org
+    b.cmrt_validations = [Cfsi::CmrtValidation.generate(File.join(Rails.root, 'spec', 'models', 'cfsi', 'sample_cmrts', '2.03a', '2.03a_-_green.xlsx'), :user => user, :organization => org),
+                          Cfsi::CmrtValidation.generate(File.join(Rails.root, 'spec', 'models', 'cfsi', 'sample_cmrts', '3.01', '3.01_-_validation_needed.xlsx'), :user => user, :organization => org)]
     b.cmrt_validations.each { |val| val.transition_to_opened; val.transition_to_validated }
     b
   end

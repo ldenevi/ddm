@@ -12,5 +12,6 @@ FactoryGirl.define do
     tin_comment "MyString"
     tungsten "MyString"
     tungsten_comment "MyString"
+    organization
   end
 end
