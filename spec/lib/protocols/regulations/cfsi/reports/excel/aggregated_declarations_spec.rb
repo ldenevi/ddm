@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedSmelters do
+describe GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedDeclarations do
   let(:user) { FactoryGirl.create(:user) }
   let(:org)  { FactoryGirl.create(:organization) }
   let(:batch) do
@@ -10,11 +10,11 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedSmelters d
     b.cmrt_validations.each { |val| val.transition_to_opened; val.transition_to_validated }
     b
   end
-  let(:asi) { GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedSmelters.new batch }
+  let(:asi) { GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedDeclarations.new batch }
 
   it "should respond to #aggregated_smelters" do
-    expect(asi).to respond_to :aggregated_smelters
-    expect(asi.aggregated_smelters).to be_kind_of Hash
-    expect(asi.aggregated_smelters).not_to be_empty
+    expect(asi).to respond_to :aggregated_declarations
+    expect(asi.aggregated_declarations).to be_kind_of Hash
+    expect(asi.aggregated_declarations).not_to be_empty
   end
 end
