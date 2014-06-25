@@ -66,7 +66,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Gold Comments", :column_width => 40, :question => ""},
                    {:name => "Tungsten (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tungsten Comments", :column_width => 40, :question => ""},
-                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q6 - v2: Have all of the smelters used by your company and its suppliers been validated as compliant in accordance with the Conflict-Free Smelter (CFS) Program and listed on the Compliant Smelter List for the following metals?\n\nQ7 - v3: Is the conflict metal intentionally added to your product?"},
+                   {:name => "Tantalum (Y/N)", :column_width => 15, :question => "Q6 - v2: Have all of the smelters used by your company and its suppliers been validated as compliant in accordance with the Conflict-Free Smelter (CFS) Program and listed on the Compliant Smelter List for the following metals?\n\nQ7 - v3: Has all applicable smelter information received by your company been reported in this declaration?"},
                    {:name => "Tantalum Comments", :column_width => 40, :question => ""},
                    {:name => "Tin (Y/N)", :column_width => 15, :question => ""},
                    {:name => "Tin Comments", :column_width => 40, :question => ""},
@@ -78,7 +78,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    # Company level questions
                    {:name => "Question A", :column_width => 15, :question => "QA - V2&3: Do you have a policy in place that includes DRC conflict-free sourcing?"},
                    {:name => "Question A Comments", :column_width => 40, :question => ""},
-                   {:name => "Question B", :column_width => 15, :question => "QB -v2: QB - v3: Is this policy publicly available on your website?\n\nQB - v3: Is your conflict minerals sourcing policy publicly available on your website? (Note: If yes, the user shall specify the URL in the comment field.)"},
+                   {:name => "Question B", :column_width => 15, :question => "QB -v2: Is this policy publicly available on your website?\n\nQB - v3: Is your conflict minerals sourcing policy publicly available on your website? (Note: If yes, the user shall specify the URL in the comment field.)"},
                    {:name => "Question B Comments", :column_width => 40, :question => ""},
                    {:name => "Question C", :column_width => 15, :question => "QC - V2&3: Do you require your direct suppliers to be DRC Conflict Free?"},
                    {:name => "Question C Comments", :column_width => 40, :question => ""},
@@ -86,7 +86,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "Question D Comments", :column_width => 40, :question => ""},
                    {:name => "Question E", :column_width => 15, :question => "QE - V2&3: Have you implemented due diligence measures for conflict-free sourcing?"},
                    {:name => "Question E Comments", :column_width => 40, :question => ""},
-                   {:name => "Question F", :column_width => 15, :question => "QF -V2 Do you request your suppliers to fill out this Conflict Minerals Reporting Template?\n\nQF - v3: Do you collect conflict minerals due diligence information from your suppliers which is in conformance with the IPC-1755 Conflict Minerals Data Exchange standard [e.g. CFSI Conflict Minerals Reporting  Template]?"},
+                   {:name => "Question F", :column_width => 15, :question => "QF -V2 Do you request your suppliers to fill out this Conflict Minerals Reporting Template?\n\nQF - v3: Do you collect conflict minerals due diligence information from your suppliers which is in conformance with the IPC-1755 Conflict Minerals Data Exchange standard [e.g. CFSI Conflict Minerals Reporting Template]?"},
                    {:name => "Question F Comments", :column_width => 40, :question => ""},
                    {:name => "Question G", :column_width => 15, :question => "QG - V2&3: Do you request smelter names from your suppliers?"},
                    {:name => "Question G Comments", :column_width => 40, :question => ""},
@@ -111,23 +111,23 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                          dec.declaration_scope,
                          dec.description_of_scope,
                          dec.company_unique_identifier,
+                         dec.company_unique_id_authority,
                          dec.address,
                          dec.authorized_company_representative_name,
-                         dec.contact_title,
                          dec.contact_email,
                          dec.contact_phone,
                          dec.authorizer,
-                         dec.authorizer_title,
+                         dec.authorizer_title || dec.contact_title,
                          dec.authorizer_email,
                          dec.authorizer_phone,
                          date.nil? ? "" : date.strftime('%B %d, %Y')]
-                  dec.minerals_questions.each_with_index do |mq, index|
+                  dec.minerals_questions.sort_by(&:sequence).each_with_index do |mq, index|
                     if dec.version.match(/^2/) && [0, 6].include?(index)
                       row += [""] * 8
                     end
                     row += [mq.tantalum, mq.tantalum_comment, mq.tin, mq.tin_comment, mq.gold, mq.gold_comment, mq.tungsten, mq.tungsten_comment]
                   end
-                  dec.company_level_questions.each do |clq|
+                  dec.company_level_questions.sort_by(&:sequence).each do |clq|
                     row += [clq.answer, clq.comment]
                   end
                   row += [dec.created_at.to_formatted_s(:local), val.file_name,  dec.version, val.status, val.issues.to_s.gsub(/(<li>|<\/li>)/, "; ")]
