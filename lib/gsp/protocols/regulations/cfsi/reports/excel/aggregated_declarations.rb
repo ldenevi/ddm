@@ -189,7 +189,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                                 "%s: %s" % ["Co.".rjust(6, ' '), validations_batch.organization.full_name],
                                 "%s: %s" % ["Date".rjust(6, ' '), Date.today],
                                 "%s: %s" % ["Time".rjust(6, ' '), Time.now.strftime("%H:%M:%S")],
-                                "%s: %s" % ["User".rjust(6, ' '), validations_batch.user.eponymz]
+                                "%s: %s" % ["User".rjust(6, ' '), validations_batch.user.eponym]
                                 ].join("\n")] + @questions, :style => style).height = 65.0
 
       # Freeze pane over data rows
