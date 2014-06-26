@@ -186,10 +186,10 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       worksheet.merge_cells "CF1:CG1"
 
       worksheet.add_row(["", "",[worksheet.name,
-                                "%s: %s" % ["Co.".rjust(6, ' '), 'current_user.organization.full_name'],
+                                "%s: %s" % ["Co.".rjust(6, ' '), validations_batch.organization.full_name],
                                 "%s: %s" % ["Date".rjust(6, ' '), Date.today],
                                 "%s: %s" % ["Time".rjust(6, ' '), Time.now.strftime("%H:%M:%S")],
-                                "%s: %s" % ["User".rjust(6, ' '), 'current_user.eponym']
+                                "%s: %s" % ["User".rjust(6, ' '), validations_batch.user.eponymz]
                                 ].join("\n")] + @questions, :style => style).height = 65.0
 
       # Freeze pane over data rows
