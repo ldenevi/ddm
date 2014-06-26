@@ -17,4 +17,12 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedDeclaratio
     expect(asi.aggregated_declarations).to be_kind_of Hash
     expect(asi.aggregated_declarations).not_to be_empty
   end
+
+  it "should generate a statistics worksheet" do
+    expect(asi).to respond_to :statistics
+    expect(asi.statistics).to be_kind_of Hash
+    expect(asi.statistics).not_to be_empty
+    expect(asi).to respond_to :statistics_worksheet
+    expect(asi.statistics_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
+  end
 end
