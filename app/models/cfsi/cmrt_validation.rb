@@ -15,6 +15,15 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   attr_accessible :user
   validates :user, :presence => true
 
+  has_many :previous_validations, :readonly => true, :class_name => "Cfsi::CmrtValidation", :finder_sql => Proc.new {
+                                                                                                                %Q{
+                                                                                                                  SELECT v.*
+                                                                                                                  FROM cfsi_cmrt_validations v
+                                                                                                                  WHERE v.validations_batch_id = #{validations_batch_id} AND v.vendor_id = #{vendor_id} AND v.id <> #{id}
+                                                                                                                  ORDER BY v.created_at
+                                                                                                                }
+                                                                                                            }
+
   def self.generate(file_path, attrs = {})
     obj = create attrs.merge({:spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => attrs[:user]})})
     obj.user = attrs[:user]
@@ -34,14 +43,16 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
     begin
       self.cmrt = Cfsi::Cmrt.generate(file_path, :organization => self.organization)
       self.cmrt.save!(:validate => false)
+      update_attribute(:vendor_id, self.cmrt.minerals_vendor.id)
+      self.validation_attempt = (self.previous_validations.last.nil?) ? 1 : self.previous_validations.last.validation_attempt.to_i + 1
       transition_to("Opened")
-    rescue
-      transition_to_file_not_readable
+    rescue $!
+      transition_to_file_not_readable($!.message)
     end
   end
 
-  def transition_to_file_not_readable
-    transition_to("File not readable", :message => "Cannot read ")
+  def transition_to_file_not_readable(errors = '')
+    transition_to("File not readable", :message => "Cannot read " + errors)
   end
 
   def transition_to_validated

@@ -3,29 +3,46 @@
 <table id="cmrt_validations_list">
   <thead>
     <tr>
-      <th>Company</th>
-      <th>Status</th>
-      <th>CM Report File</th>
-      <th>Representative E-Mail</th>
-      <th>Results E-Mailed</th>
+      <th>Vendor</th>
       <th>Issues</th>
-      <th>Template Version</th>
-      <th>Uploaded At</th>
     </tr>
   </thead>
 
-  <% @cmrt_validations.each do |cmrt_validation| %>
+  <% @unidentified_cmrt_validations.each do |cmrt_validation| %>
+  <tr><td colspan="2"><h3>Unidentified vendors</h3></td></tr>
   <tr class="<%= cycle('odd', 'even') %>">
     <% cmrt = cmrt_validation.cmrt %>
     <% declaration = cmrt.nil? ? nil : cmrt.declaration %>
-    <td><%= cmrt_validation.cmrt.declaration.company_name unless declaration.nil? %></td>
-    <td><%= cmrt_validation.status %></td>
-    <td><%= link_to cmrt_validation.file_name, :action => :download, :id => (cmrt_validation.id)  %></td>
-    <td><%= mail_to cmrt_validation.cmrt.declaration.contact_email unless declaration.nil? %></td>
-    <td><%= (cmrt_validation.sent_emails_count) ? "Yes" : "No" %></td>
+    <td>
+      <table>
+        <tr><td>Status</td> <td><%= cmrt_validation.status %></td></tr>
+        <tr><td>CM Report File</td> <td><%= link_to cmrt_validation.file_name, :action => :download, :id => (cmrt_validation.id)  %></td></tr>
+        <tr><td>Contact E-Mail</td> <td><%= mail_to cmrt_validation.cmrt.declaration.contact_email unless declaration.nil? %></td></tr>
+        <tr><td>Template Version</td> <td><%= cmrt_validation.cmrt.version unless cmrt.nil? %></td></tr>
+        <tr><td>Upload At</td> <td><%= cmrt_validation.created_at.to_formatted_s(:short) %></td></tr>
+      </table>
+    </td>
     <td><ul><%= cmrt_validation.issues.to_s.html_safe %></ul></td>
-    <td><%= cmrt_validation.cmrt.version unless cmrt.nil? %></td>
-    <td><%= cmrt_validation.created_at.to_formatted_s(:short) %></td>
+  </tr>
+  <% end %>
+
+  <% @grouped_vendor_cmrt_validations.each do |vendor, cmrt_validations| %>
+  <% cmrt_validation = cmrt_validations.last %>
+  <% cmrt = cmrt_validation.cmrt %>
+  <% declaration = cmrt.nil? ? nil : cmrt.declaration %>
+  <tr><td colspan="2"><h3><%= cmrt.minerals_vendor.full_name %></h3></td></tr>
+  <tr class="<%= cycle('odd', 'even') %>">
+    <td>
+      <table>
+        <tr><td>Status</td> <td><%= cmrt_validation.status %></td></tr>
+        <tr><td>CM Report File</td> <td><%= link_to cmrt_validation.file_name, :action => :download, :id => (cmrt_validation.id)  %></td></tr>
+        <tr><td>Contact E-Mail</td> <td><%= mail_to cmrt_validation.cmrt.declaration.contact_email unless declaration.nil? %></td></tr>
+        <tr><td>Template Version</td> <td><%= cmrt_validation.cmrt.version unless cmrt.nil? %></td></tr>
+        <tr><td>Upload At</td> <td><%= cmrt_validation.created_at.to_formatted_s(:short) %></td></tr>
+        <tr><td>Attempt #</td> <td><%= cmrt_validation.validation_attempt %></td></tr>
+      </table>
+    </td>
+    <td><ul><%= cmrt_validation.issues.to_s.html_safe %></ul></td>
   </tr>
   <% end %>
 </table>

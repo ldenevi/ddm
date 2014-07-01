@@ -46,7 +46,8 @@ class Cfsi::CmrtController < ApplicationController
 
   def list_validation_statuses
     @validations_batch = Cfsi::ValidationsBatch.where(:user_id => current_user.id).find(params[:batch_id])
-    @cmrt_validations = @validations_batch.cmrt_validations
+    @unidentified_cmrt_validations = @validations_batch.unidentified_cmrt_validations
+    @grouped_vendor_cmrt_validations = @validations_batch.grouped_vendor_cmrt_validations
     render :layout => false
   end
 
