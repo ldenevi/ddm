@@ -26,6 +26,9 @@ GSP::Application.routes.draw do
 
     get "reports/aggregated_declarations/:batch_id", :to => "reports#aggregated_declarations"
     get "reports/consolidated_smelters/:batch_id", :to => "reports#consolidated_smelters"
+
+    get "compliant_smelters/list"
+    post "compliant_smelters/update"
   end
 
   # EICC Declaration
