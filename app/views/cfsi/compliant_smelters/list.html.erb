@@ -1,0 +1,27 @@
+<%= form_tag({:controller => "cfsi/compliant_smelters", :action => :update}, :id => 'csv_upload_form', :multipart => true) do %>
+  Upload a CSV file: <%= file_field_tag 'csv' %>
+  <%= submit_tag "Upload" %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Metal</th>
+      <th>Smelter ID</th>
+      <th>Smelter Name</th>
+      <th>Location</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+  <% @confirmed_smelters.each do |smelter| %>
+    <tr>
+      <td><%= smelter.mineral %></td>
+      <td><%= smelter.v3_smelter_id %></td>
+      <td><%= smelter.name %></td>
+      <td><%= smelter.locations.join(", ") %></td>
+      <td><%= smelter.status %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
