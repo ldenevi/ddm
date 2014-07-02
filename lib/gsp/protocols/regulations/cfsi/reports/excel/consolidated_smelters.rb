@@ -140,6 +140,8 @@ EOT
                             (is_valid_non_smelter_id?(smelter.smelter_id) || 2)] }
     end
 
+    #
+    # All Reported Smelters worksheet is the list of all smelters from the a vendor's latest CMRT
     def all_reported_smelters
       {:name => "All Reported Smelters",
        :header => [{:name => "Metal", :column_width => 15},
@@ -170,6 +172,24 @@ EOT
       }
     end
 
+    def all_reported_smelters_worksheet(workbook)
+      info  = all_reported_smelters
+      sheet = Axlsx::Worksheet.new workbook, :name => info[:name]
+      # Branding header
+      worksheet_header(sheet, sheet.styles.add_style(BRANDING_STYLE))
+      # Attribute name header
+      sheet.add_row(['#'] + info[:header].collect { |h| h[:name] }, :style => sheet.styles.add_style(HEADER_STYLE)).height = 35.0
+      # Data rows
+      data_style    = sheet.styles.add_style DATA_STYLE
+      column_widths = info[:header].collect { |h| h[:column_width]}
+      info[:data].each_with_index do |row, index|
+        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+      end
+      sheet
+    end
+
+    #
+    # Consolidated Smelters worksheet
     def consolidated_smelters
       consolidated_smelters = {}
       @rejected_entries = []
@@ -229,14 +249,33 @@ EOT
         :data => rows}
     end
 
+    def consolidated_smelters_worksheet(workbook)
+      info  = consolidated_smelters
+      sheet = Axlsx::Worksheet.new workbook, :name => info[:name]
+      # Branding header
+      worksheet_header(sheet, sheet.styles.add_style(BRANDING_STYLE))
+      # Attribute name header
+      sheet.add_row(['#'] + info[:header].collect { |h| h[:name] }, :style => sheet.styles.add_style(HEADER_STYLE)).height = 35.0
+      # Data rows
+      data_style    = sheet.styles.add_style DATA_STYLE
+      column_widths = info[:header].collect { |h| h[:column_width]}
+      info[:data].each_with_index do |row, index|
+        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+      end
+      sheet
+    end
+
+    #
+    # Rejected entries worksheet
     def rejected_entries
+      raise StandardError, "#consolidated_smelters must be run before #rejected_entries" if @rejected_entries.nil?
       {:name => "Rejected Entries",
        :header => [{:name => "Metal", :column_width => 15},
                    {:name => "Smelter Reference List", :column_width => 35},
                    {:name => "Standard Smelter Names", :column_width => 35},
                    {:name => "Smelter Facility Location Country", :column_width => 35},
                    {:name => "Smelter ID", :column_width => 25},
-                   {:name => "Source EICC EICC-GeSI Report File Names", :column_width => 15},
+                   {:name => "Source CFSI CMRT File Names", :column_width => 15},
                    {:name => "Company Name", :column_width => 35},
                    {:name => "Representative Name", :column_width => 25},
                    {:name => "Representative E-Mail", :column_width => 25},
@@ -244,68 +283,104 @@ EOT
         :data => @rejected_entries}
     end
 
+    def rejected_entries_worksheet(workbook)
+      info  = rejected_entries
+      sheet = Axlsx::Worksheet.new workbook, :name => info[:name]
+      # Branding header
+      worksheet_header(sheet, sheet.styles.add_style(BRANDING_STYLE))
+      # Attribute name header
+      sheet.add_row(['#'] + info[:header].collect { |h| h[:name] }, :style => sheet.styles.add_style(HEADER_STYLE)).height = 35.0
+      # Data rows
+      data_style    = sheet.styles.add_style DATA_STYLE
+      column_widths = info[:header].collect { |h| h[:column_width]}
+      info[:data].each_with_index do |row, index|
+        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+      end
+      sheet
+    end
+
     def cfsi_compliant_smelter_list
+      hash_data = {}
+      confirmed_smelters = Cfsi::ConfirmedSmelter.order(:created_at).all
+      confirmed_smelters.each { |cs| hash_data.merge!({cs.v3_smelter_id => cs.status})  }
+      data = confirmed_smelters.map { |cs| [cs.status, cs.mineral, cs.v3_smelter_id, cs.name, cs.locations.join(", "), cs.invalid_at.to_formatted_s(:short), cs.created_at.to_formatted_s(:short)] }
+
       {:name => "CFSI-Compliant Smelters List",
-       :header => [{:name => "Metal", :column_width => 15},
+       :header => [{:name => "Status", :column_width => 15},
+                   {:name => "Metal", :column_width => 15},
                    {:name => "Standard Smelter ID", :column_width => 35},
                    {:name => "Smelter Name", :column_width => 40},
                    {:name => "Locations", :column_width => 40},
                    {:name => "Valid Until", :column_width => 20},
                    {:name => "Last Updated", :column_width => 20}],
-       :data => [[1,""]]}
+       :hash_data => hash_data,
+       :data => data}
     end
 
-    def smelter_compliance_status
-      added_smelter_ids = []
-      compliant_smelter_ids = cfsi_compliant_smelter_list[:data].collect { |row| row[1] }
-      consolidated_smelters_by_popularity = consolidated_smelters[:data].sort_by { |r| [(self.mineral_sort_order.index(r[0].downcase) || 5),
-                                                                                         (is_valid_smelter_id?(r[4]) ? r[4] :
-                                                                                            (is_valid_non_smelter_id?(r[4]) ? "YYYYYYY" + r[4] : "ZZZZZZZ" + r[4])
-                                                                                          ),
-                                                                                          (r[3].empty? ? "ZZZZZZZ" + r[3].downcase : r[3].downcase),
-                                                                                          (r[2].empty? ? "ZZZZZZZ" + r[2].downcase : r[2].downcase),
-                                                                                          r[14]
-                                                                                        ] }
-
-      rows = []
-      consolidated_smelters_by_popularity.each do |row|
-        next unless is_valid_smelter_id?(row[4])
-        next if added_smelter_ids.include?(row[4])
-        is_confirmed = begin
-                         if compliant_smelter_ids.include?(row[4]) && Rails.configuration.cfsi.countries.include?(row[3].strip.upcase)
-                          CHECKMARK_CHAR
-                         elsif compliant_smelter_ids.include?(row[4]) && !Rails.configuration.cfsi.countries.include?(row[3].strip.upcase)
-                          "?"
-                         else
-                          ""
-                         end
-                       end
-        rows << [is_confirmed] + row[0..5]
-        added_smelter_ids << row[4]
+    def cfsi_compliant_smelter_list_worksheet(workbook)
+      info  = cfsi_compliant_smelter_list
+      sheet = Axlsx::Worksheet.new workbook, :name => info[:name]
+      # Attribute name header
+      sheet.add_row(['#'] + info[:header].collect { |h| h[:name] }, :style => sheet.styles.add_style(HEADER_STYLE)).height = 35.0
+      # Data rows
+      data_style    = sheet.styles.add_style DATA_STYLE
+      column_widths = info[:header].collect { |h| h[:column_width]}
+      info[:data].each_with_index do |row, index|
+        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
       end
+      sheet
+    end
 
-      {:name => "Smelter Compliance Status",
-       :header => [{:name => "Status", :column_widths => 11},
-                   {:name => "Metal", :column_widths => 15},
-                   {:name => "Smelter Reference List", :column_widths => 35},
-                   {:name => "Standard Smelter Names", :column_widths => 35},
-                   {:name => "Smelter Facility Location Country", :column_widths => 25},
-                   {:name => "Smelter ID", :column_widths => 15}],
-       :data => rows}
+    #
+    # Smelter Compliance Statuses
+    def smelter_compliance_statuses
+      list = cfsi_compliant_smelter_list[:hash_data]
+      puts list.keys.inspect
+      rows =  consolidated_smelters[:data].map do |cs|
+                [(list.keys.include?(cs[4]) ? list[cs[4]] : "Not CFSI Compliant"),
+                 cs[0], cs[1], cs[2], cs[4]]
+              end
+      {:name => "Smelter Compliance Statuses",
+       :header => [{:name => "Status", :column_width => 20},
+                   {:name => "Metal", :column_width => 15},
+                   {:name => "Smelter Names", :column_width => 35},
+                   {:name => "Smelter Facility Location Country", :column_width => 25},
+                   {:name => "Smelter ID", :column_width => 15}],
+       :data => rows.sort_by { |row| [['compliant', 'active', 'progressing', 'not cfsi compliant'].index(row[0].downcase) || 4,
+                                      mineral_sort_order.index(row[1].downcase) || 5,
+                                      row[3],
+                                      row[2]]
+                              }}
+    end
+
+    def smelter_compliance_statuses_worksheet(workbook)
+      info  = smelter_compliance_statuses
+      sheet = Axlsx::Worksheet.new workbook, :name => info[:name]
+      # Branding header
+      worksheet_header(sheet, sheet.styles.add_style(BRANDING_STYLE))
+      # Attribute name header
+      sheet.add_row(['#'] + info[:header].collect { |h| h[:name] }, :style => sheet.styles.add_style(HEADER_STYLE)).height = 35.0
+      # Data rows
+      data_style    = sheet.styles.add_style DATA_STYLE
+      column_widths = info[:header].collect { |h| h[:column_width]}
+      info[:data].each_with_index do |row, index|
+        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+      end
+      sheet
     end
 
     def to_excel
-      self.worksheets = [all_reported_smelters,
-                         consolidated_smelters,
-                         rejected_entries,
-                         smelter_compliance_status,
-                         cfsi_compliant_smelter_list]
-      spreadsheet = super
-      spreadsheet.workbook.add_worksheet(:name => "Definitions") do |sheet|
+      workbook = Axlsx::Workbook.new
+      all_reported_smelters_worksheet(workbook)
+      consolidated_smelters_worksheet(workbook)
+      rejected_entries_worksheet(workbook)
+      smelter_compliance_statuses_worksheet(workbook)
+      cfsi_compliant_smelter_list_worksheet(workbook)
+      workbook.add_worksheet(:name => "Definitions") do |sheet|
         sheet.add_row([self.definition % CHECKMARK_CHAR], :types => :string)
         sheet.merge_cells "A1:H200"
       end
-      spreadsheet
+      Axlsx::Package.new :workbook => workbook
     end
   end
 end
