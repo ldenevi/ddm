@@ -20,9 +20,9 @@ class Cfsi::Cmrt < ActiveRecord::Base
     end
   end
 
-  def generate_minerals_vendor
+  def create_minerals_vendor
     if find_minerals_vendor.nil?
-      vendor = Cfsi::MineralsVendor.new :full_name => company_name, :properties => {:query_match_data => minerals_vendor_unique_identifier}
+      vendor = Cfsi::MineralsVendor.new :full_name => company_name, :properties => {:query_match_data => minerals_vendor_unique_identifier}, :organization => organization
       if vendor.save
         vendor
       else
@@ -31,6 +31,10 @@ class Cfsi::Cmrt < ActiveRecord::Base
     else
       raise Exception, "Vendor already exists"
     end
+  end
+
+  def find_or_create_minerals_vendor
+    find_minerals_vendor || create_minerals_vendor
   end
 
   def minerals_vendor_unique_identifier
@@ -49,6 +53,7 @@ class Cfsi::Cmrt < ActiveRecord::Base
     obj.language = obj.declaration.language
     obj.representative_email = obj.declaration.contact_email
     obj.version = obj.declaration.version
+    obj.minerals_vendor = obj.find_or_create_minerals_vendor
     obj
   end
 end

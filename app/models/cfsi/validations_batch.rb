@@ -7,11 +7,11 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   validates :organization, :presence => true
   validates :user, :presence => true
 
-  has_many :unidentified_cmrts, :class_name => 'Cfsi::Cmrt', :conditions => "vendor_id IS NULL"
-  attr_accessible :unidentified_cmrts
+  has_many :unidentified_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NULL"
+  attr_accessible :unidentified_cmrt_validations
 
-  has_many :vendor_cmrts, :class_name => 'Cfsi::Cmrt', :conditions => "vendor_id IS NOT NULL"
-  attr_accessible :vendor_cmrts
+  has_many :vendor_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NOT NULL"
+  attr_accessible :vendor_cmrt_validations
 
   has_many :cmrt_validations
 
@@ -31,5 +31,9 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
 
   def transition_to_completed
     update_attribute(:status, "Completed")
+  end
+
+  def grouped_vendor_cmrt_validations
+    vendor_cmrt_validations.group_by(&:vendor)
   end
 end
