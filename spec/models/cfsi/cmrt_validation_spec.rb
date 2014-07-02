@@ -4,7 +4,8 @@ describe Cfsi::CmrtValidation do
   let(:user) { FactoryGirl.create(:user) }
   let(:org)  { FactoryGirl.create(:organization) }
 
-  let(:empty_validation) { Cfsi::CmrtValidation.create :user => user, :organization => org }
+  let(:batch) { Cfsi::ValidationsBatch.new :user => user, :organization => org }
+  let(:empty_validation) { Cfsi::CmrtValidation.create :user => user, :organization => org, :validations_batch => batch }
   let(:empty_cmrt_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_empty.xlsx') }
 
   context "(in general)" do
@@ -32,7 +33,7 @@ describe Cfsi::CmrtValidation do
   context "during state changes" do
     let(:validation_needed_cmrt_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_validation_needed.xlsx') }
     it "should transition from 'Initialized' to 'Validation needed'" do
-      validation_needed_validation = Cfsi::CmrtValidation.generate validation_needed_cmrt_file_path, :user => user, :organization => org
+      validation_needed_validation = Cfsi::CmrtValidation.generate validation_needed_cmrt_file_path, :user => user, :organization => org, :validations_batch => batch
       expect(validation_needed_validation).to respond_to :transition_to
       expect(validation_needed_validation.state).to eq "Initialized"
       expect(validation_needed_validation.transition_to_opened).to be_true
@@ -45,7 +46,7 @@ describe Cfsi::CmrtValidation do
 
     let(:high_risk_cmrt_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_high_risk.xlsx') }
     it "should transition from 'Initialized' to 'High risk'" do
-      high_risk_validation = Cfsi::CmrtValidation.generate high_risk_cmrt_file_path, :user => user, :organization => org
+      high_risk_validation = Cfsi::CmrtValidation.generate high_risk_cmrt_file_path, :user => user, :organization => org, :validations_batch => batch
       expect(high_risk_validation).to respond_to :transition_to
       expect(high_risk_validation.state).to eq "Initialized"
       expect(high_risk_validation.transition_to_opened).to be_true
@@ -58,7 +59,7 @@ describe Cfsi::CmrtValidation do
 
     let(:green_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', '3.01', '3.01_-_green.xlsx') }
     it "should transition from 'Initialized' to 'Green'" do
-      green_validation = Cfsi::CmrtValidation.generate green_file_path, :user => user, :organization => org
+      green_validation = Cfsi::CmrtValidation.generate green_file_path, :user => user, :organization => org, :validations_batch => batch
       expect(green_validation).to respond_to :transition_to
       expect(green_validation.state).to eq "Initialized"
       expect(green_validation.transition_to_opened).to be_true
@@ -70,7 +71,7 @@ describe Cfsi::CmrtValidation do
     end
 
     let(:file_not_readable_file_path) { File.join(File.dirname(__FILE__), 'sample_cmrts', 'invalid_cmrt.xls') }
-    let(:file_not_readable_validation) { Cfsi::CmrtValidation.generate file_not_readable_file_path, :user => user, :organization => org }
+    let(:file_not_readable_validation) { Cfsi::CmrtValidation.generate file_not_readable_file_path, :user => user, :organization => org, :validations_batch => batch }
     it "should transition from 'Initialized' to 'File not readable'" do
       expect(file_not_readable_validation).to respond_to :transition_to
       expect(file_not_readable_validation.state).to eq "Initialized"

@@ -4,7 +4,7 @@ describe Cfsi::ValidationsBatch do
   let(:batch) { FactoryGirl.create(:cfsi_validations_batch) }
   context "(in general)" do
     it "should have required attributes" do
-      [:unidentified_cmrts, :vendor_cmrts, :status, :user, :organization, :cmrt_validations].each do |attr|
+      [:unidentified_cmrt_validations, :vendor_cmrt_validations, :status, :user, :organization, :cmrt_validations].each do |attr|
         expect(batch).to respond_to attr
       end
       # Analytics

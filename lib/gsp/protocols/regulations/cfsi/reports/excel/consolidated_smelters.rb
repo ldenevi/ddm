@@ -335,7 +335,6 @@ EOT
     # Smelter Compliance Statuses
     def smelter_compliance_statuses
       list = cfsi_compliant_smelter_list[:hash_data]
-      puts list.keys.inspect
       rows =  consolidated_smelters[:data].map do |cs|
                 [(list.keys.include?(cs[4]) ? list[cs[4]] : "Not CFSI Compliant"),
                  cs[0], cs[1], cs[2], cs[4]]
