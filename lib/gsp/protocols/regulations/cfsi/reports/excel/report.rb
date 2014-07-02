@@ -6,6 +6,11 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
   LOGO_IMAGE_PATH = File.expand_path(File.join(Rails.root, "public/images/logo.jpg"), File.dirname(__FILE__))
   CHECKMARK_CHAR  = "\u2714"
 
+  # Worksheet styles
+  BRANDING_STYLE = {:sz => 9, :font_name => "Lucida Console", :alignment => {:horizontal => :left, :vertical => :top, :wrap_text => true}}
+  HEADER_STYLE   = {:b => true, :sz => 10, :alignment => {:horizontal => :center, :vertical => :center , :wrap_text => true}}
+  DATA_STYLE     = {:sz => 9, :alignment => {:horizontal => :left, :vertical => :top , :wrap_text => true}}
+
   def initialize(validations_batch)
     self.validations_batch = validations_batch
     self.worksheets = []
@@ -60,10 +65,10 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
     end
 
     worksheet.add_row(["", "",[worksheet.name,
-                              "%s: %s" % ["Co.".rjust(6, ' '), 'current_user.organization.full_name'],
+                              "%s: %s" % ["Co.".rjust(6, ' '), validations_batch.user.organization.full_name],
                               "%s: %s" % ["Date".rjust(6, ' '), Date.today],
                               "%s: %s" % ["Time".rjust(6, ' '), Time.now.strftime("%H:%M:%S")],
-                              "%s: %s" % ["User".rjust(6, ' '), 'current_user.eponym']
+                              "%s: %s" % ["User".rjust(6, ' '), validations_batch.user.eponym]
                               ].join("\n")], :style => style).height = 65.0
 
     worksheet.merge_cells "A1:B1"
