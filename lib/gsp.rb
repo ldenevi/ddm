@@ -8,6 +8,7 @@ module GSP
   autoload :Client, File.join('gsp', 'client')
   autoload :Documents, File.join('gsp', 'documents')
   autoload :FileManager, File.join('gsp', 'file_manager')
+  autoload :Models, File.join('gsp', 'models')
   autoload :Protocols, File.join('gsp', 'protocols')
   autoload :Reports, File.join('gsp', 'reports')
   autoload :STATUS, File.join('gsp', 'status')
