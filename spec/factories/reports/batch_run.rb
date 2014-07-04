@@ -11,7 +11,7 @@ FactoryGirl.define do
   end
 
   factory :test_co, :class => 'Organization' do
-    full_name "ACME Test"
+    name "ACME Test"
   end
 
 end
