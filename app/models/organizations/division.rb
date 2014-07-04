@@ -1,0 +1,2 @@
+class Division < Organization
+end
