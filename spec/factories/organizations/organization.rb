@@ -1,5 +1,7 @@
 FactoryGirl.define do
   factory :organization, :class => 'Organization' do
-    full_name "Test Organization"
+    name "Test Organization, Inc."
+    display_name "TO"
+    properties {}
   end
 end

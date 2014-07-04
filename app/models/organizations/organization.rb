@@ -1,16 +1,16 @@
 class Organization < ActiveRecord::Base
-
-  validates :full_name, :length => { :minimum => 2 }
+  validates :name, :length => { :minimum => 2 }
 
   # ECOTree hierarchy
-  include GSP::UI::Javascript::EcoTree
-  make_ecotree :class_name => 'Organization', :children => 'organizations'
+  # include GSP::UI::Javascript::EcoTree
+  # make_ecotree :class_name => 'Organization', :children => 'organizations'
+  include GSP::Models::Tree::ActiveRecord
 
   attr_accessible :properties
   serialize :properties, Hash
 
   # Display information
-  attr_accessible :full_name, :display_name, :governing_law, :owner
+  attr_accessible :name, :display_name, :governing_law, :owner
   belongs_to :owner, :class_name => 'User'
   belongs_to :governing_law, :class_name => 'User'  # Using User just as a placeholder; eventually there'd be a mangeble Law object
   has_many   :users
@@ -22,13 +22,6 @@ class Organization < ActiveRecord::Base
   has_many :upcoming_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at > ? AND targeted_completion_at > ?", Time.now, Time.now]
   has_many :past_due_reviews, :class_name => 'Review', :readonly => true, :conditions => ["targeted_start_at < ? AND targeted_completion_at < ?", Time.now, Time.now]
   has_many :reviews, :order => "targeted_start_at"
-
-  # For ECOTree... should be something other than the general 'name'... JavaScript may have to be changed
-  def name
-    "#{full_name} (#{self.organization_templates.size.to_s})"
-  end
-
-
 
 private
 
