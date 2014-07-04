@@ -2,8 +2,9 @@ class Organization < ActiveRecord::Base
   validates :name, :length => { :minimum => 2 }
 
   # ECOTree hierarchy
-  include GSP::UI::Javascript::EcoTree
-  make_ecotree :class_name => 'Organization', :children => 'organizations'
+  # include GSP::UI::Javascript::EcoTree
+  # make_ecotree :class_name => 'Organization', :children => 'organizations'
+  include GSP::Models::Tree::ActiveRecord
 
   attr_accessible :properties
   serialize :properties, Hash
