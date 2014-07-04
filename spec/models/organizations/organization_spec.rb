@@ -7,7 +7,7 @@ describe Organization do
     it "should have required attributes" do
       expect(org).to respond_to :name
       expect(org.name).to be_kind_of String
-      expect(org).not_to respond_to :name
+      expect(org).not_to respond_to :full_name
       expect(org).to respond_to :display_name
       expect(org.display_name).to be_kind_of String
       expect(org).to respond_to :logo
