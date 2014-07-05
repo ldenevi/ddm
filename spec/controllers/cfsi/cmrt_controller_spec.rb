@@ -60,7 +60,7 @@ describe Cfsi::CmrtController do
   end
 
   context "while using Internet Explorer 9 or below" do
-    ZIP_FILEPATH = File.join(Rails.root, 'spec/controllers/cfsi/zipped_declarations.zip')
+    ZIP_FILEPATH = File.join(Rails.root, 'spec/controllers/cfsi/sample_data/zipped_declarations.zip')
 
     it "should not have any Cfsi::ValidationsBatch for testing" do
       Cfsi::ValidationsBatch.destroy_all
@@ -68,7 +68,7 @@ describe Cfsi::CmrtController do
     end
 
     let(:uploaded_zip) do
-     filepath = File.join(Rails.root, 'spec/controllers/cfsi/zipped_declarations.zip')
+     filepath = File.join(Rails.root, 'spec/controllers/cfsi/sample_data/zipped_declarations.zip')
      file     = File.open(filepath)
      uploaded_file = ActionDispatch::Http::UploadedFile.new(:tempfile => file, :filename => File.basename(filepath), :content_type => 'application/zip')
     end
