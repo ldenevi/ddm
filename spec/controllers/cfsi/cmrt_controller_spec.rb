@@ -8,7 +8,7 @@ describe Cfsi::CmrtController do
   end
   let(:org) { FactoryGirl.create(:organization) }
   let(:uploaded_cmrt) do
-    cmrt_file_path = File.join(File.dirname(__FILE__), "3.01_-_filled.xls")
+    cmrt_file_path = File.join(File.dirname(__FILE__), "sample_data", "3.01_-_filled.xls")
     ActionDispatch::Http::UploadedFile.new(:tempfile => File.new(cmrt_file_path), :filename => File.basename(cmrt_file_path), :content_type => 'application/vnd.ms-excel')
   end
 
