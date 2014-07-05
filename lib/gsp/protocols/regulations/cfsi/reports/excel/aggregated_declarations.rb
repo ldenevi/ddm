@@ -105,7 +105,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
                    {:name => "CFSI Template Version", :column_width => 20},
                    {:name => "Status", :column_width => 20},
                    {:name => "Issues", :column_width => 200}],
-       :data => validations_batch.cmrt_validations.collect do |val|
+       :data => validations_batch.latest_cmrt_validations.collect do |val|
                   next unless val.has_declaration?
                   dec = val.cmrt.declaration
                   date = dec.completion_at || dec.effective_date
@@ -203,7 +203,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
     end
 
     def statistics
-      total = validations_batch.cmrt_validations.collect { |val| next unless val.has_declaration?; val.cmrt.declaration }.compact.size
+      total = validations_batch.latest_cmrt_validations.collect { |val| next unless val.has_declaration?; val.cmrt.declaration }.compact.size
       stats = {
       :number_of_companies => total,
 
@@ -268,7 +268,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       :scoped_at_product_level => 0,
       :scoped_at_other         => 0}
 
-      validations_batch.cmrt_validations.each do |val|
+      validations_batch.latest_cmrt_validations.each do |val|
         next unless val.has_declaration?
 
         dec  = val.cmrt.declaration

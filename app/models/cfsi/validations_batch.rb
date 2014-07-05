@@ -10,7 +10,7 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   has_many :unidentified_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NULL"
   attr_accessible :unidentified_cmrt_validations
 
-  has_many :vendor_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NOT NULL"
+  has_many :vendor_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NOT NULL", :order => :created_at
   attr_accessible :vendor_cmrt_validations
 
   has_many :cmrt_validations
@@ -34,6 +34,11 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   end
 
   def grouped_vendor_cmrt_validations
+    cmrt_validations.map(&:cmrt).map(&:minerals_vendor)  # TODO Figure out why the CmrtValidaiton#vendor does not load unless Cmrt#minerals_vendor is called. This line shouldn't be necessary
     vendor_cmrt_validations.group_by(&:vendor)
+  end
+
+  def latest_cmrt_validations
+    unidentified_cmrt_validations + grouped_vendor_cmrt_validations.collect { |vendor, cmrt_validations| cmrt_validations.last }
   end
 end

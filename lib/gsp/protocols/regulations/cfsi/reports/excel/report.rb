@@ -16,7 +16,7 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
     self.worksheets = []
     self.sorted_smelters = []
     # Compile sorted source data
-    self.validations_batch.cmrt_validations.each do |val|
+    self.validations_batch.latest_cmrt_validations.each do |val|
       next unless val.has_declaration?
       val.cmrt.declaration.mineral_smelters.each do |smelter|
         smelter.attributes.keys.each { |attr| smelter.send("#{attr}=", smelter.send(attr).to_s) }
