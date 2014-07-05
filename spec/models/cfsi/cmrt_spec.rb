@@ -28,13 +28,13 @@ describe Cfsi::Cmrt do
 
     it "should find MineralsVendor based on unique identifier data" do
       expect(vendor_cmrt).to respond_to :find_minerals_vendor
-      Cfsi::MineralsVendor.create :full_name => "Test",  :properties => {:query_match_data => vendor_cmrt.minerals_vendor_unique_identifier}
+      Cfsi::MineralsVendor.create :name => "CMRT Spec Test",  :properties => {:query_match_data => vendor_cmrt.minerals_vendor_unique_identifier}
       expect(vendor_cmrt.find_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
     end
 
     it "should create MineralsVendor based on unique identifier data" do
       expect(vendor_cmrt).to respond_to :create_minerals_vendor
-      expect(vendor_cmrt.create_minerals_vendor).not_to be_nil
+      Cfsi::MineralsVendor.destroy_all
       expect(vendor_cmrt.create_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
     end
 

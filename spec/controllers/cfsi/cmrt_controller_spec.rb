@@ -33,6 +33,7 @@ describe Cfsi::CmrtController do
     end
     it "should validate a CMRT" do
       vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
+      uploaded_cmrt.tempfile.rewind
       post :validate, :spreadsheet => uploaded_cmrt, :batch_id => vb.id
     end
     it "should list a Cfsi::ValidationsBatch's Cfsi::CmrtValidations" do
@@ -55,6 +56,7 @@ describe Cfsi::CmrtController do
       expect(controller).to respond_to :validate_cmrt
       vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       controller = Cfsi::CmrtController.new
+      uploaded_cmrt.tempfile.rewind
       expect(controller.validate_cmrt(uploaded_cmrt, vb.id, subject.current_user)).to be_true
     end
   end
@@ -76,6 +78,7 @@ describe Cfsi::CmrtController do
     it "should accept and unpack zip file containing CFSI reports" do
       request.env["HTTP_REFERER"] = "/"
       vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
+      uploaded_zip.tempfile.rewind
       expect { post("validate_zip", :zip => uploaded_zip, :batch_id => vb.id) }.to change{Cfsi::CmrtValidation.count}.by_at_least(14)
     end
   end

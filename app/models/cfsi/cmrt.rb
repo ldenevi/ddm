@@ -22,7 +22,7 @@ class Cfsi::Cmrt < ActiveRecord::Base
 
   def create_minerals_vendor
     if find_minerals_vendor.nil?
-      vendor = Cfsi::MineralsVendor.new :name => company_name, :properties => {:query_match_data => minerals_vendor_unique_identifier}, :organization => organization
+      vendor = Cfsi::MineralsVendor.new :name => (company_name || "Unidentified Vendor"), :properties => {:query_match_data => minerals_vendor_unique_identifier}, :organization => organization
       if vendor.save
         vendor
       else
@@ -40,7 +40,7 @@ class Cfsi::Cmrt < ActiveRecord::Base
   def minerals_vendor_unique_identifier
     # TODO: Extract spreadsheet metadata & custom properties
     # For now, use company_name until extracting metad_data is possible
-    company_name
+    company_name || "Unidentified Vendor"
   end
 
   def self.generate(file_path, attrs = {})

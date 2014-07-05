@@ -37,6 +37,7 @@ class Cfsi::CmrtController < ApplicationController
           filepath = File.join(temppath, File.basename(entry.name))
           zip.extract(entry, filepath)
           uploaded_simulation = ActionDispatch::Http::UploadedFile.new(:tempfile => File.new(filepath), :filename => File.basename(filepath), :content_type => 'application/vnd.ms-excel')
+          uploaded_simulation.tempfile.rewind
           validate_cmrt(uploaded_simulation, params[:batch_id])
         end
       end
