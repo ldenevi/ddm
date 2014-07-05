@@ -22,7 +22,7 @@ class Cfsi::Cmrt < ActiveRecord::Base
 
   def create_minerals_vendor
     if find_minerals_vendor.nil?
-      vendor = Cfsi::MineralsVendor.new :full_name => company_name, :properties => {:query_match_data => minerals_vendor_unique_identifier}, :organization => organization
+      vendor = Cfsi::MineralsVendor.new :name => company_name, :properties => {:query_match_data => minerals_vendor_unique_identifier}, :organization => organization
       if vendor.save
         vendor
       else
