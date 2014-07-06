@@ -25,9 +25,9 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
                                                                                                             }
 
   def self.generate(file_path, attrs = {})
+    raise ArgumentError, ":user is nil" if attrs[:user].nil?
+    attrs.merge!(:user => attrs[:user], :organization => (attrs[:organization] || attrs[:user].organization))
     obj = create attrs.merge({:spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => attrs[:user]})})
-    obj.user = attrs[:user]
-    obj.organization = attrs[:organization]
     obj.spreadsheet.save_to_filesystem!
     obj
   end
