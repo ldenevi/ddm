@@ -8,7 +8,7 @@ describe Cfsi::CmrtController do
   end
   let(:org) { FactoryGirl.create(:organization) }
   let(:uploaded_cmrt) do
-    cmrt_file_path = File.join(File.dirname(__FILE__), "3.01_-_filled.xls")
+    cmrt_file_path = File.join(File.dirname(__FILE__), "sample_data", "3.01_-_filled.xls")
     ActionDispatch::Http::UploadedFile.new(:tempfile => File.new(cmrt_file_path), :filename => File.basename(cmrt_file_path), :content_type => 'application/vnd.ms-excel')
   end
 
@@ -33,6 +33,7 @@ describe Cfsi::CmrtController do
     end
     it "should validate a CMRT" do
       vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
+      uploaded_cmrt.tempfile.rewind
       post :validate, :spreadsheet => uploaded_cmrt, :batch_id => vb.id
     end
     it "should list a Cfsi::ValidationsBatch's Cfsi::CmrtValidations" do
@@ -55,12 +56,13 @@ describe Cfsi::CmrtController do
       expect(controller).to respond_to :validate_cmrt
       vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
       controller = Cfsi::CmrtController.new
+      uploaded_cmrt.tempfile.rewind
       expect(controller.validate_cmrt(uploaded_cmrt, vb.id, subject.current_user)).to be_true
     end
   end
 
   context "while using Internet Explorer 9 or below" do
-    ZIP_FILEPATH = File.join(Rails.root, 'spec/controllers/cfsi/zipped_declarations.zip')
+    ZIP_FILEPATH = File.join(Rails.root, 'spec/controllers/cfsi/sample_data/zipped_declarations.zip')
 
     it "should not have any Cfsi::ValidationsBatch for testing" do
       Cfsi::ValidationsBatch.destroy_all
@@ -68,7 +70,7 @@ describe Cfsi::CmrtController do
     end
 
     let(:uploaded_zip) do
-     filepath = File.join(Rails.root, 'spec/controllers/cfsi/zipped_declarations.zip')
+     filepath = File.join(Rails.root, 'spec/controllers/cfsi/sample_data/zipped_declarations.zip')
      file     = File.open(filepath)
      uploaded_file = ActionDispatch::Http::UploadedFile.new(:tempfile => file, :filename => File.basename(filepath), :content_type => 'application/zip')
     end
@@ -76,6 +78,7 @@ describe Cfsi::CmrtController do
     it "should accept and unpack zip file containing CFSI reports" do
       request.env["HTTP_REFERER"] = "/"
       vb = Cfsi::ValidationsBatch.create :user => subject.current_user, :organization => org
+      uploaded_zip.tempfile.rewind
       expect { post("validate_zip", :zip => uploaded_zip, :batch_id => vb.id) }.to change{Cfsi::CmrtValidation.count}.by_at_least(14)
     end
   end

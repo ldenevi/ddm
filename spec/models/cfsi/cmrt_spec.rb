@@ -28,15 +28,14 @@ describe Cfsi::Cmrt do
 
     it "should find MineralsVendor based on unique identifier data" do
       expect(vendor_cmrt).to respond_to :find_minerals_vendor
-      Cfsi::MineralsVendor.create :full_name => "Test",  :properties => {:query_match_data => vendor_cmrt.minerals_vendor_unique_identifier}
+      Cfsi::MineralsVendor.create :name => "CMRT Spec Test",  :properties => {:query_match_data => vendor_cmrt.minerals_vendor_unique_identifier}
       expect(vendor_cmrt.find_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
     end
 
     it "should create MineralsVendor based on unique identifier data" do
-      expect(vendor_cmrt).to respond_to :generate_minerals_vendor
-      expect(vendor_cmrt.find_minerals_vendor).to be_nil
-      expect(vendor_cmrt.generate_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
-      expect(vendor_cmrt.find_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
+      expect(vendor_cmrt).to respond_to :create_minerals_vendor
+      Cfsi::MineralsVendor.destroy_all
+      expect(vendor_cmrt.create_minerals_vendor).to be_kind_of(Cfsi::MineralsVendor)
     end
 
     let(:latest_version_cmrt) { Cfsi::Cmrt.generate(File.join(File.dirname(__FILE__), "sample_cmrts", "3.01", "3.01_-_green.xlsx")) }

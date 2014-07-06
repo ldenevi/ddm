@@ -25,7 +25,7 @@ class Reports::RoadmapController < ApplicationController
       # Header
       bounding_box([0, 9.25.in], :width => 7.5.in, :height => 1.25.in) do
         fill_color "222222"
-        text review.organization.full_name, :align => :center, :size => 14, :style => :bold
+        text review.organization.name, :align => :center, :size => 14, :style => :bold
         move_down 20
         text review.name, :align => :left, :size => 12, :style => :bold
         text "Due: #{review.targeted_completion_at.to_formatted_s(:review_date)}", :align => :left, :size => 12, :style => :bold

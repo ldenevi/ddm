@@ -54,4 +54,13 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi).to respond_to :smelter_compliance_statuses_worksheet
     expect(csi.smelter_compliance_statuses_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
   end
+
+  it "should create 'Analytics' worksheet" do
+    expect(csi).to respond_to :analytics
+    expect(csi.analytics).to be_kind_of Hash
+    expect(csi.analytics[:name]).to eq 'Analytics'
+    expect(csi.analytics[:rows]).not_to be_empty
+    expect(csi).to respond_to :analytics_worksheet
+    expect(csi.analytics_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
+  end
 end
