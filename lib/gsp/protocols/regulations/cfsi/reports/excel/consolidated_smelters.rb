@@ -368,6 +368,83 @@ EOT
       sheet
     end
 
+    def analytics
+      csmelters = consolidated_smelters[:data]
+      compl_statuses = smelter_compliance_statuses[:data]
+      num_cfsi_compliant_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" }.size
+      num_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Gold' }.size
+      num_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Tin' }.size
+      num_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Tantalum' }.size
+      num_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Tungsten' }.size
+      num_not_cfsi_compliant_smelters          = compl_statuses.size - num_cfsi_compliant_smelters
+      num_not_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Gold' }.size
+      num_not_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tin' }.size
+      num_not_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tantalum' }.size
+      num_not_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tungsten' }.size
+      gold_countries     = csmelters.select { |s| s[0] == 'Gold' }.collect { |s| s[2] }.sort.uniq
+      tin_countries      = csmelters.select { |s| s[0] == 'Tin' }.collect { |s| s[2] }.sort.uniq
+      tantalum_countries = csmelters.select { |s| s[0] == 'Tantalum' }.collect { |s| s[2] }.sort.uniq
+      tungsten_countries = csmelters.select { |s| s[0] == 'Tungsten' }.collect { |s| s[2] }.sort.uniq
+
+      {:name => "Analytics",
+       :rows => [
+                 ["Number of suppliers reporting:", validations_batch.latest_cmrt_validations.size],
+                 [""],
+                 ["Number of individual smelters reported:", csmelters.size],
+                 ["GOLD:", csmelters.select { |s| s[0].downcase == 'gold' }.size],
+                 ["TIN:", csmelters.select { |s| s[0].downcase == 'tin' }.size],
+                 ["TANTALUM:", csmelters.select { |s| s[0].downcase == 'tantalum' }.size],
+                 ["TUNGSTEN:", csmelters.select { |s| s[0].downcase == 'tungsten' }.size],
+                 [""],
+                 ["Smelters listed as CFSI Compliant:", num_cfsi_compliant_smelters, "%.2f%%" % ((num_cfsi_compliant_smelters.to_f / csmelters.size.to_f) * 100)],
+                 ["GOLD:", num_cfsi_compliant_gold_smelters, "%.2f%%" % ((num_cfsi_compliant_gold_smelters.to_f / num_cfsi_compliant_smelters.to_f) * 100)],
+                 ["TIN:", num_cfsi_compliant_tin_smelters, "%.2f%%" % ((num_cfsi_compliant_tin_smelters.to_f / num_cfsi_compliant_smelters.to_f) * 100)],
+                 ["TANTALUM:", num_cfsi_compliant_tantalum_smelters, "%.2f%%" % ((num_cfsi_compliant_tantalum_smelters.to_f / num_cfsi_compliant_smelters.to_f) * 100)],
+                 ["TUNGSTEN:", num_cfsi_compliant_tungsten_smelters, "%.2f%%" % ((num_cfsi_compliant_tungsten_smelters.to_f / num_cfsi_compliant_smelters.to_f) * 100)],
+                 [""],
+                 ["Smelters listed as Not CFSI Compliant:", num_not_cfsi_compliant_smelters, "%.2f%%" % ((num_not_cfsi_compliant_smelters.to_f / csmelters.size.to_f) * 100)],
+                 ["GOLD:", num_not_cfsi_compliant_gold_smelters, "%.2f%%" % ((num_not_cfsi_compliant_gold_smelters.to_f / num_not_cfsi_compliant_smelters.to_f) * 100)],
+                 ["TIN:", num_not_cfsi_compliant_tin_smelters, "%.2f%%" % ((num_not_cfsi_compliant_tin_smelters.to_f / num_not_cfsi_compliant_smelters.to_f) * 100)],
+                 ["TANTALUM:", num_not_cfsi_compliant_tantalum_smelters, "%.2f%%" % ((num_not_cfsi_compliant_tantalum_smelters.to_f / num_not_cfsi_compliant_smelters.to_f) * 100)],
+                 ["TUNGSTEN:", num_not_cfsi_compliant_tungsten_smelters, "%.2f%%" % ((num_not_cfsi_compliant_tungsten_smelters.to_f / num_not_cfsi_compliant_smelters.to_f) * 100)],
+                 [""],
+                 ["Number of countries of origin:", csmelters.map { |s| s[2].downcase }.compact.uniq.size],
+                 ["Countries of origin:", csmelters.collect { |s| s[2] }.compact.sort.uniq.join('; ')],
+                 ["GOLD"],
+                 ["Count:", gold_countries.size],
+                 ["Countries:", gold_countries.join('; ')],
+                 ["TIN"],
+                 ["Count:", tin_countries.size],
+                 ["Countries:", tin_countries.join('; ')],
+                 ["TANTALUM"],
+                 ["Count:", tantalum_countries.size],
+                 ["Countries:", tantalum_countries.join('; ')],
+                 ["TUNGSTEN"],
+                 ["Count:", tungsten_countries.size],
+                 ["Countries:", tungsten_countries.join('; ')]
+                ]
+
+      }
+    end
+
+    def analytics_worksheet(workbook)
+      info  = analytics
+      sheet = Axlsx::Worksheet.new workbook, :name => info[:name]
+      # Attribute name header
+      sheet.add_row(["","",""]).height = 35.0
+      # Data rows
+      data_style    = sheet.styles.add_style DATA_STYLE
+      info[:rows].each do |row|
+        sheet.add_row(row, :widths => [45, 15, 200], :styles => data_style, :types => :string)
+      end
+      sheet.merge_cells "B23:C23"
+      sheet.merge_cells "B26:C26"
+      sheet.merge_cells "B29:C29"
+      sheet.merge_cells "B32:C32"
+      sheet.merge_cells "B25:C25"
+      sheet
+    end
+
     def to_excel
       workbook = Axlsx::Workbook.new
       all_reported_smelters_worksheet(workbook)
@@ -375,6 +452,7 @@ EOT
       rejected_entries_worksheet(workbook)
       smelter_compliance_statuses_worksheet(workbook)
       cfsi_compliant_smelter_list_worksheet(workbook)
+      analytics_worksheet(workbook)
       workbook.add_worksheet(:name => "Definitions") do |sheet|
         sheet.add_row([self.definition % CHECKMARK_CHAR], :types => :string)
         sheet.merge_cells "A1:H200"
