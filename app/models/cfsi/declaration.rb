@@ -269,6 +269,11 @@ class Cfsi::Declaration < ActiveRecord::Base
   def extract_data_from_products_worksheet(worksheet_index = nil)
     products_worksheet = (worksheet_index.nil?) ? self.csv_worksheets.select { |w| w.file_name.match(".csv.#{self.structure[:worksheet_indices][:products]}") }.first
                                                  : self.csv_worksheets[worksheet_index]
+
+    if products_worksheet.nil?
+      self.errors.add :base, "Products List worksheet is missing in declaration spreadsheet -- 7"
+      return
+    end
     rows = products_worksheet.csv.read
     i    = cell_definitions[:products][:start_row]
     while !rows[i].nil?
