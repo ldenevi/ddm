@@ -34,7 +34,7 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   end
 
   def grouped_vendor_cmrt_validations
-    cmrt_validations.map(&:cmrt).map(&:minerals_vendor)  # TODO Figure out why the CmrtValidaiton#vendor does not load unless Cmrt#minerals_vendor is called. This line shouldn't be necessary
+    cmrt_validations.map(&:cmrt).compact.map(&:minerals_vendor)  # TODO Figure out why the CmrtValidaiton#vendor does not load unless Cmrt#minerals_vendor is called. This line shouldn't be necessary
     vendor_cmrt_validations.group_by(&:vendor)
   end
 
