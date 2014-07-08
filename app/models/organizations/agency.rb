@@ -7,6 +7,10 @@ class Agency < Organization
     properties.merge({:url => value})
   end
 
+  def self.find_by_acronym(val)
+    where("name LIKE '%#{val}'").first
+  end
+
 
 =begin
   # Display information

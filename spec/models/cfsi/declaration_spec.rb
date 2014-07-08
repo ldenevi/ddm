@@ -51,6 +51,11 @@ describe Cfsi::Declaration do
       expect(Cfsi::Declaration).to respond_to :get_version
     end
 
+    it "should have structural maps" do
+      expect(blank_declaration).to respond_to :get_structure_for_version
+      expect(blank_declaration).to respond_to :get_cell_definitions_for_version
+    end
+
 
     let(:csv_worksheets) { Dir.glob(File.join(SAMPLE_CMRT_CSV_DIR_PATH, "*.csv.*")) }
     let (:generated_declaration) { Cfsi::Declaration.generate_from_csv_file_paths(csv_worksheets) }

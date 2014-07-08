@@ -1,8 +1,18 @@
-module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
-  attr_accessor :messages
+class Cfsi::Declaration::V3Validator < ActiveModel::Validator
   attr_accessor :declaration
-  attr_accessor :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
-  attr_accessor :has_tantalum, :has_tin, :has_gold, :has_tungsten
+  attr_reader   :messages
+  attr_reader   :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
+  attr_reader   :has_tantalum, :has_tin, :has_gold, :has_tungsten
+private
+  attr_writer :messages
+  attr_writer :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
+  attr_writer :has_tantalum, :has_tin, :has_gold, :has_tungsten
+public
+
+  def initialize(args = {:declaration => nil})
+    super
+    @declaration = args[:declaration]
+  end
 
   def load_messages
     @messages = YAML::load_file(File.join('config', 'cfsi', @declaration.version, 'messages.en.yml'))["en"]
@@ -14,8 +24,9 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version3
     @products_list = @declaration.errors[:products_list]
   end
 
-  def run_validations(declaration)
-    @declaration = declaration
+  def validate(record)
+    return unless record.version.split('.').first == '3'
+    @declaration = record
     load_messages
     validate_basic_fields
     if is_in_scope?
