@@ -10,7 +10,8 @@ class ChangeColumnTypeOfStandardSmelterNamesToTextInCfsiMineralSmelters < Active
     change_column :cfsi_mineral_smelters, :metal, :text
     change_column :cfsi_mineral_smelters, :mineral_source, :text
     change_column :cfsi_mineral_smelters, :mineral_source_location, :text
-    change_column :cfsi_mineral_smelters, :smelter_id, :text
+    change_column :cfsi_mineral_smelters, :v2_smelter_id, :text
+    change_column :cfsi_mineral_smelters, :v3_smelter_id, :text
     change_column :cfsi_mineral_smelters, :smelter_reference_list, :text
     change_column :cfsi_mineral_smelters, :standard_smelter_name, :text
   end
@@ -26,7 +27,8 @@ class ChangeColumnTypeOfStandardSmelterNamesToTextInCfsiMineralSmelters < Active
     change_column :cfsi_mineral_smelters, :metal, :string
     change_column :cfsi_mineral_smelters, :mineral_source, :string
     change_column :cfsi_mineral_smelters, :mineral_source_location, :string
-    change_column :cfsi_mineral_smelters, :smelter_id, :string
+    change_column :cfsi_mineral_smelters, :v2_smelter_id, :text
+    change_column :cfsi_mineral_smelters, :v3_smelter_id, :text
     change_column :cfsi_mineral_smelters, :smelter_reference_list, :string
     change_column :cfsi_mineral_smelters, :standard_smelter_name, :string
   end
