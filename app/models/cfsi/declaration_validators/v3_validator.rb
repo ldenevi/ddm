@@ -25,6 +25,7 @@ public
   end
 
   def validate(record)
+    return unless record.version.split('.').first == '3'
     @declaration = record
     load_messages
     validate_basic_fields

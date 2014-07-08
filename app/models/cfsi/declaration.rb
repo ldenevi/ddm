@@ -2,6 +2,7 @@ class Cfsi::Declaration < ActiveRecord::Base
   autoload :V2Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v2_validator.rb')
   autoload :V3Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v3_validator.rb')
   extend GSP::Protocols::Regulations::CFSI::Versions
+  include GSP::Protocols::Regulations::CFSI::CMRT::Maps
 
   attr_accessible :address, :authorized_company_representative_name,
                   :company_name, :company_unique_identifier, :completion_at,
@@ -49,18 +50,10 @@ class Cfsi::Declaration < ActiveRecord::Base
     logger.info "Detected version #{obj.version}"
     raise GSP::Protocols::Regulations::CFSI::CMRT::Exceptions::VersionOne if obj.version == "1.00"
 
-    # Reading the reference maps from the hard drive every time a Declaration is created in RAM
-    # creates a speed bottleneck. This performance cost will be tolerated in this version
-    # of the Cfsi::Declaration until we observe in the field all the possible variations of the CMRT
-    # for research purposes.
-    #
-    obj.structure        = YAML::load_file(File.join('config', 'cfsi', obj.version, 'structure.yml'))
-    obj.cell_definitions = YAML::load_file(File.join('config', 'cfsi', obj.version, 'cell_definitions.yml'))
+    obj.structure        = obj.get_structure_for_version(obj.version)
+    obj.cell_definitions = obj.get_cell_definitions_for_version(obj.version)
 
-    case obj.version.split('.').first
-      when '2' then validates_with Cfsi::Declaration::V2Validator
-      when '3' then validates_with Cfsi::Declaration::V3Validator
-    end
+    validates_with Cfsi::Declaration::V2Validator, Cfsi::Declaration::V3Validator
     obj.extract_data_from_all_worksheets
     obj
   end
