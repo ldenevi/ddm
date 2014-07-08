@@ -1,7 +1,16 @@
-module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
-  attr_accessor :messages
+class Cfsi::Declaration::V2Validator < ActiveModel::Validator
   attr_accessor :declaration
-  attr_accessor :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
+  attr_reader   :messages
+  attr_reader   :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
+private
+  attr_writer :messages
+public
+  attr_writer :basic, :minerals, :company_level, :smelters_list, :standard_smelter_names, :products_list
+
+  def initialize(args = {:declaration => nil})
+    super
+    self.declaration = args[:declaration]
+  end
 
   def load_messages
     @messages = YAML::load_file(File.join('config', 'cfsi', @declaration.version, 'messages.en.yml'))["en"]
@@ -13,8 +22,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Validation::Version2
     @products_list = @declaration.errors[:products_list]
   end
 
-  def run_validations(declaration)
-    @declaration = declaration
+  def validate(record)
+    @declaration = record
     load_messages
     validate_basic_fields
     validate_minerals_fields

@@ -1,4 +1,6 @@
 class Cfsi::Declaration < ActiveRecord::Base
+  autoload :V2Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v2_validator.rb')
+  autoload :V3Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v3_validator.rb')
   extend GSP::Protocols::Regulations::CFSI::Versions
 
   attr_accessible :address, :authorized_company_representative_name,
@@ -55,19 +57,22 @@ class Cfsi::Declaration < ActiveRecord::Base
     obj.structure        = YAML::load_file(File.join('config', 'cfsi', obj.version, 'structure.yml'))
     obj.cell_definitions = YAML::load_file(File.join('config', 'cfsi', obj.version, 'cell_definitions.yml'))
 
-    validates_with Cfsi::DeclarationValidator
+    case obj.version.split('.').first
+      when '2' then validates_with Cfsi::Declaration::V2Validator
+      when '3' then validates_with Cfsi::Declaration::V3Validator
+    end
     obj.extract_data_from_all_worksheets
     obj
   end
 
   # Create Worksheets from a list of file paths
-  def self.generate_from_csv_file_paths(csv_file_paths = [])
+  def self.generate_from_csv_file_paths(csv_file_paths = [], attrs = {})
     file_paths = csv_file_paths.sort { |a,b| a.split('.').last.to_i <=> b.split('.').last.to_i }
     worksheets = []
     file_paths.each do |path|
       worksheets << GSP::Documents::MsOffice::Excel::Spreadsheet::Worksheet.load_csv(path)
     end
-    generate worksheets
+    generate worksheets, attrs
   end
 
   def extract_data_from_all_worksheets
