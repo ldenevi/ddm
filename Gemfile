@@ -16,8 +16,11 @@ gem 'rubyzip', '1.0.0'   # Zip compression
 gem 'zip-zip', '0.2'     # rubyzip 1.0.0 causes LoadError 'zip/zip'
 gem 'ice_cube', '0.11.1' # Scheduler
 gem 'recurring_select', '1.2.0' # iCal recurrence input user interface
-gem 'useragent', '0.10.0' # Detect web browser
-gem 'rest-client', '1.6.7' # For GSP::Eicc::Excel::Converters::OfficeConv
+gem 'useragent', '0.10.0'  # Detect web browser
+gem 'rest-client', '1.6.7' # For GSP::Eicc::Excel::Converters::OfficeConv TODO Change this to CFSI
+gem 'ZenTest', '4.3.0'     # For RubyInline
+gem 'RubyInline', '3.8.6'  # Runs native code within Ruby (for fuzzy-string-match)
+gem 'fuzzy-string-match', '0.9.6' # Matching data for reports
 
 # Gems used only for assets and not required
 # in production environments by default.
