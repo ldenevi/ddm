@@ -1,7 +1,7 @@
 require 'prawn'
 require "prawn/measurement_extensions"
 
-class Reports::RoadmapController < ApplicationController
+class RoadmapController < ApplicationController
   include ReportsHelper
 
   def comprehensive_due_diligence

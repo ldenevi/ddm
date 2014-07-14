@@ -16,11 +16,11 @@ describe Cfsi::MineralSmelter do
         expect(mineral_smelter).to respond_to attr
       end
       expect(mineral_smelter).to respond_to :declaration
-
       # Helper methods
       expect(mineral_smelter).to respond_to :smelter_id
-
       expect(mineral_smelter).to respond_to :organization
+      expect(mineral_smelter).to respond_to :vendor_key
+      expect(mineral_smelter.vendor_key).to eq "MyString"
     end
   end
 end

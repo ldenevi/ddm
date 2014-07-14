@@ -196,7 +196,7 @@ EOT
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
 
-        row = [smelter.metal, smelter.standard_smelter_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id, smelter.source_of_smelter_id,
+        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id, smelter.source_of_smelter_id,
                smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province,
                smelter.facility_contact_name, smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source,
                smelter.mineral_source_location, smelter.comment, smelter.is_all_smelter_feedstock_from_recycled_sources]
@@ -206,16 +206,18 @@ EOT
            ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
            ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.standard_smelter_name.size > 2 )
 
-          smelter_key = [smelter.metal, smelter.standard_smelter_name.downcase[0..6], smelter.facility_location_country.downcase]
-          consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0} if consolidated_smelters[smelter_key].nil?
+          smelter_key = smelter.vendor_key
+          consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
+          consolidated_smelters[smelter_key][:source_names] << smelter.standard_smelter_name
           row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
+          row = row + [consolidated_smelters[smelter_key][:source_names].join("\n")]
 
           # Only update declaration information of same smelter (based on smelter_key), if there is more provided data
           if row[0...-2].join('').size > consolidated_smelters[smelter_key][:data_length]
             consolidated_smelters[smelter_key][:data] = row
           end
-          consolidated_smelters[smelter_key][:data_length] = row[0...-2].join('').size
+          consolidated_smelters[smelter_key][:data_length] = row[0...-3].join('').size
         # Otherwise add valid SMELTER ID rows to Rejected Enteries worksheet
         elsif self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)
           @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
@@ -225,7 +227,7 @@ EOT
         end
       end
       rows = []
-      consolidated_smelters.each { |key, val| rows << val[:data] }
+      consolidated_smelters.each { |key, val| rows << {:row => val[:data][0...-1], :source_names => val[:data][-1]} }
 
       {:name => "Consolidated Smelters",
        :header => [{:name => "Metal", :column_width => 15},
@@ -260,7 +262,9 @@ EOT
       data_style    = sheet.styles.add_style DATA_STYLE
       column_widths = info[:header].collect { |h| h[:column_width]}
       info[:data].each_with_index do |row, index|
-        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        sheet_row = sheet.add_row([index + 1] + row[:row], :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        # smelter_name_cell = sheet_row.cells[2]
+        # sheet.add_comment(:author => "Consolidated From:\n", :text => row[:source_names], :ref => smelter_name_cell)
       end
       sheet
     end
@@ -337,7 +341,7 @@ EOT
       list = cfsi_compliant_smelter_list[:hash_data]
       rows =  consolidated_smelters[:data].map do |cs|
                 [(list.keys.include?(cs[4]) ? list[cs[4]] : "Not CFSI Compliant"),
-                 cs[0], cs[1], cs[2], cs[4]]
+                 cs[0], cs[1], cs[2], cs[4]].map(&:to_s)
               end
       {:name => "Smelter Compliance Statuses",
        :header => [{:name => "Status", :column_width => 20},
@@ -350,6 +354,7 @@ EOT
                                       row[3],
                                       row[2]]
                               }}
+
     end
 
     def smelter_compliance_statuses_worksheet(workbook)
@@ -369,7 +374,7 @@ EOT
     end
 
     def analytics
-      csmelters = consolidated_smelters[:data]
+      csmelters = consolidated_smelters[:data].map { |d| d[:row] }
       compl_statuses = smelter_compliance_statuses[:data]
       num_cfsi_compliant_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" }.size
       num_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Gold' }.size

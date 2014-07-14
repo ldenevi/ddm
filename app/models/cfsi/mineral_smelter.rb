@@ -27,4 +27,12 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   def smelter_id
     (self.v3_smelter_id.empty?) ? self.v2_smelter_id : self.v3_smelter_id
   end
+
+  def gsp_standard_name
+    @gsp_standard_name ||= Cfsi::Reports::SmelterReference.get_standard_names_for(self).first
+  end
+
+  def vendor_key
+    [metal, gsp_standard_name, facility_location_country].map(&:to_s).map(&:downcase)
+  end
 end
