@@ -29,6 +29,9 @@ GSP::Application.routes.draw do
 
     get "compliant_smelters/list"
     post "compliant_smelters/update"
+
+    get "smelters_reference/list"
+    post "smelters_reference/update"
   end
 
   # EICC Declaration
