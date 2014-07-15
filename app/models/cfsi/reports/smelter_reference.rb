@@ -25,7 +25,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
   end
 
   def self.get_standard_names_for(smelter)
-    if smelter.standard_smelter_name.to_s.empty?
+    if smelter.standard_smelter_name.to_s.empty? || count == 0
       []
     else
       distances = get_gsp_standard_name_matches(smelter)
