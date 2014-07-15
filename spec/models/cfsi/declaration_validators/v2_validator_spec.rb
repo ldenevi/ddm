@@ -2,7 +2,9 @@ require 'spec_helper'
 
 describe Cfsi::Declaration::V2Validator do
   let(:version_2) do
-    Cfsi::Declaration::V2Validator.new(:declaration => Cfsi::Declaration.new(:version => '2.00'))
+    validator = Cfsi::Declaration::V2Validator.new(:declaration => Cfsi::Declaration.new(:version => '2.00'))
+    validator.load_messages
+    validator
   end
   let(:loaded_messages) { version_2.messages }
 
