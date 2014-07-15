@@ -20,7 +20,7 @@ describe Cfsi::MineralSmelter do
       expect(mineral_smelter).to respond_to :smelter_id
       expect(mineral_smelter).to respond_to :organization
       expect(mineral_smelter).to respond_to :vendor_key
-      expect(mineral_smelter.vendor_key).to eq "MyString"
+      expect(mineral_smelter.vendor_key).to eq ["mystring", "", "mystring"]
     end
   end
 end
