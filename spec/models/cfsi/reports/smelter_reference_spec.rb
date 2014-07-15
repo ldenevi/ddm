@@ -9,7 +9,8 @@ describe Cfsi::Reports::SmelterReference do
         expect(sr).to respond_to attr
       end
       expect(sr.key_terms).to be_kind_of Array
-      expect(Cfsi::Reports::SmelterReference).to respond_to :get_standard_name_for
+      expect(Cfsi::Reports::SmelterReference).to respond_to :get_gsp_standard_name_matches
+      expect(Cfsi::Reports::SmelterReference).to respond_to :get_standard_names_for
       expect(Cfsi::Reports::SmelterReference).to respond_to :import_from_csv
       expect(Cfsi::Reports::SmelterReference).to respond_to :import_from_csv_file_path
     end

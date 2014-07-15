@@ -12,6 +12,7 @@ public
   def initialize(args = {:declaration => nil})
     super
     @declaration = args[:declaration]
+    @has_tantalum = @has_tin = @has_gold = @has_tungsten = false
   end
 
   def load_messages
@@ -41,10 +42,11 @@ public
   def is_in_scope?
     if @declaration.minerals_questions.size < 7
       @minerals << @messages[:declaration][:no_presence][:mineral_questions]
-    end
-    %w(tantalum tin gold tungsten).each do |mineral|
-      has_mineral = (@declaration.minerals_questions[0].send(mineral).to_s.downcase == 'yes' || @declaration.minerals_questions[1].send(mineral).to_s.downcase == 'yes')
-      eval("@has_#{mineral} = has_mineral")
+    elsif @declaration.minerals_questions.size > 0
+      %w(tantalum tin gold tungsten).each do |mineral|
+        has_mineral = (@declaration.minerals_questions[0].send(mineral).to_s.downcase == 'yes' || @declaration.minerals_questions[1].send(mineral).to_s.downcase == 'yes')
+        eval("@has_#{mineral} = has_mineral")
+      end
     end
     @has_tantalum || @has_tin || @has_gold || @has_tungsten
   end

@@ -5,7 +5,14 @@ describe Cfsi::Declaration::V3Validator do
     dec = Cfsi::Declaration.new :version => '3.01'
     dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 0, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
     dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 1, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
-    Cfsi::Declaration::V3Validator.new(:declaration => dec)
+    dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 2, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
+    dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 3, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
+    dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 4, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
+    dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 5, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
+    dec.minerals_questions << Cfsi::MineralsQuestion.new(:sequence => 6, :tantalum => "Yes", :tin => "Yes", :gold => "Yes", :tungsten => "Yes")
+    validator = Cfsi::Declaration::V3Validator.new(:declaration => dec)
+    validator.load_messages
+    validator
   end
   let(:loaded_messages) { version_3.messages }
 
@@ -40,10 +47,15 @@ describe Cfsi::Declaration::V3Validator do
     expect(version_3.basic).to include "(#{version_3.declaration.language}): " + loaded_messages[:declaration][:no_presence][:language]
   end
 
+  it "should validate if minerals questions are present" do
+    expect(version_3).to respond_to :is_in_scope?
+    version_3.declaration.minerals_questions = []
+    version_3.is_in_scope?
+    expect(version_3.minerals).to include loaded_messages[:declaration][:no_presence][:mineral_questions]
+  end
+
   it "should validate minerals data" do
     expect(version_3).to respond_to :validate_minerals_fields
-    version_3.declaration.minerals_questions = []
-    expect(version_3.minerals).to include loaded_messages[:declaration][:no_presence][:mineral_questions]
   end
 
   it "should validate company level data" do
