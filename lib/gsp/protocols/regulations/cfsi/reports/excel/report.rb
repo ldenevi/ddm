@@ -43,6 +43,16 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
     ["gold", "tin", "tantalum", "tungsten", ""]
   end
 
+  def is_valid_mineral?(value)
+    mineral_sort_order.include?(value.to_s.downcase)
+  end
+
+  def does_mineral_match_v2_smelter_id?(smelter)
+    return true if smelter.v2_smelter_id.to_s.empty?
+    ref = {'1' => 'gold', '2' => 'tin', '3' => 'tantalum', '4' => 'tungsten'}
+    ref[smelter.v2_smelter_id.strip[0]] == smelter.metal.strip.downcase
+  end
+
   def valid_non_smelter_id_sort_order
     ["not listed", "not supplied", "unknown"]
   end

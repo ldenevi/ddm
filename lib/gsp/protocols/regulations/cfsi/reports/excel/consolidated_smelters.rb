@@ -201,11 +201,16 @@ EOT
                smelter.facility_contact_name, smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source,
                smelter.mineral_source_location, smelter.comment, smelter.is_all_smelter_feedstock_from_recycled_sources]
 
-        # Add valid rows to Consolidated worksheet
-        if ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.standard_smelter_name.size > 2 && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
-           ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase) ) ||
-           ((self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)) && smelter.standard_smelter_name.size > 2 )
+        # Reject row with invalid Smelter ID value
+        rejection_reasons = []
+        rejection_reasons << "Invalid smelter id" unless (is_valid_smelter_id?(smelter.smelter_id) || is_valid_non_smelter_id?(smelter.smelter_id))
+        rejection_reasons << "Invalid smelter name" unless smelter.standard_smelter_name.size > 2
+        rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
+        rejection_reasons << "Invalid metal" unless is_valid_mineral?(smelter.metal)
+        rejection_reasons << "Smelter id does not match metal" if is_valid_smelter_id?(smelter.smelter_id) && !does_mineral_match_v2_smelter_id?(smelter)
 
+        if rejection_reasons.empty? ||
+          (rejection_reasons & ["Invalid smelter name", "Invalid country"]) != ["Invalid smelter name", "Invalid country"]
           smelter_key = smelter.vendor_key
           consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
@@ -218,13 +223,15 @@ EOT
             consolidated_smelters[smelter_key][:data] = row
           end
           consolidated_smelters[smelter_key][:data_length] = row[0...-3].join('').size
-        # Otherwise add valid SMELTER ID rows to Rejected Enteries worksheet
-        elsif self.is_valid_smelter_id?(smelter.smelter_id) || self.is_valid_non_smelter_id?(smelter.smelter_id)
+        else
           @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
-                                smelter.facility_location_country, smelter.smelter_id, data[:filename],
+                                smelter.facility_location_country, smelter.smelter_id,
+                                rejection_reasons.join(', '), data[:filename],
                                 data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone,
                                 smelter] # Add the smelter object to the last for sorting. It will be later removed
         end
+
+
       end
       rows = []
       consolidated_smelters.each { |key, val| rows << {:row => val[:data][0...-1], :source_names => val[:data][-1]} }
@@ -279,6 +286,7 @@ EOT
                    {:name => "Standard Smelter Names", :column_width => 35},
                    {:name => "Smelter Facility Location Country", :column_width => 35},
                    {:name => "Smelter ID", :column_width => 25},
+                   {:name => "Rejection Reason(s)", :column_width => 35},
                    {:name => "Source CFSI CMRT File Names", :column_width => 15},
                    {:name => "Company Name", :column_width => 35},
                    {:name => "Representative Name", :column_width => 25},
