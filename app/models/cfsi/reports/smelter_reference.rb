@@ -1,4 +1,5 @@
 require 'fuzzystringmatch'
+require 'gsp/ext/ruby'
 
 class Cfsi::Reports::SmelterReference < ActiveRecord::Base
   attr_accessible :country, :key_terms, :metal, :standard_name, :v2_smelter_id, :v3_smelter_id
@@ -24,22 +25,30 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     import_from_csv(csv)
   end
 
-  def self.get_standard_names_for(smelter)
+  def self.get_standard_names_for(smelter, args = {:use_key_terms => true})
     if smelter.standard_smelter_name.to_s.empty? || count == 0
       []
     else
-      distances = get_gsp_standard_name_matches(smelter)
+      distances = get_gsp_standard_name_matches(smelter, args)
       furthest  = distances.keys.max
       (furthest > 35.0) ? distances[furthest] : [smelter.standard_smelter_name]
     end
   end
 
-  def self.get_gsp_standard_name_matches(smelter)
-    @@references ||= select([:standard_name]).all
+  def self.get_gsp_standard_name_matches(smelter, args = {:use_key_terms => true})
+    @@references ||= select([:standard_name, :key_terms]).all
     jaro_winkler = FuzzyStringMatch::JaroWinkler.create(:native)
     distances = {}
     @@references.each do |ref|
-      dist = jaro_winkler.getDistance(smelter.standard_smelter_name, ref.standard_name)
+      dist = begin
+        if args[:use_key_terms]
+          ds = []
+          ref.key_terms.each { |key_term| ds << jaro_winkler.getDistance(smelter.standard_smelter_name, key_term) }
+          ds.average + jaro_winkler.getDistance(smelter.standard_smelter_name, ref.standard_name)
+        else
+          jaro_winkler.getDistance(smelter.standard_smelter_name, ref.standard_name)
+        end
+      end
       distances[dist] = [] if distances[dist].nil?
       distances[dist] << ref.standard_name
     end
