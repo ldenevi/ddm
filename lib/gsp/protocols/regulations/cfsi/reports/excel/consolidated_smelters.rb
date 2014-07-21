@@ -203,7 +203,7 @@ EOT
 
         # Reject row with invalid Smelter ID value
         rejection_reasons = []
-        rejection_reasons << "Invalid smelter id" unless (is_valid_smelter_id?(smelter.smelter_id) || is_valid_non_smelter_id?(smelter.smelter_id))
+        rejection_reasons << "Invalid smelter id" unless is_valid_smelter_id?(smelter.smelter_id)
         rejection_reasons << "Invalid smelter name" unless smelter.standard_smelter_name.size > 2
         rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
         rejection_reasons << "Invalid metal" unless is_valid_mineral?(smelter.metal)
