@@ -65,6 +65,11 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
     valid_non_smelter_id_sort_order.include? non_smelter_id.to_s.downcase
   end
 
+  def is_valid_smelter_name?(smelter_name)
+    return true if smelter_name.size > 2
+    smelter_name.downcase.split('').uniq.size > 1
+  end
+
   def worksheet_header(worksheet, style)
     worksheet.add_image(:image_src => LOGO_IMAGE_PATH, :noSelect => true, :noMove => true) do |image|
      image.width  = 4
