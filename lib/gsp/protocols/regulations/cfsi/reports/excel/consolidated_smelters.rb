@@ -197,7 +197,7 @@ EOT
         smelter = data[:smelter]
 
         row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
-               smelter.source_of_smelter_id, smelter.is_all_smelter_feedstock_from_recycled_sources]
+               smelter.source_of_smelter_id]
 
         # Reject row with invalid Smelter ID value
         rejection_reasons = []
