@@ -209,8 +209,7 @@ EOT
         rejection_reasons << "Invalid metal" unless is_valid_mineral?(smelter.metal)
         rejection_reasons << "Smelter id does not match metal" if is_valid_smelter_id?(smelter.smelter_id) && !does_mineral_match_v2_smelter_id?(smelter)
 
-        if rejection_reasons.empty? ||
-          (rejection_reasons & ["Invalid smelter name", "Invalid country"]) != ["Invalid smelter name", "Invalid country"]
+        if rejection_reasons.empty?
           smelter_key = smelter.vendor_key
           consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
