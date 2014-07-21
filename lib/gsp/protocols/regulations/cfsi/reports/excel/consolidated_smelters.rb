@@ -196,10 +196,8 @@ EOT
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
 
-        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id, smelter.source_of_smelter_id,
-               smelter.facility_location_street_address, smelter.facility_location_city, smelter.facility_location_province,
-               smelter.facility_contact_name, smelter.facility_contact_email, smelter.proposed_next_steps, smelter.mineral_source,
-               smelter.mineral_source_location, smelter.comment, smelter.is_all_smelter_feedstock_from_recycled_sources]
+        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
+               smelter.source_of_smelter_id, smelter.is_all_smelter_feedstock_from_recycled_sources]
 
         # Reject row with invalid Smelter ID value
         rejection_reasons = []
@@ -242,16 +240,6 @@ EOT
                    {:name => "Smelter ID\nVersion 2", :column_width => 15},
                    {:name => "Smelter ID\nVersion 3", :column_width => 15},
                    {:name => "Source of Smelter ID", :column_width => 15},
-                   {:name => "Smelter Facility Location Street Address", :column_width => 25},
-                   {:name => "Smelter Facility Location City", :column_width => 25},
-                   {:name => "Smelter Facility Location State / Province", :column_width => 25},
-                   {:name => "Smelter Facility Contact Name", :column_width => 25},
-                   {:name => "Smelter Facility Contact Email", :column_width => 25},
-                   {:name => "Proposed next steps, if applicable", :column_width => 30},
-                   {:name => "Name of Mine(s) or if recycled or scrap sourced, state recycled or scrap", :column_width => 30},
-                   {:name => "Location (Country) of Mine(s) or if recycled or scrap sourced, state recycled or scrap", :column_width => 15},
-                   {:name => "Does 100% of the smelter's feedstock originate from recycled or scrap sources?", :column_width => 30},
-                   {:name => "Comments", :column_width => 40},
                    {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
                    {:name => "Source Files", :column_width => 60}],
         :data => rows}
