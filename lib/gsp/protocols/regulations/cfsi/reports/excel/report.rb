@@ -58,7 +58,7 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
   end
 
   def is_valid_smelter_id?(smelter_id)
-    smelter_id.to_s.match(/^[1-4][A-Z]{3}[0-9]{3}$/) || smelter_id.to_s.match(/^CID/)
+    !(smelter_id.to_s.match(/^[1-4][A-Z]{3}[0-9]{3}$/) || smelter_id.to_s.match(/^CID/)).nil?
   end
 
   def is_valid_non_smelter_id?(non_smelter_id)
@@ -66,8 +66,7 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
   end
 
   def is_valid_smelter_name?(smelter_name)
-    return true if smelter_name.size > 2
-    smelter_name.downcase.split('').uniq.size > 1
+    smelter_name.downcase.split('').uniq.size > 1 && smelter_name.size > 2
   end
 
   def worksheet_header(worksheet, style)
