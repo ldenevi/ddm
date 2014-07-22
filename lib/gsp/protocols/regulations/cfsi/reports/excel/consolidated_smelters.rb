@@ -211,9 +211,9 @@ EOT
           smelter_key = smelter.vendor_key
           consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
-          consolidated_smelters[smelter_key][:source_names] << smelter.standard_smelter_name
           row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
-          row = row + [consolidated_smelters[smelter_key][:source_names].join("\n")]
+          # consolidated_smelters[smelter_key][:source_names] << smelter.standard_smelter_name
+          # row = row + [consolidated_smelters[smelter_key][:source_names].join("\n")]
 
           # Only update declaration information of same smelter (based on smelter_key), if there is more provided data
           if row[0...-2].join('').size > consolidated_smelters[smelter_key][:data_length]
@@ -224,8 +224,7 @@ EOT
           @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
                                 smelter.facility_location_country, smelter.smelter_id,
                                 rejection_reasons.join(', '), data[:filename],
-                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone,
-                                smelter] # Add the smelter object to the last for sorting. It will be later removed
+                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
         end
 
 
@@ -335,6 +334,7 @@ EOT
     def smelter_compliance_statuses
       list = cfsi_compliant_smelter_list[:hash_data]
       rows =  consolidated_smelters[:data].map do |cs|
+                cs = cs[:row]
                 [(list.keys.include?(cs[4]) ? list[cs[4]] : "Not CFSI Compliant"),
                  cs[0], cs[1], cs[2], cs[4]].map(&:to_s)
               end
