@@ -1,5 +1,6 @@
 class Cfsi::Cmrt < ActiveRecord::Base
   has_one :declaration, :dependent => :destroy
+  attr_accessible :declaration
   belongs_to :minerals_vendor
   attr_accessible :company_name, :file_extension, :file_name, :is_latest, :language, :meta_data, :representative_email, :spreadsheet, :version
 

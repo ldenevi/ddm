@@ -47,26 +47,8 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
     mineral_sort_order.include?(value.to_s.downcase)
   end
 
-  def does_mineral_match_v2_smelter_id?(smelter)
-    return true if smelter.v2_smelter_id.to_s.empty?
-    ref = {'1' => 'gold', '2' => 'tin', '3' => 'tantalum', '4' => 'tungsten'}
-    ref[smelter.v2_smelter_id.strip[0]] == smelter.metal.strip.downcase
-  end
-
   def valid_non_smelter_id_sort_order
     ["not listed", "not supplied", "unknown"]
-  end
-
-  def is_valid_smelter_id?(smelter_id)
-    !(smelter_id.to_s.match(/^[1-4][A-Z]{3}[0-9]{3}$/) || smelter_id.to_s.match(/^CID/)).nil?
-  end
-
-  def is_valid_non_smelter_id?(non_smelter_id)
-    valid_non_smelter_id_sort_order.include? non_smelter_id.to_s.downcase
-  end
-
-  def is_valid_smelter_name?(smelter_name)
-    smelter_name.downcase.split('').uniq.size > 1 && smelter_name.size > 2
   end
 
   def worksheet_header(worksheet, style)
