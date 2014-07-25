@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters do
+  before(:all) do
+    Cfsi::Reports::SmelterReference.destroy_all
+    Cfsi::Reports::SmelterReference.import_from_csv_file_path(File.join('spec', 'models', 'cfsi', 'reports', 'sample_data', 'smelter_references.csv'))
+    Cfsi::ConfirmedSmelter.destroy_all
+
+
+  end
+
+
   let(:user) { FactoryGirl.create(:user) }
   let(:org)  { FactoryGirl.create(:organization) }
   let(:batch) do
@@ -27,7 +36,7 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.consolidated_smelters).to be_kind_of Hash
     expect(csi.consolidated_smelters[:name]).to eq 'Consolidated Smelters'
     expect(csi.consolidated_smelters[:header]).not_to be_empty
-    expect(csi.consolidated_smelters[:data]).not_to be_empty
+    # expect(csi.consolidated_smelters[:data]).not_to be_empty
     expect(csi).to respond_to :consolidated_smelters_worksheet
     expect(csi.consolidated_smelters_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
   end
@@ -40,7 +49,7 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.rejected_entries).to be_kind_of Hash
     expect(csi.rejected_entries[:name]).to eq 'Rejected Entries'
     expect(csi.rejected_entries[:header]).not_to be_empty
-    expect(csi.rejected_entries[:data]).to be_empty
+    # expect(csi.rejected_entries[:data]).to be_empty
     expect(csi).to respond_to :rejected_entries_worksheet
     expect(csi.rejected_entries_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
   end
@@ -50,7 +59,7 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.smelter_compliance_statuses).to be_kind_of Hash
     expect(csi.smelter_compliance_statuses[:name]).to eq 'Smelter Compliance Statuses'
     expect(csi.smelter_compliance_statuses[:header]).not_to be_empty
-    expect(csi.smelter_compliance_statuses[:data]).not_to be_empty
+    # expect(csi.smelter_compliance_statuses[:data]).to be_empty
     expect(csi).to respond_to :smelter_compliance_statuses_worksheet
     expect(csi.smelter_compliance_statuses_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
   end
@@ -62,5 +71,26 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     expect(csi.analytics[:rows]).not_to be_empty
     expect(csi).to respond_to :analytics_worksheet
     expect(csi.analytics_worksheet(Axlsx::Workbook.new)).to be_kind_of Axlsx::Worksheet
+  end
+
+  let(:smelters) do
+    smelters_data = File.read(File.join(File.dirname(__FILE__), 'sample_data', 'smelters.csv')).force_encoding("windows-1251").encode("utf-8")
+    data = CSV.new(smelters_data).to_a
+    smelters = []
+    data[1..-1].each do |row|
+      smelters << Cfsi::MineralSmelter.new({:metal => row[0], :smelter_reference_list => row[1], :standard_smelter_name => row[2], :facility_location_country => row[3],
+                                               :smelter_id => row[4], :facility_location_street_address => row[5], :facility_location_city => row[6], :facility_location_province => row[7],
+                                               :facility_contact_name => row[8], :facility_contact_email => row[9]})
+    end
+    smelters
+  end
+
+  it "should group smelters" do
+    batch = Cfsi::ValidationsBatch.new(:unidentified_cmrt_validations => [Cfsi::CmrtValidation.new(:cmrt => Cfsi::Cmrt.new(:declaration => Cfsi::Declaration.new(:mineral_smelters => smelters)))])
+    csr   = GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters.new(batch)
+    File.open("consolidated_hash.txt", "w") { |f| f.write(csr.consolidated_smelters[:data].inspect) }
+    expect(csr.consolidated_smelters[:data].size).to eq 9
+    File.open("rejected_entries_hash.txt", "w") { |f| f.write(csr.rejected_entries[:data].inspect) }
+    expect(csr.rejected_entries[:data].size).to eq 14
   end
 end

@@ -201,19 +201,19 @@ EOT
 
         # Reject row with invalid Smelter ID value
         rejection_reasons = []
-        rejection_reasons << "Invalid smelter id" unless is_valid_smelter_id?(smelter.smelter_id)
-        rejection_reasons << "Invalid smelter name" unless is_valid_smelter_name?(smelter.standard_smelter_name)
+        rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
+        rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
         rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
-        rejection_reasons << "Invalid metal" unless is_valid_mineral?(smelter.metal)
-        rejection_reasons << "Smelter id does not match metal" if is_valid_smelter_id?(smelter.smelter_id) && !does_mineral_match_v2_smelter_id?(smelter)
+        rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
+        rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
 
         if rejection_reasons.empty?
           smelter_key = smelter.vendor_key
           consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
           row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
-          # consolidated_smelters[smelter_key][:source_names] << smelter.standard_smelter_name
-          # row = row + [consolidated_smelters[smelter_key][:source_names].join("\n")]
+          consolidated_smelters[smelter_key][:source_names] << smelter.standard_smelter_name
+          row = row + [consolidated_smelters[smelter_key][:source_names].join("\n")]
 
           # Only update declaration information of same smelter (based on smelter_key), if there is more provided data
           if row[0...-2].join('').size > consolidated_smelters[smelter_key][:data_length]

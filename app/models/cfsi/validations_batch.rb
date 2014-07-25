@@ -14,6 +14,7 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   attr_accessible :vendor_cmrt_validations
 
   has_many :cmrt_validations
+  attr_accessible :cmrt_validations
 
   # Analytics
   has_many :green_status_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => { :status => 'Green'}
