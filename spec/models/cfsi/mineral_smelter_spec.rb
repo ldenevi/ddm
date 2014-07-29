@@ -93,6 +93,16 @@ describe Cfsi::MineralSmelter do
     expect(ms.has_valid_mineral?).to be_false
   end
 
+  it "should search for and fill v3 ID based on v2 ID" do
+    ms = Cfsi::MineralSmelter.new :standard_smelter_name => 'Allgemeine Gold-und Silberscheideanstalt A.G.', :metal => 'Gold',
+                                     :facility_location_country => 'Germany', :v2_smelter_id => '1DEU001'
+
+    expect(ms).to respond_to :set_v3_smelter_id_from_v2_smelter_id
+    expect(ms).to respond_to :translate_v2_to_v3_id
+    expect(ms.translate_v2_to_v3_id).to be_kind_of String
+    expect(ms.v3_smelter_id).to eq 'CID000035'
+  end
+
 
 
 
