@@ -11,6 +11,14 @@ class Agency < Organization
     where("name LIKE '%#{val}'").first
   end
 
+  def self.in_house
+    where("name LIKE 'In-House'").first
+  end
+
+  def acronym
+    name.split(/W/).collect { |w| w[0] }.join('')
+  end
+
 
 =begin
   # Display information
