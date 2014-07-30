@@ -98,8 +98,6 @@ describe Cfsi::MineralSmelter do
                                      :facility_location_country => 'Germany', :v2_smelter_id => '1DEU001'
 
     expect(ms).to respond_to :set_v3_smelter_id_from_v2_smelter_id
-    expect(ms).to respond_to :translate_v2_to_v3_id
-    expect(ms.translate_v2_to_v3_id).to be_kind_of String
     expect(ms.v3_smelter_id).to eq 'CID000035'
   end
 
