@@ -17,6 +17,7 @@ describe Cfsi::SmeltersReferenceController do
       expect(response.body).to match 'id="csv_upload_form"'
     end
     it "should update SmelterReferences from CSV file" do
+      Cfsi::Reports::SmelterReference.destroy_all
       expect { post :update, :csv => uploaded_list }.to change { Cfsi::Reports::SmelterReference.count }.by_at_least(100)
       expect(response).to redirect_to :action => :list
     end
