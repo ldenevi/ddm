@@ -15,7 +15,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Versions
               "3.01" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.01.worksheet.0.txt"))}
 
   def get_version(worksheet_0)
-    get_jarow_distances(worksheet_0).sort { |a, b| b[1] <=> a[1] }.first[0]
+    get_similarity_ratings(worksheet_0).sort { |a, b| b[1] <=> a[1] }.first[0]
   end
 
   def get_similarity_ratings(comparison_string)
