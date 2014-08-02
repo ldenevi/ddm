@@ -1,4 +1,7 @@
 # http://stackoverflow.com/questions/653157/a-better-similarity-ranking-algorithm-for-variable-length-strings
+
+require 'fuzzystringmatch'
+
 module GSP::Protocols::Regulations::CFSI::CMRT::Versions
   VERSION_HEADER_DATA_DIRPATH = File.join('lib', 'gsp', 'protocols', 'regulations', 'cfsi', 'cmrt', 'versions')
 
@@ -12,7 +15,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Versions
               "3.01" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.01.worksheet.0.txt"))}
 
   def get_version(worksheet_0)
-    similarities.sort { |a, b| b[1] <=> a[1] }.first[0]
+    get_jarow_distances(worksheet_0).sort { |a, b| b[1] <=> a[1] }.first[0]
   end
 
   def get_similarity_ratings(comparison_string)
@@ -42,5 +45,13 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Versions
     (2.0 * intersection) / union
   end
 
+  def get_jarow_distances(comparison_string)
+    distances = []
+    jarow = FuzzyStringMatch::JaroWinkler.create(:native)
+    VERSIONS.each do |cmrt_version, version_data|
+      distances << [cmrt_version, jarow.getDistance(version_data, comparison_string)]
+    end
+    distances
+  end
 
 end
