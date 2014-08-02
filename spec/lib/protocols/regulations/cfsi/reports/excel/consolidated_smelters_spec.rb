@@ -88,9 +88,7 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
   it "should group smelters" do
     batch = Cfsi::ValidationsBatch.new(:unidentified_cmrt_validations => [Cfsi::CmrtValidation.new(:cmrt => Cfsi::Cmrt.new(:declaration => Cfsi::Declaration.new(:mineral_smelters => smelters)))])
     csr   = GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters.new(batch)
-    File.open("consolidated_hash.txt", "w") { |f| f.write(csr.consolidated_smelters[:data].inspect) }
     expect(csr.consolidated_smelters[:data].size).to eq 9
-    File.open("rejected_entries_hash.txt", "w") { |f| f.write(csr.rejected_entries[:data].inspect) }
     expect(csr.rejected_entries[:data].size).to eq 14
   end
 end
