@@ -1,7 +1,7 @@
 class Cfsi::Declaration < ActiveRecord::Base
   autoload :V2Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v2_validator.rb')
   autoload :V3Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v3_validator.rb')
-  extend GSP::Protocols::Regulations::CFSI::Versions
+  extend GSP::Protocols::Regulations::CFSI::CMRT::Versions
   include GSP::Protocols::Regulations::CFSI::CMRT::Maps
 
   attr_accessible :address, :authorized_company_representative_name,

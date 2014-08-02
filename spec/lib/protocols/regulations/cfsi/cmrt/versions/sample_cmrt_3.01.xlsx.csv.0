@@ -1,0 +1,234 @@
+,,,,,,
+,DOCUMENT TITLE,,,,,
+,Conflict Minerals Reporting Template,,,,,
+,SHEET,,,,,
+,1 of 8,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,REVISION HISTORY,,,,,
+,"A change in the first digit of the revision number (e.g., 1.0 to 2.0) signifies a set of major improvements have occurred which will likely include different data reporting requirements. Changes to the first or second decimal place (e.g., “2.01” to “2.02”) indicate only minor changes have been made to the template which are not expected to result in substantial changes to the data being reported.  The addition of a letter (e.g., “a”, or “b”, or “c”) following the revision number indicate that only the standard smelter list has been updated from the prior version.",,,,,
+,,,,,,
+,REVISION,ORIGINATOR,RELEASE DATE,DESCRIPTION OF FUNCTIONAL CHANGE,UPDATES TO SMELTER LIST,
+,1,"Jared Connors, Intel","July 19th, 2011",New Release,,
+,2,"Jared Connors, Intel","Aug 29th, 2012","Major update to functionality including: addition of the known smelter list, addition of declaration scope including product tab, and added and modified multiple questions and / or their responses.",New.,
+,2.01,"Jared Connors, Intel","Dec 
+21st 2012","List of changes to the template functionality:
+1. Modified Smelter List tab to prevent smelter rows from wrapping text. This was being caused by the hidden formula in column A which allows for a software vendor to easily grab the smelter IDs.
+2. Changed protection settings on the Smelter List tab to allow users to delete rows. This allows users to delete rows with incorrect entries within the smelter tab. Ensured that columns could not be mistakenly deleted in the process.","1. Added “CV DS Jaya Abadi” an alias to “PT Stanindo Inti Perkasa”
+2. Added “Mentok” as an alias to “PT Tambang Timah”
+3. Corrected spelling of ""Duoluoshan"" id # 3CHN001
+4. Corrected spelling of ""Mitsubishi Materials Corporation"" id # 1JPN039
+5. Changed “Gejiu Non-ferrous” to its proper name “Geiju Non-Ferrous Metal Processing Co. Ltd.”
+6. Changed “Mitsubishi Material” to its proper name “Mitsubishi Materials Corporation”
+7. Changed “Niotan” to “Kemet Blue Powder”
+8. Added “Nihon Material Co. LTD” as a gold refiner
+9. Added “Aida Chemical Industries Co. Ltd.” as a gold refiner
+10. Added “Asaka Riken Co Ltd” as a gold refiner",
+,,,,,"11. Added “Kojima Chemical” as a gold refiner
+12. Added “Sabin” as a gold refiner
+13. Added “United Precious Metal Refining Inc.” as a gold refiner
+14. Added “Yokohama Metal Co Ltd” as a gold refiner
+15. Added “CNMC (Guangxi) PGMA Co., Ltd.” as a tin refiner
+16. Added “Conghua Tantalum and Niobium Smeltry” as a tantalum refiner
+17. Removed “Tantalite Resources” as a refinery
+18. Added “Minmetals Ganzhou Tin Co. Ltd.” as a tin refinery
+19. Updated “ATI Metalworking Products” to its proper full name “ATI Tungsten Materials”
+20. Updated “China Minmetals Corp.” to its proper full name “China Minmetals Nonferrous Metals Co Ltd”",
+,,,,,"21. Removed “Ganzhou Huaxing Tungsten” as a smelter
+22. Removed “Ganzhou Nonferrous Metals Smelting Co Ltd.” as a smelter
+23. Removed “Sichuan Metals & Materials Imp & Exp Co as a tungsten smelter
+24. Added “Ganzhou Grand Sea W & Mo Group Co., Ltd.” as a tungsten smelter
+25. Added “Hunan Chenzhou Mining Group Co” as a tungsten smelter
+26. Added “Japan New Metals Co Ltd” as a tungsten smelter
+27. Added “Zhuzhou Cemented Carbide Group Co Ltd” as a tungsten smelter",
+,2.02,"Jared Connors, Intel",March 29th 2013,"1. Added new selection to the metals dropdown lists of smelter list tab “Smelter not yet identified”
+2. Moved “smelter not listed” to the bottom of each metals dropdown list
+3. Fixed error in Checker sheet to eliminate display of text “one or more smelters have been added to smelter list” when rows are deleted
+4. Rewrite of T&Cs
+5. Adding Italian translation
+6. Allow for deletion of rows in Smelter List tab
+7. Removed hover over text in column C of Smelter List tab
+8. Inserted additional rows for data entry on the Smelter List tab up to 2,500 rows
+9. Made smelter ID numbers visible in Smelter List tab
+10. Made template revision history tab visible","1. Added the following aliases to Ohio Precious Metals “OPM Metals”, “USPM”, “United States Precious Metals”
+2. Added “ALMT” as tungsten smelter
+3. Added “Suzhou Xingrui Noble” as gold smelter
+4. Added “Shangdong Zhaojin Group” as an alias of “Shandong Zhaojin Gold & Silver Refinery Co.,  Ltd”
+5. Added “Shandong Zhaoyuan Gold Argentine refining company limited” as an alias of “Zhongyuan Gold Smelter of Zhongjin Gold Corporation”
+6. Added “SEMPSA” as an alias for “SEMPSA Joyeria Plateria SA”
+7. Added “Umicore Brazil Ltd” as an alias for “Umicore Brasil Ltda”
+8. Added “Pan Pacific Copper Co., LTD.” as a gold smelter
+9. Added “White Solder Metalurgia” as a tin smelter
+10. Added “JiuJiang JinXin Nonferrous Metals Co. Ltd.” as a tantalum smelter",
+,,,,"11. Removed language selection from individual tabs, all controlled on Declaration tab
+12. Updated template to prevent users from adding tabs to the worksheet
+13. Added statement at the top of the revision history tab clarifying purpose of .0x revision updates","11. Corrected spelling of “jiujiang Tanbre” to “JiuJiang Tambre Co. Ltd.”
+12. Added Torecom as a gold smelter
+15. Added “PT Tinindo Internusa” as alias of “PT Tinindo Inter Nusa”
+16. Added “CV Jus Tindo” as alias of “CV JusTindo”
+17. Added “PT Bellitin Makmur Lestari” and “BML” as alias of “PT BilliTin Makmur Lestari”
+18. Added “Liuzhou China Tin Group Co., Ltd.” as alias of “Liuzhou China Tin”
+19. Added “PT Timah (Persero) TBK” and “Banka Tin” as alias of “PT Tambang Timah”
+20. Added “Yun Nan Tin Co.,LTD” as alias of “Yunnan Tin Company Limited”",
+,,,,,"21. Added “GEJIU ZILI MINING&SMELTING CO.,LTD.” as alias of “Gejiu Zi-Li”
+22. Added “Jiangxi Tungsten Co Ltd” as alias of “Jiangxi Tungsten Industry Group Co Ltd”
+23. Added “Linwu Xianggui” as a tin smelter
+24. Added ""IMLI"" and “Indra Eramulti Logam” as aliases of “PT Bukit Timah”
+25. Added “CV Gita Pesona” as tin smelter
+26. Added “PT Tommy Utama” as tin smelter
+27. Added “PT Bangka Tin Industry” as tin smelter
+28. Added “PT DS Jaya Abadi” as tin smelter
+29. Added “PT Panca Mega” as tin smelter
+30. Added “PT Seirama Tin investment” as tin smelter",
+,,,,,"31. Added “PT Karimun Mining” as tin smelter
+32. Added “Cooper Santa” as tin smelter
+33. Added “Daejin Indus Co. Ltd” as gold smelter
+34. Added “DaeryongENC” as gold smelter
+35. Added “Do Sung Corporation” as gold smelter
+36. Added “Hwasung CJ Co. Ltd” as gold smelter
+37. Added “Korea Metal” as gold smelter
+38. Added “SAMWON METALS Corp.” as gold smelter",
+,2.03,"Akimasa Yamakawa, JEITA / John Plyler, BlackBerry","July 12th
+2013","1. Resolved Excel 2003 incompatibility with programming for multiple languages.
+2. Minor corrections to row number references in the instructions.
+3. Added translation on checker sheet for the Column Name “Hyperlink to Source”
+4. Corrected Japanese translation of ""authorized representative"" and ""representative"" on Declaration worksheet.
+5. Adjusted row spacing of misc cells to allow for different lengths of translated text and comments.
+6. Removed the symbols for the metals on the standard smelter list (e.g., ""Sn"").
+7. Deleted text ""If no for all metals, you are done with this survey."" from question 1 on the Declaration worksheet.","1. Added “Fujian Jinxin Tungsten Co., Ltd.” as tungsten refiner
+2. Added “Dayu Weiliang Tungsten Co., Ltd.” as tungsten refiner
+3. Added “Xinhai Rendan Shaoguan Tungsten Co., Ltd.” as tungsten refiner
+4. Added “Hunan Chun-Chang Nonferrous Smelting & Concentrating Co., Ltd.” as tungsten refiner
+5. Added “Jiangxi Minmetals Gao'an Non-ferrous Metals Co., Ltd.” as tungsten refiner
+6. Corrected the spelling of ""Allydne"" to ""Alldyne""
+7. Corrected the spelling of ""Allydne Powder Technologies"" to ""Alldyne Powder Technologies""
+8. Corrected the spelling of ""Korea Metal"" to ""Korea Metal Co. Ltd""
+9. Added ""LMS Brasil S.A.""  as tantalum smelter
+10. Added ""QuantumClean""  as tantalum smelter",
+,,,,,"11. Added ""Taki Chemicals"" as tantalum smelter
+12. Added ""Tantalite Resources"" as tantalum smelter
+13. Corrected naming inconsistency of “Ohio Precious Metals LLC.” on standard smelter list and alias table.
+14. Corrected naming inconsistency of “The Refinery of Shandong Gold Mining Co., Ltd” on standard smelter list and alias table.
+15. Added ""Molycorp Silmet"" as tantalum smelter
+16. Added ""King-Tan Tantalum Industry Ltd"" as tantalum smelter
+17. Added ""CooperMetal"" as an alias of ""Coopersanta""
+18. Corrected the spelling of ""Malaysia Smelting Corp"" to ""Malaysia Smelting Corporation (MSC)""
+19. Corrected the spelling of ""Asahi Pretec Corp"" to ""Asahi Pretec Corporation""
+20. Corrected the spelling of ""United Precious Metal Refining Inc."" to “United Precious Metal Refining, Inc.”",
+,,,,,"21. Added ""Fenix Metals"" as tin smelter
+22. Changed alias “Bangka Tin” from  “PT Tambang Timah” to “PT Timah”
+23. Added “Ketapang” as an alias of “PT Bangka Putra Karya”
+24. Corrected the Smelter ID of Cooper Santa from “2IDN063” to “2BRA063”
+25. Added ""Kundur"" as an alias of “PT Tambang Timah”
+26. Added “TT” as an alias of “PT Tambang Timah”
+27. Added ""CooperMetal"" as an alias of ""Coopersanta""
+28. Corrected spelling of “CV Prima Timah Utama” to “PT Prima Timah Utama”.",
+,2.03a,"John Plyler, BlackBerry",July 25th 2013,,"1. Corrected the spelling of ""ALMT"" to ""A.L.M.T. Corp.""
+2. Added ""A.L.M.T. Tungsten Corp"", ""Allied Material Corp"", and ""ALMT"" as aliases of ""A.L.M.T. Corp.""
+3. Corrected country of ""A.L.M.T. Corp."" to ""Japan"" and smelter ID to ""4JPN020""
+4. Changed alias ""Wolfram"" for ""Wolfram Company CJSC"" to ""Wolfram [Russia]""
+5. Added ""Wolfram [Austria]"" as an alias of ""Wolfram Bergbau und Hütten AG""
+6. Added ""Kennametal Inc."" as a tungsten refiner
+7. Added ""Kennametal"" as an alias of ""Kennametal Inc.""",
+,3.00,"Akimasa Yamakawa, JEITA, and John Plyler, BlackBerry, under the direction of the CFSI Due Diligence Workgroup",April 9th 2014,"Major update to synchronize the CFSI CMRT with the data fields in the newly published IPC-1755 Standard. Changes include:
+1. Addition of new company information fields.
+2. Two additional due diligence questions and removal of one.  
+3. Minor changes to question text throughout.
+4. Expansion of instructions and definitions.
+5. Updated translations of all modified text.","Added the following gold refiners:  
+1. Bauer Walser AG
+2. C. Hafner GmbH + Co. KG
+3. China National Gold Group Corporation
+4. Colt Refining
+5. Daye Non-Ferrous Metals Mining Ltd.
+6. Doduco
+7. Eco-System Recycling Co., Ltd.
+8. Gansu Seemine Material Hi-Tech Co Ltd
+9. Guangdong Jinding Gold Limited
+10. Hangzhou Fuchunjiang Smelting Co., Ltd.",
+,,,,,"11. Hunan Chenzhou Mining Industry Group
+12. Kennecott Utah Copper LLC
+13. Lingbao Jinyuan Tonghui Refinery Co. Ltd.
+14. Luoyang Zijin Yinhui Metal Smelt Co Ltd
+15. Metalor Technologies (Singapore) Pte. Ltd.
+16. Ohura Precious Metal Industry Co., Ltd
+17. Penglai Penggang Gold Industry Co Ltd
+18. So Accurate Group, Inc.
+19. Tongling nonferrous Metals Group Co.,Ltd 
+20. Umicore Precious Metals Thailand",
+,,,,,"21. YAMAMOTO PRECIOUS METAL CO., LTD.
+22. Yunnan Copper Industry Co Ltd
+
+",
+,,,,,"Added the following tantalum smelters: 
+1. Changsha South Tantalum Niobium Co Ltd
+2. Guangdong Zhiyuan New Material Co., Ltd.
+3. Hengyang King Xing Lifeng New Materials Co., LTD
+4. Metallurgical Products India (Pvt.) Ltd.
+5. Mineração Taboca S.A.
+6. Shanghai Jiangxi Metals Co. Ltd
+7. Yichun Jin Yang Rare Metal Co., Ltd",
+,,,,,"Added the following tin smelters: 
+1. China Rare Metal Materials Company
+2. Estanho de Rondônia S.A.
+3. Magnu's Minerais Metais e Ligas LTDA
+4. O.M. Manufacturing (Thailand) Co., Ltd.
+5. Rui Da Hung
+6. Soft Metais Ltda.",
+,,,,,"Added the following tungsten refiners: 
+1. Ganzhou Jiangwu Ferrotungsten Co., Ltd.
+2. Jiangxi Gan Bei Tungsten Co., Ltd.
+3. Jiangxi Richsea New Materials Co., Ltd.
+4. Jiangxi Tonggu Non-ferrous Metallurgical & Chemical Co., Ltd.
+5. Jiangxi Xinsheng Tungsten Industry Co., Ltd.
+6. Jiangxi Yaosheng Tungsten Co., Ltd.
+7. Malipo Haiyu Tungsten Co., Ltd.
+8. Xiamen Tungsten (H.C.) Co., Ltd.",
+,,,,,"Removed the following as gold refiners:
+1. Central Bank of the DPR of Korea
+2.Codelco
+3. Suzhou Xingrui Noble
+Removed ""Gannon & Scott"" as a tantalum smelter",
+,,,,,"Removed the following as tin smelters:
+1. CV Duta Putra Bangka
+2. CV Gita Pesona
+3. CV JusTindo
+4. CV Makmur Jaya
+5. CV Nurjanah
+6. Gold Bell Group
+7. PT Alam Lestari Kencana
+8. PT Babel Surya Alam Lestari
+9. PT Bangka Kudai Tin
+10. PT Bangka Timah Utama Sejahtera",
+,,,,,"11. PT BilliTin Makmur Lestari
+12. PT Fang Di MulTindo
+13. PT HP Metals Indonesia
+14. PT Koba Tin
+15. PT Panca Mega
+16. PT Seirama Tin investment
+17. PT Sumber Jaya Indah
+18. PT Timah Nusantara
+19. PT Tommy Utama
+20. PT Yinchendo Mining Industry",
+,,,,,"Removed the following as tungsten refiners:
+1. China Minmetals Nonferrous Metals Co Ltd
+2. Ganzhou Grand Sea W & Mo Group Co Ltd",
+,,,,,"Changed numerous Standard Smelter Names, including:
+1. ""Pan Pacific Copper Co. LTD"" to ""JX Nippon Mining & Metals Co., Ltd""
+2. ""Xstrata Canada Corporation"" to ""CCR Refinery – Glencore Canada Corporation""
+3. ""PT Refined Banka Tin"" to ""PT Refined Bangka Tin""
+4. ""ATI Tungsten Materials"" to ""Kennametal Huntsville""
+5. ""Jiangxi Rare Earth & Rare Metals Tungsten Group Corp"" to ""Ganzhou Non-ferrous Metals Smelting Co., Ltd.""
+6. ""Kennametal Inc."" to ""Kennametal Fallon""
+7. ""Chaozhou Xianglu Tungsten Industry Co Ltd"" to ""Guangdong Xianglu Tungsten Industry Co., Ltd.""
+Changed numerous ""Alias"" names of smelters and refiners.",
+,3.01,"Akimasa Yamakawa, JEITA, and John Plyler, BlackBerry, under the direction of the CFSI Due Diligence Workgroup",,"1. Removed the ability to overwrite the “Declaration Scope or Class” field. Users are restricted to only use the drop-down options.
+2. Addressed issue with Checker incorrectly showing “Description of Scope” as missing data when a user selects “B. Product (or List of Products)” as the Declaration Scope.
+3. Programmed Checker to show missing data when response to question B is ""Yes"", unless a url is entered the corresponding ""Comments"" field.","1. Added the tin smelter ""Melt Metais e Ligas S/A""
+2. Added the tungsten refiner ""Vietnam Youngsun Tungsten Industry Co., Ltd""
+3. Corrected the name of tin smelter ""Liuzhou China Tin"" to ""China Tin Group Co., Ltd.""
+4. Corrected the name of tin smelter ""PT Timah"" to ""PT Timah (Persero), Tbk""",
+,,,,,,
+,© 2014 Conflict-Free Sourcing Initiative. All rights reserved.,,,,,
+,,,,,,

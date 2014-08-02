@@ -1,6 +1,6 @@
 # http://stackoverflow.com/questions/653157/a-better-similarity-ranking-algorithm-for-variable-length-strings
-module GSP::Protocols::Regulations::CFSI::Versions
-  VERSION_HEADER_DATA_DIRPATH = File.join('lib', 'gsp', 'protocols', 'regulations', 'cfsi', 'versions')
+module GSP::Protocols::Regulations::CFSI::CMRT::Versions
+  VERSION_HEADER_DATA_DIRPATH = File.join('lib', 'gsp', 'protocols', 'regulations', 'cfsi', 'cmrt', 'versions')
 
   VERSIONS = {"1.00" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "1.00.worksheet.0.txt")),
               "2.00" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "2.00.worksheet.0.txt")),
@@ -8,6 +8,7 @@ module GSP::Protocols::Regulations::CFSI::Versions
               "2.02" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "2.02.worksheet.0.txt")),
               "2.03" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "2.03.worksheet.0.txt")),
               "2.03a" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "2.03a.worksheet.0.txt")),
+              "3.00" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.00.worksheet.0.txt")),
               "3.01" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.01.worksheet.0.txt"))}
 
   def get_version(worksheet_0)
