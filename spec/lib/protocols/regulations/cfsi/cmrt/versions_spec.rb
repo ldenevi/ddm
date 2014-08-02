@@ -62,4 +62,12 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Versions do
     worksheet_0_data = File.read(fp)
     expect(versions.get_version(worksheet_0_data)).to eq '3.01'
   end
+
+  it "should list comparison ratings for string against all worksheet 0 versions" do
+    fp = File.join(File.dirname(__FILE__), 'versions', 'sample_cmrt_2.03a.xlsx.csv.0')
+    expect(File.exists?(fp)).to be_true
+    expect(versions).to respond_to :get_similarity_ratings
+    expect(versions.get_similarity_ratings(File.read(fp)).to be_kind_of Array
+
+  end
 end

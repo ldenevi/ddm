@@ -12,11 +12,15 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Versions
               "3.01" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.01.worksheet.0.txt"))}
 
   def get_version(worksheet_0)
-    similarities = []
-    VERSIONS.each do |k, v|
-      similarities << [k, string_similarity(v, worksheet_0)]
-    end
     similarities.sort { |a, b| b[1] <=> a[1] }.first[0]
+  end
+
+  def get_similarity_ratings(comparison_string)
+    similarities = []
+    VERSIONS.each do |cmrt_version, version_data|
+      similarities << [cmrt_version, string_similarity(version_data, comparison_string)]
+    end
+    similarities
   end
 
   def string_similarity(str1, str2)
