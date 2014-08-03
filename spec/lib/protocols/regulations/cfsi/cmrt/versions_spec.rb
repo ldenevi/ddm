@@ -67,13 +67,13 @@ describe GSP::Protocols::Regulations::CFSI::CMRT::Versions do
     fp = File.join(File.dirname(__FILE__), 'versions', 'sample_cmrt_2.03a.xlsx.csv.0')
     expect(File.exists?(fp)).to be_true
     expect(versions).to respond_to :get_similarity_ratings
-    expect(versions.get_similarity_ratings(File.read(fp)).to be_kind_of Array
+    expect(versions.get_similarity_ratings(File.read(fp))).to be_kind_of Array
   end
 
   it "should list Jaro-Winkler distance ratings for string against all worksheet 0 versions" do
     fp = File.join(File.dirname(__FILE__), 'versions', 'sample_cmrt_2.03a.xlsx.csv.0')
     expect(File.exists?(fp)).to be_true
     expect(versions).to respond_to :get_jarow_distances
-    expect(versions.get_jarow_distances(File.read(fp)).to be_kind_of Array
+    expect(versions.get_jarow_distances(File.read(fp))).to be_kind_of Array
   end
 end
