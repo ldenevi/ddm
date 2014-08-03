@@ -47,7 +47,7 @@ describe Cfsi::Declaration do
     end
 
     it "should detect version" do
-      expect((class << Cfsi::Declaration; self; end)).to include GSP::Protocols::Regulations::CFSI::Versions
+      expect((class << Cfsi::Declaration; self; end)).to include GSP::Protocols::Regulations::CFSI::CMRT::Versions
       expect(Cfsi::Declaration).to respond_to :get_version
     end
 
