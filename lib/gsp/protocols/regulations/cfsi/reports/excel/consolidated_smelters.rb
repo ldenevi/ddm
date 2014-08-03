@@ -183,7 +183,7 @@ EOT
       data_style    = sheet.styles.add_style DATA_STYLE
       column_widths = info[:header].collect { |h| h[:column_width]}
       info[:data].each_with_index do |row, index|
-        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        sheet.add_row([index + 1] + row, :style => data_style, :types => :string, :widths => [6] + column_widths)
       end
       sheet
     end
@@ -255,7 +255,7 @@ EOT
       data_style    = sheet.styles.add_style DATA_STYLE
       column_widths = info[:header].collect { |h| h[:column_width]}
       info[:data].each_with_index do |row, index|
-        sheet_row = sheet.add_row([index + 1] + row[:row], :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        sheet_row = sheet.add_row([index + 1] + row[:row], :style => data_style, :types => :string, :widths => [6] + column_widths)
         # smelter_name_cell = sheet_row.cells[2]
         # sheet.add_comment(:author => "Consolidated From:\n", :text => row[:source_names], :ref => smelter_name_cell)
       end
@@ -292,7 +292,7 @@ EOT
       data_style    = sheet.styles.add_style DATA_STYLE
       column_widths = info[:header].collect { |h| h[:column_width]}
       info[:data].each_with_index do |row, index|
-        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        sheet.add_row([index + 1] + row, :style => data_style, :types => :string, :widths => [6] + column_widths)
       end
       sheet
     end
@@ -324,7 +324,7 @@ EOT
       data_style    = sheet.styles.add_style DATA_STYLE
       column_widths = info[:header].collect { |h| h[:column_width]}
       info[:data].each_with_index do |row, index|
-        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        sheet.add_row([index + 1] + row, :style => data_style, :types => :string, :widths => [6] + column_widths)
       end
       sheet
     end
@@ -363,7 +363,7 @@ EOT
       data_style    = sheet.styles.add_style DATA_STYLE
       column_widths = info[:header].collect { |h| h[:column_width]}
       info[:data].each_with_index do |row, index|
-        sheet.add_row([index + 1] + row, :styles => data_style, :types => :string, :widths => [6] + column_widths)
+        sheet.add_row([index + 1] + row, :style => data_style, :types => :string, :widths => [6] + column_widths)
       end
       sheet
     end
@@ -435,7 +435,7 @@ EOT
       # Data rows
       data_style    = sheet.styles.add_style DATA_STYLE
       info[:rows].each do |row|
-        sheet.add_row(row, :widths => [45, 15, 200], :styles => data_style, :types => :string)
+        sheet.add_row(row, :widths => [45, 15, 200], :style => data_style, :types => :string)
       end
       sheet.merge_cells "B23:C23"
       sheet.merge_cells "B26:C26"
@@ -454,8 +454,9 @@ EOT
       cfsi_compliant_smelter_list_worksheet(workbook)
       analytics_worksheet(workbook)
       workbook.add_worksheet(:name => "Definitions") do |sheet|
-        sheet.add_row([self.definition % CHECKMARK_CHAR], :types => :string)
+        style = sheet.styles.add_style(BRANDING_STYLE)
         sheet.merge_cells "A1:H200"
+        sheet.add_row([self.definition % CHECKMARK_CHAR], :types => :string, :style => style)
       end
       Axlsx::Package.new :workbook => workbook
     end
