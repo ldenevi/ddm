@@ -266,20 +266,20 @@ EOT
   :comment: 6
 :smelter_list:
   :start_row: 4
-  :metal: 0
-  :smelter_reference_list: 1
-  :standard_smelter_name: 2
-  :facility_location_country: 3
-  :smelter_id: 4
-  :facility_location_street_address: 5
-  :facility_location_city: 6
-  :facility_location_province: 7
-  :facility_contact_name: 8
-  :facility_contact_email: 9
-  :proposed_next_steps: 10
-  :mineral_source: 11
-  :mineral_source_location: 12
-  :comment: 13
+  :metal: 1
+  :smelter_reference_list: 2
+  :standard_smelter_name: 3
+  :facility_location_country: 4
+  :smelter_id: 5
+  :facility_location_street_address: 6
+  :facility_location_city: 7
+  :facility_location_province: 8
+  :facility_contact_name: 9
+  :facility_contact_email: 10
+  :proposed_next_steps: 11
+  :mineral_source: 12
+  :mineral_source_location: 13
+  :comment: 14
 :standard_smelter_name:
   :start_row: 2
   :metal: 0
