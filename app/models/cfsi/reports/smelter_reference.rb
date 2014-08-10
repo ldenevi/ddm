@@ -31,7 +31,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     else
       distances = get_gsp_standard_name_matches(smelter, args)
       furthest  = distances.keys.max
-      (furthest.to_f > 0.84) ? ["(#{furthest}) " + distances[furthest].first] : [smelter.standard_smelter_name]
+      (furthest.to_f > 0.84) ? distances[furthest] : [smelter.standard_smelter_name]
     end
   end
 
