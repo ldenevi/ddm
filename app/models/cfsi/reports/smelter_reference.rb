@@ -44,6 +44,8 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
       str1 = begin
         if smelter_name =~ /Perth Mint/
           "Western Australian Mint trading as The Perth Mint"
+        elsif smelter_name.gsub(' ', '') =~ /F&X/
+          "F&X Electro-Materials Ltd."
         else
           smelter_name
         end
