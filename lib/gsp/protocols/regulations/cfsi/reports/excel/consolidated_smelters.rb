@@ -450,9 +450,9 @@ EOT
       all_reported_smelters_worksheet(workbook)
       consolidated_smelters_worksheet(workbook)
       rejected_entries_worksheet(workbook)
-      smelter_compliance_statuses_worksheet(workbook)
-      cfsi_compliant_smelter_list_worksheet(workbook)
-      analytics_worksheet(workbook)
+      # smelter_compliance_statuses_worksheet(workbook)
+      # cfsi_compliant_smelter_list_worksheet(workbook)
+      # analytics_worksheet(workbook)
       workbook.add_worksheet(:name => "Definitions") do |sheet|
         style = sheet.styles.add_style(BRANDING_STYLE)
         sheet.merge_cells "A1:H200"
