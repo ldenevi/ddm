@@ -31,7 +31,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     else
       distances = get_gsp_standard_name_matches(smelter, args)
       furthest  = distances.keys.max
-      (furthest.to_f > 0.0) ? distances[furthest] : [smelter.standard_smelter_name]
+      (furthest.to_f > 0.84) ? ["(#{furthest}) " + distances[furthest].first] : [smelter.standard_smelter_name]
     end
   end
 
@@ -41,19 +41,26 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     distances = {}
     smelter_name = smelter.standard_smelter_name.to_s.split("\n").sort_by { |e| e.size }.last
     @@references.each do |ref|
-      dist = begin
-        if args[:use_key_terms]
-          ds = []
-          ref.key_terms.each { |key_term| ds << jaro_winkler.getDistance(smelter_name, key_term) }
-          ds.average + jaro_winkler.getDistance(smelter_name, ref.standard_name)
+      str1 = begin
+        if smelter_name =~ /Perth Mint/
+          "Western Australian Mint trading as The Perth Mint"
         else
-          jaro_winkler.getDistance(smelter_name, ref.standard_name)
+          smelter_name
         end
       end
+      str1 = strip_to_key_terms(str1)
+      str2 = strip_to_key_terms(ref.standard_name)
+      dist = jaro_winkler.getDistance(str1, str2)
       distances[dist] = [] if distances[dist].nil?
       distances[dist] << ref.standard_name
     end
     distances
+  end
+
+  def self.strip_to_key_terms(string)
+    legal_words = %w(pt corp corporation co company ltd ltda limited llc spa sa ag gmbh inc pllc kg jsc pte)
+    regexp = Regexp.new('\b' + (['\W'] + legal_words).join('\b|\b') + '\b')
+    string.gsub(/[.,]/,'').downcase.gsub(regexp, '')
   end
 
 end
