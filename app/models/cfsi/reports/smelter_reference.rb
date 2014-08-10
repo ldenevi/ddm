@@ -46,6 +46,12 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "Western Australian Mint trading as The Perth Mint"
         elsif smelter_name.gsub(' ', '') =~ /F&X/
           "F&X Electro-Materials Ltd."
+        elsif smelter_name.downcase =~ /rfh/ && smelter.facility_location_country.downcase == 'china'
+          "RFH Tantalum Smeltry Co., Ltd"
+        elsif smelter_name.downcase.gsub(' ', '').gsub('.','') =~ /hcstarck/
+          "H.C. Starck Group"
+        elsif smelter_name =~ /PT Timah/ && smelter.smelter_id == 'CID001482'
+          "PT Timah"
         else
           smelter_name
         end
