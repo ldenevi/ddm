@@ -55,6 +55,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "PT Timah"
         elsif smelter_name.downcase =~ /johnson matthey/
           perform_strip_to_key_term = false
+          smelter_name
         elsif smelter_name.downcase =~ /xstrata/
           "CCR Refinery Glencore Canada Corporation"
         elsif smelter_name.downcase =~ /thaisarco/
