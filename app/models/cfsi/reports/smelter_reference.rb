@@ -40,8 +40,8 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     jaro_winkler = FuzzyStringMatch::JaroWinkler.create(:native)
     distances = {}
     smelter_name = smelter.standard_smelter_name.to_s.split("\n").sort_by { |e| e.size }.last
-    perform_strip_to_key_term = true
     @@references.each do |ref|
+      perform_strip_to_key_term = true
       str1 = begin
         if smelter_name =~ /Perth Mint/
           "Western Australian Mint trading as The Perth Mint"
