@@ -118,17 +118,17 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "Gejiu Zi-Li"
         elsif smelter_name.downcase =~ /kai/ && smelter_name.downcase =~ /unita|union/
           "Kai Unita Trade Limited Liability Company"
-        elsif smelter_name.downcase =~ /msc/ && smelter_name.facility_location_country.downcase =~ /malaysia/
+        elsif smelter_name.downcase =~ /msc/ && smelter.facility_location_country.downcase =~ /malaysia/
           "Malaysia Smelting Corporation (MSC)"
-        elsif smelter_name.downcase =~ /minsur|funsur|amalgamated metal/ && smelter_name.facility_location_country.downcase =~ /peru/
+        elsif smelter_name.downcase =~ /minsur|funsur|amalgamated metal/ && smelter.facility_location_country.downcase =~ /peru/
           "Minsur"
-        elsif smelter_name.downcase =~ /ulba/ && smelter_name.facility_location_country.downcase =~ /kazakhstan/
+        elsif smelter_name.downcase =~ /ulba/ && smelter.facility_location_country.downcase =~ /kazakhstan/
           "Ulba"
         elsif smelter_name.downcase =~ /china minmetal/
           "China Minmetals Nonferrous Metals Co Ltd"
         elsif smelter_name.downcase.gsub(/\W/, '') =~ /seadragon|grandsea/
           "Ganzhou Seadragon W & Mo Co., Ltd."
-        elsif smelter_name.downcase.gsub(/\W/, '') =~ /rareearth/ && smelter_name.facility_location_country.downcase =~ /china/
+        elsif smelter_name.downcase.gsub(/\W/, '') =~ /rareearth/ && smelter.facility_location_country.downcase =~ /china/
           "Ganzhou Non-ferrous Metals Smelting Co., Ltd."
         else
           smelter_name
