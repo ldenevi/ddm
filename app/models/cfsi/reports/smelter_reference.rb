@@ -40,6 +40,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     jaro_winkler = FuzzyStringMatch::JaroWinkler.create(:native)
     distances = {}
     smelter_name = smelter.standard_smelter_name.to_s.split("\n").sort_by { |e| e.size }.last
+    perform_strip_to_key_term = true
     @@references.each do |ref|
       str1 = begin
         if smelter_name =~ /Perth Mint/
@@ -52,12 +53,20 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "H.C. Starck Group"
         elsif smelter_name =~ /PT Timah/ && smelter.smelter_id == 'CID001482'
           "PT Timah"
+        elsif smelter_name.downcase =~ /johnson matthey/
+          perform_strip_to_key_term = false
+        elsif smelter_name.downcase =~ /xstrata/
+          "CCR Refinery Glencore Canada Corporation"
+        elsif smelter_name.downcase =~ /thaisarco/
+          "Thailand Smelting and Refining Co. Ltd."
+        elsif smelter_name.downcase =~ /ati\b/ && smelter.metal.downcase == 'tungsten'
+          "Kennametal Huntsville"
         else
           smelter_name
         end
       end
-      str1 = strip_to_key_terms(str1)
-      str2 = strip_to_key_terms(ref.standard_name)
+      str1 = strip_to_key_terms(str1) if perform_strip_to_key_term
+      str2 = strip_to_key_terms(ref.standard_name) if perform_strip_to_key_term
       dist = jaro_winkler.getDistance(str1, str2)
       distances[dist] = [] if distances[dist].nil?
       distances[dist] << ref.standard_name
