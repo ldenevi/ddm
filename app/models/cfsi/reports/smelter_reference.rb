@@ -58,10 +58,14 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           smelter_name
         elsif smelter_name.downcase =~ /xstrata/
           "CCR Refinery Glencore Canada Corporation"
-        elsif smelter_name.downcase =~ /thaisarco/
-          "Thailand Smelting and Refining Co. Ltd."
+        elsif smelter_name.downcase =~ /thailand/ && smelter_name.downcase =~ /smelting/ && smelter_name.downcase =~ /refining/
+          "Thaisarco"
         elsif smelter_name.downcase =~ /ati\b/ && smelter.metal.downcase == 'tungsten'
           "Kennametal Huntsville"
+        elsif smelter_name.downcase =~ /nusantara/
+          smelter_name
+        elsif smelter_name.downcase =~ /cookson/
+          "Alpha"
         else
           smelter_name
         end
