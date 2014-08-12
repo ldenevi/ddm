@@ -196,8 +196,7 @@ EOT
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
 
-        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
-               smelter.source_of_smelter_id]
+        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id]
 
         # Reject row with invalid Smelter ID value
         rejection_reasons = []
