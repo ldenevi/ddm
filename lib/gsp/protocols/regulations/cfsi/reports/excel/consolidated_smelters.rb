@@ -196,7 +196,7 @@ EOT
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
 
-        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id]
+        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
 
         # Reject row with invalid Smelter ID value
         rejection_reasons = []
@@ -240,7 +240,7 @@ EOT
                    {:name => "Source of Smelter ID", :column_width => 15},
                    {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
                    {:name => "Source Files", :column_width => 60}],
-        :data => rows.sort_by { |r| [r[:row][0], r[:row][2], r[:row][1]] }}
+        :data => rows.sort_by { |r| [r[:row][0].downcase, r[:row][2].downcase, r[:row][1].downcase] }}
     end
 
     def consolidated_smelters_worksheet(workbook)
