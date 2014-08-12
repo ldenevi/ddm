@@ -49,7 +49,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "F&X Electro-Materials Ltd."
         elsif smelter_name =~ /rfh/ && smelter.facility_location_country.downcase == 'china'
           "RFH Tantalum Smeltry Co., Ltd"
-        elsif smelter_name.gsub(' ', '').gsub('.','') =~ /hcstarck/
+        elsif smelter_name.gsub(/\W/,'') =~ /hcstarck/
           "H.C. Starck Group"
         elsif smelter_name =~ /pt timah/ && smelter.smelter_id == 'CID001482'
           "PT Timah"
