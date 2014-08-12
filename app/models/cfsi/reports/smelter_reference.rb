@@ -155,7 +155,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
   end
 
   def self.strip_to_key_terms(string)
-    legal_words = %w(pt corp corporation co company ltd ltda limited llc spa sa ag gmbh inc pllc kg jsc pte)
+    legal_words = %w(pt corp corporation co company ltd ltda limited llc spa sa ag gmbh inc pllc kg jsc pte industry ind)
     regexp = Regexp.new('\b' + (['\W'] + legal_words).join('\b|\b') + '\b')
     string.gsub(/[.,]/,'').downcase.gsub(regexp, '')
   end
