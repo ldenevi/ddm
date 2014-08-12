@@ -39,98 +39,98 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     @@references ||= select([:standard_name, :key_terms]).all
     jaro_winkler = FuzzyStringMatch::JaroWinkler.create(:native)
     distances = {}
-    smelter_name = smelter.standard_smelter_name.to_s
+    smelter_name = smelter.standard_smelter_name.to_s.downcase
     @@references.each do |ref|
       perform_strip_to_key_term = true
       str1 = begin
-        if smelter_name =~ /Perth Mint/ || smelter_name.downcase =~ /agr matthey/
+        if smelter_name =~ /Perth Mint/ || smelter_name =~ /agr matthey/
           "Western Australian Mint trading as The Perth Mint"
         elsif smelter_name.gsub(' ', '') =~ /F&X/
           "F&X Electro-Materials Ltd."
-        elsif smelter_name.downcase =~ /rfh/ && smelter.facility_location_country.downcase == 'china'
+        elsif smelter_name =~ /rfh/ && smelter.facility_location_country.downcase == 'china'
           "RFH Tantalum Smeltry Co., Ltd"
-        elsif smelter_name.downcase.gsub(' ', '').gsub('.','') =~ /hcstarck/
+        elsif smelter_name.gsub(' ', '').gsub('.','') =~ /hcstarck/
           "H.C. Starck Group"
         elsif smelter_name =~ /PT Timah/ && smelter.smelter_id == 'CID001482'
           "PT Timah"
-        elsif smelter_name.downcase =~ /johnson matthey/
+        elsif smelter_name =~ /johnson matthey/
           perform_strip_to_key_term = false
-          if !(smelter_name.downcase =~ /ltd|limited/) && smelter.facility_location_country.downcase =~ /united states/
+          if !(smelter_name =~ /ltd|limited/) && smelter.facility_location_country.downcase =~ /united states/
             "Johnson Matthey Inc"
           else
             smelter_name
           end
-        elsif smelter_name.downcase =~ /xstrata/
+        elsif smelter_name =~ /xstrata/
           "CCR Refinery Glencore Canada Corporation"
-        elsif smelter_name.downcase =~ /thailand/ && smelter_name.downcase =~ /smelting/ && smelter_name.downcase =~ /refining/
+        elsif smelter_name =~ /thailand/ && smelter_name =~ /smelting/ && smelter_name =~ /refining/
           "Thaisarco"
-        elsif smelter_name.downcase =~ /ati\b/ && smelter.metal.downcase == 'tungsten'
+        elsif smelter_name =~ /ati\b/ && smelter.metal.downcase == 'tungsten'
           "Kennametal Huntsville"
-        elsif smelter_name.downcase =~ /nusantara/
+        elsif smelter_name =~ /nusantara/
           smelter_name
-        elsif smelter_name.downcase =~ /cookson/
+        elsif smelter_name =~ /cookson/
           "Alpha"
-        elsif smelter_name.downcase =~ /aurubis/
+        elsif smelter_name =~ /aurubis/
           "Aurubis AG"
-        elsif smelter_name.downcase =~ /asahi|amagasaki/
+        elsif smelter_name =~ /asahi|amagasaki/
           "Asahi Pretec Corporation"
-        elsif smelter_name.downcase =~ /\bdowa\b/
+        elsif smelter_name =~ /\bdowa\b/
           "Dowa"
-        elsif smelter_name.downcase =~ /jx nippon|pan pacific copper/
+        elsif smelter_name =~ /jx nippon|pan pacific copper/
           "JX Nippon Mining & Metals Co., Ltd."
-        elsif smelter_name.downcase =~ /\bmitsui\b/
+        elsif smelter_name =~ /\bmitsui\b/
           "Mitsui Mining and Smelting Co., Ltd."
-        elsif smelter_name.downcase =~ /\btanaka\b/
+        elsif smelter_name =~ /\btanaka\b/
           "Tanaka Kikinzoku Kogyo K.K."
-        elsif smelter_name.downcase =~ /tokuriki/
+        elsif smelter_name =~ /tokuriki/
           "Tokuriki Honten Co., Ltd"
-        elsif smelter_name.downcase =~ /central/ && smelter_name.downcase =~ /bank/ && smelter_name.downcase =~ /philippines/
+        elsif smelter_name =~ /central/ && smelter_name =~ /bank/ && smelter_name =~ /philippines/
           "Bangko Sentral ng Pilipinas (Central Bank of the Philippines)"
-        elsif smelter_name.downcase =~ /caridad/ && smelter.facility_location_country.downcase == 'mexico'
+        elsif smelter_name =~ /caridad/ && smelter.facility_location_country.downcase == 'mexico'
           "Caridad"
-        elsif smelter_name.downcase =~ /\bsempsa\b/
+        elsif smelter_name =~ /\bsempsa\b/
           "SEMPSA Joyera Platera SA"
-        elsif smelter_name.downcase =~ /\bmetalor\b/
-          if smelter_name.downcase =~ /hong kong/
+        elsif smelter_name =~ /\bmetalor\b/
+          if smelter_name =~ /hong kong/
             "Metalor Technologies (Hong Kong) Ltd"
-          elsif smelter_name.downcase =~ /singapore/
+          elsif smelter_name =~ /singapore/
             "Metalor Technologies (Singapore) Pte. Ltd."
-          elsif smelter_name.downcase =~ /\busa\b/
+          elsif smelter_name =~ /\busa\b/
             "Metalor USA Refining Corporation"
           else
             "Metalor Technologies SA"
           end
-        elsif smelter_name.downcase =~ /\bsolar\b/
+        elsif smelter_name =~ /\bsolar\b/
           "Solar Applied Materials Technology Corp."
-        elsif smelter_name.downcase =~ /\bnavoi\b/
+        elsif smelter_name =~ /\bnavoi\b/
           "Navoi Mining and Metallurgical Combinat"
         elsif smelter.facility_location_country.downcase =~ /bolivia/
-          if smelter_name.downcase =~ /vinto/ || smelter_name.downcase =~ /enaf/
+          if smelter_name =~ /vinto/ || smelter_name =~ /enaf/
             "EM Vinto"
           else
             smelter_name
           end
-        elsif smelter_name.downcase.gsub(/\W/, '') =~ /yunnantin|ytcl/
+        elsif smelter_name.gsub(/\W/, '') =~ /yunnantin|ytcl/
           "Yunnan Tin Company, Ltd."
-        elsif smelter_name.downcase =~ /china tin/
+        elsif smelter_name =~ /china tin/
           "Liuzhou China Tin"
-        elsif smelter_name.downcase.gsub(/\W/, '') =~ /zili/ && smelter.facility_location_country.downcase =~ /china/
+        elsif smelter_name.gsub(/\W/, '') =~ /zili/ && smelter.facility_location_country.downcase =~ /china/
           "Gejiu Zi-Li"
-        elsif smelter_name.downcase =~ /kai/ && smelter_name.downcase =~ /unita|union/
+        elsif smelter_name =~ /kai/ && smelter_name =~ /unita|union/
           "Kai Unita Trade Limited Liability Company"
-        elsif smelter_name.downcase =~ /msc/ && smelter.facility_location_country.downcase =~ /malaysia/
+        elsif smelter_name =~ /msc/ && smelter.facility_location_country.downcase =~ /malaysia/
           "Malaysia Smelting Corporation (MSC)"
-        elsif smelter_name.downcase =~ /minsur|funsur|amalgamated metal/ && smelter.facility_location_country.downcase =~ /peru/
+        elsif smelter_name =~ /minsur|funsur|amalgamated metal/ && smelter.facility_location_country.downcase =~ /peru/
           "Minsur"
-        elsif smelter_name.downcase =~ /ulba/ && smelter.facility_location_country.downcase =~ /kazakhstan/
+        elsif smelter_name =~ /ulba/ && smelter.facility_location_country.downcase =~ /kazakhstan/
           "Ulba"
-        elsif smelter_name.downcase =~ /china minmetal/
+        elsif smelter_name =~ /china minmetal/
           "China Minmetals Nonferrous Metals Co Ltd"
-        elsif smelter_name.downcase.gsub(/\W/, '') =~ /seadragon|grandsea/
+        elsif smelter_name.gsub(/\W/, '') =~ /seadragon|grandsea/
           "Ganzhou Seadragon W & Mo Co., Ltd."
-        elsif smelter_name.downcase.gsub(/\W/, '') =~ /rareearth/ && smelter.facility_location_country.downcase =~ /china/
+        elsif smelter_name.gsub(/\W/, '') =~ /rareearth/ && smelter.facility_location_country.downcase =~ /china/
           "Ganzhou Non-ferrous Metals Smelting Co., Ltd."
-        elsif smelter_name.downcase.gsub(/\W/, '') =~ /umicore/
+        elsif smelter_name.gsub(/\W/, '') =~ /umicore/
           if smelter.facility_location_country.downcase =~ /brazil/
             "Umicore Brasil Ltda"
           elsif smelter.facility_location_country.downcase =~ /thailand/
