@@ -39,7 +39,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     @@references ||= select([:standard_name, :key_terms]).all
     jaro_winkler = FuzzyStringMatch::JaroWinkler.create(:native)
     distances = {}
-    smelter_name = smelter.standard_smelter_name.to_s.split("\n").sort_by { |e| e.size }.last
+    smelter_name = smelter.standard_smelter_name.to_s
     @@references.each do |ref|
       perform_strip_to_key_term = true
       str1 = begin
@@ -142,6 +142,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           smelter_name
         end
       end
+      str1 = str1.split("\n").sort_by { |e| e.size }.last
       str1 = perform_strip_to_key_term ? strip_to_key_terms(str1) : str1
       str2 = perform_strip_to_key_term ? strip_to_key_terms(ref.standard_name) : ref.standard_name
       dist = jaro_winkler.getDistance(str1.downcase, str2.downcase)
