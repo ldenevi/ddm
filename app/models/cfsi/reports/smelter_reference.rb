@@ -43,15 +43,15 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
     @@references.each do |ref|
       perform_strip_to_key_term = true
       str1 = begin
-        if smelter_name =~ /Perth Mint/ || smelter_name =~ /agr matthey/
+        if smelter_name =~ /perth mint/ || smelter_name =~ /agr matthey/
           "Western Australian Mint trading as The Perth Mint"
-        elsif smelter_name.gsub(' ', '') =~ /F&X/
+        elsif smelter_name.gsub(' ', '') =~ /f&x/
           "F&X Electro-Materials Ltd."
         elsif smelter_name =~ /rfh/ && smelter.facility_location_country.downcase == 'china'
           "RFH Tantalum Smeltry Co., Ltd"
         elsif smelter_name.gsub(' ', '').gsub('.','') =~ /hcstarck/
           "H.C. Starck Group"
-        elsif smelter_name =~ /PT Timah/ && smelter.smelter_id == 'CID001482'
+        elsif smelter_name =~ /pt timah/ && smelter.smelter_id == 'CID001482'
           "PT Timah"
         elsif smelter_name =~ /johnson matthey/
           perform_strip_to_key_term = false
