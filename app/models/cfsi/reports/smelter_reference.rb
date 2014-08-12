@@ -144,7 +144,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
       end
       str1 = perform_strip_to_key_term ? strip_to_key_terms(str1) : str1
       str2 = perform_strip_to_key_term ? strip_to_key_terms(ref.standard_name) : ref.standard_name
-      dist = jaro_winkler.getDistance(str1, str2)
+      dist = jaro_winkler.getDistance(str1.downcase, str2.downcase)
       distances[dist] = [] if distances[dist].nil?
       distances[dist] << ref.standard_name
     end
