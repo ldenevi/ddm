@@ -132,6 +132,8 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "Ganzhou Seadragon W & Mo Co., Ltd."
         elsif smelter_name.gsub(/\W/, '') =~ /rareearth/ && smelter.facility_location_country.downcase =~ /china/
           "Ganzhou Non-ferrous Metals Smelting Co., Ltd."
+        elsif smelter_name.gsub(/\W/, '') =~ /almt/ && smelter.facility_location_country.downcase =~ /japan/
+          "A.L.M.T. Corp."
         elsif smelter_name.gsub(/\W/, '') =~ /umicore/
           if smelter.facility_location_country.downcase =~ /brazil/
             "Umicore Brasil Ltda"
