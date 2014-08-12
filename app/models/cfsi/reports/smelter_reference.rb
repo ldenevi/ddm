@@ -97,7 +97,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
             "Metalor Technologies (Hong Kong) Ltd"
           elsif smelter_name =~ /singapore/
             "Metalor Technologies (Singapore) Pte. Ltd."
-          elsif smelter_name =~ /\busa\b/
+          elsif smelter_name =~ /\busa\b/ || smelter.facility_location_country.downcase =~ /united states/
             "Metalor USA Refining Corporation"
           else
             "Metalor Technologies SA"
