@@ -136,7 +136,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           elsif smelter.facility_location_country.downcase =~ /thailand/
             "Umicore Precious Metals Thailand"
           else
-            smelter_name
+            "Umicore SA Business Unit Precious Metals Refining"
           end
         else
           smelter_name

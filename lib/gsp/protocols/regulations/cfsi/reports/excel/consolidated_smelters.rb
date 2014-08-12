@@ -241,7 +241,7 @@ EOT
                    {:name => "Source of Smelter ID", :column_width => 15},
                    {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
                    {:name => "Source Files", :column_width => 60}],
-        :data => rows.sort_by { |r| [r[0], r[2], r[1]] }}
+        :data => rows.sort_by { |r| [r[:row][0], r[:row][2], r[:row][1]] }}
     end
 
     def consolidated_smelters_worksheet(workbook)
