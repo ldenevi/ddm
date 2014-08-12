@@ -57,6 +57,8 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           perform_strip_to_key_term = false
           if !(smelter_name =~ /ltd|limited/) && smelter.facility_location_country.downcase =~ /united states/
             "Johnson Matthey Inc"
+          elsif smelter_name =~ /canada/
+            "Johnson Matthey Ltd"
           else
             smelter_name
           end
