@@ -86,7 +86,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "Tanaka Kikinzoku Kogyo K.K."
         elsif smelter_name =~ /tokuriki/
           "Tokuriki Honten Co., Ltd"
-        elsif smelter_name =~ /central/ && smelter_name =~ /bank/ && smelter_name =~ /philippines/
+        elsif smelter_name =~ /central/ && smelter_name =~ /bank/ && smelter.facility_location_country.downcase =~ /philippines/
           "Bangko Sentral ng Pilipinas (Central Bank of the Philippines)"
         elsif smelter_name =~ /caridad/ && smelter.facility_location_country.downcase == 'mexico'
           "Caridad"
