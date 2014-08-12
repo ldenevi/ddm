@@ -36,7 +36,7 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   end
 
   def vendor_key
-    [metal.to_s.downcase, gsp_standard_name, smelter_id.to_s.downcase]
+    [metal, gsp_standard_name, smelter_id].map { |e| e.to_s.downcase }
   end
 
   def has_valid_smelter_id?
