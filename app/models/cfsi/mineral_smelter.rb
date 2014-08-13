@@ -32,7 +32,7 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   end
 
   def gsp_standard_name
-    Cfsi::Reports::SmelterReference.get_standard_names_for(self).first
+    @gsp_standard_name ||= Cfsi::Reports::SmelterReference.get_standard_names_for(self).first
   end
 
   def vendor_key
