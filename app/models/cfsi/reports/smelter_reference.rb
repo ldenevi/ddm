@@ -36,7 +36,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
   end
 
   def self.get_gsp_standard_name_matches(smelter, args = {:use_key_terms => true})
-    @@references ||= select([:standard_name, :key_terms]).all
+    @@references ||= select([:standard_name]).all
     jaro_winkler = FuzzyStringMatch::JaroWinkler.create(:native)
     distances = {}
     smelter_name = smelter.standard_smelter_name.to_s.downcase

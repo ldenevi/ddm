@@ -191,37 +191,21 @@ EOT
     #
     # Consolidated Smelters worksheet
     def consolidated_smelters
-      consolidated_smelters = {}
       @rejected_entries = []
-      puts "=================> Running 'consolidated_smelters' <======================="
-      puts "self.sorted_smelters #{self.sorted_smelters.size}"
+      @clean_entries = []
+
+      puts "Splitting clean and dirty entries..."
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
-        putc '.'
-        row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
-
-        # Reject row with invalid Smelter ID value
         rejection_reasons = []
         rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
         rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
         rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
         rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
         rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
-
         if rejection_reasons.empty?
           putc '+'
-          smelter_key = smelter.vendor_key
-          consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
-          consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
-          row = row + [consolidated_smelters[smelter_key][:declaration_filenames].uniq.size, consolidated_smelters[smelter_key][:declaration_filenames].uniq.join(", ")]
-          consolidated_smelters[smelter_key][:source_names] << smelter.standard_smelter_name
-          row = row + [consolidated_smelters[smelter_key][:source_names].join("\n")]
-
-          # Only update declaration information of same smelter (based on smelter_key), if there is more provided data
-          if row[0...-2].join('').size > consolidated_smelters[smelter_key][:data_length]
-            consolidated_smelters[smelter_key][:data] = row
-          end
-          consolidated_smelters[smelter_key][:data_length] = row[0...-3].join('').size
+          @clean_entries << data
         else
           putc '-'
           @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
@@ -229,11 +213,48 @@ EOT
                                 rejection_reasons.join(', '), data[:filename],
                                 data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
         end
-
-
       end
+
+      grouped_smelters = {}
+      # Load GSP-corrected standard smelter name
+      threads = []
+      @clean_entries.in_groups(4, false).each do |grouped|
+        threads << Thread.new do
+          grouped.each do |data|
+            putc '*'
+            data[:smelter].gsp_standard_name
+          end
+        end
+      end
+      threads.each { |t| t.join }
+
+      @clean_entries.each do |data|
+        putc '.'
+        smelter = data[:smelter]
+        smelter_key = smelter.vendor_key
+        row = [smelter.metal, smelter.gsp_standard_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
+        grouped_smelters[smelter_key] = {:group_row => [], :individual_entries => [], :declaration_filenames => [], :reported_countries => []} if grouped_smelters[smelter_key].nil?
+        grouped_smelters[smelter_key][:individual_entries] << row + [data[:file_name]]
+        grouped_smelters[smelter_key][:declaration_filenames] << data[:file_name]
+        grouped_smelters[smelter_key][:reported_countries] << smelter.facility_location_country
+      end
+      grouped_smelters.each do |vendor_key, data|
+        putc '-'
+        country = begin
+          country_tally = {}
+          reported_countries = data[:reported_countries].map(&:downcase)
+          reported_countries.uniq.each do |country|
+            country_tally.merge!({reported_countries.count(country) => country.upcase})
+          end
+          country_tally[country_tally.keys.max]
+        end
+        an_entry = data[:individual_entries].first
+        source_cmrts = data[:declaration_filenames].uniq.sort
+        data[:group_row] = [an_entry[0], an_entry[1], country, an_entry[3], an_entry[4], source_cmrts.size, source_cmrts.join(', ')]
+      end
+
       rows = []
-      consolidated_smelters.each { |key, val| rows << {:row => val[:data][0...-1], :source_names => val[:data][-1]} }
+      grouped_smelters.each { |key, val| rows << {:row => val[:group_row]} }
       putc '|'
       {:name => "Consolidated Smelters",
        :header => [{:name => "Metal", :column_width => 15},
