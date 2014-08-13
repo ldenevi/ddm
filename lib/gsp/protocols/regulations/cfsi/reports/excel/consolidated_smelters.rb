@@ -193,9 +193,11 @@ EOT
     def consolidated_smelters
       consolidated_smelters = {}
       @rejected_entries = []
+      puts "=================> Running 'consolidated_smelters' <======================="
+      puts "self.sorted_smelters #{self.sorted_smelters.size}"
       self.sorted_smelters.each do |data|
         smelter = data[:smelter]
-
+        putc '.'
         row = [smelter.metal, smelter.gsp_standard_name.to_s, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
 
         # Reject row with invalid Smelter ID value
@@ -207,6 +209,7 @@ EOT
         rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
 
         if rejection_reasons.empty?
+          putc '+'
           smelter_key = smelter.vendor_key
           consolidated_smelters[smelter_key] = {:data => [], :declaration_filenames => [], :data_length => 0, :source_names => []} if consolidated_smelters[smelter_key].nil?
           consolidated_smelters[smelter_key][:declaration_filenames] << data[:file_name]
@@ -220,6 +223,7 @@ EOT
           end
           consolidated_smelters[smelter_key][:data_length] = row[0...-3].join('').size
         else
+          putc '-'
           @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
                                 smelter.facility_location_country, smelter.smelter_id,
                                 rejection_reasons.join(', '), data[:filename],
@@ -230,7 +234,7 @@ EOT
       end
       rows = []
       consolidated_smelters.each { |key, val| rows << {:row => val[:data][0...-1], :source_names => val[:data][-1]} }
-
+      putc '|'
       {:name => "Consolidated Smelters",
        :header => [{:name => "Metal", :column_width => 15},
                    {:name => "Standard Smelter Names", :column_width => 35},
