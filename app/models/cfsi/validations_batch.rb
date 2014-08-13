@@ -7,10 +7,10 @@ class Cfsi::ValidationsBatch < ActiveRecord::Base
   validates :organization, :presence => true
   validates :user, :presence => true
 
-  has_many :unidentified_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NULL"
+  has_many :unidentified_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "cfsi_cmrt_validations.vendor_id IS NULL"
   attr_accessible :unidentified_cmrt_validations
 
-  has_many :vendor_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "vendor_id IS NOT NULL", :order => :created_at
+  has_many :vendor_cmrt_validations, :class_name => 'Cfsi::CmrtValidation', :conditions => "cfsi_cmrt_validations.vendor_id IS NOT NULL", :order => :created_at
   attr_accessible :vendor_cmrt_validations
 
   has_many :cmrt_validations
