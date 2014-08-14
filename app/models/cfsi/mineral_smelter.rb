@@ -42,7 +42,15 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   end
 
   def has_valid_smelter_id?
-    !(smelter_id.match(/^[1-4][A-Z]{3}[0-9]{3}$/) || smelter_id.match(/^CID/)).nil?
+    has_valid_v2_smelter_id? || has_valid_v3_smelter_id?
+  end
+
+  def has_valid_v2_smelter_id?
+    !smelter_id.match(/^[1-4][A-Z]{3}[0-9]{3}$/).nil?
+  end
+
+  def has_valid_v3_smelter_id?
+    !smelter_id.match(/^CID/).nil?
   end
 
   def has_valid_non_smelter_id?

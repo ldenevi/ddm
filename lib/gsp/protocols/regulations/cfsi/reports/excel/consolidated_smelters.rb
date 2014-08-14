@@ -199,6 +199,7 @@ EOT
         smelter = data[:smelter]
         rejection_reasons = []
         rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
+        rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
         rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
         rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
         rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
@@ -209,7 +210,7 @@ EOT
         else
           putc '-'
           @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
-                                smelter.facility_location_country, smelter.smelter_id,
+                                smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
                                 rejection_reasons.join(', '), data[:filename],
                                 data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
         end
@@ -294,7 +295,8 @@ EOT
                    {:name => "Smelter Reference List", :column_width => 35},
                    {:name => "Standard Smelter Names", :column_width => 35},
                    {:name => "Smelter Facility Location Country", :column_width => 35},
-                   {:name => "Smelter ID", :column_width => 25},
+                   {:name => "Smelter ID\nVersion 2", :column_width => 25},
+                   {:name => "Smelter ID\nVersion 3", :column_width => 25},
                    {:name => "Rejection Reason(s)", :column_width => 35},
                    {:name => "Source CFSI CMRT File Names", :column_width => 15},
                    {:name => "Company Name", :column_width => 35},
