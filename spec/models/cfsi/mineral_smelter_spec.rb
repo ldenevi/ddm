@@ -20,7 +20,7 @@ describe Cfsi::MineralSmelter do
       # Helper methods
       expect(mineral_smelter).to respond_to :smelter_id
       expect(mineral_smelter).to respond_to :vendor_key
-      expect(mineral_smelter.vendor_key).to eq ["gold", "western australian mint trading as the perth mint", "australia"]
+      expect(mineral_smelter.vendor_key).to eq ["gold", "western australian mint trading as the perth mint", "1aus046"]
 
       expect(mineral_smelter).to respond_to :has_valid_smelter_id?
       expect(mineral_smelter).to respond_to :has_valid_non_smelter_id?
@@ -101,7 +101,8 @@ describe Cfsi::MineralSmelter do
     expect(ms.v3_smelter_id).to eq 'CID000035'
   end
 
-
-
-
+  it "should validate v2_smelter_id" do
+    ms = Cfsi::MineralSmelter.new
+    expect(ms).to respond_to :is_v2_smelter_id_country_code_valid?
+  end
 end

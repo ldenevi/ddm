@@ -14,6 +14,8 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   include GSP::Protocols::Regulations::CFSI::CMRT::V2ToV3IdTranslation
   after_initialize :set_v3_smelter_id_from_v2_smelter_id
 
+  include GSP::Protocols::Regulations::CFSI::CMRT::ValidateV2SmelterIdCountryCode
+
   def smelter_id=(value)
     if value.to_s.match(/^CID./)
       self.v3_smelter_id = value.to_s.strip
@@ -40,7 +42,15 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   end
 
   def has_valid_smelter_id?
-    !(smelter_id.match(/^[1-4][A-Z]{3}[0-9]{3}$/) || smelter_id.match(/^CID/)).nil?
+    has_valid_v2_smelter_id? || has_valid_v3_smelter_id?
+  end
+
+  def has_valid_v2_smelter_id?
+    !smelter_id.match(/^[1-4][A-Z]{3}[0-9]{3}$/).nil?
+  end
+
+  def has_valid_v3_smelter_id?
+    !smelter_id.match(/^CID/).nil?
   end
 
   def has_valid_non_smelter_id?

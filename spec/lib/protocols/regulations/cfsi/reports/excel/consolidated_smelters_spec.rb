@@ -96,7 +96,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     batch = Cfsi::ValidationsBatch.new
 
     Dir.glob(File.join(File.dirname(__FILE__), 'sample_data', 'consolidated_smelters_worksheet', '*')).each do |cmrt_folder|
-    Dir.glob(File.join('/home/syreethus/Desktop/gsp/spec/lib/protocols/regulations/cfsi/reports/excel', 'sample_data', 'consolidated_smelters_worksheet', '*')).each do |cmrt_folder|
       dec = Cfsi::Declaration.generate_from_csv_file_paths Dir.glob(File.join(cmrt_folder, '*'))
       cmrt = Cfsi::Cmrt.new(:declaration => dec)
       spreadsheet = Spreadsheet.new(:filename => cmrt_folder.split('/').last)
