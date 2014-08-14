@@ -219,7 +219,7 @@ EOT
       grouped_smelters = {}
       # Load GSP-corrected standard smelter name
       threads = []
-      @clean_entries.in_groups(4, false).each do |grouped|
+      @clean_entries.in_groups(2, false).each do |grouped|
         threads << Thread.new do
           grouped.each do |data|
             putc '*'
