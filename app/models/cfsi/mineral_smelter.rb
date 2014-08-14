@@ -14,6 +14,8 @@ class Cfsi::MineralSmelter < ActiveRecord::Base
   include GSP::Protocols::Regulations::CFSI::CMRT::V2ToV3IdTranslation
   after_initialize :set_v3_smelter_id_from_v2_smelter_id
 
+  include GSP::Protocols::Regulations::CFSI::CMRT::ValidateV2SmelterIdCountryCode
+
   def smelter_id=(value)
     if value.to_s.match(/^CID./)
       self.v3_smelter_id = value.to_s.strip
