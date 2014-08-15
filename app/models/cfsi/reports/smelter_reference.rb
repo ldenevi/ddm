@@ -174,7 +174,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           if smelter_name =~ /kolyma/
             "OJSC Kolyma Refinery"
           else
-            "OJSC “The Gulidov Krasnoyarsk Non-Ferrous Metals Plant” (OJSC Krastvetmet)"
+            "OJSC The Gulidov Krasnoyarsk Non-Ferrous Metals Plant (OJSC Krastvetmet)"
           end
         elsif smelter.facility_location_country.downcase =~ /turkey/
           if smelter_name =~ /\bata/
