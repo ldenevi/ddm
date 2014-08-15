@@ -104,7 +104,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           end
         elsif smelter_name =~ /\bsolar\b/
           "Solar Applied Materials Technology Corp."
-        elsif smelter_name =~ /\bnavoi\b/
+        elsif smelter_name =~ /\bnavoi\b/ || (smelter_name.gsub(/\W/, '') =~ /nmc/ && smelter_name.facility_location_country =~ /uzbekistan/)
           "Navoi Mining and Metallurgical Combinat"
         elsif smelter.facility_location_country.downcase =~ /bolivia/
           if smelter_name =~ /vinto/ || smelter_name =~ /enaf/
@@ -132,7 +132,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "Ganzhou Seadragon W & Mo Co., Ltd."
         elsif smelter_name.gsub(/\W/, '') =~ /rareearth/ && smelter.facility_location_country.downcase =~ /china/
           "Ganzhou Non-ferrous Metals Smelting Co., Ltd."
-        elsif smelter_name.gsub(/\W/, '') =~ /almt/ && smelter.facility_location_country.downcase =~ /japan/
+        elsif (smelter_name.gsub(/\W/, '') =~ /almt/ || smelter_name =~ /allied/) && smelter.facility_location_country.downcase =~ /japan/
           "A.L.M.T. Corp."
         elsif smelter_name.gsub(/\W/, '') =~ /umicore/
           if smelter.facility_location_country.downcase =~ /brazil/
@@ -142,6 +142,74 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           else
             "Umicore SA Business Unit Precious Metals Refining"
           end
+        elsif smelter_name =~ /ashanti/
+          "AngloGold Ashanti Corrego do Sitio Minerssao"
+        elsif smelter_name.gsub(/\W/, '') =~ /xiangl/
+          "Guangdong Xianglu Tungsten Industry Co., Ltd."
+        elsif smelter_name.gsub(/\W/, '') =~/guangdong/
+          if smelter_name =~ /gold/
+            "Guangdong Jinding Gold Limited"
+          else
+            smelter_name
+          end
+        elsif smelter_name.gsub(/\W/, '') =~ /xiamen/ || smelter_name =~ /xtc/
+          "Xiamen Tungsten Co., Ltd"
+        elsif smelter_name.gsub(/\W/, '') =~ /zhuzhou/
+          "Zhuzhou Cemented Carbide Group Co Ltd"
+        elsif smelter_name.gsub(/\W/, '') =~ /greatwallgold/
+          "The Great Wall Gold and Silver Refinery of China"
+        elsif smelter_name.gsub(/\W/, '') =~ /zijin/
+          "Zijin Mining Group Co. Ltd"
+        elsif smelter_name.gsub(/\W/, '') =~ /sumitomo|toyo/ || smelter_name =~ /\bsmm\b/
+          "Sumitomo Metal Mining Co., Ltd."
+        elsif smelter_name =~ /tanaka/
+          "Tanaka Kikinzoku Kogyo K.K."
+        elsif smelter_name =~ /yokohama/
+          "Yokohama Metal Co Ltd"
+        elsif smelter_name.gsub(' ', '') =~ /dosung/
+          "Do Sung Corporation"
+        elsif smelter_name.gsub(/\W/, '') =~ /lsnikko/
+          "LS-NIKKO Copper Inc."
+        elsif smelter_name =~ /ojsc/
+          if smelter_name =~ /kolyma/
+            "OJSC Kolyma Refinery"
+          else
+            "OJSC “The Gulidov Krasnoyarsk Non-Ferrous Metals Plant” (OJSC Krastvetmet)"
+          end
+        elsif smelter.facility_location_country.downcase =~ /turkey/
+          if smelter_name =~ /\bata/
+            "Atasay Kuyumculuk Sanayi Ve Ticaret A.S."
+          else
+            smelter_name
+          end
+        elsif smelter_name.gsub(' ', '') =~ /williamsadvanced/
+          "Materion"
+        elsif smelter_name.gsub(/\W/, '') =~ /opm/
+          "Ohio Precious Metals, LLC"
+        elsif smelter_name =~ /accurate/ && smelter_name =~ /group/ && smelter.facility_location_country =~ /united states/
+          "So Accurate Group, Inc."
+        elsif smelter_name =~ /luoshan/
+          "Duoluoshan"
+        elsif smelter_name =~ /orient/ && smelter_name =~ /tantalum/
+          "Ningxia Orient Tantalum Industry Co., Ltd."
+        elsif smelter_name =~ /mpil/ && smelter.facility_location_country =~ /india/
+          "Metallurgical Products India (Pvt.) Ltd."
+        elsif smelter_name =~ /cabot|\bgam\b/ && smelter.facility_location_country.downcase =~ /united states/
+          "Global Advanced Metals"
+        elsif smelter_name =~ /niotan/ && smelter.facility_location_country.downcase =~ /united states/
+          "Kemet Blue Powder"
+        elsif smelter_name =~ /taboca/
+          "Minerassao Taboca S.A."
+        elsif smelter_name =~ /guangxi/ && smelter_name =~ /pinggui/
+          "CNMC (Guangxi) PGMA Co. Ltd."
+        elsif smelter_name =~ /huichang/ && smelter.facility_location_country.downcase =~ /china/
+          "Huichang Jinshunda Tin Co. Ltd"
+        elsif smelter_name.gsub(/\W/,'') =~ /chengfeng/ && smelter.facility_location_country.downcase =~ /china/
+          "Yunnan Chengfeng"
+        elsif smelter_name.gsub(/\W/, '') =~ /keta|bangkaputra/ && smelter.facility_location_country.downcase =~ /indonesia/
+          "PT Bangka Putra Karya"
+        elsif smelter_name.gsub(/\W/, '') =~ /multi|imli/ && smelter.facility_location_country.downcase =~ /indonesia/
+          "PT Bukit Timah"
         else
           smelter_name
         end
