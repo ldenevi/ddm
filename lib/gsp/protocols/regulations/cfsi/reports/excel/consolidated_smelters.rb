@@ -191,107 +191,109 @@ EOT
     #
     # Consolidated Smelters worksheet
     def consolidated_smelters
-      @rejected_entries = []
-      @clean_entries = []
+      @consolidated_smelters ||= begin
+        @rejected_entries = []
+        @clean_entries = []
 
-      puts "Splitting clean and dirty entries..."
-      self.sorted_smelters.each do |data|
-        smelter = data[:smelter]
-        rejection_reasons = []
-        rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
-        rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
-        rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
-        rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
-        rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
-        rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
-        if rejection_reasons.empty?
-          putc '+'
-          @clean_entries << data
-        else
+        puts "Splitting clean and dirty entries..."
+        self.sorted_smelters.each do |data|
+          smelter = data[:smelter]
+          rejection_reasons = []
+          rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
+          rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
+          rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
+          rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
+          rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
+          rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
+          if rejection_reasons.empty?
+            putc '+'
+            @clean_entries << data
+          else
+            putc '-'
+            @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
+                                  smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
+                                  rejection_reasons.join(', '), data[:filename],
+                                  data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
+          end
+        end
+
+        grouped_smelters = {}
+        # Load GSP-corrected standard smelter name
+        threads = []
+        @clean_entries.in_groups(2, false).each do |grouped|
+          threads << Thread.new do
+            grouped.each do |data|
+              putc '*'
+              data[:smelter].gsp_standard_name
+            end
+          end
+        end
+        threads.each { |t| t.join }
+
+        # TODO This is the second time the database is being queried for the SmelterReference list. Reduce this to only one.
+        gsp_smelter_reference_list = Cfsi::Reports::SmelterReference.all
+        @referenced_clean_entries = []
+        @clean_entries.each do |data|
+          putc '^'
+          smelter = data[:smelter]
+          rejection_reasons = []
+          referenced_smelter = gsp_smelter_reference_list.find { |e| e.standard_name == smelter.gsp_standard_name }
+          if referenced_smelter.nil?
+            rejection_reasons << "Smelter name not found in Smelter Reference List"
+          else
+            rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.gsub(/\W/,'').downcase == referenced_smelter.country.gsub(/\W/,'').downcase
+            rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
+                                                                                                             (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
+          end
+
+          if rejection_reasons.empty?
+            @referenced_clean_entries << data
+          else
+            @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
+                                  smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
+                                  rejection_reasons.join(', '), data[:filename],
+                                  data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
+          end
+        end
+
+        @referenced_clean_entries.each do |data|
+          putc '.'
+          smelter = data[:smelter]
+          smelter_key = smelter.vendor_key
+          row = [smelter.metal, smelter.gsp_standard_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
+          grouped_smelters[smelter_key] = {:group_row => [], :individual_entries => [], :declaration_filenames => [], :reported_countries => []} if grouped_smelters[smelter_key].nil?
+          grouped_smelters[smelter_key][:individual_entries] << row + [data[:file_name]]
+          grouped_smelters[smelter_key][:declaration_filenames] << data[:file_name]
+          grouped_smelters[smelter_key][:reported_countries] << smelter.facility_location_country
+        end
+        grouped_smelters.each do |vendor_key, data|
           putc '-'
-          @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
-                                smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
-                                rejection_reasons.join(', '), data[:filename],
-                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
-        end
-      end
-
-      grouped_smelters = {}
-      # Load GSP-corrected standard smelter name
-      threads = []
-      @clean_entries.in_groups(2, false).each do |grouped|
-        threads << Thread.new do
-          grouped.each do |data|
-            putc '*'
-            data[:smelter].gsp_standard_name
+          country = begin
+            country_tally = {}
+            reported_countries = data[:reported_countries].map(&:downcase)
+            reported_countries.uniq.each do |country|
+              country_tally.merge!({reported_countries.count(country) => country.upcase})
+            end
+            country_tally[country_tally.keys.max]
           end
-        end
-      end
-      threads.each { |t| t.join }
-
-      # TODO This is the second time the database is being queried for the SmelterReference list. Reduce this to only one.
-      gsp_smelter_reference_list = Cfsi::Reports::SmelterReference.all
-      @referenced_clean_entries = []
-      @clean_entries.each do |data|
-        putc '^'
-        smelter = data[:smelter]
-        rejection_reasons = []
-        referenced_smelter = gsp_smelter_reference_list.find { |e| e.standard_name == smelter.gsp_standard_name }
-        if referenced_smelter.nil?
-          rejection_reasons << "Smelter name not found in Smelter Reference List"
-        else
-          rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.gsub(/\W/,'').downcase == referenced_smelter.country.gsub(/\W/,'').downcase
-          rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
-                                                                                                           (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
+          an_entry = data[:individual_entries].first
+          source_cmrts = data[:declaration_filenames].uniq.sort
+          data[:group_row] = [an_entry[0], an_entry[1], country, an_entry[3], an_entry[4], source_cmrts.size, source_cmrts.join(', ')]
         end
 
-        if rejection_reasons.empty?
-          @referenced_clean_entries << data
-        else
-          @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
-                                smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
-                                rejection_reasons.join(', '), data[:filename],
-                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
-        end
+        rows = []
+        grouped_smelters.each { |key, val| rows << {:row => val[:group_row]} }
+        putc '|'
+        {:name => "Consolidated Smelters",
+         :header => [{:name => "Metal", :column_width => 15},
+                     {:name => "Standard Smelter Names", :column_width => 35},
+                     {:name => "Smelter Facility Location Country", :column_width => 35},
+                     {:name => "Smelter ID\nVersion 2", :column_width => 15},
+                     {:name => "Smelter ID\nVersion 3", :column_width => 15},
+                     {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
+                     {:name => "Source Files", :column_width => 60}],
+          :data => rows.sort_by { |r| [r[:row][0].downcase, r[:row][2].downcase, r[:row][1].downcase] }}
       end
-
-      @referenced_clean_entries.each do |data|
-        putc '.'
-        smelter = data[:smelter]
-        smelter_key = smelter.vendor_key
-        row = [smelter.metal, smelter.gsp_standard_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
-        grouped_smelters[smelter_key] = {:group_row => [], :individual_entries => [], :declaration_filenames => [], :reported_countries => []} if grouped_smelters[smelter_key].nil?
-        grouped_smelters[smelter_key][:individual_entries] << row + [data[:file_name]]
-        grouped_smelters[smelter_key][:declaration_filenames] << data[:file_name]
-        grouped_smelters[smelter_key][:reported_countries] << smelter.facility_location_country
-      end
-      grouped_smelters.each do |vendor_key, data|
-        putc '-'
-        country = begin
-          country_tally = {}
-          reported_countries = data[:reported_countries].map(&:downcase)
-          reported_countries.uniq.each do |country|
-            country_tally.merge!({reported_countries.count(country) => country.upcase})
-          end
-          country_tally[country_tally.keys.max]
-        end
-        an_entry = data[:individual_entries].first
-        source_cmrts = data[:declaration_filenames].uniq.sort
-        data[:group_row] = [an_entry[0], an_entry[1], country, an_entry[3], an_entry[4], source_cmrts.size, source_cmrts.join(', ')]
-      end
-
-      rows = []
-      grouped_smelters.each { |key, val| rows << {:row => val[:group_row]} }
-      putc '|'
-      {:name => "Consolidated Smelters",
-       :header => [{:name => "Metal", :column_width => 15},
-                   {:name => "Standard Smelter Names", :column_width => 35},
-                   {:name => "Smelter Facility Location Country", :column_width => 35},
-                   {:name => "Smelter ID\nVersion 2", :column_width => 15},
-                   {:name => "Smelter ID\nVersion 3", :column_width => 15},
-                   {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
-                   {:name => "Source Files", :column_width => 60}],
-        :data => rows.sort_by { |r| [r[:row][0].downcase, r[:row][2].downcase, r[:row][1].downcase] }}
     end
 
     def consolidated_smelters_worksheet(workbook)
