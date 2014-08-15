@@ -229,7 +229,33 @@ EOT
       end
       threads.each { |t| t.join }
 
+      # TODO This is the second time the database is being queried for the SmelterReference list. Reduce this to only one.
+      gsp_smelter_reference_list = Cfsi::Reports::SmelterReference.all
+      @referenced_clean_entries = []
       @clean_entries.each do |data|
+        putc '^'
+        smelter = data[:smelter]
+        rejection_reasons = []
+        referenced_smelter = gsp_smelter_reference_list.find { |e| e.standard_name == smelter.gsp_standard_name }
+        if referenced_smelter.nil?
+          rejection_reasons << "Smelter name not found in Smelter Reference List"
+        else
+          rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.downcase == referenced_smelter.country.downcase
+          rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
+                                                                                                           (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
+        end
+
+        if rejection_reasons.empty?
+          @referenced_clean_entries << data
+        else
+          @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
+                                smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
+                                rejection_reasons.join(', '), data[:filename],
+                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
+        end
+      end
+
+      @referenced_clean_entries.each do |data|
         putc '.'
         smelter = data[:smelter]
         smelter_key = smelter.vendor_key
