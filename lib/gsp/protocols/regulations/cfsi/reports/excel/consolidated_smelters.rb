@@ -1,130 +1,130 @@
+# encoding: utf-8
+
 module GSP::Protocols::Regulations::CFSI::Reports::Excel
   class ConsolidatedSmelters < Report
     def definition
 <<-EOT
-INGESTOR REPORTS
+INGESTOR REPORT DEFINTIONS
 Green Status Pro Ingestor generated the following RCOI reports after processing your
-company's supplier's CFSI Conflict Minerals Template Reports:
+company's supplier's CFSI Conflict Minerals Reporting Templates:
 
-  1. All Reported Smelters
-  2. Consolidated Smelter Report
-  3. Corrective Action Report
-  4. Smelter Compliance Status Report
-  5. Rejected Entries Report
+  1. All Reported Smelters Report
+  2. Consolidated Smelters Report
+  3. Rejected Entries Report
+  4. Smelter Compliance Statuses Report
+  5. RCOI Analytics Report
   6. Aggregated Declarations Report
-  7. Smelters by Supplier Report
-  8. Comprehensive Suppliers Validation Report
+  7. Declarations Statistics
 
-Companies rely on these reports to document their compliance with Dodd-Frank Section 1502
-and to support their Form SD Conflict Minerals Report disclosures.  This suite of reports
-supports audits by independent private auditors, SEC Examiners, customers and NGO special
-interest groups.
+These reports are designed to assist you in meeting the SEC-reporting requirements for
+Dodd-Frank Section 1502. They do not constitute legal advice.  Users should consult
+with their attorneys about their specific situation.
 
 
 1) ALL REPORTED SMELTERS
-Lists all smelter entries reported by all suppliers sorted by Smelter ID, Metal, Smelter
-Reference List, Standard Smelter Name and Country.  Includes responses for all columns in
-the CFSI Smelter list as reported; template version; and source CFSI Report
-File Name.
+The All Reported Smelters Report is the central repository for all your smelter-related
+RCOI data. It aggregates all the smelter data provided to you by your suppliers using
+any combination of EICC-GeSI CMRT v2 and CFSI CMRT v3 formats.
 
-The All Reported Smelters Report is the central repository for all smelter-related RCOI
-data delivered to the user. It is generated in Excel format to allow the user to easily
-create custom reports.
+For each Validation Batch you run or update, this report organizes all smelter entries
+exactly as reported by all suppliers. Smelter entries are sorted by Metal, Country,
+Standard Smelter Name and Smelter ID. Each smelter entry row includes the supplier’s
+additional information regarding the smelter in the same order as listed on the CFSI
+Smelter List. Ingestor adds the EICC-GeSI/CFSI CMRT version and the Source File Name.
+
+The All Reported Smelters Report is generated in Excel format to allow you to easily
+analyze the data and create custom reports.
 
 
 2) CONSOLIDATED SMELTER REPORT
-Consolidates and sorts smelters by Smelter ID.  Checks that Metal, Standard Smelter Name
-and Country are the same. For smelter entries without a valid Smelter ID, consolidates
-entries with matches, in sequential order, of Metal, Country and first 12 characters
-entered in the Smelter Reference List. The consolidated smelter entry row displayed is
-the one that a supplier submits that contains the most data in all fields.
+The Consolidated Smelter Report lists all the unique smelters that your suppliers have
+reasonably reported to be in your company’s supply chain. This report, derived from the
+All Reported Smelter Report, provides the smelter identification information you need
+in an easy-to-use format.
 
-Includes responses for all columns in the CFSI Smelter list as reported; number of
-suppliers reporting the use of the smelter; and source CFSI Report File Names.
+To maintain the integrity of the Consolidated Smelter Report, each smelter entry must
+have valid data in these 5 columns to be included: 1) Metal, 2) Smelter Reference List,
+3) Standard Smelter Name, 4) Smelter Country and 4) Smelter ID. Ingestor cross-references
+the most recently released CFSI CMRT list of Standard Smelter Names to ensure the validity
+of the data. Note that smelter data communicated by suppliers using older CMRT Standard
+Smelter Names may be out-of-date and currently incorrect.
+
+To create the Consolidated Smelter Report, Ingestor first eliminates unsupported entries
+from the All Reported Smelter Report. Such entries are either missing data, such as a
+smelter ID, or have corrupt data, such as a smelter ID in the wrong format. This data
+is moved to the Rejected Entries Report. Suppliers whose smelter entries are rejected
+should be notified and required to correct the problem.
+
+Ingestor then consolidates duplicate smelter listings. If more than one supplier
+identifies the same smelter in its supply chains, Ingestor counts the instances and
+references the source files. If an individual supplier reports the use of the same
+smelter two or more times on the same CMRT, Ingestor will only count one smelter entry.
+
+The Consolidated Smelter Report’s output is ordered by smelter:
+A. Metal
+B. Country
+C. Standard Smelter Name
+
 This report consolidates smelter listings and eliminates unsupportable entries,
-significantly reducing the row count of the All Reported Smelter report.
+significantly reducing the row count of the All Reported Smelter Report. Therefore, it
+will be the basis for generating your own firm’s CMRT that you must provide to your customers.
 
 
-3) CORRECTIVE ACTION REPORT
-Groups non-duplicative supplier smelter listings reported in the Consolidated Smelters
-worksheet to guide supplier validation efforts and support judgment-based consolidation.
-Required due to the large number of errors and omissions (especially Smelter IDs) found
-in suppliers' CFSI Conflict Minerals Reports.  Sorts smelter rows in sequence by:
-1) Metal, 2) Standard Smelter Name, 3) Smelter Reference List, 4) Country.
 
-Green Status Pro recommends reviewers read down the Standard Smelter Name column to
-identify supplier reporting errors.
+3) REJECTED ENTRIES
+Smelters listed in Rejected Entries Report have missing, inaccurate or ambiguous data
+associated with them. The Rejected Entries Report provides a repository of
+supplier-smelter entries for which due diligence should be performed to confirm and
+improve the accuracy of the reported data. It is critical that you do not pass
+incorrect conflict minerals data to your customers.
 
-This report facilitates communications with suppliers who should be providing more
-accurate information; supports the responsibility to not report inaccurate information
-downstream; and documents the reasonableness of consolidating smelters reported without
-CFSI-issued Smelter IDs.
+The Rejected Entries Report consists of smelter entries from the All Reported Smelters
+Report that cannot be included in the Consolidated Smelter Report due to missing data,
+incorrect data or lack of confidence in the information provided. All supplier-reported
+smelters identified in the All Reported Smelters Report will be reported in either the
+Consolidated Smelter Report or the Rejected Entries Report.
 
+A smelter entry that does not have valid data in any one of these five categories is
+assigned to the Rejected Entries Report:
+A. Metal
+B. Smelter Reference List
+C. Standard Smelter Name
+D. Smelter Country
+E. Smelter ID
 
-4) SMELTER COMPLIANCE STATUS REPORT
-Identifies which smelters listed in the Consolidated Smelter report have been designated
-as conflict-free.  Matches the smelter IDs reported in the Consolidated Smelter report
-against the current CFSI-published listing of smelters that have passed its conflict-free
-audit requirements. A smelter appearing on the consolidated smelter list is dropped from
-this list if its smelter ID is invalid (listed as 'not supplied,' for instance) or an
-identical smelter number has already been incorporated in this list. The Status field is
-marked with check (%s) for entries whose Smelter ID is listed in the then current
-CFSI-Compliant Smelter Listing. The Status field  is marked with a question mark (?) for
-entries whose Smelter ID is listed in the then-current CFSI-Compliant Smelter Listing,
-but if there is some uncertainty about its address. The then current CFSI-Compliant
-Smelter Listing is included as a separate worksheet.
+Suppliers whose smelter entries are flagged on the Rejected Entries Report should be
+contacted immediately as part of the supplier due diligence process and made aware of
+the problem(s) and your company’s policy regarding suppliers who do not maintain an
+adequate Conflict Minerals Reporting program.
 
-The objective of Dodd-Frank Section 1502 is to encourage and assist companies in using
-3TG only from smelters that are committed to acquiring their mineral stocks from
-legitimate sources.  The Smelter Compliance Status report acts as a year-over-year
-scorecard on how well the company is accomplishing this goal.
-
-
-5) REJECTED ENTRIES
-A smelter entry must have valid data in 3 of the following 5 columns to be accepted:
-Metal, Smelter Reference List, Standard Smelter Names, Smelter Facility Location Country
-and Smelter ID.  It lists supplier entries that are not included in the Consolidated
-Smelter Report. Suppliers who are flagged on the Rejected Entries listing should be
-contacted immediately.
+Rejection Messages are:
+Invalid smelter id – ID is either not provided or is in the wrong format.
+Invalid smelter name – Smelter name may be missing, not in English, consist of placeholder characters (not words.)
+Invalid country – Data in Smelter Facility Location Country field is not that for a country.
+Smelter id does not match metal – Smelter ID Version 2 has a country code embedded in it. Ingestor checks that the country code and V2 id are consistent. If not, this message appears.
+Invalid country code for v2 smelter id – Supplier entry contains an invalid country code within the ID Version 2 Smelter code.
 
 
-6) AGGREGATED DECLARATIONS
-Lists each supplier and its answer to each question, including comments, on the
-Declaration worksheet; template version; source CFSI Report File Name; and
-Ingestor-generated validation status and messages based on the declarations.
-
-The Aggregated Declarations Report is the central repository for all supplier contact
-information, compliance policies, and use of 3TGs.  Additional reports can be created
-from this overarching report.
+The Rejected Entries Report provides companies with a solid foundation for evaluating
+the risks inherent in their 3TG supply chains.
 
 
-7) SMELTERS BY SUPPLIER LIST
-Lists suppliers alphabetically for each supplier. Smelters are sorted by metal, smelter
-reference list, standard smelter name, and country.  Includes responses for all columns
-in the CFSI Smelter list as reported; template version; source CFSI Report
-File Name; company contact information; date CFSI CRMT was completed; and the
-answers to Question 1, "Are any of the following metals necessary to the functionality
-or production of your company's products that it manufactures or contracts to
-manufacture? Tantalum? Tin? Gold? Tungsten?"
+4) SMELTER COMPLIANCE STATUSES REPORT
+Identifies which smelters listed in the Consolidated Smelter Report have been designated
+as Compliant, Active, or Progressing in the CFSI Conflict-free Smelter Program. Matches
+the smelter IDs reported in the Consolidated Smelter report against the current
+CFSI-published listing of smelters that have passed or are actively participating in its
+conflict-free audit requirements program.
 
-This report has the same number of rows as the All Reported Smelters Report and contains
-similar data.  It is a powerful tool for quickly determining which smelters are critical
-to a company's operations and which companies are providing incorrect and incomplete
-smelter information.
+Smelters that do not have smelter ID matches with the CFSI listing are categorized as
+Not CFSI Compliant.
 
 
-8) COMPREHENSIVE SUPPLIERS VALIDATION
-Ingestor creates a virtual due diligence worksheet for each supplier that includes all
-the Validation Needed messages based on the company's rules; the manager responsible for
-conducting due diligence on the supplier; and a link to the supplier's CFSI CMRT.
-The reviewer adds comments and files to the virtual worksheet to document the due
-diligence effort.  These comments are time stamped to provide a comprehensive audit
-trail and due diligence record.
 
-The Comprehensive Suppliers Validation report is run on an interim during the RCOI
-process to provide managers with the current status of their SEC-mandated due diligence
-efforts and at the end of the process to provide an auditable record of the company's
-supplier due diligence.  This report is published as a PDF.
+5) RCOI ANALYTICS
+
+
+6) AGGREGATED DECLARATIONS REPORT
 
 EOT
     end
@@ -191,107 +191,109 @@ EOT
     #
     # Consolidated Smelters worksheet
     def consolidated_smelters
-      @rejected_entries = []
-      @clean_entries = []
+      @consolidated_smelters ||= begin
+        @rejected_entries = []
+        @clean_entries = []
 
-      puts "Splitting clean and dirty entries..."
-      self.sorted_smelters.each do |data|
-        smelter = data[:smelter]
-        rejection_reasons = []
-        rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
-        rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
-        rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
-        rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
-        rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
-        rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
-        if rejection_reasons.empty?
-          putc '+'
-          @clean_entries << data
-        else
+        puts "Splitting clean and dirty entries..."
+        self.sorted_smelters.each do |data|
+          smelter = data[:smelter]
+          rejection_reasons = []
+          rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
+          rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
+          rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
+          rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
+          rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
+          rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
+          if rejection_reasons.empty?
+            putc '+'
+            @clean_entries << data
+          else
+            putc '-'
+            @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
+                                  smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
+                                  rejection_reasons.join(', '), data[:filename],
+                                  data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
+          end
+        end
+
+        grouped_smelters = {}
+        # Load GSP-corrected standard smelter name
+        threads = []
+        @clean_entries.in_groups(2, false).each do |grouped|
+          threads << Thread.new do
+            grouped.each do |data|
+              putc '*'
+              data[:smelter].gsp_standard_name
+            end
+          end
+        end
+        threads.each { |t| t.join }
+
+        # TODO This is the second time the database is being queried for the SmelterReference list. Reduce this to only one.
+        gsp_smelter_reference_list = Cfsi::Reports::SmelterReference.all
+        @referenced_clean_entries = []
+        @clean_entries.each do |data|
+          putc '^'
+          smelter = data[:smelter]
+          rejection_reasons = []
+          referenced_smelter = gsp_smelter_reference_list.find { |e| e.standard_name == smelter.gsp_standard_name }
+          if referenced_smelter.nil?
+            rejection_reasons << "Smelter name not found in Smelter Reference List"
+          else
+            rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.gsub(/\W/,'').downcase == referenced_smelter.country.gsub(/\W/,'').downcase
+            rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
+                                                                                                             (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
+          end
+
+          if rejection_reasons.empty?
+            @referenced_clean_entries << data
+          else
+            @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
+                                  smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
+                                  rejection_reasons.join(', '), data[:filename],
+                                  data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
+          end
+        end
+
+        @referenced_clean_entries.each do |data|
+          putc '.'
+          smelter = data[:smelter]
+          smelter_key = smelter.vendor_key
+          row = [smelter.metal, smelter.gsp_standard_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
+          grouped_smelters[smelter_key] = {:group_row => [], :individual_entries => [], :declaration_filenames => [], :reported_countries => []} if grouped_smelters[smelter_key].nil?
+          grouped_smelters[smelter_key][:individual_entries] << row + [data[:file_name]]
+          grouped_smelters[smelter_key][:declaration_filenames] << data[:file_name]
+          grouped_smelters[smelter_key][:reported_countries] << smelter.facility_location_country
+        end
+        grouped_smelters.each do |vendor_key, data|
           putc '-'
-          @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
-                                smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
-                                rejection_reasons.join(', '), data[:filename],
-                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
-        end
-      end
-
-      grouped_smelters = {}
-      # Load GSP-corrected standard smelter name
-      threads = []
-      @clean_entries.in_groups(2, false).each do |grouped|
-        threads << Thread.new do
-          grouped.each do |data|
-            putc '*'
-            data[:smelter].gsp_standard_name
+          country = begin
+            country_tally = {}
+            reported_countries = data[:reported_countries].map(&:downcase)
+            reported_countries.uniq.each do |country|
+              country_tally.merge!({reported_countries.count(country) => country.upcase})
+            end
+            country_tally[country_tally.keys.max]
           end
-        end
-      end
-      threads.each { |t| t.join }
-
-      # TODO This is the second time the database is being queried for the SmelterReference list. Reduce this to only one.
-      gsp_smelter_reference_list = Cfsi::Reports::SmelterReference.all
-      @referenced_clean_entries = []
-      @clean_entries.each do |data|
-        putc '^'
-        smelter = data[:smelter]
-        rejection_reasons = []
-        referenced_smelter = gsp_smelter_reference_list.find { |e| e.standard_name == smelter.gsp_standard_name }
-        if referenced_smelter.nil?
-          rejection_reasons << "Smelter name not found in Smelter Reference List"
-        else
-          rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.gsub(/\W/,'').downcase == referenced_smelter.country.gsub(/\W/,'').downcase
-          rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
-                                                                                                           (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
+          an_entry = data[:individual_entries].first
+          source_cmrts = data[:declaration_filenames].uniq.sort
+          data[:group_row] = [an_entry[0], an_entry[1], country, an_entry[3], an_entry[4], source_cmrts.size, source_cmrts.join(', ')]
         end
 
-        if rejection_reasons.empty?
-          @referenced_clean_entries << data
-        else
-          @rejected_entries << [smelter.metal, smelter.smelter_reference_list, smelter.standard_smelter_name,
-                                smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id,
-                                rejection_reasons.join(', '), data[:filename],
-                                data[:declaration].company_name, data[:declaration].authorized_company_representative_name, data[:declaration].contact_email, data[:declaration].contact_phone]
-        end
+        rows = []
+        grouped_smelters.each { |key, val| rows << {:row => val[:group_row]} }
+        putc '|'
+        {:name => "Consolidated Smelters",
+         :header => [{:name => "Metal", :column_width => 15},
+                     {:name => "Standard Smelter Names", :column_width => 35},
+                     {:name => "Smelter Facility Location Country", :column_width => 35},
+                     {:name => "Smelter ID\nVersion 2", :column_width => 15},
+                     {:name => "Smelter ID\nVersion 3", :column_width => 15},
+                     {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
+                     {:name => "Source Files", :column_width => 60}],
+          :data => rows.sort_by { |r| [r[:row][0].downcase, r[:row][2].downcase, r[:row][1].downcase] }}
       end
-
-      @referenced_clean_entries.each do |data|
-        putc '.'
-        smelter = data[:smelter]
-        smelter_key = smelter.vendor_key
-        row = [smelter.metal, smelter.gsp_standard_name, smelter.facility_location_country, smelter.v2_smelter_id, smelter.v3_smelter_id].map(&:to_s)
-        grouped_smelters[smelter_key] = {:group_row => [], :individual_entries => [], :declaration_filenames => [], :reported_countries => []} if grouped_smelters[smelter_key].nil?
-        grouped_smelters[smelter_key][:individual_entries] << row + [data[:file_name]]
-        grouped_smelters[smelter_key][:declaration_filenames] << data[:file_name]
-        grouped_smelters[smelter_key][:reported_countries] << smelter.facility_location_country
-      end
-      grouped_smelters.each do |vendor_key, data|
-        putc '-'
-        country = begin
-          country_tally = {}
-          reported_countries = data[:reported_countries].map(&:downcase)
-          reported_countries.uniq.each do |country|
-            country_tally.merge!({reported_countries.count(country) => country.upcase})
-          end
-          country_tally[country_tally.keys.max]
-        end
-        an_entry = data[:individual_entries].first
-        source_cmrts = data[:declaration_filenames].uniq.sort
-        data[:group_row] = [an_entry[0], an_entry[1], country, an_entry[3], an_entry[4], source_cmrts.size, source_cmrts.join(', ')]
-      end
-
-      rows = []
-      grouped_smelters.each { |key, val| rows << {:row => val[:group_row]} }
-      putc '|'
-      {:name => "Consolidated Smelters",
-       :header => [{:name => "Metal", :column_width => 15},
-                   {:name => "Standard Smelter Names", :column_width => 35},
-                   {:name => "Smelter Facility Location Country", :column_width => 35},
-                   {:name => "Smelter ID\nVersion 2", :column_width => 15},
-                   {:name => "Smelter ID\nVersion 3", :column_width => 15},
-                   {:name => "Number of\nSource CFSI\nCM Report Files", :column_width => 20},
-                   {:name => "Source Files", :column_width => 60}],
-        :data => rows.sort_by { |r| [r[:row][0].downcase, r[:row][2].downcase, r[:row][1].downcase] }}
     end
 
     def consolidated_smelters_worksheet(workbook)
@@ -501,9 +503,9 @@ EOT
       all_reported_smelters_worksheet(workbook)
       consolidated_smelters_worksheet(workbook)
       rejected_entries_worksheet(workbook)
-      # smelter_compliance_statuses_worksheet(workbook)
-      # cfsi_compliant_smelter_list_worksheet(workbook)
-      # analytics_worksheet(workbook)
+      smelter_compliance_statuses_worksheet(workbook)
+      cfsi_compliant_smelter_list_worksheet(workbook)
+      analytics_worksheet(workbook)
       workbook.add_worksheet(:name => "Definitions") do |sheet|
         style = sheet.styles.add_style(BRANDING_STYLE)
         sheet.merge_cells "A1:H200"
