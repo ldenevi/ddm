@@ -240,7 +240,7 @@ EOT
         if referenced_smelter.nil?
           rejection_reasons << "Smelter name not found in Smelter Reference List"
         else
-          rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.downcase == referenced_smelter.country.downcase
+          rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.gsub(/\W/,'').downcase == referenced_smelter.country.gsub(/\W/,'').downcase
           rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
                                                                                                            (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
         end
