@@ -104,7 +104,7 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           end
         elsif smelter_name =~ /\bsolar\b/
           "Solar Applied Materials Technology Corp."
-        elsif smelter_name =~ /\bnavoi\b/ || (smelter_name.gsub(/\W/, '') =~ /nmc/ && smelter_name.facility_location_country =~ /uzbekistan/)
+        elsif smelter_name =~ /\bnavoi\b/ || (smelter_name.gsub(/\W/, '') =~ /nmc/ && smelter.facility_location_country =~ /uzbekistan/)
           "Navoi Mining and Metallurgical Combinat"
         elsif smelter.facility_location_country.downcase =~ /bolivia/
           if smelter_name =~ /vinto/ || smelter_name =~ /enaf/
