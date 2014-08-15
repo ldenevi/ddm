@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 module GSP::Protocols::Regulations::CFSI::Reports::Excel
   class ConsolidatedSmelters < Report
     def definition
