@@ -202,7 +202,7 @@ EOT
           rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
           rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
           rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
-          rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
+          rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.map { |c| c.gsub(/\W/,'') }.include?(smelter.facility_location_country.gsub(/\W/,'').upcase)
           rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
           rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
           if rejection_reasons.empty?
