@@ -202,7 +202,7 @@ EOT
           rejection_reasons << "Invalid smelter id" unless smelter.has_valid_smelter_id?
           rejection_reasons << "Invalid country code for v2 smelter id" if smelter.has_valid_v2_smelter_id? && !smelter.is_v2_smelter_id_country_code_valid?
           rejection_reasons << "Invalid smelter name" unless smelter.has_valid_smelter_name?
-          rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.include?(smelter.facility_location_country.upcase)
+          rejection_reasons << "Invalid country" unless Rails.configuration.cfsi.countries.map { |c| c.gsub(/\W/,'') }.include?(smelter.facility_location_country.gsub(/\W/,'').upcase)
           rejection_reasons << "Invalid metal" unless smelter.has_valid_mineral?
           rejection_reasons << "Smelter id does not match metal" if smelter.has_valid_smelter_id? && !smelter.does_mineral_match_v2_smelter_id?
           if rejection_reasons.empty?
@@ -237,13 +237,13 @@ EOT
           putc '^'
           smelter = data[:smelter]
           rejection_reasons = []
-          referenced_smelter = gsp_smelter_reference_list.find { |e| e.standard_name == smelter.gsp_standard_name }
-          if referenced_smelter.nil?
+          referenced_smelters = gsp_smelter_reference_list.select { |e| e.standard_name == smelter.gsp_standard_name }
+          if referenced_smelters.empty?
             rejection_reasons << "Smelter name not found in Smelter Reference List"
           else
-            rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless smelter.facility_location_country.gsub(/\W/,'').downcase == referenced_smelter.country.gsub(/\W/,'').downcase
-            rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && smelter.v2_smelter_id.downcase == referenced_smelter.v2_smelter_id.to_s.downcase) ||
-                                                                                                             (smelter.v3_smelter_id && smelter.v3_smelter_id.downcase == referenced_smelter.v3_smelter_id.to_s.downcase)
+            rejection_reasons << "Country does not match Smelter Reference List for smelter name" unless referenced_smelters.map { |rs| rs.country.gsub(/\W/,'').downcase }.include?(smelter.facility_location_country.gsub(/\W/,'').downcase)
+            rejection_reasons << "Smelter ID does not match Smelter Reference List for smelter name" unless (smelter.v2_smelter_id && referenced_smelters.map { |rs| rs.v2_smelter_id.to_s.downcase }.include?(smelter.v2_smelter_id.downcase)) ||
+                                                                                                             (smelter.v3_smelter_id && referenced_smelters.map { |rs| rs.v3_smelter_id.to_s.downcase }.include?(smelter.v3_smelter_id.downcase))
           end
 
           if rejection_reasons.empty?
