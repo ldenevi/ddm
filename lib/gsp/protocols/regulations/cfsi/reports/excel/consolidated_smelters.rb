@@ -387,24 +387,25 @@ EOT
     #
     # Smelter Compliance Statuses
     def smelter_compliance_statuses
-      list = cfsi_compliant_smelter_list[:hash_data]
-      rows =  consolidated_smelters[:data].map do |cs|
-                cs = cs[:row]
-                [(list.keys.include?(cs[4]) ? list[cs[4]] : "Not CFSI Compliant"),
-                 cs[0], cs[1], cs[2], cs[4]].map(&:to_s)
-              end
-      {:name => "Smelter Compliance Statuses",
-       :header => [{:name => "Status", :column_width => 20},
-                   {:name => "Metal", :column_width => 15},
-                   {:name => "Smelter Names", :column_width => 35},
-                   {:name => "Smelter Facility Location Country", :column_width => 25},
-                   {:name => "Smelter ID", :column_width => 15}],
-       :data => rows.sort_by { |row| [['compliant', 'active', 'progressing', 'not cfsi compliant'].index(row[0].downcase) || 4,
-                                      mineral_sort_order.index(row[1].downcase) || 5,
-                                      row[3],
-                                      row[2]]
-                              }}
-
+      @smelter_compliance_statuses ||= begin
+        list = cfsi_compliant_smelter_list[:hash_data]
+        rows =  consolidated_smelters[:data].map do |cs|
+                  cs = cs[:row]
+                  [(list.keys.include?(cs[4]) ? list[cs[4]] : "Not CFSI Compliant"),
+                   cs[0], cs[1], cs[2], cs[4]].map(&:to_s)
+                end
+        {:name => "Smelter Compliance Statuses",
+         :header => [{:name => "Status", :column_width => 20},
+                     {:name => "Metal", :column_width => 15},
+                     {:name => "Smelter Names", :column_width => 35},
+                     {:name => "Smelter Facility Location Country", :column_width => 25},
+                     {:name => "Smelter ID", :column_width => 15}],
+         :data => rows.sort_by { |row| [['compliant', 'active', 'progressing', 'not cfsi compliant'].index(row[0].downcase) || 4,
+                                        mineral_sort_order.index(row[1].downcase) || 5,
+                                        row[3],
+                                        row[2]]
+                                }}
+      end
     end
 
     def smelter_compliance_statuses_worksheet(workbook)
