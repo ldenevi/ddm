@@ -86,8 +86,14 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "Dowa"
         elsif smelter_name =~ /jx nippon|pan pacific copper/
           "JX Nippon Mining & Metals Co., Ltd."
-        elsif smelter_name =~ /\bmitsui\b/
-          "Mitsui Mining and Smelting Co., Ltd."
+        elsif smelter_name =~ /mitsui/
+          if smelter.metal.downcase == 'gold'
+            "Mitsui Mining and Smelting Co., Ltd."
+          elsif smelter.metal.downcase == 'tantalum'
+            "Mitsui Mining & Smelting"
+          else
+            smelter_name
+          end
         elsif smelter_name =~ /\btanaka\b/
           "Tanaka Kikinzoku Kogyo K.K."
         elsif smelter_name =~ /tokuriki/
