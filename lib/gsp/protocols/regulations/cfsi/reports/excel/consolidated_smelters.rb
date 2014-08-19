@@ -427,15 +427,15 @@ EOT
       csmelters = consolidated_smelters[:data].map { |d| d[:row] }
       compl_statuses = smelter_compliance_statuses[:data]
       num_cfsi_compliant_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" }.size
-      num_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Gold' }.size
-      num_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Tin' }.size
-      num_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Tantalum' }.size
-      num_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1] == 'Tungsten' }.size
+      num_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1].downcase == 'gold' }.size
+      num_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1].downcase == 'tin' }.size
+      num_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1].downcase == 'tantalum' }.size
+      num_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] != "Not CFSI Compliant" && s[1].downcase == 'tungsten' }.size
       num_not_cfsi_compliant_smelters          = compl_statuses.size - num_cfsi_compliant_smelters
-      num_not_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Gold' }.size
-      num_not_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tin' }.size
-      num_not_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tantalum' }.size
-      num_not_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tungsten' }.size
+      num_not_cfsi_compliant_gold_smelters     = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1].downcase == 'gold' }.size
+      num_not_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1].downcase == 'tin' }.size
+      num_not_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1].downcase == 'tantalum' }.size
+      num_not_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1].downcase == 'tungsten' }.size
       gold_countries     = csmelters.select { |s| s[0].downcase == 'gold' }.collect { |s| s[2] }.sort.uniq
       tin_countries      = csmelters.select { |s| s[0].downcase == 'tin' }.collect { |s| s[2] }.sort.uniq
       tantalum_countries = csmelters.select { |s| s[0].downcase == 'tantalum' }.collect { |s| s[2] }.sort.uniq
