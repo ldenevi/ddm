@@ -436,10 +436,10 @@ EOT
       num_not_cfsi_compliant_tin_smelters      = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tin' }.size
       num_not_cfsi_compliant_tantalum_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tantalum' }.size
       num_not_cfsi_compliant_tungsten_smelters = compl_statuses.select { |s| s[0] == "Not CFSI Compliant" && s[1] == 'Tungsten' }.size
-      gold_countries     = csmelters.select { |s| s[0] == 'Gold' }.collect { |s| s[2] }.sort.uniq
-      tin_countries      = csmelters.select { |s| s[0] == 'Tin' }.collect { |s| s[2] }.sort.uniq
-      tantalum_countries = csmelters.select { |s| s[0] == 'Tantalum' }.collect { |s| s[2] }.sort.uniq
-      tungsten_countries = csmelters.select { |s| s[0] == 'Tungsten' }.collect { |s| s[2] }.sort.uniq
+      gold_countries     = csmelters.select { |s| s[0].downcase == 'gold' }.collect { |s| s[2] }.sort.uniq
+      tin_countries      = csmelters.select { |s| s[0].downcase == 'tin' }.collect { |s| s[2] }.sort.uniq
+      tantalum_countries = csmelters.select { |s| s[0].downcase == 'tantalum' }.collect { |s| s[2] }.sort.uniq
+      tungsten_countries = csmelters.select { |s| s[0].downcase == 'tungsten' }.collect { |s| s[2] }.sort.uniq
 
       {:name => "Analytics",
        :rows => [
