@@ -216,6 +216,14 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           "PT Bangka Putra Karya"
         elsif smelter_name.gsub(/\W/, '') =~ /multi|imli/ && smelter.facility_location_country.downcase =~ /indonesia/
           "PT Bukit Timah"
+        elsif smelter_name.gsub(/\W/, '') =~ /zhuzhou/
+          if smelter.metal.downcase == 'tungsten'
+            "Zhuzhou Cemented Carbide Group Co Ltd"
+          elsif smelter.metal.downcase == 'tantalum'
+            "Zhuzhou Cement Carbide"
+          else
+            smelter_name
+          end
         else
           smelter_name
         end
