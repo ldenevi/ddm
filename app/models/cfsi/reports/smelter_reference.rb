@@ -165,7 +165,11 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
             smelter_name
           end
         elsif smelter_name.gsub(/\W/, '') =~ /xiamen/ || smelter_name =~ /xtc/
-          "Xiamen Tungsten Co., Ltd"
+          if smelter_name.gsub(/\W/, '') =~ /hc/
+            "Xiamen Tungsten (H.C.) Co., Ltd."
+          else
+            "Xiamen Tungsten Co., Ltd"
+          end
         elsif smelter_name.gsub(/\W/, '') =~ /greatwallgold/
           "The Great Wall Gold and Silver Refinery of China"
         elsif smelter_name.gsub(/\W/, '') =~ /zijin/
