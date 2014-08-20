@@ -19,6 +19,7 @@ class Trial::SignUpController < Trial::PublicController
     if @user.save
       sign_in @user
       Notifications::Security.welcome(@user).deliver
+      Notifications::Security.notify_gsp_of_new_trial_user(@user).deliver
       redirect_to root_url
     else
       flash[:errors] = @user.errors
