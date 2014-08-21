@@ -57,6 +57,20 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           else
             smelter_name
           end
+        elsif smelter_name =~ /heraeus/
+          if smelter.facility_location_country.downcase =~ /germany/
+            "Heraeus Precious Metals GmbH & Co. KG"
+          elsif smelter.facility_location_country.downcase =~ /hong/
+            "Heraeus Ltd. Hong Kong"
+          elsif smelter.facility_location_country.downcase =~ /switzerland/
+            "Argor-Heraeus SA"
+          else
+            smelter_name
+          end
+        elsif smelter_name =~ /qiankun/
+          "Inner Mongolia Qiankun Gold and Silver Refinery Share Company Limited"
+        elsif smelter_name =~ /luoyang/
+          "Luoyang Zijin Yinhui Metal Smelt Co Ltd"
         elsif smelter_name =~ /pt timah/ && smelter.smelter_id == 'CID001482'
           "PT Timah"
         elsif smelter_name =~ /johnson matthey/
