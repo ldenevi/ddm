@@ -57,6 +57,30 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           else
             smelter_name
           end
+        elsif smelter_name =~ /heraeus/
+          if smelter.facility_location_country.downcase =~ /germany/
+            "Heraeus Precious Metals GmbH & Co. KG"
+          elsif smelter.facility_location_country.downcase =~ /hong/
+            "Heraeus Ltd. Hong Kong"
+          elsif smelter.facility_location_country.downcase =~ /switzerland/
+            "Argor-Heraeus SA"
+          else
+            smelter_name
+          end
+        elsif smelter_name =~ /novosibirsk/
+          if smelter.metal.downcase == 'gold'
+            "FSE Novosibirsk Refinery"
+          elsif smelter.metal.downcase == 'tin'
+            "Novosibirsk Integrated Tin Works"
+          else
+            smelter_name
+          end
+        elsif smelter_name =~ /shyolkovsky/
+          "SOE Shyolkovsky Factory of Secondary Precious Metals"
+        elsif smelter_name =~ /qiankun/
+          "Inner Mongolia Qiankun Gold and Silver Refinery Share Company Limited"
+        elsif smelter_name =~ /luoyang/
+          "Luoyang Zijin Yinhui Metal Smelt Co Ltd"
         elsif smelter_name =~ /pt timah/ && smelter.smelter_id == 'CID001482'
           "PT Timah"
         elsif smelter_name =~ /johnson matthey/
@@ -223,7 +247,11 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
         elsif smelter_name.gsub(/\W/, '') =~ /keta|bangkaputra/ && smelter.facility_location_country.downcase =~ /indonesia/
           "PT Bangka Putra Karya"
         elsif smelter_name.gsub(/\W/, '') =~ /multi|imli/ && smelter.facility_location_country.downcase =~ /indonesia/
-          "PT Bukit Timah"
+          unless smelter_name =~ /fang/
+            "PT Bukit Timah"
+          else
+            smelter_name
+          end
         elsif smelter_name.gsub(/\W/, '') =~ /zhuzhou/
           if smelter.metal.downcase == 'tungsten'
             "Zhuzhou Cemented Carbide Group Co Ltd"
