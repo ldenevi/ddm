@@ -67,6 +67,16 @@ class Cfsi::Reports::SmelterReference < ActiveRecord::Base
           else
             smelter_name
           end
+        elsif smelter_name =~ /novosibirsk/
+          if smelter.metal.downcase == 'gold'
+            "FSE Novosibirsk Refinery"
+          elsif smelter.metal.downcase == 'tin'
+            "Novosibirsk Integrated Tin Works"
+          else
+            smelter_name
+          end
+        elsif smelter_name =~ /shyolkovsky/
+          "SOE Shyolkovsky Factory of Secondary Precious Metals"
         elsif smelter_name =~ /qiankun/
           "Inner Mongolia Qiankun Gold and Silver Refinery Share Company Limited"
         elsif smelter_name =~ /luoyang/
