@@ -76,7 +76,7 @@ class Cfsi::Declaration < ActiveRecord::Base
     extract_data_from_minerals_questions_worksheet
     extract_data_from_company_level_questions_worksheet
     extract_data_from_mineral_smelters_worksheet
-    extract_data_from_standard_smelter_names_worksheet
+    # extract_data_from_standard_smelter_names_worksheet
     extract_data_from_products_worksheet
   end
 
