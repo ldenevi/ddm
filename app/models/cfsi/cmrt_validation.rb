@@ -15,6 +15,9 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   attr_accessible :user
   validates :user, :presence => true
 
+  attr_accessor :system_errors
+  attr_accessor :backtrace
+
   has_many :previous_validations, :readonly => true, :class_name => "Cfsi::CmrtValidation", :finder_sql => Proc.new {
                                                                                                                 %Q{
                                                                                                                   SELECT v.*
@@ -47,6 +50,8 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
       self.validation_attempt = (self.previous_validations.last.nil?) ? 1 : self.previous_validations.last.validation_attempt.to_i + 1
       transition_to("Opened")
     rescue $!
+      self.system_errors = $!.message
+      self.backtrace = $!.backtrace
       transition_to_file_not_readable($!.message)
     end
   end
