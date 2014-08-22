@@ -30,7 +30,7 @@
   <% cmrt_validation = cmrt_validations.last %>
   <% cmrt = cmrt_validation.cmrt %>
   <% declaration = cmrt.nil? ? nil : cmrt.declaration %>
-  <tr><td colspan="2"><h3><%= cmrt.minerals_vendor.name %></h3></td></tr>
+  <tr><td colspan="2"><h3><%= cmrt.minerals_vendor ? cmrt.minerals_vendor.name : "Unidentified vendor" %></h3></td></tr>
   <tr class="<%= cycle('odd', 'even') %>">
     <td>
       <table>
