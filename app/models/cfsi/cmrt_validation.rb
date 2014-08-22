@@ -57,7 +57,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   end
 
   def transition_to_file_not_readable(errors = '')
-    transition_to("File not readable", :message => "Cannot read " + errors)
+    transition_to("File not readable", :message => errors)
   end
 
   def transition_to_validated
