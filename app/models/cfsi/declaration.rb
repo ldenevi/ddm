@@ -52,6 +52,9 @@ class Cfsi::Declaration < ActiveRecord::Base
 
     obj.structure        = obj.get_structure_for_version(obj.version)
     obj.cell_definitions = obj.get_cell_definitions_for_version(obj.version)
+    obj.structure[:worksheet_indices].values.uniq.each do |index|
+      raise GSP::Protocols::Regulations::CFSI::CMRT::Exceptions::InvalidWorksheets if obj.csv_worksheets[index].nil?
+    end
 
     validates_with Cfsi::Declaration::V2Validator, Cfsi::Declaration::V3Validator
     obj.extract_data_from_all_worksheets
