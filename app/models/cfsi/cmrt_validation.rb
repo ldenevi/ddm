@@ -47,7 +47,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
       self.cmrt = Cfsi::Cmrt.generate(file_path, :organization => self.organization)
       self.cmrt.save!(:validate => false)
       update_attribute(:vendor_id, self.cmrt.minerals_vendor.id)
-      self.validation_attempt = (self.previous_validations.last.nil?) ? 1 : self.previous_validations.last.validation_attempt.to_i + 1
+      self.validation_attempt = (self.previous_validations.last.nil?) ? 1 : self.previous_validations.last.validation_attempt.to_i + 1 unless validations_batch.nil?
       transition_to("Opened")
     rescue $!
       self.system_errors = $!.message
