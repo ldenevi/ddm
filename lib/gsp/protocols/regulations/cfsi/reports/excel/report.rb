@@ -12,7 +12,7 @@ class GSP::Protocols::Regulations::CFSI::Reports::Excel::Report < Object
   DATA_STYLE     = {:sz => 9, :alignment => {:horizontal => :left, :vertical => :top , :wrap_text => true}}
 
   def initialize(validations_batch)
-    self.validations_batch = Cfsi::ValidationsBatch.includes([:unidentified_cmrt_validations, :vendor_cmrt_validations => [:vendor, :spreadsheet, {:cmrt => {:declaration => :mineral_smelters}}]]).find(validations_batch)
+    self.validations_batch = validations_batch
     self.worksheets = []
     self.sorted_smelters = []
     # Compile sorted source data
