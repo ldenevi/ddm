@@ -123,6 +123,7 @@ describe Cfsi::Declaration do
       expect(generated_declaration.mineral_smelters.last.smelter_reference_list).not_to be_empty
       expect(generated_declaration.mineral_smelters.last.metal).not_to be_empty
 
+=begin
       # Standard smelter names
       expect(generated_declaration.standard_smelter_names).not_to be_empty
       expect(generated_declaration.standard_smelter_names.first).not_to be_nil
@@ -136,6 +137,7 @@ describe Cfsi::Declaration do
       expect(generated_declaration.standard_smelter_names.last.metal).not_to be_empty
       expect(generated_declaration.standard_smelter_names.last.smelter_id).not_to be_empty
       expect(generated_declaration.standard_smelter_names.last.standard_smelter_name).not_to be_empty
+=end
 
       # Products
       expect(generated_declaration.products).not_to be_empty
