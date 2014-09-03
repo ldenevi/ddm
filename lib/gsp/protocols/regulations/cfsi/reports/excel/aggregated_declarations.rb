@@ -358,6 +358,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       # Styles
       h2 = sheet.styles.add_style :b => true, :sz => 10, :alignment => {:horizontal => :right, :vertical => :center, :wrap_text => true}
       right_align = sheet.styles.add_style :alignment => {:horizontal => :right}
+      center_align = sheet.styles.add_style :alignment => {:horizontal => :center}
 
       sheet.add_row ["Number of Companies", stats[:number_of_companies], "100%"], :style => [h2, nil, nil]
 
@@ -365,61 +366,61 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Conflict Minerals Originating from the DRC or adjoining countries", "", ""], :style => h2
-        sheet.add_row ["Answered \"Yes\" for any metal", stats[:answered_yes_for_any_metal], stats[:answered_yes_for_any_metal] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tantalum", stats[:answered_yes_for_tantalum], stats[:answered_yes_for_tantalum] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tin", stats[:answered_yes_for_tin], stats[:answered_yes_for_tin] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Gold", stats[:answered_yes_for_gold], stats[:answered_yes_for_gold] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tungsten", stats[:answered_yes_for_tungsten], stats[:answered_yes_for_tungsten] / stats[:number_of_companies]], :style => [right_align, nil, nil]
+        sheet.add_row ["Answered \"Yes\" for any metal", stats[:answered_yes_for_any_metal], ("%.2f%%" % (stats[:answered_yes_for_any_metal].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tantalum", stats[:answered_yes_for_tantalum], ("%.2f%%" % (stats[:answered_yes_for_tantalum].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tin", stats[:answered_yes_for_tin], ("%.2f%%" % (stats[:answered_yes_for_tin].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Gold", stats[:answered_yes_for_gold], ("%.2f%%" % (stats[:answered_yes_for_gold] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tungsten", stats[:answered_yes_for_tungsten], ("%.2f%%" % (stats[:answered_yes_for_tungsten] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Conflict Minerals", "", ""], :style => h2
-        sheet.add_row ["Tantalum", stats[:reported_cm_tantalum], stats[:reported_cm_tantalum] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tin", stats[:reported_cm_tin], stats[:reported_cm_tin] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Gold", stats[:reported_cm_gold], stats[:reported_cm_gold] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tungsten", stats[:reported_cm_tungsten], stats[:reported_cm_tungsten] / stats[:number_of_companies]], :style => [right_align, nil, nil]
+        sheet.add_row ["Tantalum", stats[:reported_cm_tantalum], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tin", stats[:reported_cm_tin], ("%.2f%%" % (stats[:reported_cm_tin] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Gold", stats[:reported_cm_gold], ("%.2f%%" % (stats[:reported_cm_gold] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tungsten", stats[:reported_cm_tungsten], ("%.2f%%" % (stats[:reported_cm_tungsten] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Number of Conflict Minerals", "", ""], :style => h2
-        sheet.add_row ["None", stats[:number_of_cm_none], stats[:reported_cm_tantalum] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["1", stats[:number_of_cm_one], stats[:number_of_cm_one] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["2", stats[:number_of_cm_two], stats[:number_of_cm_two] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["3", stats[:number_of_cm_three], stats[:number_of_cm_three] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["4", stats[:number_of_cm_four], stats[:number_of_cm_four] / stats[:number_of_companies]], :style => [right_align, nil, nil]
+        sheet.add_row ["None", stats[:number_of_cm_none], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["1", stats[:number_of_cm_one], ("%.2f%%" % (stats[:number_of_cm_one] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["2", stats[:number_of_cm_two], ("%.2f%%" % (stats[:number_of_cm_two] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["3", stats[:number_of_cm_three], ("%.2f%%" % (stats[:number_of_cm_three] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["4", stats[:number_of_cm_four], ("%.2f%%" % (stats[:number_of_cm_four] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting All Smelters Were Identified", "", ""], :style => h2
-        sheet.add_row ["Tantalum", stats[:reported_all_tantalum_identified], stats[:reported_all_tantalum_identified] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tin", stats[:reported_all_tin_identified], stats[:reported_all_tin_identified] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Gold", stats[:reported_all_gold_identified], stats[:reported_all_gold_identified] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tungsten", stats[:reported_all_tungsten_identified], stats[:reported_all_tungsten_identified] / stats[:number_of_companies]], :style => [right_align, nil, nil]
+        sheet.add_row ["Tantalum", stats[:reported_all_tantalum_identified], ("%.2f%%" % (stats[:reported_all_tantalum_identified] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tin", stats[:reported_all_tin_identified], ("%.2f%%" % (stats[:reported_all_tin_identified] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Gold", stats[:reported_all_gold_identified], ("%.2f%%" % (stats[:reported_all_gold_identified] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tungsten", stats[:reported_all_tungsten_identified], ("%.2f%%" % (stats[:reported_all_tungsten_identified] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Company Reports Regarding Supplier Responses", "100%", "75% - 99%", "50% - 74%", "25% - 49%", "1% - 24%", "None - 0%"], :style => h2
-        sheet.add_row ["Tantalum", stats[:supplier_response_100_tantalum], stats[:supplier_response_75_tantalum], stats[:supplier_response_50_tantalum], stats[:supplier_response_25_tantalum], stats[:supplier_response_1_tantalum], stats[:supplier_response_0_tantalum]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tin", stats[:supplier_response_100_tin], stats[:supplier_response_75_tin], stats[:supplier_response_50_tin], stats[:supplier_response_25_tin], stats[:supplier_response_1_tin], stats[:supplier_response_0_tin]], :style => [right_align, nil, nil]
-        sheet.add_row ["Gold", stats[:supplier_response_100_gold], stats[:supplier_response_75_gold], stats[:supplier_response_50_gold], stats[:supplier_response_25_gold], stats[:supplier_response_1_gold], stats[:supplier_response_0_gold]], :style => [right_align, nil, nil]
-        sheet.add_row ["Tungsten", stats[:supplier_response_100_tungsten], stats[:supplier_response_75_tungsten], stats[:supplier_response_50_tungsten], stats[:supplier_response_25_tungsten], stats[:supplier_response_1_tungsten], stats[:supplier_response_0_tungsten]], :style => [right_align, nil, nil]
+        sheet.add_row ["Tantalum", stats[:supplier_response_100_tantalum], stats[:supplier_response_75_tantalum], stats[:supplier_response_50_tantalum], stats[:supplier_response_25_tantalum], stats[:supplier_response_1_tantalum], stats[:supplier_response_0_tantalum]], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tin", stats[:supplier_response_100_tin], stats[:supplier_response_75_tin], stats[:supplier_response_50_tin], stats[:supplier_response_25_tin], stats[:supplier_response_1_tin], stats[:supplier_response_0_tin]], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Gold", stats[:supplier_response_100_gold], stats[:supplier_response_75_gold], stats[:supplier_response_50_gold], stats[:supplier_response_25_gold], stats[:supplier_response_1_gold], stats[:supplier_response_0_gold]], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tungsten", stats[:supplier_response_100_tungsten], stats[:supplier_response_75_tungsten], stats[:supplier_response_50_tungsten], stats[:supplier_response_25_tungsten], stats[:supplier_response_1_tungsten], stats[:supplier_response_0_tungsten]], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting a Policy in Place", stats[:reported_policy_in_place], stats[:reported_policy_in_place] / stats[:number_of_companies]], :style => [h2, nil, nil]
+        sheet.add_row ["Companies Reporting a Policy in Place", stats[:reported_policy_in_place], ("%.2f%%" % (stats[:reported_policy_in_place] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting Their Policy is Available on Their Website", stats[:reported_policy_on_website], stats[:reported_policy_on_website] / stats[:number_of_companies]], :style => [h2, nil, nil]
+        sheet.add_row ["Companies Reporting Their Policy is Available on Their Website", stats[:reported_policy_on_website], ("%.2f%%" % (stats[:reported_policy_on_website] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting They Are Subject to the SEC Conflict Minerals rule", stats[:reported_subject_to_sec], stats[:reported_subject_to_sec] / stats[:number_of_companies]], :style => [h2, nil, nil]
+        sheet.add_row ["Companies Reporting They Are Subject to the SEC Conflict Minerals rule", [:reported_subject_to_sec], ("%.2f%%" % (stats[:reported_subject_to_sec] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Status", "", ""], :style => [h2, nil, nil]
-        sheet.add_row ["Green", stats[:status_green], stats[:status_green] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["High Risk", stats[:status_high_risk], stats[:status_high_risk] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Validation Needed", stats[:status_validation_needed], stats[:status_validation_needed] / stats[:number_of_companies]], :style => [right_align, nil, nil]
+        sheet.add_row ["Green", stats[:status_green], ("%.2f%%" % (stats[:status_green] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["High Risk", stats[:status_high_risk], ("%.2f%%" % (stats[:status_high_risk] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Validation Needed", stats[:status_validation_needed], ("%.2f%%" % (stats[:status_validation_needed] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Reporting at", "", ""], :style => [h2, nil, nil]
-        sheet.add_row ["Company level", stats[:scoped_at_company_level], stats[:scoped_at_company_level] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Product level", stats[:scoped_at_product_level], stats[:scoped_at_product_level] / stats[:number_of_companies]], :style => [right_align, nil, nil]
-        sheet.add_row ["Other", stats[:scoped_at_other], stats[:scoped_at_other] / stats[:number_of_companies]], :style => [right_align, nil, nil]
+        sheet.add_row ["Company level", stats[:scoped_at_company_level], ("%.2f%%" % (stats[:scoped_at_company_level] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Product level", stats[:scoped_at_product_level], ("%.2f%%" % (stats[:scoped_at_product_level] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Other", stats[:scoped_at_other], ("%.2f%%" % (stats[:scoped_at_other] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
       end
       sheet
     end
