@@ -1,7 +1,7 @@
 set :application, 'GSP-App'
 
 # From
-set :repo_url, 'git@gitlab.greenstatuspro.com:gsp-app.git'
+set :repo_url, 'git@gitlab.greenstatuspro.com:repositories/gsp-app.git'
 
 # To
 set :deploy_to, "/var/www_rails/gsp-app"
