@@ -4,13 +4,13 @@ class Cfsi::ReportsController < ApplicationController
   end
 
   def aggregated_declarations
-    batch = Cfsi::ValidationsBatch.includes([:unidentified_cmrt_validations, :vendor_cmrt_validations => [:vendor, :spreadsheet, {:cmrt => {:declaration => :mineral_smelters}}]]).find(params[:batch_id])
+    batch = Cfsi::ValidationsBatch.includes([:unidentified_cmrt_validations, :vendor_cmrt_validations => [:vendor, :spreadsheet, {:cmrt => [:minerals_vendor, {:declaration => :mineral_smelters}]}]]).find(params[:batch_id])
     spreadsheet = GSP::Protocols::Regulations::CFSI::Reports::Excel::AggregatedDeclarations.new(batch).to_excel
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("cfsi_aggregated_declarations_report.gsp.xlsx"), :type => 'application/excel'
   end
 
   def consolidated_smelters
-    batch = Cfsi::ValidationsBatch.includes([:unidentified_cmrt_validations, :vendor_cmrt_validations => [:vendor, :spreadsheet, {:cmrt => {:declaration => :mineral_smelters}}]]).find(params[:batch_id])
+    batch = Cfsi::ValidationsBatch.includes([:unidentified_cmrt_validations, :vendor_cmrt_validations => [:vendor, :spreadsheet, {:cmrt => [:minerals_vendor, {:declaration => :mineral_smelters}]}]]).find(params[:batch_id])
     spreadsheet = GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters.new(batch).to_excel
     send_data spreadsheet.to_stream(false).read, :filename => report_filename("cfsi_consolidated_smelters_report.gsp.xlsx"), :type => 'application/excel'
   end
