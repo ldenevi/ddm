@@ -42,5 +42,8 @@
     <div data-progress="<%= review.progress %>" class="review-progress-bar">
     </div>
   </div>
+  <div>
+    <%= link_to "Comprehensive Report", roadmap_comprehensive_report_path(review.id) %>
+  </div>
 </article>
 
