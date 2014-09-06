@@ -6,7 +6,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
   belongs_to :validations_batch
   belongs_to :vendor, :class_name => 'Cfsi::MineralsVendor'
   attr_accessible :cmrt, :validations_batch, :email_sent_at, :issues, :sent_emails_count,
-                  :status, :validation_attempt, :spreadsheet
+                  :status, :validation_attempt, :spreadsheet, :vendor
 
   belongs_to :organization
   attr_accessible :organization
