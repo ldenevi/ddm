@@ -33,6 +33,10 @@ GSP::Application.routes.draw do
     get "smelters_reference/list"
     post "smelters_reference/update"
   end
+  
+  namespace :roadmap do
+    get "reports/comprehensive_due_diligence/:review_id", :to => "reports#comprehensive_due_diligence", :as => "comprehensive_report"
+  end
 
   # EICC Declaration
   get "eicc/declaration/index"
@@ -54,9 +58,6 @@ GSP::Application.routes.draw do
     get "reports/ingestor/:id/consolidated_smelters", :to => "ingestor#consolidated_smelters", :as => "consolidated_smelters"
     get "reports/ingestor/:id/aggregated_declarations", :to => "ingestor#aggregated_declarations", :as => "aggregated_declarations"
     get "reports/ingestor/:id/smelters_by_suppliers", :to => "ingestor#smelters_by_suppliers", :as => "smelters_by_suppliers"
-
-    # Roadmap
-    get "reports/roadmap/:id/comprehensive_due_diligence", :to => "roadmap#comprehensive_due_diligence", :as => "comprehensive_due_diligence"
   end
 
   get "reviews/list"
@@ -141,8 +142,6 @@ GSP::Application.routes.draw do
 
   # Reports
   get "reports/list", :to => "reports#list", :as => "reports_list"
-  get "reports/get/c/:id", :to => "reports#generate_comprehensive", :as => "comprehensive_report"
-  get "reports/comprehensive", :to => "reports#comprehensive", :as => "comprehensive_list"
   get "reports/review_status", :to => "reports#review_status", :as => "review_status"
   get "reports/eicc_consolidated_report/:id", :to => "reports#eicc_consolidated_report", :as => "eicc_consolidated_report"
   get "reports/eicc_detailed_smelter_report/:id", :to => "reports#eicc_detailed_smelter_report", :as => "eicc_detailed_smelter_report"
