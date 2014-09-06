@@ -43,18 +43,20 @@ class Cfsi::Cmrt < ActiveRecord::Base
     # For now, use company_name until extracting metad_data is possible
     company_name || "Unidentified Vendor"
   end
+  
+  def initialize_attributes_from_declaration(declaration)
+    self.declaration = declaration
+    self.company_name = self.declaration.company_name
+    self.language = self.declaration.language
+    self.representative_email = self.declaration.contact_email
+    self.version = self.declaration.version
+    self.minerals_vendor = self.find_or_create_minerals_vendor
+  end
 
   def self.generate(file_path, attrs = {})
-    obj = new attrs
-    obj.file_name = File.basename(file_path)
-    obj.file_extension = File.extname(file_path)
+    obj = new attrs.merge(:file_name => File.basename(file_path), :file_extension => File.extname(file_path))
     worksheets = GSP::Documents::Conversion::OfficeConvert::Excel.to_worksheets(file_path)
-    obj.declaration = Cfsi::Declaration.generate(worksheets, attrs)
-    obj.company_name = obj.declaration.company_name
-    obj.language = obj.declaration.language
-    obj.representative_email = obj.declaration.contact_email
-    obj.version = obj.declaration.version
-    obj.minerals_vendor = obj.find_or_create_minerals_vendor
+    obj.initialize_attributes_from_declaration(Cfsi::Declaration.generate(worksheets, attrs))
     obj
   end
 end
