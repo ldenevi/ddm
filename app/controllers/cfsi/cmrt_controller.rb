@@ -8,8 +8,18 @@ class Cfsi::CmrtController < ApplicationController
   end
 
   def new
-    @validations_batch = Cfsi::ValidationsBatch.create :user => current_user, :organization => current_user.organization
-    redirect_to :action => :show, :id => @validations_batch.id
+    if current_user.is_a?(Trial::TrialUser) && Cfsi::ValidationsBatch.where(:user_id => current_user).count == 3
+      flash[:notice] = "You have reached the maximum number of CMRT validation batches. Please contact Green Status Pro sales to upgrade your account."
+      redirect_to :action => :index
+    else
+      @validations_batch = Cfsi::ValidationsBatch.create :user => current_user, :organization => current_user.organization
+      if @validations_batch.valid?
+        redirect_to :action => :show, :id => @validations_batch.id
+      else
+        flash[:errors] = @validations_batch.errors.full_messages
+        redirect_to :action => :index
+      end
+    end
   end
 
   def validate_cmrt(uploaded_cmrt_file, validations_batch_id, user = current_user)
