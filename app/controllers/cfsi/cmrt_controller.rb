@@ -1,4 +1,7 @@
 class Cfsi::CmrtController < ApplicationController
+  TRIAL_USER_BATCH_LIMIT = 3
+  TRIAL_USER_CMRT_LIMIT  = 7
+
   def index
     @validations_batches = Cfsi::ValidationsBatch.order("created_at DESC").where(:user_id => current_user).all || []
   end
@@ -8,19 +11,36 @@ class Cfsi::CmrtController < ApplicationController
   end
 
   def new
-    @validations_batch = Cfsi::ValidationsBatch.create :user => current_user, :organization => current_user.organization
-    redirect_to :action => :show, :id => @validations_batch.id
+    if current_user.is_a?(Trial::TrialUser) && Cfsi::ValidationsBatch.where(:user_id => current_user).count == TRIAL_USER_BATCH_LIMIT
+      flash[:notice] = "You have reached the maximum number of CMRT validation batches: #{TRIAL_USER_BATCH_LIMIT}. Please contact Green Status Pro sales to upgrade your account."
+      redirect_to :action => :index
+    else
+      @validations_batch = Cfsi::ValidationsBatch.create :user => current_user, :organization => current_user.organization
+      if @validations_batch.valid?
+        redirect_to :action => :show, :id => @validations_batch.id
+      else
+        flash[:errors] = @validations_batch.errors.full_messages
+        redirect_to :action => :index
+      end
+    end
   end
 
   def validate_cmrt(uploaded_cmrt_file, validations_batch_id, user = current_user)
-    @validations_batch = Cfsi::ValidationsBatch.find(validations_batch_id)
-    temp_file_path = store_uploaded_file(uploaded_cmrt_file)
-    @validations_batch.transition_to_processing
-    @cmrt_validation = Cfsi::CmrtValidation.generate(temp_file_path, :validations_batch => @validations_batch, :user => user, :organization => user.organization)
-    @cmrt_validation.transition_to_opened
-    @cmrt_validation.transition_to_validated
-    @validations_batch.transition_to_completed
-    @cmrt_validation.state != "File not readable"
+    @validations_batch = Cfsi::ValidationsBatch.includes(:cmrt_validations).find(validations_batch_id)
+    if current_user.is_a?(Trial::TrialUser) && @validations_batch.cmrt_validations.size >= TRIAL_USER_CMRT_LIMIT
+      limit_message = "You have reached the maximum number of CMRTs: #{TRIAL_USER_CMRT_LIMIT}. Please contact Green Status Pro sales to upgrade your account."
+      flash[:notice] = limit_message
+      @cmrt_validation = Cfsi::CmrtValidation.create(:validations_batch => @validations_batch, :user => user, :organization => user.organization, :issues => limit_message)
+      false
+    else
+      temp_file_path = store_uploaded_file(uploaded_cmrt_file)
+      @validations_batch.transition_to_processing
+      @cmrt_validation = Cfsi::CmrtValidation.generate(temp_file_path, :validations_batch => @validations_batch, :user => user, :organization => user.organization)
+      @cmrt_validation.transition_to_opened
+      @cmrt_validation.transition_to_validated
+      @validations_batch.transition_to_completed
+      @cmrt_validation.state != "File not readable"
+    end
   end
 
   def validate

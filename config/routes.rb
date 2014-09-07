@@ -38,28 +38,6 @@ GSP::Application.routes.draw do
     get "reports/comprehensive_due_diligence/:review_id", :to => "reports#comprehensive_due_diligence", :as => "comprehensive_report"
   end
 
-  # EICC Declaration
-  get "eicc/declaration/index"
-  get "eicc/declaration/list"
-  get "eicc/declaration/new", :to => "eicc/declaration#new", :as => "begin_new_eicc_declaration_check"
-  get "eicc/declaration/show/:id", :to => "eicc/declaration#show", :as => "upload_eicc_declarations"
-  post "eicc/declaration/upload"
-  post "eicc/declaration/validate_single_eicc_spreadsheet/:validation_status_id", :to => "eicc/declaration#validate_single_eicc_spreadsheet"
-  get "eicc/declaration/show_validation_statuses/:id", :to => "eicc/declaration#show_validation_statuses"
-  get "eicc/declaration/download_uploaded_eicc_spreadsheet/:id", :to => "eicc/declaration#download_uploaded_eicc_spreadsheet", :as => "download_uploaded_eicc_spreadsheet"
-  get "eicc/declaration/find_or_create_review/:id", :to => "eicc/declaration#find_or_create_review", :as => "find_or_create_review"
-
-  scope :module => 'eicc' do
-    post "upload_zip", :to => "declaration#upload_zip", :as => "upload_eicc_declarations_zip"
-  end
-
-  scope :module => 'reports' do
-    # EICC/GeSI Ingestor
-    get "reports/ingestor/:id/consolidated_smelters", :to => "ingestor#consolidated_smelters", :as => "consolidated_smelters"
-    get "reports/ingestor/:id/aggregated_declarations", :to => "ingestor#aggregated_declarations", :as => "aggregated_declarations"
-    get "reports/ingestor/:id/smelters_by_suppliers", :to => "ingestor#smelters_by_suppliers", :as => "smelters_by_suppliers"
-  end
-
   get "reviews/list"
 
   get "reviews/show"
@@ -139,13 +117,6 @@ GSP::Application.routes.draw do
   get  "review/task/:task_id/comment/form", :to => "review#post_comment_form", :as => "post_comment_form"
 
   get "review/get_file/:id", :to => "review#get_attachment", :as => "get_file"
-
-  # Reports
-  get "reports/list", :to => "reports#list", :as => "reports_list"
-  get "reports/review_status", :to => "reports#review_status", :as => "review_status"
-  get "reports/eicc_consolidated_report/:id", :to => "reports#eicc_consolidated_report", :as => "eicc_consolidated_report"
-  get "reports/eicc_detailed_smelter_report/:id", :to => "reports#eicc_detailed_smelter_report", :as => "eicc_detailed_smelter_report"
-  get "reports/eicc_consolidated_smelter_list/:id", :to => "reports#eicc_consolidated_smelter_list", :as => "eicc_consolidated_smelter_list_report"
 
   # Calendar
   get "calendar/datafeed/:method", :to => "calendar#datafeed"

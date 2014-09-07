@@ -24,7 +24,7 @@ protected
 
   def after_sign_in_path_for(resource)
     if current_user.is_a?(Trial::TrialUser)
-      eicc_declaration_index_path
+      cfsi_cmrt_index_path
     else
       session[:return_to] || root_path
     end
