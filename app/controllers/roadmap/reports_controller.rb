@@ -3,6 +3,7 @@ require "prawn/measurement_extensions"
 
 class Roadmap::ReportsController < ApplicationController
   include ReportsHelper
+  Prawn::Document.send(:include, ActionView::Helpers::SanitizeHelper)
   
   def comprehensive_due_diligence
     review = Review.includes({:tasks => :comments}).where(:id => params[:review_id], :organization_id => current_user.organization.id).first
@@ -46,14 +47,14 @@ class Roadmap::ReportsController < ApplicationController
 
         # Instructions
         task_name = make_cell(:content => "<b>#{task.name}</b>", :align => :center)
-        task_inst = make_cell(:content => "<font size='9'>%s</font>" % task.instructions.gsub('<li>', '- ').gsub('</li>', ""), :align => :left)
+        task_inst = make_cell(:content => "<font size='9'>%s</font>" % strip_tags(task.instructions.gsub('<li>', "\n- ").gsub('</li>', "")), :align => :left)
 
         # Comments
         comments = []
         task.comments.each do |comment|
           author = "<b>%s:</b>" % comment.author.eponym
           date   = "<font size='8'>%s</font>\n" % comment.created_at.to_formatted_s(:long)
-          body   = "<font size='9'>%s</font>" % comment.body.gsub(/<\/.+>/, '').gsub(/<.+>/, '')
+          body   = "<font size='9'>%s</font>" % strip_tags(comment.body)
           attachments = "<font size='9'>Attachments: %s</font>" % comment.attachments.map { |a| "<color rgb='0000FF'><u><link href='%s'>%s</link></u></color>" % ["http://gsp-app.greenstatuspro.com/review/get_file/#{a.id}", a.filename] }.join(', ')
           comments += [[""], [[author, date, body, attachments].join("\n")]]
         end
