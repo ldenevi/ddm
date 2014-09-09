@@ -36,6 +36,7 @@ GSP::Application.routes.draw do
   
   namespace :roadmap do
     get "reports/comprehensive_due_diligence/:review_id", :to => "reports#comprehensive_due_diligence", :as => "comprehensive_report"
+    get "logos/get/:id", :to => "logos#get", :as => "agency_logo"
   end
 
   get "reviews/list"

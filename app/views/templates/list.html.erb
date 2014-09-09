@@ -15,7 +15,7 @@
     <div class="organization-templates">
       <% @templates.each do |template| %>
       <div class="templates-list-item">
-        <div class="templates-list-logo"><img src="/images/agencies/<%= template.agency.acronym.downcase %>.png"></div>
+        <div class="templates-list-logo"><%= image_tag url_for roadmap_agency_logo_path(template.agency.id) %></div>
         <div>
           <span><%= link_to template.regulatory_review_name, template_show_path(template.id) %></span>
           <span><%= (template.tasks.to_s.empty?) ? "No" : JSON.parse(template.tasks).size %> task(s)</span>
