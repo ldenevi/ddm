@@ -365,19 +365,19 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       unless stats[:number_of_companies] == 0
 
         sheet.add_row ["", "", ""]
+        sheet.add_row ["Companies Reporting Conflict Minerals", "", ""], :style => h2
+        sheet.add_row ["Tantalum", stats[:reported_cm_tantalum], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tin", stats[:reported_cm_tin], ("%.2f%%" % (stats[:reported_cm_tin] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Gold", stats[:reported_cm_gold], ("%.2f%%" % (stats[:reported_cm_gold] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["Tungsten", stats[:reported_cm_tungsten], ("%.2f%%" % (stats[:reported_cm_tungsten] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+
+        sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Conflict Minerals Originating from the DRC or adjoining countries", "", ""], :style => h2
         sheet.add_row ["Answered \"Yes\" for any metal", stats[:answered_yes_for_any_metal], ("%.2f%%" % (stats[:answered_yes_for_any_metal].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tantalum", stats[:answered_yes_for_tantalum], ("%.2f%%" % (stats[:answered_yes_for_tantalum].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tin", stats[:answered_yes_for_tin], ("%.2f%%" % (stats[:answered_yes_for_tin].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Gold", stats[:answered_yes_for_gold], ("%.2f%%" % (stats[:answered_yes_for_gold] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tungsten", stats[:answered_yes_for_tungsten], ("%.2f%%" % (stats[:answered_yes_for_tungsten] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
-
-        sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting Conflict Minerals", "", ""], :style => h2
-        sheet.add_row ["Tantalum", stats[:reported_cm_tantalum], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
-        sheet.add_row ["Tin", stats[:reported_cm_tin], ("%.2f%%" % (stats[:reported_cm_tin] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
-        sheet.add_row ["Gold", stats[:reported_cm_gold], ("%.2f%%" % (stats[:reported_cm_gold] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
-        sheet.add_row ["Tungsten", stats[:reported_cm_tungsten], ("%.2f%%" % (stats[:reported_cm_tungsten] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Number of Conflict Minerals", "", ""], :style => h2
@@ -408,7 +408,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
         sheet.add_row ["Companies Reporting Their Policy is Available on Their Website", stats[:reported_policy_on_website], ("%.2f%%" % (stats[:reported_policy_on_website] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting They Are Subject to the SEC Conflict Minerals rule", [:reported_subject_to_sec], ("%.2f%%" % (stats[:reported_subject_to_sec] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
+        sheet.add_row ["Companies Reporting They Are Subject to the SEC Conflict Minerals rule", stats[:reported_subject_to_sec], ("%.2f%%" % (stats[:reported_subject_to_sec] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Status", "", ""], :style => [h2, nil, nil]
