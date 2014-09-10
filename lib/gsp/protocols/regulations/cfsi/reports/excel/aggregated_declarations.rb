@@ -408,7 +408,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
         sheet.add_row ["Companies Reporting Their Policy is Available on Their Website", stats[:reported_policy_on_website], ("%.2f%%" % (stats[:reported_policy_on_website] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting They Are Subject to the SEC Conflict Minerals rule", [:reported_subject_to_sec], ("%.2f%%" % (stats[:reported_subject_to_sec] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
+        sheet.add_row ["Companies Reporting They Are Subject to the SEC Conflict Minerals rule", stats[:reported_subject_to_sec], ("%.2f%%" % (stats[:reported_subject_to_sec] / stats[:number_of_companies].to_f * 100.00))], :style => [h2, nil, nil]
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Status", "", ""], :style => [h2, nil, nil]
