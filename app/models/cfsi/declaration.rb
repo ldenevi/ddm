@@ -16,10 +16,10 @@ class Cfsi::Declaration < ActiveRecord::Base
   belongs_to :cmrt
   attr_accessible :cmrt
 
-  has_many :company_level_questions, :dependent => :destroy
+  has_many :company_level_questions, :dependent => :destroy, :order => 'sequence'
   attr_accessible :company_level_questions
 
-  has_many :minerals_questions, :dependent => :destroy
+  has_many :minerals_questions, :dependent => :destroy, :order => 'sequence'
   attr_accessible :minerals_questions
 
   has_many :mineral_smelters, :dependent => :destroy
