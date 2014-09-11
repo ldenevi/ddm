@@ -368,7 +368,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Number of Conflict Minerals", "", ""], :style => h2
-        sheet.add_row ["None", stats[:number_of_cm_none], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["None", stats[:number_of_cm_none], ("%.2f%%" % (stats[:number_of_cm_none] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["1", stats[:number_of_cm_one], ("%.2f%%" % (stats[:number_of_cm_one] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["2", stats[:number_of_cm_two], ("%.2f%%" % (stats[:number_of_cm_two] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["3", stats[:number_of_cm_three], ("%.2f%%" % (stats[:number_of_cm_three] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
