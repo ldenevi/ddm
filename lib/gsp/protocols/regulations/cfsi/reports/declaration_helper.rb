@@ -33,9 +33,9 @@ module GSP::Protocols::Regulations::CFSI::Reports::DeclarationHelper
   #
   def has_tantalum_from_conflict_zone?
     if is_version_2?
-      minerals_questions[1].tungsten.to_s.downcase =~ /yes/
+      minerals_questions[1].tantalum.to_s.downcase =~ /yes/
     elsif is_version_3?
-      minerals_questions[2].tungsten.to_s.downcase =~ /yes/
+      minerals_questions[2].tantalum.to_s.downcase =~ /yes/
     end
   end
   def has_tin_from_conflict_zone?
