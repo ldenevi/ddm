@@ -3,6 +3,7 @@ class Cfsi::Declaration < ActiveRecord::Base
   autoload :V3Validator, File.join(File.dirname(__FILE__), 'declaration_validators', 'v3_validator.rb')
   extend GSP::Protocols::Regulations::CFSI::CMRT::Versions
   include GSP::Protocols::Regulations::CFSI::CMRT::Maps
+  include GSP::Protocols::Regulations::CFSI::Reports::DeclarationHelper
 
   attr_accessible :address, :authorized_company_representative_name,
                   :company_name, :company_unique_identifier, :completion_at,

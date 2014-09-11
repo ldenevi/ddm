@@ -207,16 +207,16 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       stats = {
       :number_of_companies => total,
 
+      :reported_cm_tantalum => 0,
+      :reported_cm_tin      => 0,
+      :reported_cm_gold     => 0,
+      :reported_cm_tungsten => 0,
+
       :answered_yes_for_any_metal => 0,
       :answered_yes_for_tantalum  => 0,
       :answered_yes_for_tin       => 0,
       :answered_yes_for_gold      => 0,
       :answered_yes_for_tungsten  => 0,
-
-      :reported_cm_tantalum => 0,
-      :reported_cm_tin      => 0,
-      :reported_cm_gold     => 0,
-      :reported_cm_tungsten => 0,
 
       :number_of_cm_none  => 0,
       :number_of_cm_one   => 0,
@@ -272,72 +272,59 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
         next unless val.has_declaration?
 
         dec  = val.cmrt.declaration
-        mqs  = dec.minerals_questions.sort_by(&:sequence)
-        clqs = dec.company_level_questions.sort_by(&:sequence)
-        is_version_2 = dec.version =~ /^2/
 
-        has_tantalum = is_version_2 ? (mqs[1].tantalum.to_s.downcase == 'yes') : ([mqs[0].tantalum.to_s.downcase, mqs[1].tantalum.to_s.downcase].include?('yes'))
-        has_tin      = is_version_2 ? (mqs[1].tin.to_s.downcase == 'yes') : ([mqs[0].tin.to_s.downcase, mqs[1].tin.to_s.downcase].include?('yes'))
-        has_gold     = is_version_2 ? (mqs[1].gold.to_s.downcase == 'yes') : ([mqs[0].gold.to_s.downcase, mqs[1].gold.to_s.downcase].include?('yes'))
-        has_tungsten = is_version_2 ? (mqs[1].tungsten.to_s.downcase == 'yes') : ([mqs[0].tungsten.to_s.downcase, mqs[1].tungsten.to_s.downcase].include?('yes'))
+        stats[:reported_cm_tantalum] += 1 if dec.has_tantalum_from_conflict_zone?
+        stats[:reported_cm_tin]      += 1 if dec.has_tin_from_conflict_zone?
+        stats[:reported_cm_gold]     += 1 if dec.has_gold_from_conflict_zone?
+        stats[:reported_cm_tungsten] += 1 if dec.has_tungsten_from_conflict_zone?
 
-        stats[:answered_yes_for_any_metal] += 1 if has_tantalum || has_tin || has_gold || has_tungsten
-        stats[:answered_yes_for_tantalum]  += 1 if has_tantalum
-        stats[:answered_yes_for_tin]       += 1 if has_tin
-        stats[:answered_yes_for_gold]      += 1 if has_gold
-        stats[:answered_yes_for_tungsten]  += 1 if has_tungsten
+        stats[:answered_yes_for_any_metal] += 1 if dec.has_any_key_metal?
+        stats[:answered_yes_for_tantalum]  += 1 if dec.has_tantalum?
+        stats[:answered_yes_for_tin]       += 1 if dec.has_tin?
+        stats[:answered_yes_for_gold]      += 1 if dec.has_gold?
+        stats[:answered_yes_for_tungsten]  += 1 if dec.has_tungsten?
 
-        has_cm_tantalum = is_version_2 ? mqs[1].tantalum.to_s.downcase == 'yes' : mqs[2].tantalum.to_s.downcase == 'yes'
-        has_cm_tin      = is_version_2 ? mqs[1].tin.to_s.downcase == 'yes' : mqs[2].tin.to_s.downcase == 'yes'
-        has_cm_gold     = is_version_2 ? mqs[1].gold.to_s.downcase == 'yes' : mqs[2].gold.to_s.downcase == 'yes'
-        has_cm_tungsten = is_version_2 ? mqs[1].tungsten.to_s.downcase == 'yes' : mqs[2].tungsten.to_s.downcase == 'yes'
+        stats[:number_of_cm_none]  += 1 if dec.number_of_conflict_minerals == 0
+        stats[:number_of_cm_one]   += 1 if dec.number_of_conflict_minerals == 1
+        stats[:number_of_cm_two]   += 1 if dec.number_of_conflict_minerals == 2
+        stats[:number_of_cm_three] += 1 if dec.number_of_conflict_minerals == 3
+        stats[:number_of_cm_four]  += 1 if dec.number_of_conflict_minerals == 4
 
-        stats[:reported_cm_tantalum] += 1 if has_cm_tantalum
-        stats[:reported_cm_tin]      += 1 if has_cm_tin
-        stats[:reported_cm_gold]     += 1 if has_cm_gold
-        stats[:reported_cm_tungsten] += 1 if has_cm_tungsten
+        stats[:reported_all_tantalum_identified] += 1 if dec.are_all_tantalum_smelters_identified?
+        stats[:reported_all_tin_identified]      += 1 if dec.are_all_tin_smelters_identified?
+        stats[:reported_all_gold_identified]     += 1 if dec.are_all_gold_smelters_identified?
+        stats[:reported_all_tungsten_identified] += 1 if dec.are_all_tungsten_smelters_identified?
 
-        stats[:number_of_cm_none]  += 1 if ([has_cm_tantalum, has_cm_tin, has_cm_gold, has_cm_tungsten] - [false]).size == 0
-        stats[:number_of_cm_one]   += 1 if ([has_cm_tantalum, has_cm_tin, has_cm_gold, has_cm_tungsten] - [false]).size == 1
-        stats[:number_of_cm_two]   += 1 if ([has_cm_tantalum, has_cm_tin, has_cm_gold, has_cm_tungsten] - [false]).size == 2
-        stats[:number_of_cm_three] += 1 if ([has_cm_tantalum, has_cm_tin, has_cm_gold, has_cm_tungsten] - [false]).size == 3
-        stats[:number_of_cm_four]  += 1 if ([has_cm_tantalum, has_cm_tin, has_cm_gold, has_cm_tungsten] - [false]).size == 4
+        stats[:supplier_response_100_tantalum] += 1 if dec.have_100_percent_of_tantalum_suppliers_responded?
+        stats[:supplier_response_100_tin]      += 1 if dec.have_100_percent_of_tin_suppliers_responded?
+        stats[:supplier_response_100_gold]     += 1 if dec.have_100_percent_of_gold_suppliers_responded?
+        stats[:supplier_response_100_tungsten] += 1 if dec.have_100_percent_of_tungsten_suppliers_responded?
+        stats[:supplier_response_75_tantalum] += 1 if dec.have_75_percent_of_tantalum_suppliers_responded?
+        stats[:supplier_response_75_tin]      += 1 if dec.have_75_percent_of_tin_suppliers_responded?
+        stats[:supplier_response_75_gold]     += 1 if dec.have_75_percent_of_gold_suppliers_responded?
+        stats[:supplier_response_75_tungsten] += 1 if dec.have_75_percent_of_tungsten_suppliers_responded?
+        stats[:supplier_response_50_tantalum] += 1 if dec.have_50_percent_of_tantalum_suppliers_responded?
+        stats[:supplier_response_50_tin]      += 1 if dec.have_50_percent_of_tin_suppliers_responded?
+        stats[:supplier_response_50_gold]     += 1 if dec.have_50_percent_of_gold_suppliers_responded?
+        stats[:supplier_response_50_tungsten] += 1 if dec.have_50_percent_of_tungsten_suppliers_responded?
+        stats[:supplier_response_25_tantalum] += 1 if dec.have_25_percent_of_tantalum_suppliers_responded?
+        stats[:supplier_response_25_tin]      += 1 if dec.have_25_percent_of_tin_suppliers_responded?
+        stats[:supplier_response_25_gold]     += 1 if dec.have_25_percent_of_gold_suppliers_responded?
+        stats[:supplier_response_25_tungsten] += 1 if dec.have_25_percent_of_tungsten_suppliers_responded?
+        stats[:supplier_response_1_tantalum] += 1 if dec.have_1_percent_of_tantalum_suppliers_responded?
+        stats[:supplier_response_1_tin]      += 1 if dec.have_1_percent_of_tin_suppliers_responded?
+        stats[:supplier_response_1_gold]     += 1 if dec.have_1_percent_of_gold_suppliers_responded?
+        stats[:supplier_response_1_tungsten] += 1 if dec.have_1_percent_of_tungsten_suppliers_responded?
+        stats[:supplier_response_0_tantalum] += 1 if dec.have_0_percent_of_tantalum_suppliers_responded?
+        stats[:supplier_response_0_tin]      += 1 if dec.have_0_percent_of_tin_suppliers_responded?
+        stats[:supplier_response_0_gold]     += 1 if dec.have_0_percent_of_gold_suppliers_responded?
+        stats[:supplier_response_0_tungsten] += 1 if dec.have_0_percent_of_tungsten_suppliers_responded?
 
-        stats[:reported_all_tantalum_identified] += 1 if is_version_2 ? mqs[4].tantalum.to_s.downcase =~ /^yes/ : mqs[5].tantalum.to_s.downcase == 'yes'
-        stats[:reported_all_tin_identified]      += 1 if is_version_2 ? mqs[4].tin.to_s.downcase =~ /^yes/ : mqs[5].tin.to_s.downcase == 'yes'
-        stats[:reported_all_gold_identified]     += 1 if is_version_2 ? mqs[4].gold.to_s.downcase =~ /^yes/ : mqs[5].gold.to_s.downcase == 'yes'
-        stats[:reported_all_tungsten_identified] += 1 if is_version_2 ? mqs[4].tungsten.to_s.downcase =~ /^yes/ : mqs[5].tungsten.to_s.downcase == 'yes'
+        stats[:reported_policy_in_place] += 1 if dec.has_policy_in_place?
 
-        stats[:supplier_response_100_tantalum] += 1 if is_version_2 ? mqs[3].tantalum.to_s.downcase =~ /^yes/ : mqs[4].tantalum.to_s.downcase =~ /^yes/
-        stats[:supplier_response_100_tin]      += 1 if is_version_2 ? mqs[3].tin.to_s.downcase =~ /^yes/ : mqs[4].tin.to_s.downcase =~ /^yes/
-        stats[:supplier_response_100_gold]     += 1 if is_version_2 ? mqs[3].gold.to_s.downcase =~ /^yes/ : mqs[4].gold.to_s.downcase =~ /^yes/
-        stats[:supplier_response_100_tungsten] += 1 if is_version_2 ? mqs[3].tungsten.to_s.downcase =~ /^yes/ : mqs[4].tungsten.to_s.downcase =~ /^yes/
-        stats[:supplier_response_75_tantalum] += 1 if is_version_2 ? mqs[3].tantalum.to_s.downcase =~ /75/ : mqs[4].tantalum.to_s.downcase =~ /75/
-        stats[:supplier_response_75_tin]      += 1 if is_version_2 ? mqs[3].tin.to_s.downcase =~ /75/ : mqs[4].tin.to_s.downcase =~ /75/
-        stats[:supplier_response_75_gold]     += 1 if is_version_2 ? mqs[3].gold.to_s.downcase =~ /75/ : mqs[4].gold.to_s.downcase =~ /75/
-        stats[:supplier_response_75_tungsten] += 1 if is_version_2 ? mqs[3].tungsten.to_s.downcase =~ /75/ : mqs[4].tungsten.to_s.downcase =~ /75/
-        stats[:supplier_response_50_tantalum] += 1 if is_version_2 ? mqs[3].tantalum.to_s.downcase =~ /50/ : mqs[4].tantalum.to_s.downcase =~ /50/
-        stats[:supplier_response_50_tin]      += 1 if is_version_2 ? mqs[3].tin.to_s.downcase =~ /50/ : mqs[4].tin.to_s.downcase =~ /50/
-        stats[:supplier_response_50_gold]     += 1 if is_version_2 ? mqs[3].gold.to_s.downcase =~ /50/ : mqs[4].gold.to_s.downcase =~ /50/
-        stats[:supplier_response_50_tungsten] += 1 if is_version_2 ? mqs[3].tungsten.to_s.downcase =~ /50/ : mqs[4].tungsten.to_s.downcase =~ /50/
-        stats[:supplier_response_25_tantalum] += 1 if is_version_2 ? mqs[3].tantalum.to_s.downcase =~ /> 25/ : mqs[4].tantalum.to_s.downcase =~ /greater than 25/
-        stats[:supplier_response_25_tin]      += 1 if is_version_2 ? mqs[3].tin.to_s.downcase =~ /> 25/ : mqs[4].tin.to_s.downcase =~ /greater than 25/
-        stats[:supplier_response_25_gold]     += 1 if is_version_2 ? mqs[3].gold.to_s.downcase =~ /> 25/ : mqs[4].gold.to_s.downcase =~ /greater than 25/
-        stats[:supplier_response_25_tungsten] += 1 if is_version_2 ? mqs[3].tungsten.to_s.downcase =~ /> 25/ : mqs[4].tungsten.to_s.downcase =~ /greater than 25/
-        stats[:supplier_response_1_tantalum] += 1 if is_version_2 ? mqs[3].tantalum.to_s.downcase =~ /< 25/ : mqs[4].tantalum.to_s.downcase =~ /less than 25/
-        stats[:supplier_response_1_tin]      += 1 if is_version_2 ? mqs[3].tin.to_s.downcase =~ /< 25/ : mqs[4].tin.to_s.downcase =~ /less than 25/
-        stats[:supplier_response_1_gold]     += 1 if is_version_2 ? mqs[3].gold.to_s.downcase =~ /< 25/ : mqs[4].gold.to_s.downcase =~ /less than 25/
-        stats[:supplier_response_1_tungsten] += 1 if is_version_2 ? mqs[3].tungsten.to_s.downcase =~ /< 25/ : mqs[4].tungsten.to_s.downcase =~ /less than 25/
-        stats[:supplier_response_0_tantalum] += 1 if is_version_2 ? mqs[3].tantalum.to_s.downcase =~ /none/ : mqs[4].tantalum.to_s.downcase =~ /none/
-        stats[:supplier_response_0_tin]      += 1 if is_version_2 ? mqs[3].tin.to_s.downcase =~ /none/ : mqs[4].tin.to_s.downcase =~ /none/
-        stats[:supplier_response_0_gold]     += 1 if is_version_2 ? mqs[3].gold.to_s.downcase =~ /none/ : mqs[4].gold.to_s.downcase =~ /none/
-        stats[:supplier_response_0_tungsten] += 1 if is_version_2 ? mqs[3].tungsten.to_s.downcase =~ /none/ : mqs[4].tungsten.to_s.downcase =~ /none/
+        stats[:reported_policy_on_website] += 1 if dec.has_policy_on_website?
 
-        stats[:reported_policy_in_place] += 1 if clqs[0].answer.to_s.downcase == 'yes'
-
-        stats[:reported_policy_on_website] += 1 if clqs[1].answer.to_s.downcase == 'yes'
-
-        stats[:reported_subject_to_sec] += 1 if clqs.last.answer.to_s.downcase == 'yes'
+        stats[:reported_subject_to_sec] += 1 if dec.is_subject_to_sec?
 
         stats[:status_green]             += 1 if val.status == 'Green'
         stats[:status_validation_needed] += 1 if val.status.to_s.downcase == 'validation needed'
@@ -365,14 +352,14 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
       unless stats[:number_of_companies] == 0
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting Conflict Minerals", "", ""], :style => h2
+        sheet.add_row ["Companies Reporting Conflict Minerals Originating from the DRC or adjoining countries", "", ""], :style => h2
         sheet.add_row ["Tantalum", stats[:reported_cm_tantalum], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tin", stats[:reported_cm_tin], ("%.2f%%" % (stats[:reported_cm_tin] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Gold", stats[:reported_cm_gold], ("%.2f%%" % (stats[:reported_cm_gold] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tungsten", stats[:reported_cm_tungsten], ("%.2f%%" % (stats[:reported_cm_tungsten] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
 
         sheet.add_row ["", "", ""]
-        sheet.add_row ["Companies Reporting Conflict Minerals Originating from the DRC or adjoining countries", "", ""], :style => h2
+        sheet.add_row ["Companies Reporting Conflict Minerals", "", ""], :style => h2
         sheet.add_row ["Answered \"Yes\" for any metal", stats[:answered_yes_for_any_metal], ("%.2f%%" % (stats[:answered_yes_for_any_metal].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tantalum", stats[:answered_yes_for_tantalum], ("%.2f%%" % (stats[:answered_yes_for_tantalum].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["Tin", stats[:answered_yes_for_tin], ("%.2f%%" % (stats[:answered_yes_for_tin].to_f / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
@@ -381,7 +368,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
 
         sheet.add_row ["", "", ""]
         sheet.add_row ["Companies Reporting Number of Conflict Minerals", "", ""], :style => h2
-        sheet.add_row ["None", stats[:number_of_cm_none], ("%.2f%%" % (stats[:reported_cm_tantalum] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
+        sheet.add_row ["None", stats[:number_of_cm_none], ("%.2f%%" % (stats[:number_of_cm_none] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["1", stats[:number_of_cm_one], ("%.2f%%" % (stats[:number_of_cm_one] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["2", stats[:number_of_cm_two], ("%.2f%%" % (stats[:number_of_cm_two] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
         sheet.add_row ["3", stats[:number_of_cm_three], ("%.2f%%" % (stats[:number_of_cm_three] / stats[:number_of_companies].to_f * 100.00))], :style => [right_align, center_align, center_align]
