@@ -284,11 +284,11 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
         stats[:answered_yes_for_gold]      += 1 if dec.has_gold?
         stats[:answered_yes_for_tungsten]  += 1 if dec.has_tungsten?
 
-        stats[:number_of_cm_none]  += 1 if dec.number_of_conflict_minerals == 0
-        stats[:number_of_cm_one]   += 1 if dec.number_of_conflict_minerals == 1
-        stats[:number_of_cm_two]   += 1 if dec.number_of_conflict_minerals == 2
-        stats[:number_of_cm_three] += 1 if dec.number_of_conflict_minerals == 3
-        stats[:number_of_cm_four]  += 1 if dec.number_of_conflict_minerals == 4
+        stats[:number_of_cm_none]  += 1 if dec.number_of_key_minerals == 0
+        stats[:number_of_cm_one]   += 1 if dec.number_of_key_minerals == 1
+        stats[:number_of_cm_two]   += 1 if dec.number_of_key_minerals == 2
+        stats[:number_of_cm_three] += 1 if dec.number_of_key_minerals == 3
+        stats[:number_of_cm_four]  += 1 if dec.number_of_key_minerals == 4
 
         stats[:reported_all_tantalum_identified] += 1 if dec.are_all_tantalum_smelters_identified?
         stats[:reported_all_tin_identified]      += 1 if dec.are_all_tin_smelters_identified?
