@@ -509,11 +509,13 @@ EOT
       smelter_compliance_statuses_worksheet(workbook)
       cfsi_compliant_smelter_list_worksheet(workbook)
       analytics_worksheet(workbook)
+=begin
       workbook.add_worksheet(:name => "Definitions") do |sheet|
         style = sheet.styles.add_style(BRANDING_STYLE)
         sheet.merge_cells "A1:H200"
         sheet.add_row([self.definition % CHECKMARK_CHAR], :types => :string, :style => style)
       end
+=end
       Axlsx::Package.new :workbook => workbook
     end
   end
