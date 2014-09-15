@@ -15,19 +15,6 @@ module GSP::Protocols::Regulations::CFSI::Reports::DeclarationHelper
     !(version =~ /^3/).nil?
   end
   
-  def is_minerals_questions_associated?
-    expected_size = begin
-                      if is_version_2?
-                        6
-                      elsif is_version_3?
-                        7
-                      else
-                        0
-                      end
-                    end
-    minerals_questions.size == expected_size
-  end
-  
   #
   # Has it been declared that any of the key minerals originate from the DRC or any adjoining nation?
   #
