@@ -5,6 +5,7 @@ module GSP::Protocols::Regulations::CFSI::Reports::Excel
     def definition
 <<-EOT
 INGESTOR REPORT DEFINTIONS
+
 Green Status Pro Ingestor generated the following RCOI reports after processing your
 company's supplier's CFSI Conflict Minerals Reporting Templates:
 
@@ -16,49 +17,49 @@ company's supplier's CFSI Conflict Minerals Reporting Templates:
   6. Aggregated Declarations Report
   7. Declarations Statistics
 
-These reports are designed to assist you in meeting the SEC-reporting requirements for
-Dodd-Frank Section 1502. They do not constitute legal advice.  Users should consult
-with their attorneys about their specific situation.
-
+These reports are designed to assist you in meeting the SEC-reporting requirements
+for Dodd-Frank Section 1502.  They do not constitute legal advice.  Users should
+consult with their attorneys about their specific situation
 
 1) ALL REPORTED SMELTERS
 The All Reported Smelters Report is the central repository for all your smelter-related
-RCOI data. It aggregates all the smelter data provided to you by your suppliers using
-any combination of EICC-GeSI CMRT v2 and CFSI CMRT v3 formats.
+RCOI data.  It aggregates all the smelter data provided to you by your suppliers
+using any combination of EICC-GeSI CMRT V2 and CFSI CMRT V3 formats.
 
-For each Validation Batch you run or update, this report organizes all smelter entries
-exactly as reported by all suppliers. Smelter entries are sorted by Metal, Country,
-Standard Smelter Name and Smelter ID. Each smelter entry row includes the supplier’s
-additional information regarding the smelter in the same order as listed on the CFSI
-Smelter List. Ingestor adds the EICC-GeSI/CFSI CMRT version and the Source File Name.
+For each Validation Batch you run or update, this report organizes all smelter
+entries exactly as reported by all suppliers.  Smelter entries are sorted by
+Metal, Country, Standard Smelter Name and Smelter ID.  Each smelter entry row
+includes the supplier’s additional information regarding the smelter in the same
+order as listed on the CFSI Smelter List.  Ingestor adds the EICC-GeSI/CFSI CMRT
+version and the Source File Name. 
 
-The All Reported Smelters Report is generated in Excel format to allow you to easily
-analyze the data and create custom reports.
-
+The All Reported Smelters Report is generated in Excel format to allow you to
+easily analyze the data and create custom reports.
 
 2) CONSOLIDATED SMELTER REPORT
-The Consolidated Smelter Report lists all the unique smelters that your suppliers have
-reasonably reported to be in your company’s supply chain. This report, derived from the
-All Reported Smelter Report, provides the smelter identification information you need
-in an easy-to-use format.
+The Consolidated Smelter Report lists all the unique smelters that your suppliers
+have reasonably reported to be in your company’s supply chain. This report,
+derived from the All Reported Smelter Report, provides the smelter identification
+information you need in an easy-to-use format.
 
-To maintain the integrity of the Consolidated Smelter Report, each smelter entry must
-have valid data in these 5 columns to be included: 1) Metal, 2) Smelter Reference List,
+To maintain the integrity of the Consolidated Smelter Report, each smelter entry
+must have valid data in these 5 columns to be included: 1) Metal, 2) Smelter Reference List,
 3) Standard Smelter Name, 4) Smelter Country and 4) Smelter ID. Ingestor cross-references
-the most recently released CFSI CMRT list of Standard Smelter Names to ensure the validity
-of the data. Note that smelter data communicated by suppliers using older CMRT Standard
-Smelter Names may be out-of-date and currently incorrect.
+the most recently released CFSI CMRT list of Standard Smelter Names to ensure the
+validity of the data.  Note that smelter data communicated by suppliers using older
+CMRT Standard Smelter Names may be out-of-date and currently incorrect.
 
-To create the Consolidated Smelter Report, Ingestor first eliminates unsupported entries
-from the All Reported Smelter Report. Such entries are either missing data, such as a
-smelter ID, or have corrupt data, such as a smelter ID in the wrong format. This data
-is moved to the Rejected Entries Report. Suppliers whose smelter entries are rejected
-should be notified and required to correct the problem.
+To create the Consolidated Smelter Report, Ingestor first eliminates unsupported
+entries from the All Reported Smelter Report.  Such entries are either missing
+data, such as a smelter ID, or have corrupt data, such as a smelter ID in the wrong
+format.  This data is moved to the Rejected Entries Report.  Suppliers whose
+smelter entries are rejected should be notified and required to correct the problem.
 
-Ingestor then consolidates duplicate smelter listings. If more than one supplier
-identifies the same smelter in its supply chains, Ingestor counts the instances and
-references the source files. If an individual supplier reports the use of the same
-smelter two or more times on the same CMRT, Ingestor will only count one smelter entry.
+Ingestor then consolidates duplicate smelter listings.  If more than one supplier
+identifies the same smelter in its supply chains, Ingestor counts the instances
+and references the source files.  If an individual supplier reports the use of
+the same smelter two or more times on the same CMRT, Ingestor will only count one
+smelter entry.
 
 The Consolidated Smelter Report’s output is ordered by smelter:
 A. Metal
@@ -66,65 +67,167 @@ B. Country
 C. Standard Smelter Name
 
 This report consolidates smelter listings and eliminates unsupportable entries,
-significantly reducing the row count of the All Reported Smelter Report. Therefore, it
-will be the basis for generating your own firm’s CMRT that you must provide to your customers.
+significantly reducing the row count of the All Reported Smelter Report. 
+Therefore, it will be the basis for generating your own firm’s CMRT that you must
+provide to your customers.
 
+3) REJECTED ENTREES
+Smelters listed in Rejected Entries Report have missing, inaccurate or ambiguous
+data associated with them.  The Rejected Entries Report provides a repository of
+supplier-smelter entries for which due diligence should be performed to confirm
+and improve the accuracy of the reported data.  It is critical that you do not
+pass incorrect conflict minerals data to your customers.
 
+The Rejected Entries Report consists of smelter entries from the All Reported
+Smelters Report that cannot be included in the Consolidated Smelter Report due
+to missing data, incorrect data or lack of confidence in the information provided. 
+All supplier-reported smelters identified in the All Reported Smelters Report
+will be reported in either the Consolidated Smelter Report or the Rejected Entries Report.
 
-3) REJECTED ENTRIES
-Smelters listed in Rejected Entries Report have missing, inaccurate or ambiguous data
-associated with them. The Rejected Entries Report provides a repository of
-supplier-smelter entries for which due diligence should be performed to confirm and
-improve the accuracy of the reported data. It is critical that you do not pass
-incorrect conflict minerals data to your customers.
-
-The Rejected Entries Report consists of smelter entries from the All Reported Smelters
-Report that cannot be included in the Consolidated Smelter Report due to missing data,
-incorrect data or lack of confidence in the information provided. All supplier-reported
-smelters identified in the All Reported Smelters Report will be reported in either the
-Consolidated Smelter Report or the Rejected Entries Report.
-
-A smelter entry that does not have valid data in any one of these five categories is
-assigned to the Rejected Entries Report:
+A smelter entry that does not have valid data in any one of these five categories is assigned to the Rejected Entries Report:
 A. Metal
 B. Smelter Reference List
 C. Standard Smelter Name
 D. Smelter Country
-E. Smelter ID
+E. Smelter ID  
 
-Suppliers whose smelter entries are flagged on the Rejected Entries Report should be
-contacted immediately as part of the supplier due diligence process and made aware of
-the problem(s) and your company’s policy regarding suppliers who do not maintain an
+Suppliers whose smelter entries are flagged on the Rejected Entries Report should
+be contacted as part of the supplier due diligence process and made aware of the
+problem(s) and your company’s policy regarding suppliers who do not maintain an
 adequate Conflict Minerals Reporting program.
 
+One of the operational benefits of the Rejected Entries Report is that it provides
+you an additional resource for evaluating the risks inherent in your 3TG supply chains.
+
 Rejection Messages are:
-Invalid smelter id – ID is either not provided or is in the wrong format.
-Invalid smelter name – Smelter name may be missing, not in English, consist of placeholder characters (not words.)
-Invalid country – Data in Smelter Facility Location Country field is not that for a country.
-Smelter id does not match metal – Smelter ID Version 2 has a country code embedded in it. Ingestor checks that the country code and V2 id are consistent. If not, this message appears.
-Invalid country code for v2 smelter id – Supplier entry contains an invalid country code within the ID Version 2 Smelter code.
-
-
-The Rejected Entries Report provides companies with a solid foundation for evaluating
-the risks inherent in their 3TG supply chains.
-
+        · Invalid country code for v2 smelter id – The country code embedded in
+           the version 2 ID format does not match the country entered in the smelter
+           facility location country field.
+        · Invalid country – Data in smelter facility location country field is
+           not a valid entry and therefore the country cannot be identified.
+        · Invalid smelter id – ID is either not provided or is in the wrong format.
+        · Invalid smelter name – Smelter name may be missing, not in English, or
+           consist of place holder characters. 
+        · Smelter id does not match metal – The metal code embedded in the version 2 ID
+           format does not match the metal entered in the metal field.
+        · Smelter name not found in Smelter Reference List – The current published
+           CFSI Standard Smelter List does not contain this smelter name.  This
+           occurs frequently when a supplier uses an out-of-date version of the CMRT.
+           The smelter name provided may be a sales office or distribution location.
+           Conduct due diligence with the reporting supplier to confirm whether
+           this is an actual smelter.
+        · Smelter ID does not match Smelter Reference List for smelter name - The
+           current published CFSI Standard Smelter List does not list this smelter ID
+           with this smelter name.  This occurs frequently when a supplier copies
+           and pastes data from its suppliers.  Conduct due diligence with the
+           reporting supplier to correct this entry by determining whether the
+           smelter name or ID are correct or not.
+        · Country does not match Smelter Reference List for smelter name - The
+           current published CFSI Standard Smelter List does not include the
+           smelter facility location country with this smelter name.  This occurs
+           frequently when a supplier copies and pastes data from its suppliers.
+           Conduct due diligence with the reporting supplier to correct this entry
+           by determining whether the smelter name or country are correct or not.
 
 4) SMELTER COMPLIANCE STATUSES REPORT
-Identifies which smelters listed in the Consolidated Smelter Report have been designated
-as Compliant, Active, or Progressing in the CFSI Conflict-free Smelter Program. Matches
-the smelter IDs reported in the Consolidated Smelter report against the current
-CFSI-published listing of smelters that have passed or are actively participating in its
-conflict-free audit requirements program.
+Identifies which smelters listed in the Consolidated Smelter Report have been
+designated as Compliant, Active, or Progressing in the CFSI Conflict-free Smelter
+Program.  Matches the smelter IDs reported in the Consolidated Smelter report
+against the current CFSI-published listing of smelters that have passed or are
+actively participating in its conflict-free audit requirements program. 
 
-Smelters that do not have smelter ID matches with the CFSI listing are categorized as
-Not CFSI Compliant.
-
-
+Smelters that do not have smelter ID matches with the CFSI listing are
+categorized as "Not CFSI Compliant."
 
 5) RCOI ANALYTICS
-
+Provides an analysis of the smelter information contained in the supplier CMRTs
+processed in the current batch.
+        · Number of suppliers reporting - A count of CMRTs included in this batch.
+        · Number of individual smelters reported – The number of unique smelters
+           listed in the Consolidated Smelter Report.  The total is provided first
+           followed by the breakdown by 3TG.
+        · Smelters listed as CFSI Compliant – Number and percentage of smelters
+           listed in the Consolidated Smelter Report that are either compliant
+           with the CFSI’s conflict-free materials sourcing audit program or are
+           actively engaged in achieving compliance. The number and percentage of
+           smelters that are participating in the CFSI audit program are listed
+           first.  The following 4 rows are the breakdown by 3TG.
+        · Smelters listed as Not CFSI Compliant - Number and percentage of smelters
+           listed in the Consolidated Smelter Report that are neither approved by
+           the CFSI nor actively participating in its program to assure sourcing
+           of only conflict-free materials. The number and percentage of smelters
+           that are NOT participating in the CFSI audit program are listed first.
+           The following 4 rows are the breakdown by 3TG.
+        · Number of countries of origin and Countries of origin – A listing of
+           unique countries identified as smelter facility location countries
+           using the data in the Consolidated Smelter Report.
 
 6) AGGREGATED DECLARATIONS REPORT
+The Aggregated Declarations Report is the central repository for all your supplier
+Company information.  It aggregates all the declarations provided to you by your
+suppliers on the Declaration worksheet using any combination of EICC-GeSI CMRT V2
+and CFSI CMRT V3 formats.
+
+For each Validation Batch you run or update, this report organizes all supplier
+declarations exactly as reported by your suppliers.  Ingestor then adds the following
+information at the end of each row: 1) CMRT File Name, 2) CFSI Template Version,
+3) Supplier Status and 4) validation issues that require due diligence follow up
+with the supplier.  Supplier Status may be: 1) Green – supplier CMRT has no
+declaration validation issues; 2) High risk – supplier reports that it knows it
+uses 3TGs sourced from the DRC or bordering countries; 3) Validation needed – the
+supplier did not provide all the required information and/or the information provided
+indicates areas of risk in the supplier’s conflict minerals program; 4) Rejected –
+the supplier’s CMRT could not be processed because it was in the wrong format.
+
+The Aggregated Declarations Report is generated in Excel format to allow you to
+easily analyze the data and create custom reports.
+
+7) DECLARATIONS STATISTICS REPORT
+Provides an analysis of the Declarations information contained in the supplier
+CMRTs processed in the current batch.
+
+   · Number of Companies - A count of CMRTs included in this batch.
+   · Companies Reporting Conflict Minerals Originating from the DRC or adjoining
+      countries– The number of companies answering Yes to the Question: Do the
+      following metals (necessary to the functionality or production of your
+      company's products) originate from the DRC or an adjoining country?
+      (CMRT V2) / Does any of the conflict metal originate from the covered
+      countries? (CMRT V3)
+   · Companies Reporting Conflict Minerals – The number of companies answering
+      Yes to the Question: Are any of the following metals necessary to the
+      functionality or production of your company's products that it manufacturers
+      or contracts to manufacture? (CMRT V2) / Is the conflict metal intentionally
+      added to your product? (CMRT V3) and/or Is the conflict metal necessary to
+      the production of your company's product and contained in the finished product
+      that your company manufactures or contracts to manufacture? (CMRT V3)
+   · Companies Reporting Number of Conflict Minerals – Number of companies reporting:
+      No use of conflict minerals; 1 conflict mineral used; 2 conflict minerals used;
+      3 conflict minerals used; or all 4 conflicts mineral used.
+   · Companies Reporting All Smelters Were Identified – The number of companies
+      answering Yes to the Question: For each conflict metal, have you identified
+      all of the smelters your company and its suppliers use to supply the products
+      included within the declaration scope indicated above?
+   · Company Reports Regarding Supplier Responses – Distribution of company
+      responses to the question: Have you received completed Conflict Minerals
+      Reporting Templates from all of your suppliers? (CMRT V2) / Have you received
+      conflict metals data/information for each metal from all relevant suppliers
+      of 3TG? (CMRT V3)
+   · Companies Reporting a Policy in Place – The number of companies answering
+      Yes to the Question: Do you have a policy in place that includes DRC
+      conflict-free sourcing?
+   · Companies Reporting Their Policy is Available on Their Website – The number
+      of companies answering Yes to the Question: Is this policy publicly available
+      on your website? (CMRT V2) / Is your conflict minerals sourcing policy
+      publicly available on your website? (CMRT V3) 
+   · Companies Reporting They Are Subject to the SEC Conflict Minerals rule –
+      The number of companies answering Yes to the Question: Are you subject to
+      the SEC Conflict Minerals disclosure requirement rule? (CMRT V2) / Are you
+      subject to the SEC Conflict Minerals rule? (CMRT V3)
+   · Status – Number of companies in each status category based on Ingestor’s
+      validation analysis.
+   · Reporting at - The number of companies reporting for each category of
+      Declaration Scope or Class
+
 
 EOT
     end
@@ -509,13 +612,11 @@ EOT
       smelter_compliance_statuses_worksheet(workbook)
       cfsi_compliant_smelter_list_worksheet(workbook)
       analytics_worksheet(workbook)
-=begin
       workbook.add_worksheet(:name => "Definitions") do |sheet|
         style = sheet.styles.add_style(BRANDING_STYLE)
         sheet.merge_cells "A1:H200"
         sheet.add_row([self.definition % CHECKMARK_CHAR], :types => :string, :style => style)
       end
-=end
       Axlsx::Package.new :workbook => workbook
     end
   end
