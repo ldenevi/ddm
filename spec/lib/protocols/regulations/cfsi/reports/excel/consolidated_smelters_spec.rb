@@ -5,8 +5,6 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     Cfsi::Reports::SmelterReference.destroy_all
     Cfsi::Reports::SmelterReference.import_from_csv_file_path(File.join('spec', 'models', 'cfsi', 'reports', 'sample_data', 'smelter_references.csv'))
     Cfsi::ConfirmedSmelter.destroy_all
-
-
   end
 
 
@@ -103,5 +101,19 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
     end
     csr = GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters.new(batch)
 
+  end
+  
+  it "should reject entries with incorrect metal" do
+    smelters = [Cfsi::MineralSmelter.create({:metal => "Tin", :smelter_reference_list => "Royal Canadian Mint", :standard_smelter_name => "Royal Canadian Mint", :facility_location_country => "CANADA", :smelter_id => "CID001534", :organization => org}),
+                Cfsi::MineralSmelter.create({:metal => "Gold", :smelter_reference_list => "Royal Canadian Mint", :standard_smelter_name => "Royal Canadian Mint", :facility_location_country => "CANADA", :smelter_id => "CID001534", :organization => org})]
+    dec = Cfsi::Declaration.create :organization => org, :mineral_smelters => smelters
+    cmrt = Cfsi::Cmrt.create :declaration => dec, :organization => org
+    batch = Cfsi::ValidationsBatch.create :organization => org, :user => user
+    batch.unidentified_cmrt_validations << Cfsi::CmrtValidation.create(:cmrt => cmrt, :organization => org, :user => user)
+    csr = GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters.new(batch)
+    expect(csr.all_reported_smelters[:data].size).to eq 2
+    expect(csr.consolidated_smelters[:data].size).to eq 1
+    expect(csr.rejected_entries[:data].size).to eq 1
+    expect(csr.rejected_entries[:data].first[6]).to eq "Incorrect metal for smelter"
   end
 end
