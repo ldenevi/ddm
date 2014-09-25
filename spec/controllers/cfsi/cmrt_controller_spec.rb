@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe Cfsi::CmrtController do
   before(:all) {  Cfsi::ValidationsBatch.destroy_all }
+  let(:user) { FactoryGirl.create(:user) }
   before(:each) do
-    @request.env["devise.mapping"] = Devise.mappings[:user]
-    sign_in FactoryGirl.create(:user)
+    sign_in user
   end
   let(:org) { FactoryGirl.create(:organization) }
   let(:uploaded_cmrt) do
