@@ -106,8 +106,10 @@ describe GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters
   it "should reject entries with incorrect metal" do
     smelters = [Cfsi::MineralSmelter.create({:metal => "Tin", :smelter_reference_list => "Royal Canadian Mint", :standard_smelter_name => "Royal Canadian Mint", :facility_location_country => "CANADA", :smelter_id => "CID001534", :organization => org}),
                 Cfsi::MineralSmelter.create({:metal => "Gold", :smelter_reference_list => "Royal Canadian Mint", :standard_smelter_name => "Royal Canadian Mint", :facility_location_country => "CANADA", :smelter_id => "CID001534", :organization => org})]
-    dec = Cfsi::Declaration.create :organization => org, :mineral_smelters => smelters
-    cmrt = Cfsi::Cmrt.create :declaration => dec, :organization => org
+    dec = Cfsi::Declaration.new :organization => org, :mineral_smelters => smelters
+    dec.save(:validate => false)
+    cmrt = Cfsi::Cmrt.new :declaration => dec, :organization => org
+    cmrt.save(:validate => false)
     batch = Cfsi::ValidationsBatch.create :organization => org, :user => user
     batch.unidentified_cmrt_validations << Cfsi::CmrtValidation.create(:cmrt => cmrt, :organization => org, :user => user)
     csr = GSP::Protocols::Regulations::CFSI::Reports::Excel::ConsolidatedSmelters.new(batch)
