@@ -27,7 +27,7 @@ class Cfsi::CmrtController < ApplicationController
 
   def validate_cmrt(uploaded_cmrt_file, validations_batch_id, user = current_user)
     @validations_batch = Cfsi::ValidationsBatch.includes(:cmrt_validations).find(validations_batch_id)
-    if current_user.is_a?(Trial::TrialUser) && @validations_batch.cmrt_validations.size >= TRIAL_USER_CMRT_LIMIT
+    if user.is_a?(Trial::TrialUser) && @validations_batch.cmrt_validations.size >= TRIAL_USER_CMRT_LIMIT
       limit_message = "You have reached the maximum number of CMRTs: #{TRIAL_USER_CMRT_LIMIT}. Please contact Green Status Pro sales to upgrade your account."
       flash[:notice] = limit_message
       @cmrt_validation = Cfsi::CmrtValidation.create(:validations_batch => @validations_batch, :user => user, :organization => user.organization, :issues => limit_message)
