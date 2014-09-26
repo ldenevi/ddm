@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Cfsi::ReportsController do
-  before(:each) { sign_in FactoryGirl.create(:admin) }
   before(:each) do
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in FactoryGirl.create(:user)
