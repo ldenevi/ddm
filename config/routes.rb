@@ -1,4 +1,13 @@
 GSP::Application.routes.draw do
+  namespace :admin do
+    get "clients/index"
+    post "clients/add_organization"
+    get "clients/view/:id", :to => "clients#view", :as => "clients_view_organization"
+    post "clients/:organization_id/add_user", :to => "clients#add_user", :as => "clients_add_user"
+    delete "clients/:organization_id/delete_user/:user_id", :to => "clients#delete_user", :as => "clients_delete_user"
+    delete "clients/:id/delete_organization", :to => "clients#delete_organization", :as => "clients_delete_organization"
+    post "clients/:organization_id/purchase_template", :to => "clients#purchase_template", :as => "clients_purchase_template"
+  end
 
   namespace :trial do
     get  "sign_up/index"

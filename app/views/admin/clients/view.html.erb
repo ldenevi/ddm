@@ -1,0 +1,70 @@
+<p><%= link_to "<-- Back to organization list", admin_clients_index_path %></p>
+
+<h1><%= @organization.name %></h1>
+
+<ul>
+  <li><%= link_to "Create a user", "#create_user" %></li>
+  <li><%= link_to "View/Delete users", "#list_users" %></li>
+  <li><%= link_to "Templates", "#list_templates" %></li>
+  <li><%= link_to "Purchase GSP Templates", "#add_templates" %></li>
+</ul>
+
+<hr>
+<div>
+  <h3 id="create_user">Create a user:</h3>
+
+  <%= form_tag(admin_clients_add_user_path(:organization_id => @organization), :method => :post) do %>
+  <table>
+    <tr><td>First Name:</td> <td><%= text_field :user, :first_name %></td></tr>
+    <tr><td>Last Name:</td> <td><%= text_field :user, :last_name %></td></tr>
+    <tr><td>Email:</td> <td><%= email_field :user, :email %></td></tr>
+    <tr><td>Password:</td> <td><%= password_field :user, :password %></td></tr>
+    <tr><td>Password Confirmation:</td> <td><%= password_field :user, :password_confirmation %></td></tr>
+    <tr><td colspan=2><%= submit_tag "Add new user to #{@organization.name}" %></td></tr>
+  </table>
+  <% end %>
+</div>
+
+<hr>
+<h3 id="list_users">Users:</h3>
+<table style="border:1px solid; padding:3px">
+<thead>
+<tr>
+  <th>E-Mail</th>
+  <th>First Name</th>
+  <th>Last Name</th>
+  <th>&nbsp;</th>
+</tr>
+</thead>
+<tbody>
+<% @organization.users.each do |user| %>
+<tr>
+  <td><%= user.email %></td>
+  <td><%= user.first_name %></td>
+  <td><%= user.last_name %></td>
+  <td><%= link_to "Delete", admin_clients_delete_user_path(:organization_id => @organization, :user_id => user), :method => :delete %></td>
+</tr>
+<% end %>
+</tbody>
+</table>
+
+<hr>
+<h3 id="list_templates">Templates:</h3>
+<ul>
+  <% @organization.organization_templates.each do |template| %>
+  <li><%= template.name %> (<%= template.display_name%>)</li>
+  <% end %>
+</ul>
+
+<hr>
+<h3 id="add_templates">Add templates:</h3>
+<% if @organization.users.empty? %>
+  <h4>In order to add templates to this organization, please first create a user. This user will be used as the organization's purchasing agent.</h4>
+<% else %>
+  <h4>Click link to add Template to <%= @organization.name %>'s library</h4>
+  <ul>
+  <% GspTemplate.all.each do |template| %>
+    <li><%= template.id %> -- <%= link_to "#{template.full_name} (#{template.display_name})", admin_clients_purchase_template_path(:organization_id => @organization, :gsp_template_id => template), :method => :post %></li>
+  <% end %>
+  </ul>
+<% end %>
