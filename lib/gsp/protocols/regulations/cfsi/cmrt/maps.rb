@@ -6,6 +6,7 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Maps
   autoload :Version2Dot03a, File.join('gsp', 'protocols', 'regulations', 'cfsi', 'cmrt', 'maps', 'version_2.03a')
   autoload :Version3Dot00, File.join('gsp', 'protocols', 'regulations', 'cfsi', 'cmrt', 'maps', 'version_3.00')
   autoload :Version3Dot01, File.join('gsp', 'protocols', 'regulations', 'cfsi', 'cmrt', 'maps', 'version_3.01')
+  autoload :Version3Dot02, File.join('gsp', 'protocols', 'regulations', 'cfsi', 'cmrt', 'maps', 'version_3.02')
 
   def self.included(obj)
     obj.send(:include, InstanceMethods)

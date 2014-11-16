@@ -31,6 +31,7 @@ class Cfsi::CmrtValidation < ActiveRecord::Base
     raise ArgumentError, ":user is nil" if attrs[:user].nil?
     attrs.merge!(:user => attrs[:user], :organization => (attrs[:organization] || attrs[:user].organization))
     obj = create attrs.merge({:spreadsheet => Spreadsheet.generate({:filename => File.basename(file_path), :data => File.read(file_path), :user => attrs[:user]})})
+    obj.spreadsheet.storage_path = File.join(GSP::FileManager::Storage::STORAGE_PATH, obj.spreadsheet.filename)
     obj.spreadsheet.save_to_filesystem!
     obj
   end

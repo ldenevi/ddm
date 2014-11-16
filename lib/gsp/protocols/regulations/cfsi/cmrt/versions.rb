@@ -12,7 +12,8 @@ module GSP::Protocols::Regulations::CFSI::CMRT::Versions
               "2.03" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "2.03.worksheet.0.txt")),
               "2.03a" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "2.03a.worksheet.0.txt")),
               "3.00" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.00.worksheet.0.txt")),
-              "3.01" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.01.worksheet.0.txt"))}
+              "3.01" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.01.worksheet.0.txt")),
+              "3.02" => File.read(File.join(VERSION_HEADER_DATA_DIRPATH, "3.02.worksheet.0.txt"))}
 
   def get_version(worksheet_0)
     get_similarity_ratings(worksheet_0).sort { |a, b| b[1] <=> a[1] }.first[0]
